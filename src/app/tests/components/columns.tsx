@@ -54,24 +54,48 @@ export const getColumns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<Test>[
   },
   {
     accessorKey: "testCode",
-    header: "Test Code",
+    header: () => <div className="text-center">Test Code</div>,
     cell: ({ row }) => <div className="text-center">{row.getValue("testCode")}</div>,
   },
   {
     accessorKey: "testMethods",
-    header: "Method(s)",
+    header: () => <div className="text-center">Method(s)</div>,
     cell: ({ row }) => <div className="text-center">{row.getValue("testMethods")}</div>,
   },
   {
     accessorKey: "accreditation",
-    header: "Accreditation",
+    header: () => <div className="text-center">Accreditation</div>,
     cell: ({ row }) => {
       const accreditation = row.getValue("accreditation") as string;
       const variant = accreditation.toLowerCase() === "yes" ? "default" : "secondary"
       return <div className="text-center"><Badge variant={variant}>{accreditation}</Badge></div>
     },
   },
-    {
+  {
+    accessorKey: "amountUGX",
+    header: ({ column }) => {
+        return (
+          <div className="text-right">
+            <Button
+              variant="ghost"
+              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+              Amount (UGX)
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+        )
+      },
+    cell: ({ row }) => {
+        const amount = parseFloat(row.getValue("amountUGX"))
+        const formatted = new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "UGX",
+        }).format(amount)
+        return <div className="text-right font-medium">{formatted}</div>
+    }
+  },
+  {
     accessorKey: "amountUSD",
     header: ({ column }) => {
         return (
