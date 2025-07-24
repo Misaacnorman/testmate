@@ -8,6 +8,7 @@ import { Test } from "@/types/test";
 import { getTests, addTest, deleteTest, updateTest } from "@/services/tests";
 import { useToast } from '@/hooks/use-toast';
 import { EditTestDialog } from './components/edit-test-dialog';
+import * as XLSX from 'xlsx';
 
 export default function TestsPage() {
   const [data, setData] = useState<Test[]>([]);
@@ -37,6 +38,16 @@ export default function TestsPage() {
   useEffect(() => {
     fetchTests();
   }, [fetchTests]);
+  
+  const handleSearch = (searchTerm: string) => {
+    const lowercasedSearch = searchTerm.toLowerCase();
+    const filtered = data.filter(item => 
+        Object.values(item).some(val => 
+            String(val).toLowerCase().includes(lowercasedSearch)
+        )
+    );
+    setFilteredData(filtered);
+  };
 
   const handleTestCreated = async (test: Omit<Test, 'id'>) => {
     try {
@@ -54,6 +65,44 @@ export default function TestsPage() {
         description: "Could not save the new test.",
       });
     }
+  };
+  
+  const handleImport = async (tests: Omit<Test, 'id'>[]) => {
+    try {
+      const importPromises = tests.map(test => addTest(test));
+      await Promise.all(importPromises);
+      toast({
+        title: "Import Successful",
+        description: `${tests.length} tests have been imported successfully.`,
+      });
+      fetchTests();
+    } catch (error) {
+       console.error("Failed to import tests:", error);
+      toast({
+        variant: "destructive",
+        title: "Error Importing Tests",
+        description: "Could not import the tests. Please check the console for more details.",
+      });
+    }
+  };
+
+  const handleExport = () => {
+    if (data.length === 0) {
+      toast({
+        variant: "destructive",
+        title: "Export Failed",
+        description: "There is no data to export.",
+      });
+      return;
+    }
+    const worksheet = XLSX.utils.json_to_sheet(data.map(({id, ...rest}) => rest)); // Exclude ID from export
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Tests");
+    XLSX.writeFile(workbook, "Test_Data.xlsx");
+     toast({
+        title: "Export Successful",
+        description: `Exported ${data.length} test records.`,
+      });
   };
 
   const handleTestUpdated = async (test: Test) => {
@@ -92,18 +141,6 @@ export default function TestsPage() {
       });
     }
   };
-
-  const handleDataUpdate = (newData: Test[]) => {
-      setData(newData);
-      setFilteredData(newData);
-      // Here you might want to batch write the new data to Firestore
-      // For simplicity, we'll just update the local state.
-      // A full implementation would involve a more complex sync logic.
-      toast({
-        title: "Data Updated",
-        description: `${newData.length - data.length} new records added locally.`,
-      });
-  };
   
   return (
     <>
@@ -123,9 +160,9 @@ export default function TestsPage() {
               <CardDescription>A comprehensive list of all tests conducted in the laboratory.</CardDescription>
             </div>
             <TestActions 
-              allData={data} 
-              onFilter={setFilteredData} 
-              onDataUpdate={handleDataUpdate}
+              onSearch={handleSearch}
+              onExport={handleExport}
+              onImport={handleImport}
               onTestCreated={handleTestCreated}
             />
           </CardHeader>

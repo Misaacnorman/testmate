@@ -11,45 +11,21 @@ import * as XLSX from 'xlsx';
 import { useToast } from "@/hooks/use-toast";
 
 interface TestActionsProps {
-  allData: Test[];
-  onFilter: (filteredData: Test[]) => void;
-  onDataUpdate: (newData: Test[]) => void;
+  onSearch: (searchTerm: string) => void;
+  onExport: () => void;
+  onImport: (tests: Omit<Test, 'id'>[]) => void;
   onTestCreated: (newTest: Omit<Test, 'id'>) => void;
 }
 
-export function TestActions({ allData, onFilter, onDataUpdate, onTestCreated }: TestActionsProps) {
+export function TestActions({ onSearch, onExport, onImport, onTestCreated }: TestActionsProps) {
   const [search, setSearch] = useState("");
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  React.useEffect(() => {
-    const lowercasedSearch = search.toLowerCase();
-    const filtered = allData.filter(item => 
-        Object.values(item).some(val => 
-            String(val).toLowerCase().includes(lowercasedSearch)
-        )
-    );
-    onFilter(filtered);
-  }, [search, allData, onFilter]);
-
-  const handleExport = () => {
-    if (allData.length === 0) {
-      toast({
-        variant: "destructive",
-        title: "Export Failed",
-        description: "There is no data to export.",
-      });
-      return;
-    }
-    const worksheet = XLSX.utils.json_to_sheet(allData.map(({id, ...rest}) => rest)); // Exclude ID from export
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Tests");
-    XLSX.writeFile(workbook, "Test_Data.xlsx");
-     toast({
-        title: "Export Successful",
-        description: `Exported ${allData.length} test records.`,
-      });
-  };
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+    onSearch(e.target.value);
+  }
 
   const handleImportClick = () => {
     fileInputRef.current?.click();
@@ -67,8 +43,7 @@ export function TestActions({ allData, onFilter, onDataUpdate, onTestCreated }: 
           const worksheet = workbook.Sheets[sheetName];
           const json = XLSX.utils.sheet_to_json<any>(worksheet);
 
-          const newTests: Test[] = json.map((row, index) => ({
-            id: `imported-${Date.now()}-${index}`,
+          const newTests: Omit<Test, 'id'>[] = json.map((row) => ({
             materialCategory: row['materialCategory'] || '',
             testCode: row['testCode'] || '',
             materialTest: row['materialTest'] || '',
@@ -80,17 +55,13 @@ export function TestActions({ allData, onFilter, onDataUpdate, onTestCreated }: 
             leadTimeDays: Number(row['leadTimeDays']) || 0,
           }));
 
-          onDataUpdate([...allData, ...newTests]);
-          toast({
-            title: "Import Successful",
-            description: `${newTests.length} tests have been imported.`,
-          });
+          onImport(newTests);
         } catch (error) {
             console.error(error);
             toast({
               variant: "destructive",
               title: "Import Failed",
-              description: "Please check the file format and try again.",
+              description: "Please check the file format and try again. The file should contain columns like 'materialCategory', 'testCode', etc.",
             });
         } finally {
             if(fileInputRef.current) {
@@ -110,7 +81,7 @@ export function TestActions({ allData, onFilter, onDataUpdate, onTestCreated }: 
           placeholder="Search tests..." 
           className="pl-9 w-full md:w-[200px] lg:w-[300px]"
           value={search}
-          onChange={e => setSearch(e.target.value)}
+          onChange={handleSearchChange}
         />
       </div>
       <DropdownMenu>
@@ -132,7 +103,7 @@ export function TestActions({ allData, onFilter, onDataUpdate, onTestCreated }: 
         <span>Import</span>
       </Button>
       <input type="file" ref={fileInputRef} onChange={handleFileChange} accept=".xlsx, .xls, .csv" style={{ display: 'none' }} />
-      <Button variant="outline" className="gap-1" onClick={handleExport}>
+      <Button variant="outline" className="gap-1" onClick={onExport}>
         <Download className="h-3.5 w-3.5" />
         <span>Export</span>
       </Button>
