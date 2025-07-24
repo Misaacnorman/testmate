@@ -65,15 +65,15 @@ export function TestActions({
           const json = XLSX.utils.sheet_to_json<any>(worksheet);
 
           const newTests: Omit<Test, 'id'>[] = json.map((row) => ({
-            materialCategory: row['materialCategory'] || '',
-            testCode: row['testCode'] || '',
-            materialTest: row['materialTest'] || '',
-            testMethods: row['testMethods'] || '',
-            accreditation: row['accreditation'] || '',
-            unit: row['unit'] || '',
-            amountUGX: Number(row['amountUGX']) || 0,
-            amountUSD: Number(row['amountUSD']) || 0,
-            leadTimeDays: Number(row['leadTimeDays']) || 0,
+            materialCategory: row['MATERIAL CATEGORY'] || '',
+            testCode: row['TEST CODE'] || '',
+            materialTest: row['MATERIAL TEST'] || '',
+            testMethods: row['TEST METHOD(S)'] || '',
+            accreditation: row['ACCREDITATION STATUS'] || row['ACCREDITATION'] || '',
+            unit: row['UNIT'] || '',
+            amountUGX: Number(row['AMOUNT (UGX)']) || 0,
+            amountUSD: Number(row['AMOUNT (USD)']) || 0,
+            leadTimeDays: Number(row['LEAD TIME (DAYS)']) || 0,
           }));
 
           onImport(newTests);
@@ -82,7 +82,7 @@ export function TestActions({
             toast({
               variant: "destructive",
               title: "Import Failed",
-              description: "Please check the file format and try again. The file should contain columns like 'materialCategory', 'testCode', etc.",
+              description: "Please check the file format and try again. The file should contain columns with the correct headers.",
             });
         } finally {
             if(fileInputRef.current) {
