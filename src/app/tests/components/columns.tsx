@@ -31,7 +31,7 @@ type ColumnsProps = {
 
 export const getColumns = ({ onDelete }: ColumnsProps): ColumnDef<Test>[] => [
   {
-    accessorKey: "MATERIAL CATEGORY",
+    accessorKey: "materialCategory",
     header: ({ column }) => {
       return (
         <Button
@@ -43,31 +43,31 @@ export const getColumns = ({ onDelete }: ColumnsProps): ColumnDef<Test>[] => [
         </Button>
       )
     },
-    cell: ({ row }) => <div className="min-w-[150px]">{row.getValue("MATERIAL CATEGORY")}</div>,
+    cell: ({ row }) => <div className="min-w-[150px]">{row.getValue("materialCategory")}</div>,
   },
   {
-    accessorKey: "TEST CODE",
+    accessorKey: "testCode",
     header: "Test Code",
   },
   {
-    accessorKey: "MATERIAL TEST",
+    accessorKey: "materialTest",
     header: "Material Test",
-     cell: ({ row }) => <div className="min-w-[150px]">{row.getValue("MATERIAL TEST")}</div>,
+     cell: ({ row }) => <div className="min-w-[150px]">{row.getValue("materialTest")}</div>,
   },
   {
-    accessorKey: "TEST METHOD(S)",
+    accessorKey: "testMethods",
     header: "Test Method(s)",
   },
   {
-    accessorKey: "ACCREDITATION",
+    accessorKey: "accreditation",
     header: "Accreditation",
   },
   {
-    accessorKey: "UNIT",
+    accessorKey: "unit",
     header: "Unit",
   },
   {
-    accessorKey: "AMOUNT (UGX)",
+    accessorKey: "amountUGX",
     header: ({ column }) => {
         return (
           <div className="text-right">
@@ -82,13 +82,13 @@ export const getColumns = ({ onDelete }: ColumnsProps): ColumnDef<Test>[] => [
         )
       },
     cell: ({ row }) => {
-        const amount = parseFloat(row.getValue("AMOUNT (UGX)"))
+        const amount = parseFloat(row.getValue("amountUGX"))
         const formatted = new Intl.NumberFormat("en-US").format(amount)
         return <div className="text-right font-medium">{formatted}</div>
     }
   },
   {
-    accessorKey: "AMOUNT (USD)",
+    accessorKey: "amountUSD",
     header: ({ column }) => {
         return (
           <div className="text-right">
@@ -103,7 +103,7 @@ export const getColumns = ({ onDelete }: ColumnsProps): ColumnDef<Test>[] => [
         )
       },
     cell: ({ row }) => {
-        const amount = parseFloat(row.getValue("AMOUNT (USD)"))
+        const amount = parseFloat(row.getValue("amountUSD"))
         const formatted = new Intl.NumberFormat("en-US", {
             style: "currency",
             currency: "USD",
@@ -112,9 +112,9 @@ export const getColumns = ({ onDelete }: ColumnsProps): ColumnDef<Test>[] => [
     }
   },
   {
-    accessorKey: "LEAD TIME (DAYS)",
+    accessorKey: "leadTimeDays",
     header: "Lead Time (Days)",
-    cell: ({ row }) => <div className="text-center">{row.getValue("LEAD TIME (DAYS)")}</div>,
+    cell: ({ row }) => <div className="text-center">{row.getValue("leadTimeDays")}</div>,
   },
   {
     id: "actions",

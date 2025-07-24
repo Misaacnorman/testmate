@@ -69,15 +69,15 @@ export function TestActions({ allData, onFilter, onDataUpdate, onTestCreated }: 
 
           const newTests: Test[] = json.map((row, index) => ({
             id: `imported-${Date.now()}-${index}`,
-            'MATERIAL CATEGORY': row['MATERIAL CATEGORY'] || '',
-            'TEST CODE': row['TEST CODE'] || '',
-            'MATERIAL TEST': row['MATERIAL TEST'] || '',
-            'TEST METHOD(S)': row['TEST METHOD(S)'] || '',
-            'ACCREDITATION': row['ACCREDITATION'] || '',
-            'UNIT': row['UNIT'] || '',
-            'AMOUNT (UGX)': Number(row['AMOUNT (UGX)']) || 0,
-            'AMOUNT (USD)': Number(row['AMOUNT (USD)']) || 0,
-            'LEAD TIME (DAYS)': Number(row['LEAD TIME (DAYS)']) || 0,
+            materialCategory: row['materialCategory'] || '',
+            testCode: row['testCode'] || '',
+            materialTest: row['materialTest'] || '',
+            testMethods: row['testMethods'] || '',
+            accreditation: row['accreditation'] || '',
+            unit: row['unit'] || '',
+            amountUGX: Number(row['amountUGX']) || 0,
+            amountUSD: Number(row['amountUSD']) || 0,
+            leadTimeDays: Number(row['leadTimeDays']) || 0,
           }));
 
           onDataUpdate([...allData, ...newTests]);

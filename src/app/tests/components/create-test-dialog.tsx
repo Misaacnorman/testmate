@@ -24,14 +24,14 @@ import { Test } from "@/types/test";
 
 const testSchema = z.object({
   materialCategory: z.string().min(1, "Material category is required."),
-  testMethod: z.string().min(1, "Test method is required."),
+  testMethods: z.string().min(1, "Test method is required."),
   testCode: z.string().min(1, "Test code is required."),
   materialTest: z.string().min(1, "Material test is required."),
   accreditation: z.string().min(1, "Accreditation status is required."),
   unit: z.string().min(1, "Unit is required."),
   amountUGX: z.coerce.number().min(0, "Amount must be positive."),
   amountUSD: z.coerce.number().min(0, "Amount must be positive."),
-  leadTime: z.coerce.number().int().min(0, "Lead time must be positive."),
+  leadTimeDays: z.coerce.number().int().min(0, "Lead time must be positive."),
 });
 
 type CreateTestDialogProps = {
@@ -47,20 +47,20 @@ export function CreateTestDialog({ onTestCreated }: CreateTestDialogProps) {
     resolver: zodResolver(testSchema),
     defaultValues: {
       materialCategory: "",
-      testMethod: "",
+      testMethods: "",
       testCode: "",
       materialTest: "",
       accreditation: "",
       unit: "",
       amountUGX: 0,
       amountUSD: 0,
-      leadTime: 0,
+      leadTimeDays: 0,
     },
   });
 
   const handleSuggestCode = async () => {
     const materialCategory = form.getValues("materialCategory");
-    const testMethod = form.getValues("testMethod");
+    const testMethod = form.getValues("testMethods");
 
     if (!materialCategory || !testMethod) {
       toast({
@@ -93,15 +93,15 @@ export function CreateTestDialog({ onTestCreated }: CreateTestDialogProps) {
 
   const onSubmit = (values: z.infer<typeof testSchema>) => {
     const newTest: Omit<Test, 'id'> = {
-        'MATERIAL CATEGORY': values.materialCategory,
-        'TEST CODE': values.testCode,
-        'MATERIAL TEST': values.materialTest,
-        'TEST METHOD(S)': values.testMethod,
-        'ACCREDITATION': values.accreditation,
-        'UNIT': values.unit,
-        'AMOUNT (UGX)': values.amountUGX,
-        'AMOUNT (USD)': values.amountUSD,
-        'LEAD TIME (DAYS)': values.leadTime,
+        materialCategory: values.materialCategory,
+        testCode: values.testCode,
+        materialTest: values.materialTest,
+        testMethods: values.testMethods,
+        accreditation: values.accreditation,
+        unit: values.unit,
+        amountUGX: values.amountUGX,
+        amountUSD: values.amountUSD,
+        leadTimeDays: values.leadTimeDays,
     };
     onTestCreated(newTest);
     setOpen(false);
@@ -128,7 +128,7 @@ export function CreateTestDialog({ onTestCreated }: CreateTestDialogProps) {
                 <FormField control={form.control} name="materialCategory" render={({ field }) => (
                     <FormItem><FormLabel>Material Category</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
-                <FormField control={form.control} name="testMethod" render={({ field }) => (
+                <FormField control={form.control} name="testMethods" render={({ field }) => (
                     <FormItem><FormLabel>Test Method(s)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="testCode" render={({ field }) => (
@@ -153,7 +153,7 @@ export function CreateTestDialog({ onTestCreated }: CreateTestDialogProps) {
                     <FormField control={form.control} name="unit" render={({ field }) => (
                         <FormItem><FormLabel>Unit</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                     )} />
-                    <FormField control={form.control} name="leadTime" render={({ field }) => (
+                    <FormField control={form.control} name="leadTimeDays" render={({ field }) => (
                         <FormItem><FormLabel>Lead Time (Days)</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>
                     )} />
                 </div>

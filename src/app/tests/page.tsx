@@ -41,7 +41,7 @@ export default function TestsPage() {
       const newTest = await addTest(test);
       toast({
         title: "Test Created",
-        description: `Test "${newTest['MATERIAL TEST']}" has been successfully created.`,
+        description: `Test "${newTest.materialTest}" has been successfully created.`,
       });
       fetchTests();
     } catch (error) {

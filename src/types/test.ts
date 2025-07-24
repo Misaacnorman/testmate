@@ -1,12 +1,12 @@
 export type Test = {
   id: string;
-  'MATERIAL CATEGORY': string;
-  'TEST CODE': string;
-  'MATERIAL TEST': string;
-  'TEST METHOD(S)': string;
-  'ACCREDITATION': string;
-  'UNIT': string;
-  'AMOUNT (UGX)': number;
-  'AMOUNT (USD)': number;
-  'LEAD TIME (DAYS)': number;
+  materialCategory: string;
+  testCode: string;
+  materialTest: string;
+  testMethods: string;
+  accreditation: string;
+  unit: string;
+  amountUGX: number;
+  amountUSD: number;
+  leadTimeDays: number;
 };
