@@ -151,10 +151,10 @@ export function EditTestDialog({ test, onTestUpdated, onOpenChange }: EditTestDi
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField control={form.control} name="amountUGX" render={({ field }) => (
-                        <FormItem><FormLabel>Amount (UGX)</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>
+                        <FormItem><FormLabel>Amount UGX</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>
                     )} />
                     <FormField control={form.control} name="amountUSD" render={({ field }) => (
-                        <FormItem><FormLabel>Amount (USD)</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>
+                        <FormItem><FormLabel>Amount USD</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>
                     )} />
                 </div>
                 <DialogFooter>
