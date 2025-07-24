@@ -2,7 +2,7 @@
 
 import { db } from '@/lib/firebase';
 import { Test } from '@/types/test';
-import { collection, getDocs, addDoc, doc, deleteDoc, DocumentData, QueryDocumentSnapshot } from 'firebase/firestore';
+import { collection, getDocs, addDoc, doc, deleteDoc, DocumentData, QueryDocumentSnapshot, updateDoc } from 'firebase/firestore';
 
 const testsCollection = collection(db, 'tests');
 
@@ -36,6 +36,12 @@ export async function addTest(test: Omit<Test, 'id'>): Promise<Test> {
         id: docRef.id,
         ...test
     };
+}
+
+export async function updateTest(test: Test): Promise<void> {
+    const testDoc = doc(db, 'tests', test.id);
+    const { id, ...testData } = test;
+    await updateDoc(testDoc, testData);
 }
 
 export async function deleteTest(testId: string): Promise<void> {

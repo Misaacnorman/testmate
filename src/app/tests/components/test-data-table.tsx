@@ -27,13 +27,14 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 interface TestDataTableProps {
   data: Test[];
   isLoading: boolean;
+  onEditTest: (test: Test) => void;
   onDeleteTest: (id: string) => void;
 }
 
-export function TestDataTable({ data, isLoading, onDeleteTest }: TestDataTableProps) {
+export function TestDataTable({ data, isLoading, onEditTest, onDeleteTest }: TestDataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
-  const columns = React.useMemo(() => getColumns({ onDelete: onDeleteTest }), [onDeleteTest]);
+  const columns = React.useMemo(() => getColumns({ onEdit: onEditTest, onDelete: onDeleteTest }), [onEditTest, onDeleteTest]);
 
   const table = useReactTable({
     data,

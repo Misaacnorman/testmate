@@ -26,10 +26,11 @@ import {
 import React from "react"
 
 type ColumnsProps = {
+  onEdit: (test: Test) => void;
   onDelete: (id: string) => void;
 }
 
-export const getColumns = ({ onDelete }: ColumnsProps): ColumnDef<Test>[] => [
+export const getColumns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<Test>[] => [
   {
     accessorKey: "materialCategory",
     header: ({ column }) => {
@@ -131,7 +132,7 @@ export const getColumns = ({ onDelete }: ColumnsProps): ColumnDef<Test>[] => [
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem disabled>
+              <DropdownMenuItem onClick={() => onEdit(test)}>
                 Edit
               </DropdownMenuItem>
               <DropdownMenuSeparator />
