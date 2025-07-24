@@ -38,8 +38,8 @@ export function ImportPreviewDialog({ open, onOpenChange, tests, onConfirm }: Im
                 <TableHead>Test Code</TableHead>
                 <TableHead>Material Test</TableHead>
                 <TableHead>Accreditation</TableHead>
-                <TableHead>Amount (UGX)</TableHead>
-                <TableHead>Amount (USD)</TableHead>
+                <TableHead className="text-right">Amount (UGX)</TableHead>
+                <TableHead className="text-right">Amount (USD)</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

@@ -115,12 +115,14 @@ export function EditTestDialog({ test, onTestUpdated, onOpenChange }: EditTestDi
         </DialogHeader>
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 py-4">
-                <FormField control={form.control} name="materialCategory" render={({ field }) => (
-                    <FormItem><FormLabel>Material Category</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                )} />
-                <FormField control={form.control} name="testMethods" render={({ field }) => (
-                    <FormItem><FormLabel>Test Method(s)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                )} />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField control={form.control} name="materialCategory" render={({ field }) => (
+                        <FormItem><FormLabel>Material Category</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                    )} />
+                    <FormField control={form.control} name="testMethods" render={({ field }) => (
+                        <FormItem><FormLabel>Test Method(s)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                    )} />
+                </div>
                 <FormField control={form.control} name="testCode" render={({ field }) => (
                     <FormItem>
                         <FormLabel>Test Code</FormLabel>
@@ -139,7 +141,7 @@ export function EditTestDialog({ test, onTestUpdated, onOpenChange }: EditTestDi
                 <FormField control={form.control} name="accreditation" render={({ field }) => (
                     <FormItem><FormLabel>Accreditation</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField control={form.control} name="unit" render={({ field }) => (
                         <FormItem><FormLabel>Unit</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                     )} />
@@ -147,7 +149,7 @@ export function EditTestDialog({ test, onTestUpdated, onOpenChange }: EditTestDi
                         <FormItem><FormLabel>Lead Time (Days)</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>
                     )} />
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField control={form.control} name="amountUGX" render={({ field }) => (
                         <FormItem><FormLabel>Amount (UGX)</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>
                     )} />
