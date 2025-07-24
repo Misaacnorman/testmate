@@ -35,7 +35,7 @@ const testSchema = z.object({
 });
 
 type CreateTestDialogProps = {
-    onTestCreated: (test: Test) => void;
+    onTestCreated: (test: Omit<Test, 'id'>) => void;
 }
 
 export function CreateTestDialog({ onTestCreated }: CreateTestDialogProps) {
@@ -92,8 +92,7 @@ export function CreateTestDialog({ onTestCreated }: CreateTestDialogProps) {
   };
 
   const onSubmit = (values: z.infer<typeof testSchema>) => {
-    const newTest: Test = {
-        id: `manual-${Date.now()}`,
+    const newTest: Omit<Test, 'id'> = {
         'MATERIAL CATEGORY': values.materialCategory,
         'TEST CODE': values.testCode,
         'MATERIAL TEST': values.materialTest,
@@ -105,10 +104,6 @@ export function CreateTestDialog({ onTestCreated }: CreateTestDialogProps) {
         'LEAD TIME (DAYS)': values.leadTime,
     };
     onTestCreated(newTest);
-    toast({
-        title: "Test Created",
-        description: `Test "${values.materialTest}" has been successfully created.`,
-    });
     setOpen(false);
     form.reset();
   };

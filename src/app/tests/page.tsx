@@ -1,38 +1,87 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { TestDataTable } from "./components/test-data-table";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { TestActions } from "./components/test-actions";
 import { Test } from "@/types/test";
-
-const mockTests: Test[] = [
-    { id: '1', 'MATERIAL CATEGORY': 'Concrete', 'TEST CODE': 'CON-001', 'MATERIAL TEST': 'Compressive Strength', 'TEST METHOD(S)': 'ASTM C39', 'ACCREDITATION': 'ISO 17025', 'UNIT': 'MPa', 'AMOUNT (UGX)': 50000, 'AMOUNT (USD)': 14, 'LEAD TIME (DAYS)': 3 },
-    { id: '2', 'MATERIAL CATEGORY': 'Soil', 'TEST CODE': 'SOIL-002', 'MATERIAL TEST': 'Moisture Content', 'TEST METHOD(S)': 'ASTM D2216', 'ACCREDITATION': 'Yes', 'UNIT': '%', 'AMOUNT (UGX)': 30000, 'AMOUNT (USD)': 8, 'LEAD TIME (DAYS)': 1 },
-    { id: '3', 'MATERIAL CATEGORY': 'Asphalt', 'TEST CODE': 'ASP-003', 'MATERIAL TEST': 'Bitumen Content', 'TEST METHOD(S)': 'ASTM D2172', 'ACCREDITATION': 'Yes', 'UNIT': '%', 'AMOUNT (UGX)': 120000, 'AMOUNT (USD)': 33, 'LEAD TIME (DAYS)': 2 },
-    { id: '4', 'MATERIAL CATEGORY': 'Steel', 'TEST CODE': 'STL-004', 'MATERIAL TEST': 'Tensile Strength', 'TEST METHOD(S)': 'ASTM E8', 'ACCREDITATION': 'No', 'UNIT': 'psi', 'AMOUNT (UGX)': 80000, 'AMOUNT (USD)': 22, 'LEAD TIME (DAYS)': 5 },
-    { id: '5', 'MATERIAL CATEGORY': 'Water', 'TEST CODE': 'WAT-005', 'MATERIAL TEST': 'pH Level', 'TEST METHOD(S)': 'EPA 150.1', 'ACCREDITATION': 'Yes', 'UNIT': 'pH', 'AMOUNT (UGX)': 25000, 'AMOUNT (USD)': 7, 'LEAD TIME (DAYS)': 1 },
-];
+import { getTests, addTest, deleteTest } from "@/services/tests";
+import { useToast } from '@/hooks/use-toast';
 
 export default function TestsPage() {
   const [data, setData] = useState<Test[]>([]);
   const [filteredData, setFilteredData] = useState<Test[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
+
+  const fetchTests = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const tests = await getTests();
+      setData(tests);
+      setFilteredData(tests);
+    } catch (error) {
+      console.error("Failed to fetch tests:", error);
+      toast({
+        variant: "destructive",
+        title: "Error fetching tests",
+        description: "Could not retrieve tests from the database.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }, [toast]);
 
   useEffect(() => {
-    // In a real app, you would fetch this from Firestore.
-    setIsLoading(true);
-    const timer = setTimeout(() => {
-      setData(mockTests);
-      setFilteredData(mockTests);
-      setIsLoading(false);
-    }, 1500);
-    return () => clearTimeout(timer);
-  }, []);
+    fetchTests();
+  }, [fetchTests]);
+
+  const handleTestCreated = async (test: Omit<Test, 'id'>) => {
+    try {
+      const newTest = await addTest(test);
+      toast({
+        title: "Test Created",
+        description: `Test "${newTest['MATERIAL TEST']}" has been successfully created.`,
+      });
+      fetchTests();
+    } catch (error) {
+      console.error("Failed to create test:", error);
+      toast({
+        variant: "destructive",
+        title: "Error creating test",
+        description: "Could not save the new test.",
+      });
+    }
+  };
+
+  const handleTestDeleted = async (testId: string) => {
+    try {
+      await deleteTest(testId);
+      toast({
+        title: "Test Deleted",
+        description: "The test has been successfully deleted.",
+      });
+      fetchTests(); // Refetch data to update the table
+    } catch (error) {
+      console.error("Failed to delete test:", error);
+      toast({
+        variant: "destructive",
+        title: "Error deleting test",
+        description: "Could not delete the test.",
+      });
+    }
+  };
 
   const handleDataUpdate = (newData: Test[]) => {
       setData(newData);
       setFilteredData(newData);
+      // Here you might want to batch write the new data to Firestore
+      // For simplicity, we'll just update the local state.
+      // A full implementation would involve a more complex sync logic.
+      toast({
+        title: "Data Updated",
+        description: `${newData.length - data.length} new records added locally.`,
+      });
   };
   
   return (
@@ -51,10 +100,15 @@ export default function TestsPage() {
             <CardTitle>All Tests</CardTitle>
             <CardDescription>A comprehensive list of all tests conducted in the laboratory.</CardDescription>
           </div>
-          <TestActions allData={data} onFilter={setFilteredData} onDataUpdate={handleDataUpdate} />
+          <TestActions 
+            allData={data} 
+            onFilter={setFilteredData} 
+            onDataUpdate={handleDataUpdate}
+            onTestCreated={handleTestCreated}
+          />
         </CardHeader>
         <CardContent>
-          <TestDataTable data={filteredData} isLoading={isLoading} />
+          <TestDataTable data={filteredData} isLoading={isLoading} onDeleteTest={handleTestDeleted} />
         </CardContent>
       </Card>
     </div>

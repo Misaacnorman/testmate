@@ -14,9 +14,10 @@ interface TestActionsProps {
   allData: Test[];
   onFilter: (filteredData: Test[]) => void;
   onDataUpdate: (newData: Test[]) => void;
+  onTestCreated: (newTest: Omit<Test, 'id'>) => void;
 }
 
-export function TestActions({ allData, onFilter, onDataUpdate }: TestActionsProps) {
+export function TestActions({ allData, onFilter, onDataUpdate, onTestCreated }: TestActionsProps) {
   const [search, setSearch] = useState("");
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -135,7 +136,7 @@ export function TestActions({ allData, onFilter, onDataUpdate }: TestActionsProp
         <Download className="h-3.5 w-3.5" />
         <span>Export</span>
       </Button>
-      <CreateTestDialog onTestCreated={(newTest) => onDataUpdate([...allData, newTest])} />
+      <CreateTestDialog onTestCreated={onTestCreated} />
     </div>
   );
 }
