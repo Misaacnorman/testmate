@@ -3,14 +3,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Download, FileUp, Filter, Search, Trash2 } from "lucide-react";
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { ChevronDown, Download, FileUp, Filter, Search, Trash2 } from "lucide-react";
 import { CreateTestDialog } from "./create-test-dialog";
 import { Test } from "@/types/test";
 import * as XLSX from 'xlsx';
 import { useToast } from "@/hooks/use-toast";
+import { ImportPreviewDialog } from "./import-preview-dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { DropdownMenuGroup } from "@/components/ui/dropdown-menu";
 
 interface TestActionsProps {
   onSearch: (searchTerm: string) => void;
@@ -38,6 +38,8 @@ export function TestActions({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedAccreditations, setSelectedAccreditations] = useState<string[]>([]);
   const [selectedMaterialCategories, setSelectedMaterialCategories] = useState<string[]>([]);
+  const [isPreviewing, setIsPreviewing] = useState(false);
+  const [testsToImport, setTestsToImport] = useState<Omit<Test, 'id'>[]>([]);
 
   useEffect(() => {
     onFilter({ accreditation: selectedAccreditations, materialCategory: selectedMaterialCategories });
@@ -65,18 +67,20 @@ export function TestActions({
           const json = XLSX.utils.sheet_to_json<any>(worksheet);
 
           const newTests: Omit<Test, 'id'>[] = json.map((row) => ({
-            materialCategory: row['MATERIAL CATEGORY'] || '',
-            testCode: row['TEST CODE'] || '',
-            materialTest: row['MATERIAL TEST'] || '',
-            testMethods: row['TEST METHOD(S)'] || '',
-            accreditation: row['ACCREDITATION STATUS'] || row['ACCREDITATION'] || '',
-            unit: row['UNIT'] || '',
-            amountUGX: Number(row['AMOUNT (UGX)']) || 0,
-            amountUSD: Number(row['AMOUNT (USD)']) || 0,
-            leadTimeDays: Number(row['LEAD TIME (DAYS)']) || 0,
+            materialCategory: String(row['MATERIAL CATEGORY'] || ''),
+            testCode: String(row['TEST CODE'] || ''),
+            materialTest: String(row['MATERIAL TEST'] || ''),
+            testMethods: String(row['TEST METHOD(S)'] || ''),
+            accreditation: String(row['ACCREDITATION'] || ''),
+            unit: String(row['UNIT'] || ''),
+            amountUGX: Number(row['AMOUNT (UGX)'] || 0),
+            amountUSD: Number(row['AMOUNT (USD)'] || 0),
+            leadTimeDays: Number(row['LEAD TIME (DAYS)'] || 0),
           }));
+          
+          setTestsToImport(newTests);
+          setIsPreviewing(true);
 
-          onImport(newTests);
         } catch (error) {
             console.error(error);
             toast({
@@ -108,6 +112,12 @@ export function TestActions({
         ? prev.filter(c => c !== category)
         : [...prev, category]
     );
+  }
+
+  const handleConfirmImport = () => {
+    onImport(testsToImport);
+    setIsPreviewing(false);
+    setTestsToImport([]);
   }
 
   return (
@@ -158,38 +168,61 @@ export function TestActions({
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
-      <Button variant="outline" className="gap-1" onClick={handleImportClick}>
-        <FileUp className="h-3.5 w-3.5" />
-        <span>Import</span>
-      </Button>
+
+      <div className="ml-auto flex items-center gap-2">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="gap-1">
+              <span>Bulk Actions</span>
+              <ChevronDown className="h-3.5 w-3.5" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={handleImportClick}>
+              <FileUp className="mr-2 h-4 w-4" />
+              Import from file
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={onExport}>
+              <Download className="mr-2 h-4 w-4" />
+              Export to Excel
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <AlertDialog>
+               <AlertDialogTrigger asChild>
+                <DropdownMenuItem className="text-destructive focus:text-destructive focus:bg-destructive/10">
+                  <Trash2 className="mr-2 h-4 w-4" />
+                   Delete All
+                </DropdownMenuItem>
+               </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete all tests from the database.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={onDeleteAll} className="bg-destructive hover:bg-destructive/90">
+                    Delete All
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <CreateTestDialog onTestCreated={onTestCreated} />
+      </div>
+
       <input type="file" ref={fileInputRef} onChange={handleFileChange} accept=".xlsx, .xls, .csv" style={{ display: 'none' }} />
-      <Button variant="outline" className="gap-1" onClick={onExport}>
-        <Download className="h-3.5 w-3.5" />
-        <span>Export</span>
-      </Button>
-      <CreateTestDialog onTestCreated={onTestCreated} />
-      <AlertDialog>
-        <AlertDialogTrigger asChild>
-          <Button variant="destructive" className="gap-1">
-            <Trash2 className="h-3.5 w-3.5" />
-            <span>Delete All</span>
-          </Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete all tests from the database.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={onDeleteAll} className="bg-destructive hover:bg-destructive/90">
-              Delete All
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      
+      <ImportPreviewDialog
+        open={isPreviewing}
+        onOpenChange={setIsPreviewing}
+        tests={testsToImport}
+        onConfirm={handleConfirmImport}
+      />
     </div>
   );
 }

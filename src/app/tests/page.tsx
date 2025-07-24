@@ -195,21 +195,23 @@ export default function TestsPage() {
           </div>
         </div>
         <Card>
-          <CardHeader className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div>
-              <CardTitle>All Tests</CardTitle>
-              <CardDescription>A comprehensive list of all tests conducted in the laboratory.</CardDescription>
+          <CardHeader>
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+               <div className='flex-grow'>
+                  <CardTitle>All Tests</CardTitle>
+                  <CardDescription>A comprehensive list of all tests conducted in the laboratory.</CardDescription>
+              </div>
+              <TestActions 
+                onSearch={handleSearch}
+                onExport={handleExport}
+                onImport={handleImport}
+                onTestCreated={handleTestCreated}
+                onDeleteAll={handleDeleteAll}
+                onFilter={handleFilter}
+                accreditations={uniqueAccreditations}
+                materialCategories={uniqueMaterialCategories}
+              />
             </div>
-            <TestActions 
-              onSearch={handleSearch}
-              onExport={handleExport}
-              onImport={handleImport}
-              onTestCreated={handleTestCreated}
-              onDeleteAll={handleDeleteAll}
-              onFilter={handleFilter}
-              accreditations={uniqueAccreditations}
-              materialCategories={uniqueMaterialCategories}
-            />
           </CardHeader>
           <CardContent>
             <TestDataTable data={filteredData} isLoading={isLoading} onEditTest={setEditingTest} onDeleteTest={handleTestDeleted} />
