@@ -24,6 +24,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import React from "react"
+import { Badge } from "@/components/ui/badge"
 
 type ColumnsProps = {
   onEdit: (test: Test) => void;
@@ -39,64 +40,42 @@ export const getColumns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<Test>[
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Material Category
+          Category
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
     },
-    cell: ({ row }) => <div className="text-center">{row.getValue("materialCategory")}</div>,
-  },
-  {
-    accessorKey: "testCode",
-    header: () => <div className="text-center">Test Code</div>,
-    cell: ({ row }) => <div className="text-center">{row.getValue("testCode")}</div>,
+    cell: ({ row }) => <div className="min-w-[150px]">{row.getValue("materialCategory")}</div>,
   },
   {
     accessorKey: "materialTest",
-    header: () => <div className="text-center">Material Test</div>,
-     cell: ({ row }) => <div className="text-center">{row.getValue("materialTest")}</div>,
+    header: "Material Test",
+     cell: ({ row }) => <div className="min-w-[200px]">{row.getValue("materialTest")}</div>,
+  },
+  {
+    accessorKey: "testCode",
+    header: "Test Code",
+    cell: ({ row }) => <div className="text-center">{row.getValue("testCode")}</div>,
   },
   {
     accessorKey: "testMethods",
-    header: () => <div className="text-center">Test Method(s)</div>,
+    header: "Method(s)",
     cell: ({ row }) => <div className="text-center">{row.getValue("testMethods")}</div>,
   },
   {
     accessorKey: "accreditation",
-    header: () => <div className="text-center">Accreditation</div>,
-    cell: ({ row }) => <div className="text-center">{row.getValue("accreditation")}</div>,
-  },
-  {
-    accessorKey: "unit",
-    header: () => <div className="text-center">Unit</div>,
-    cell: ({ row }) => <div className="text-center">{row.getValue("unit")}</div>,
-  },
-  {
-    accessorKey: "amountUGX",
-    header: ({ column }) => {
-        return (
-          <div className="text-center">
-            <Button
-              variant="ghost"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Amount (UGX)
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-          </div>
-        )
-      },
+    header: "Accreditation",
     cell: ({ row }) => {
-        const amount = parseFloat(row.getValue("amountUGX"))
-        const formatted = new Intl.NumberFormat("en-US").format(amount)
-        return <div className="text-center font-medium">{formatted}</div>
-    }
+      const accreditation = row.getValue("accreditation") as string;
+      const variant = accreditation.toLowerCase() === "yes" ? "default" : "secondary"
+      return <div className="text-center"><Badge variant={variant}>{accreditation}</Badge></div>
+    },
   },
-  {
+    {
     accessorKey: "amountUSD",
     header: ({ column }) => {
         return (
-          <div className="text-center">
+          <div className="text-right">
             <Button
               variant="ghost"
               onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -113,13 +92,13 @@ export const getColumns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<Test>[
             style: "currency",
             currency: "USD",
         }).format(amount)
-        return <div className="text-center font-medium">{formatted}</div>
+        return <div className="text-right font-medium">{formatted}</div>
     }
   },
   {
     accessorKey: "leadTimeDays",
-    header: () => <div className="text-center">Lead Time (Days)</div>,
-    cell: ({ row }) => <div className="text-center">{row.getValue("leadTimeDays")}</div>,
+    header: () => <div className="text-center">Lead Time</div>,
+    cell: ({ row }) => <div className="text-center">{row.getValue("leadTimeDays")} days</div>,
   },
   {
     id: "actions",
