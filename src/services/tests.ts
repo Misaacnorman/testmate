@@ -2,7 +2,7 @@
 
 import { db } from '@/lib/firebase';
 import { Test } from '@/types/test';
-import { collection, getDocs, addDoc, doc, deleteDoc, DocumentData, QueryDocumentSnapshot, updateDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, doc, deleteDoc, DocumentData, QueryDocumentSnapshot, updateDoc, writeBatch } from 'firebase/firestore';
 
 const testsCollection = collection(db, 'tests');
 
@@ -47,4 +47,13 @@ export async function updateTest(test: Test): Promise<void> {
 export async function deleteTest(testId: string): Promise<void> {
     const testDoc = doc(db, 'tests', testId);
     await deleteDoc(testDoc);
+}
+
+export async function deleteAllTests(): Promise<void> {
+    const snapshot = await getDocs(testsCollection);
+    const batch = writeBatch(db);
+    snapshot.docs.forEach((doc) => {
+        batch.delete(doc.ref);
+    });
+    await batch.commit();
 }

@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { TestDataTable } from "./components/test-data-table";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { TestActions } from "./components/test-actions";
 import { Test } from "@/types/test";
-import { getTests, addTest, deleteTest, updateTest } from "@/services/tests";
+import { getTests, addTest, deleteTest, updateTest, deleteAllTests } from "@/services/tests";
 import { useToast } from '@/hooks/use-toast';
 import { EditTestDialog } from './components/edit-test-dialog';
 import * as XLSX from 'xlsx';
@@ -48,6 +48,29 @@ export default function TestsPage() {
     );
     setFilteredData(filtered);
   };
+
+  const handleFilter = useCallback((filters: { accreditation: string[], materialCategory: string[] }) => {
+    let newFilteredData = [...data];
+
+    if (filters.accreditation.length > 0) {
+      newFilteredData = newFilteredData.filter(item => filters.accreditation.includes(item.accreditation));
+    }
+    if (filters.materialCategory.length > 0) {
+      newFilteredData = newFilteredData.filter(item => filters.materialCategory.includes(item.materialCategory));
+    }
+
+    setFilteredData(newFilteredData);
+  }, [data]);
+
+  const uniqueAccreditations = useMemo(() => {
+    const accreditations = data.map(test => test.accreditation).filter(Boolean);
+    return [...new Set(accreditations)];
+  }, [data]);
+
+  const uniqueMaterialCategories = useMemo(() => {
+    const categories = data.map(test => test.materialCategory).filter(Boolean);
+    return [...new Set(categories)];
+  }, [data]);
 
   const handleTestCreated = async (test: Omit<Test, 'id'>) => {
     try {
@@ -141,6 +164,24 @@ export default function TestsPage() {
       });
     }
   };
+
+  const handleDeleteAll = async () => {
+    try {
+      await deleteAllTests();
+      toast({
+        title: "All Tests Deleted",
+        description: "All tests have been successfully deleted.",
+      });
+      fetchTests();
+    } catch (error) {
+      console.error("Failed to delete all tests:", error);
+      toast({
+        variant: "destructive",
+        title: "Error Deleting All Tests",
+        description: "Could not delete all tests.",
+      });
+    }
+  }
   
   return (
     <>
@@ -164,6 +205,10 @@ export default function TestsPage() {
               onExport={handleExport}
               onImport={handleImport}
               onTestCreated={handleTestCreated}
+              onDeleteAll={handleDeleteAll}
+              onFilter={handleFilter}
+              accreditations={uniqueAccreditations}
+              materialCategories={uniqueMaterialCategories}
             />
           </CardHeader>
           <CardContent>

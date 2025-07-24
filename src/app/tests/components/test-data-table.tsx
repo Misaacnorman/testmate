@@ -22,7 +22,6 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Test } from "@/types/test";
 import { getColumns } from "./columns";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 interface TestDataTableProps {
   data: Test[];
@@ -60,7 +59,7 @@ export function TestDataTable({ data, isLoading, onEditTest, onDeleteTest }: Tes
   
   return (
     <div>
-      <ScrollArea className="w-full whitespace-nowrap rounded-md border">
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -109,8 +108,7 @@ export function TestDataTable({ data, isLoading, onEditTest, onDeleteTest }: Tes
             )}
           </TableBody>
         </Table>
-        <ScrollBar orientation="horizontal" />
-      </ScrollArea>
+      </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button
           variant="outline"

@@ -44,34 +44,38 @@ export const getColumns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<Test>[
         </Button>
       )
     },
-    cell: ({ row }) => <div className="min-w-[150px]">{row.getValue("materialCategory")}</div>,
+    cell: ({ row }) => <div className="text-center">{row.getValue("materialCategory")}</div>,
   },
   {
     accessorKey: "testCode",
-    header: "Test Code",
+    header: () => <div className="text-center">Test Code</div>,
+    cell: ({ row }) => <div className="text-center">{row.getValue("testCode")}</div>,
   },
   {
     accessorKey: "materialTest",
-    header: "Material Test",
-     cell: ({ row }) => <div className="min-w-[150px]">{row.getValue("materialTest")}</div>,
+    header: () => <div className="text-center">Material Test</div>,
+     cell: ({ row }) => <div className="text-center">{row.getValue("materialTest")}</div>,
   },
   {
     accessorKey: "testMethods",
-    header: "Test Method(s)",
+    header: () => <div className="text-center">Test Method(s)</div>,
+    cell: ({ row }) => <div className="text-center">{row.getValue("testMethods")}</div>,
   },
   {
     accessorKey: "accreditation",
-    header: "Accreditation",
+    header: () => <div className="text-center">Accreditation</div>,
+    cell: ({ row }) => <div className="text-center">{row.getValue("accreditation")}</div>,
   },
   {
     accessorKey: "unit",
-    header: "Unit",
+    header: () => <div className="text-center">Unit</div>,
+    cell: ({ row }) => <div className="text-center">{row.getValue("unit")}</div>,
   },
   {
     accessorKey: "amountUGX",
     header: ({ column }) => {
         return (
-          <div className="text-right">
+          <div className="text-center">
             <Button
               variant="ghost"
               onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -85,14 +89,14 @@ export const getColumns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<Test>[
     cell: ({ row }) => {
         const amount = parseFloat(row.getValue("amountUGX"))
         const formatted = new Intl.NumberFormat("en-US").format(amount)
-        return <div className="text-right font-medium">{formatted}</div>
+        return <div className="text-center font-medium">{formatted}</div>
     }
   },
   {
     accessorKey: "amountUSD",
     header: ({ column }) => {
         return (
-          <div className="text-right">
+          <div className="text-center">
             <Button
               variant="ghost"
               onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -109,12 +113,12 @@ export const getColumns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<Test>[
             style: "currency",
             currency: "USD",
         }).format(amount)
-        return <div className="text-right font-medium">{formatted}</div>
+        return <div className="text-center font-medium">{formatted}</div>
     }
   },
   {
     accessorKey: "leadTimeDays",
-    header: "Lead Time (Days)",
+    header: () => <div className="text-center">Lead Time (Days)</div>,
     cell: ({ row }) => <div className="text-center">{row.getValue("leadTimeDays")}</div>,
   },
   {
