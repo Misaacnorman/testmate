@@ -22,7 +22,7 @@ export default function DashboardLayout({
         <SidebarHeader>
           <div className="flex items-center gap-2 p-4">
             <Beaker className="w-8 h-8 text-primary" />
-            <h1 className="text-xl font-bold">TestCentral</h1>
+            <h1 className="text-xl font-bold">TestMate</h1>
           </div>
         </SidebarHeader>
         <SidebarContent>
