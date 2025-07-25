@@ -150,28 +150,15 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         return;
       }
       
-      // --- DEBUGGING CODE START ---
-      console.log("DEBUG - Selected Categories Keys:", Object.keys(selectedCategories));
-      console.log("DEBUG - Special Categories Array:", specialCategories);
-
-      // Original check (case-sensitive)
-      const anySpecialSelectedOriginal = Object.keys(selectedCategories).some(cat => specialCategories.includes(cat));
-      console.log("DEBUG - Any Special Selected (Original, case-sensitive):", anySpecialSelectedOriginal);
-
-      // Case-insensitive check (for debugging)
-      const anySpecialSelectedCaseInsensitive = Object.keys(selectedCategories).some(selectedCat =>
+      const anySpecialSelected = Object.keys(selectedCategories).some(selectedCat =>
         specialCategories.some(specialCat =>
           specialCat.toLowerCase().trim() === selectedCat.toLowerCase().trim()
         )
       );
-      console.log("DEBUG - Any Special Selected (Case-insensitive):", anySpecialSelectedCaseInsensitive);
-      // --- DEBUGGING CODE END ---
 
-      if (anySpecialSelectedOriginal) {
-        console.log("DEBUG: Moving to Step 4");
+      if (anySpecialSelected) {
         setCurrentStep(4);
       } else {
-        console.log("DEBUG: Moving to Step 5 (No Special)");
         setCurrentStep(5);
       }
     } else if (currentStep === 4) {
@@ -191,7 +178,11 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
 
   const handleBack = () => {
     if (currentStep === 5) {
-      const anySpecialSelected = Object.keys(selectedCategories).some(cat => specialCategories.includes(cat));
+      const anySpecialSelected = Object.keys(selectedCategories).some(selectedCat =>
+        specialCategories.some(specialCat =>
+          specialCat.toLowerCase().trim() === selectedCat.toLowerCase().trim()
+        )
+      );
       if (anySpecialSelected) {
         setCurrentStep(4);
       } else {
@@ -203,18 +194,13 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
   };
   
   const handleCategoryToggle = (category: string) => {
-    console.log("DEBUG - Toggling Category:", category); // --- ADD THIS ---
     setSelectedCategories(prev => {
         const newCategories = { ...prev };
-        console.log("DEBUG - Previous selectedCategories state:", prev); // --- ADD THIS ---
         if (newCategories[category]) {
             delete newCategories[category];
-            console.log("DEBUG - Removed category:", category); // --- ADD THIS ---
         } else {
             newCategories[category] = { quantity: 1, tests: {} };
-            console.log("DEBUG - Added category:", category); // --- ADD THIS ---
         }
-        console.log("DEBUG - New selectedCategories state:", newCategories); // --- ADD THIS ---
         return newCategories;
     });
   };
@@ -308,7 +294,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
   const initializeStep4Data = useCallback(() => {
     const initialData: Record<string, any> = {};
     Object.entries(selectedCategories).forEach(([category, data]) => {
-      if (specialCategories.includes(category)) {
+      if (specialCategories.some(sc => sc.toLowerCase() === category.toLowerCase())) {
         initialData[category] = {
           numberOfSets: 1,
           setDistribution: [data.quantity],
@@ -598,7 +584,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         
         {currentStep === 4 && (
             <Accordion type="multiple" className="w-full space-y-2">
-                {Object.keys(selectedCategories).filter(cat => specialCategories.includes(cat)).map(category => (
+                {Object.keys(selectedCategories).filter(cat => specialCategories.some(sc => sc.toLowerCase() === cat.toLowerCase())).map(category => (
                      <AccordionItem key={category} value={category}>
                         <AccordionTrigger className="font-bold text-lg">{category}</AccordionTrigger>
                         <AccordionContent className="p-4">
