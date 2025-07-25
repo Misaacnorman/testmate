@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -28,7 +29,6 @@ import { Test } from "@/types/test";
 import { useToast } from "@/hooks/use-toast";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CalendarIcon, ChevronDown } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { SampleReceipt } from "./sample-receipt";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -205,19 +205,18 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
   
   const handleTestToggle = (category: string, test: Test) => {
     setSelectedCategories(prev => {
-      const newCategories = JSON.parse(JSON.stringify(prev));
-      const categoryData = newCategories[category];
-      
-      if (categoryData.tests[test.id]) {
-        delete categoryData.tests[test.id];
-      } else {
-        categoryData.tests[test.id] = { 
-          quantity: categoryData.quantity, 
-          testMethods: test.testMethods, 
-          materialTest: test.materialTest 
-        };
-      }
-      return newCategories;
+        const newCategories = JSON.parse(JSON.stringify(prev));
+        const categoryData = newCategories[category];
+        if (categoryData.tests[test.id]) {
+            delete categoryData.tests[test.id];
+        } else {
+            categoryData.tests[test.id] = { 
+                quantity: categoryData.quantity, 
+                testMethods: test.testMethods, 
+                materialTest: test.materialTest 
+            };
+        }
+        return newCategories;
     });
   };
 
@@ -304,7 +303,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
   const initializeStep4Data = useCallback(() => {
     const initialData: Record<string, any> = {};
     Object.entries(selectedCategories).forEach(([category, data]) => {
-      if (specialCategories.some(sc => sc.toLowerCase() === category.toLowerCase())) {
+      if (specialCategories.some(sc => sc.toLowerCase().trim() === category.toLowerCase().trim())) {
          const selectedTests = Object.values(data.tests).map((t: any) => t.materialTest);
          const hasWaterAbsorption = selectedTests.includes("Water Absorption");
          const hasCompressiveStrength = selectedTests.includes("Compressive Strength");
@@ -401,8 +400,11 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
   
   const renderSetFields = (category: string, setsData: any, setOffset = 0, subField?: string) => {
       return setsData?.sets.map((set: any, i: number) => (
-            <div key={i + setOffset} className="space-y-3 border p-3 rounded-lg">
-                <h4 className="font-semibold text-md">Set {i + 1 + setOffset}</h4>
+            <AccordionItem key={i + setOffset} value={`set-${i + setOffset}`}>
+              <AccordionTrigger>
+                  <h4 className="font-semibold text-md">Set {i + 1 + setOffset}</h4>
+              </AccordionTrigger>
+              <AccordionContent className="space-y-3 border p-3 rounded-lg">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="space-y-2">
                         <Label>Casting Date</Label>
@@ -453,7 +455,8 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                       ))}
                     </div>
                 </div>
-            </div>
+              </AccordionContent>
+            </AccordionItem>
         ));
   }
 
@@ -647,10 +650,10 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         )}
 
         {currentStep === 3 && (
-            <Accordion type="multiple" className="w-full space-y-2">
+            <Accordion type="multiple" className="w-full space-y-2" defaultValue={Object.keys(selectedCategories)}>
                 {Object.keys(selectedCategories).map(category => (
                     <AccordionItem key={category} value={category}>
-                        <AccordionTrigger className="hover:no-underline border p-2 rounded-md">
+                        <AccordionTrigger>
                            <div className="flex w-full items-center justify-between">
                                 <span className="font-bold text-lg flex-1 text-left">{category}</span>
                                 <div className="flex items-center gap-2 pr-2">
@@ -663,14 +666,13 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                                         onClick={e => e.stopPropagation()}
                                      />
                                 </div>
-                                <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
                             </div>
                         </AccordionTrigger>
                         <AccordionContent className="p-4 border border-t-0 rounded-b-md">
                             <div className="space-y-4">
                                <h4 className="font-semibold">Select Tests:</h4>
                                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
-                                {allTests.filter(t => t.materialCategory === category).map(test => (
+                                {allTests.filter(t => t.materialCategory.toLowerCase().trim() === category.toLowerCase().trim()).map(test => (
                                     <div key={test.id} className="flex items-center justify-between">
                                         <div className="flex items-center space-x-3">
                                             <Checkbox
@@ -708,13 +710,15 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         )}
         
         {currentStep === 4 && (
-            <Accordion type="multiple" className="w-full space-y-2" defaultValue={Object.keys(selectedCategories).filter(cat => specialCategories.some(sc => sc.toLowerCase() === cat.toLowerCase()))}>
+            <Accordion type="multiple" className="w-full space-y-2" defaultValue={Object.keys(selectedCategories).filter(cat => specialCategories.some(sc => sc.toLowerCase().trim() === cat.toLowerCase().trim()))}>
                 {Object.keys(selectedCategories).filter(cat => specialCategories.some(sc => sc.toLowerCase().trim() === cat.toLowerCase().trim())).map(category => {
                      const catData = step4Data[category];
                      if (!catData) return null;
                      return(
                      <AccordionItem key={category} value={category}>
-                        <AccordionTrigger className="font-bold text-lg">{category}</AccordionTrigger>
+                        <AccordionTrigger>
+                           <span className="font-bold text-lg flex-1 text-left">{category}</span>
+                        </AccordionTrigger>
                         <AccordionContent className="p-4">
                             {catData?.isSpecialPair ? (
                                 <div className="space-y-6">
@@ -742,7 +746,9 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                                             />
                                         </div>
                                     </div>
-                                    {renderSetFields(category, catData.compressive, 0, 'compressive')}
+                                    <Accordion type="multiple" className="w-full" defaultValue={['set-0']}>
+                                      {renderSetFields(category, catData.compressive, 0, 'compressive')}
+                                    </Accordion>
 
                                     <div className="space-y-2 border p-3 rounded-md">
                                         <div className="flex justify-between items-center">
@@ -768,7 +774,9 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                                             />
                                         </div>
                                     </div>
-                                    {renderSetFields(category, catData.water, 0, 'water')}
+                                     <Accordion type="multiple" className="w-full" defaultValue={['set-0']}>
+                                      {renderSetFields(category, catData.water, 0, 'water')}
+                                    </Accordion>
                                 </div>
                             ) : (
                                 <div className="space-y-4">
@@ -808,7 +816,9 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                                         </div>
                                     )}
                                     <Separator/>
-                                    {renderSetFields(category, catData)}
+                                     <Accordion type="multiple" className="w-full" defaultValue={['set-0']}>
+                                        {renderSetFields(category, catData)}
+                                     </Accordion>
                                 </div>
                             )}
                         </AccordionContent>

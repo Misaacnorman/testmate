@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -25,10 +26,11 @@ export function SampleReceipt({ formData, categories, specialData, receiptDate, 
         }))
     );
     
-    const renderSetDetails = (set: any, index: number) => {
+    const renderSetDetails = (set: any, index: number, distribution?: number[]) => {
+        const quantity = distribution ? distribution[index] : 'N/A';
         return (
              <div key={index} className="text-xs space-y-1 mt-2 p-2 border-t">
-                <p><strong>Set {index + 1}:</strong></p>
+                <p><strong>Set {index + 1} (Qty: {quantity})</strong></p>
                 <div className="pl-2">
                     <p>Casting: {set.castingDate ? format(new Date(set.castingDate), 'PPP') : 'N/A'}, Testing: {set.testingDate ? format(new Date(set.testingDate), 'PPP') : 'N/A'}, Age: {set.age || 'N/A'} days</p>
                     <p>Area of Use: {set.areaOfUse || 'N/A'}</p>
@@ -60,18 +62,18 @@ export function SampleReceipt({ formData, categories, specialData, receiptDate, 
                 }
               }
             `}</style>
-            <div id="receipt-content" className="w-full max-w-4xl bg-white p-8 border rounded-lg shadow-lg overflow-y-auto">
+            <div id="receipt-content" className="w-full max-w-4xl bg-white text-black p-8 border rounded-lg shadow-lg overflow-y-auto">
                 {/* Header */}
                 <div className="flex justify-between items-start pb-4 border-b">
                     <div className="flex items-center gap-4">
                         <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
                         <div>
                             <h1 className="text-3xl font-bold">TestMate Laboratories</h1>
-                            <p className="text-muted-foreground">Quality Testing Services</p>
+                            <p className="text-gray-500">Quality Testing Services</p>
                         </div>
                     </div>
                     <div className="text-right">
-                        <h2 className="text-2xl font-semibold text-primary">Sample Receipt</h2>
+                        <h2 className="text-2xl font-semibold text-red-600">Sample Receipt</h2>
                         <p className="text-sm">Receipt No: <span className="font-mono">{Date.now()}</span></p>
                         <p className="text-sm">Date: <span className="font-mono">{format(receiptDate, 'yyyy-MM-dd HH:mm')}</span></p>
                     </div>
@@ -115,7 +117,7 @@ export function SampleReceipt({ formData, categories, specialData, receiptDate, 
                 {/* Tests Table */}
                 <div className="my-6">
                     <h3 className="font-semibold text-lg mb-2">Tests to be Performed</h3>
-                    <table className="w-full text-sm border-collapse">
+                    <table className="w-full text-sm border-collapse border">
                         <thead className="bg-gray-100">
                             <tr>
                                 <th className="p-2 border text-left">Material Category</th>
@@ -139,24 +141,24 @@ export function SampleReceipt({ formData, categories, specialData, receiptDate, 
 
                  {/* Special Sample Details */}
                 {Object.keys(specialData).length > 0 && (
-                    <div className="my-6">
+                    <div className="my-6 break-after-page">
                         <h3 className="font-semibold text-lg mb-2 border-b pb-1">Special Sample Details</h3>
                         {Object.entries(specialData).map(([category, data] : [string, any]) => (
-                            <div key={category} className="text-sm mt-2">
-                                <h4 className="font-semibold">{category}</h4>
+                            <div key={category} className="text-sm mt-4">
+                                <h4 className="font-semibold text-base bg-gray-100 p-2 rounded-md">{category}</h4>
                                 {data.isSpecialPair ? (
                                     <>
                                         <div className="mt-2 p-2 border rounded-md">
-                                            <h5 className="font-medium text-primary">Compressive Strength (Qty: {data.compressive.quantity})</h5>
-                                            {data.compressive.sets.map(renderSetDetails)}
+                                            <h5 className="font-medium text-red-600">Compressive Strength (Total Qty: {data.compressive.quantity})</h5>
+                                            {data.compressive.sets.map((set:any, i:number) => renderSetDetails(set, i, data.compressive.setDistribution))}
                                         </div>
                                          <div className="mt-2 p-2 border rounded-md">
-                                            <h5 className="font-medium text-primary">Water Absorption (Qty: {data.water.quantity})</h5>
-                                            {data.water.sets.map(renderSetDetails)}
+                                            <h5 className="font-medium text-red-600">Water Absorption (Total Qty: {data.water.quantity})</h5>
+                                            {data.water.sets.map((set:any, i:number) => renderSetDetails(set, i, data.water.setDistribution))}
                                         </div>
                                     </>
                                 ) : (
-                                    data.sets.map(renderSetDetails)
+                                    data.sets.map((set:any, i:number) => renderSetDetails(set, i, data.setDistribution))
                                 )}
                             </div>
                         ))}
@@ -175,13 +177,13 @@ export function SampleReceipt({ formData, categories, specialData, receiptDate, 
                          ))}
                          </div>
                      ) : (
-                        <p className="text-sm text-muted-foreground">No special notes provided.</p>
+                        <p className="text-sm text-gray-500">No special notes provided.</p>
                      )}
                 </div>
 
 
                 {/* Footer */}
-                <div className="text-center text-xs text-muted-foreground pt-4 border-t mt-8">
+                <div className="text-center text-xs text-gray-500 pt-4 border-t mt-8">
                     <p>Thank you for choosing TestMate Laboratories. Results will be delivered as requested.</p>
                     <p>For inquiries, please contact us at +256-XXX-XXXXXX or visit www.testmate.lab</p>
                 </div>
@@ -193,3 +195,4 @@ export function SampleReceipt({ formData, categories, specialData, receiptDate, 
         </div>
     );
 }
+
