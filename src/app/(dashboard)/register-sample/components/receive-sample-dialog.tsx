@@ -91,9 +91,6 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
     return Object.keys(selectedCategories).some(cat => specialCategories.includes(cat));
   }, [selectedCategories, specialCategories]);
 
-  const numSteps = hasSpecialCategories ? 5 : 4;
-  const reviewStepNumber = hasSpecialCategories ? 5 : 4;
-
   useEffect(() => {
     if (open) {
       const fetchInitialData = async () => {
@@ -160,9 +157,9 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
       if (hasSpecialCategories) {
         setCurrentStep(4);
       } else {
-        setCurrentStep(reviewStepNumber);
+        setCurrentStep(5); // Skip to review
       }
-    } else if (currentStep === 4 && hasSpecialCategories) {
+    } else if (currentStep === 4) {
        // Validation for step 4
        const isStep4Valid = Object.entries(step4Data).every(([cat, data]) => {
            if (!selectedCategories[cat]) return true; // Only validate selected categories
@@ -174,12 +171,12 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
            toast({ variant: "destructive", title: "Validation Error", description: "The sum of set distributions must match the total quantity for each category." });
            return;
        }
-      setCurrentStep(reviewStepNumber);
+      setCurrentStep(5);
     }
   };
 
   const handleBack = () => {
-     if (currentStep === reviewStepNumber) {
+     if (currentStep === 5) {
         if(hasSpecialCategories) {
             setCurrentStep(4);
         } else {
@@ -349,13 +346,13 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl max-h-[95vh] flex flex-col">
         <DialogHeader>
-          <DialogTitle>Receive New Sample (Step {currentStep} of {numSteps})</DialogTitle>
+          <DialogTitle>Receive New Sample (Step {currentStep} of 5)</DialogTitle>
            <DialogDescription>
             {currentStep === 1 && "Enter the client and sample details."}
             {currentStep === 2 && "Select the material categories for testing."}
             {currentStep === 3 && "Specify quantities and select tests for each category."}
-            {currentStep === 4 && hasSpecialCategories && "Provide additional details for special samples."}
-            {currentStep === reviewStepNumber && "Review all the details before confirming."}
+            {currentStep === 4 && "Provide additional details for special samples."}
+            {currentStep === 5 && "Review all the details before confirming."}
           </DialogDescription>
         </DialogHeader>
         
@@ -582,7 +579,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
             </Accordion>
         )}
         
-        {currentStep === 4 && hasSpecialCategories && (
+        {currentStep === 4 && (
             <Accordion type="multiple" className="w-full space-y-2">
                 {Object.keys(selectedCategories).filter(cat => specialCategories.includes(cat)).map(category => (
                      <AccordionItem key={category} value={category}>
@@ -683,7 +680,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
             </Accordion>
         )}
         
-        {currentStep === reviewStepNumber && (
+        {currentStep === 5 && (
             <ScrollArea className="h-full">
                 <div className="space-y-6 pr-4">
                     <div className="space-y-2">
@@ -726,7 +723,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                         ))}
                     </div>
 
-                    {hasSpecialCategories && (
+                    {hasSpecialCategories && Object.keys(step4Data).length > 0 && (
                          <div className="space-y-4">
                             <Separator/>
                             <h3 className="text-lg font-semibold">Special Sample Details</h3>
@@ -753,11 +750,11 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         </div>
 
         <DialogFooter className="pt-4">
-          {currentStep > 1 && currentStep <= reviewStepNumber && (
+          {currentStep > 1 && (
             <Button variant="ghost" onClick={handleBack} className="mr-auto">Back</Button>
           )}
-          {currentStep < reviewStepNumber && <Button onClick={handleNext}>Next</Button>}
-          {currentStep === reviewStepNumber && <Button onClick={() => setShowReceipt(true)}>Confirm & Generate Receipt</Button>}
+          {currentStep < 5 && <Button onClick={handleNext}>Next</Button>}
+          {currentStep === 5 && <Button onClick={() => setShowReceipt(true)}>Confirm & Generate Receipt</Button>}
           <DialogClose asChild><Button variant="outline">Cancel</Button></DialogClose>
         </DialogFooter>
       </DialogContent>
