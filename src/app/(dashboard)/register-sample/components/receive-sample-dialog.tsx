@@ -151,33 +151,32 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
                 };
             }
             setStep3Data(newStep3Data);
-            
-            const newStep4Data: Step4Data = {};
-             for (const category of selectedCategories) {
-                if(specialCategories.includes(category)) {
-                    newStep4Data[category] = step4Data[category] || {
-                        numberOfSets: 1,
-                        setDistribution: [step3Data[category]?.quantity || 1],
-                        sets: Array.from({ length: 1 }).map((_, i) => ({
-                            serials: Array.from({ length: step3Data[category]?.quantity || 1 }, (_, j) => String(j + 1)).join(', '),
-                            castingDate: new Date(),
-                            testingDate: new Date(),
-                            age: 0,
-                            areaOfUse: "",
-                            class: ""
-                        }))
-                    }
-                }
-            }
-            setStep4Data(newStep4Data);
         }
         
-        if (step === 3 && hasSpecialCategories) {
-            setStep(prev => prev + 1);
-        } else if (step === 3 && !hasSpecialCategories) {
-            setStep(5); // Skip to step 5
-        } else if (step === 4) {
-            setStep(5); // Go to step 5 from 4
+        if(step === 3){
+            if (hasSpecialCategories) {
+                const newStep4Data: Step4Data = {};
+                 for (const category of selectedCategories) {
+                    if(specialCategories.includes(category)) {
+                        newStep4Data[category] = step4Data[category] || {
+                            numberOfSets: 1,
+                            setDistribution: [step3Data[category]?.quantity || 1],
+                            sets: Array.from({ length: 1 }).map((_, i) => ({
+                                serials: Array.from({ length: step3Data[category]?.quantity || 1 }, (_, j) => String(j + 1)).join(', '),
+                                castingDate: new Date(),
+                                testingDate: new Date(),
+                                age: 0,
+                                areaOfUse: "",
+                                class: ""
+                            }))
+                        }
+                    }
+                }
+                setStep4Data(newStep4Data);
+                setStep(4);
+            } else {
+                 setStep(5);
+            }
         }
         else {
              setStep(prev => prev + 1);
@@ -221,16 +220,25 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
   };
 
   const handleTestSelectionChange = (category: string, testId: string) => {
-    setStep3Data(prev => ({
-        ...prev,
-        [category]: {
-            ...prev[category],
-            selectedTests: {
-                ...prev[category].selectedTests,
-                [testId]: !prev[category].selectedTests[testId]
+    setStep3Data(prev => {
+        const isSelected = !prev[category].selectedTests[testId];
+        const newTestQuantities = { ...prev[category].testQuantities };
+        if(isSelected){
+            newTestQuantities[testId] = prev[category].quantity;
+        }
+
+        return {
+            ...prev,
+            [category]: {
+                ...prev[category],
+                selectedTests: {
+                    ...prev[category].selectedTests,
+                    [testId]: isSelected
+                },
+                testQuantities: newTestQuantities,
             }
         }
-    }));
+    });
   };
   
   const handleTestQuantityChange = (category: string, testId: string, quantity: number) => {
@@ -273,7 +281,7 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
             numberOfSets: numSets,
             setDistribution: newDistribution,
             sets: Array.from({ length: numSets }).map((_, i) => ({
-                ...prev[category]?.sets[i],
+                ...(prev[category]?.sets[i] || {}),
                 serials: Array.from({ length: newDistribution[i] }, (_, j) => String(j + 1)).join(', '),
                 castingDate: prev[category]?.sets[i]?.castingDate || new Date(),
                 testingDate: prev[category]?.sets[i]?.testingDate || new Date(),
@@ -312,10 +320,14 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
         (currentSet as any)[field] = value;
 
         if (field === 'castingDate' || field === 'testingDate') {
-            currentSet.age = differenceInDays(currentSet.testingDate, currentSet.castingDate);
+            if(currentSet.castingDate && currentSet.testingDate) {
+               currentSet.age = differenceInDays(currentSet.testingDate, currentSet.castingDate);
+            }
         }
         if (field === 'age') {
-            currentSet.testingDate = addDays(currentSet.castingDate, value);
+            if(currentSet.castingDate && value >= 0) {
+               currentSet.testingDate = addDays(currentSet.castingDate, value);
+            }
         }
         
         newSets[setIndex] = currentSet;
@@ -788,7 +800,7 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
                         Next
                       </Button>
                   )}
-                  {step === numSteps - 1 && (
+                  {step === numSteps - 1 && hasSpecialCategories && (
                      <Button type="button" onClick={handleNext} className="ml-auto">
                         Review
                       </Button>
@@ -799,6 +811,13 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
                         Confirm & Generate Receipt
                       </Button>
                   )}
+                  
+                   {step === 3 && !hasSpecialCategories && (
+                     <Button type="button" onClick={() => setStep(5)} disabled={!isStep3Valid()} className="ml-auto">
+                        Review
+                      </Button>
+                  )}
+
 
                    <Button type="button" variant="destructive" onClick={() => onOpenChange(false)} className={step === 1 ? "ml-auto" : ""}>Cancel</Button>
               </DialogFooter>
