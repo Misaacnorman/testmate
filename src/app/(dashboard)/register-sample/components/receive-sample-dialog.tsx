@@ -152,11 +152,47 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
   const watchCategoryQuantities = form.watch("step3Data");
 
   const handleNext = async () => {
-    const isValid = await form.trigger();
+    let isValid = false;
+    if (step === 1) {
+      isValid = await form.trigger([
+        "clientName",
+        "clientAddress",
+        "clientContact",
+        "sameForBilling",
+        "billedClientName",
+        "billedClientAddress",
+        "billedClientContact",
+        "projectTitle",
+        "sampleStatus",
+        "deliveredBy",
+        "deliveryContact",
+        "resultTransmittal",
+        "transmittalEmail",
+        "transmittalWhatsapp"
+      ]);
+    } else {
+      // For step 2 and 3, we don't need to trigger validation to proceed.
+      isValid = true;
+    }
+
+
     if (isValid) {
       if (step === 2) {
         // From step 2 to 3
         const currentStep3Data = form.getValues('step3Data') || [];
+        
+        // Remove data for categories that are no longer selected
+        const categoriesToRemove: number[] = [];
+        currentStep3Data.forEach((d, index) => {
+            if(!selectedCategories.includes(d.name)) {
+                categoriesToRemove.push(index);
+            }
+        });
+        
+        if (categoriesToRemove.length > 0) {
+          remove(categoriesToRemove.reverse());
+        }
+
         const newStep3Data = selectedCategories
           .filter(cat => !currentStep3Data.some(d => d.name === cat))
           .map(category => ({
@@ -169,18 +205,9 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
               quantity: 1
             }))
           }));
-        
-        // Remove data for categories that are no longer selected
-        const categoriesToRemove = currentStep3Data
-          .filter(d => !selectedCategories.includes(d.name))
-          .map(d => currentStep3Data.findIndex(item => item.name === d.name));
-        
-        if (categoriesToRemove.length > 0) {
-          remove(categoriesToRemove);
-        }
 
         if(newStep3Data.length > 0) {
-            append(newStep3Data);
+            append(newStep3Data, { shouldFocus: false });
         }
       }
       setStep(prev => prev + 1);
