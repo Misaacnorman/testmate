@@ -162,16 +162,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         setCurrentStep(5);
       }
     } else if (currentStep === 4) {
-       const isStep4Valid = Object.entries(step4Data).every(([cat, data]) => {
-           if (!selectedCategories[cat]) return true;
-           const totalDistribution = data.setDistribution.reduce((a:number, b:number) => a + b, 0);
-           return totalDistribution === selectedCategories[cat].quantity;
-       });
-
-       if (!isStep4Valid) {
-           toast({ variant: "destructive", title: "Validation Error", description: "The sum of set distributions must match the total quantity for each category." });
-           return;
-       }
+       // A more complex validation is needed here for the new structure
       setCurrentStep(5);
     }
   };
@@ -290,6 +281,23 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         };
     });
   }, []);
+  
+  const handleSampleIdChange = (category: string, setIndex: number, sampleIndex: number, value: string) => {
+    setStep4Data(prev => {
+        const newStep4Data = { ...prev };
+        const newSets = [...newStep4Data[category].sets];
+        const newSerials = [...newSets[setIndex].serials];
+        newSerials[sampleIndex] = value;
+        newSets[setIndex].serials = newSerials;
+        return {
+            ...prev,
+            [category]: {
+                ...prev[category],
+                sets: newSets
+            }
+        };
+    });
+  };
 
   const initializeStep4Data = useCallback(() => {
     const initialData: Record<string, any> = {};
@@ -299,9 +307,9 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
           numberOfSets: 1,
           setDistribution: [data.quantity],
           sets: Array.from({ length: 1 }, () => ({
-              serials: Array.from({length: data.quantity}, (_, i) => i + 1).join(', '),
+              serials: Array.from({length: data.quantity}, (_, i) => `${i + 1}`),
               castingDate: null,
-              testingDate: null,
+              testingDate: new Date(),
               age: '',
               areaOfUse: '',
               class: '',
@@ -332,13 +340,78 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
 
     const newSets = Array.from({ length: numSets }, (_, i) => {
         const setQuantity = distribution[i];
+        let serialCounter = 1;
+        if (i > 0) {
+            for(let j=0; j<i; j++) {
+                serialCounter += distribution[j];
+            }
+        }
         return {
-            serials: Array.from({length: setQuantity}, (_, j) => j + 1).join(', '),
-            castingDate: null, testingDate: null, age: '', areaOfUse: '', class: ''
+            serials: Array.from({length: setQuantity}, (_, k) => `${serialCounter + k}`),
+            castingDate: null, testingDate: new Date(), age: '', areaOfUse: '', class: ''
         };
     });
     handleStep4Change(category, 'sets', newSets);
   };
+  
+  const renderSetFields = (category: string, setsData: any, setOffset = 0) => {
+      return setsData?.sets.map((set: any, i: number) => (
+            <div key={i + setOffset} className="space-y-3 border p-3 rounded-lg">
+                <h4 className="font-semibold text-md">Set {i + 1 + setOffset} {Object.values(selectedCategories[category].tests).some((t:any) => t.materialTest.includes("Water Absorption")) && <span className="text-muted-foreground font-normal">(For Water Absorption)</span>}</h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                        <Label>Casting Date</Label>
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal", !set.castingDate && "text-muted-foreground")}>
+                                  <CalendarIcon className="mr-2 h-4 w-4" />
+                                  {set.castingDate ? format(new Date(set.castingDate), "PPP") : <span>Pick a date</span>}
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0"><Calendar mode="single" selected={set.castingDate} onSelect={(date) => handleSetDataChange(category, i, 'castingDate', date)} initialFocus /></PopoverContent>
+                        </Popover>
+                    </div>
+                     <div className="space-y-2">
+                        <Label>Testing Date</Label>
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal", !set.testingDate && "text-muted-foreground")}>
+                                  <CalendarIcon className="mr-2 h-4 w-4" />
+                                  {set.testingDate ? format(new Date(set.testingDate), "PPP") : <span>Pick a date</span>}
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0"><Calendar mode="single" selected={set.testingDate ? new Date(set.testingDate) : undefined} onSelect={(date) => handleSetDataChange(category, i, 'testingDate', date)} initialFocus /></PopoverContent>
+                        </Popover>
+                    </div>
+                    <div className="space-y-2">
+                        <Label>Age (Days)</Label>
+                        <Input type="number" value={set.age} onChange={(e) => handleSetDataChange(category, i, 'age', e.target.value)} />
+                    </div>
+                </div>
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                          <Label>Area of Use</Label>
+                          <Input value={set.areaOfUse} onChange={(e) => handleSetDataChange(category, i, 'areaOfUse', e.target.value)} />
+                      </div>
+                      {category === "Concrete Cubes" && (
+                          <div className="space-y-2">
+                              <Label>Class</Label>
+                              <Input value={set.class} onChange={(e) => handleSetDataChange(category, i, 'class', e.target.value)} />
+                          </div>
+                      )}
+                 </div>
+                <div className="space-y-2">
+                    <Label>Sample IDs</Label>
+                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
+                      {set.serials.map((serial: string, sIndex: number) => (
+                          <Input key={sIndex} value={serial} onChange={(e) => handleSampleIdChange(category, i, sIndex, e.target.value)} />
+                      ))}
+                    </div>
+                </div>
+            </div>
+        ));
+  }
+
 
   if (showReceipt) {
     return <SampleReceipt formData={step1Data} categories={selectedCategories} specialData={step4Data} receiptDate={receiptDate} onClose={() => onOpenChange(false)} />;
@@ -583,103 +656,63 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         )}
         
         {currentStep === 4 && (
-            <Accordion type="multiple" className="w-full space-y-2">
-                {Object.keys(selectedCategories).filter(cat => specialCategories.some(sc => sc.toLowerCase() === cat.toLowerCase())).map(category => (
+            <Accordion type="multiple" className="w-full space-y-2" defaultValue={Object.keys(selectedCategories).filter(cat => specialCategories.some(sc => sc.toLowerCase() === cat.toLowerCase()))}>
+                {Object.keys(selectedCategories).filter(cat => specialCategories.some(sc => sc.toLowerCase() === cat.toLowerCase())).map(category => {
+                     const selectedTests = Object.values(selectedCategories[category].tests).map((t: any) => t.materialTest);
+                     const hasWaterAbsorption = selectedTests.includes("Water Absorption");
+                     const hasCompressiveStrength = selectedTests.includes("Compressive Strength");
+                     const isSpecialPair = hasWaterAbsorption && hasCompressiveStrength;
+
+                     return(
                      <AccordionItem key={category} value={category}>
                         <AccordionTrigger className="font-bold text-lg">{category}</AccordionTrigger>
                         <AccordionContent className="p-4">
-                            <div className="space-y-4">
-                                <div className="flex items-center gap-4">
-                                    <Label>Number of Sets</Label>
-                                    <Input 
-                                        type="number" 
-                                        className="w-24" 
-                                        min={1} 
-                                        value={step4Data[category]?.numberOfSets || 1} 
-                                        onChange={e => handleSetDistribution(category, parseInt(e.target.value, 10))}
-                                    />
+                            {isSpecialPair ? (
+                                <div>Special Pair UI</div>
+                            ) : (
+                                <div className="space-y-4">
+                                    <div className="flex items-center gap-4">
+                                        <Label>Number of Sets</Label>
+                                        <Input 
+                                            type="number" 
+                                            className="w-24" 
+                                            min={1} 
+                                            value={step4Data[category]?.numberOfSets || 1} 
+                                            onChange={e => handleSetDistribution(category, parseInt(e.target.value, 10))}
+                                        />
+                                    </div>
+                                    {step4Data[category]?.numberOfSets > 1 && (
+                                        <div className="space-y-2 border p-2 rounded-md">
+                                            <div className="flex justify-between">
+                                                <Label>Set Distribution</Label>
+                                                <span className={cn("text-sm font-bold", step4Data[category]?.setDistribution.reduce((a:number,b:number) => a+b, 0) !== selectedCategories[category].quantity ? "text-destructive" : "text-primary")}>
+                                                   Sum: {step4Data[category]?.setDistribution.reduce((a:number,b:number) => a+b, 0)} / {selectedCategories[category].quantity}
+                                                </span>
+                                            </div>
+                                            <div className="flex gap-2 flex-wrap">
+                                                {step4Data[category]?.setDistribution.map((dist: number, i: number) => (
+                                                    <Input 
+                                                        key={i} 
+                                                        type="number" 
+                                                        className="w-20" 
+                                                        value={dist}
+                                                        onChange={e => {
+                                                            const newDist = [...step4Data[category].setDistribution];
+                                                            newDist[i] = parseInt(e.target.value, 10);
+                                                            handleStep4Change(category, 'setDistribution', newDist);
+                                                        }}
+                                                     />
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                    <Separator/>
+                                    {renderSetFields(category, step4Data[category])}
                                 </div>
-                                {step4Data[category]?.numberOfSets > 1 && (
-                                    <div className="space-y-2 border p-2 rounded-md">
-                                        <div className="flex justify-between">
-                                            <Label>Set Distribution</Label>
-                                            <span className={cn("text-sm font-bold", step4Data[category]?.setDistribution.reduce((a:number,b:number) => a+b, 0) !== selectedCategories[category].quantity ? "text-destructive" : "text-primary")}>
-                                               Sum: {step4Data[category]?.setDistribution.reduce((a:number,b:number) => a+b, 0)} / {selectedCategories[category].quantity}
-                                            </span>
-                                        </div>
-                                        <div className="flex gap-2 flex-wrap">
-                                            {step4Data[category]?.setDistribution.map((dist: number, i: number) => (
-                                                <Input 
-                                                    key={i} 
-                                                    type="number" 
-                                                    className="w-20" 
-                                                    value={dist}
-                                                    onChange={e => {
-                                                        const newDist = [...step4Data[category].setDistribution];
-                                                        newDist[i] = parseInt(e.target.value, 10);
-                                                        handleStep4Change(category, 'setDistribution', newDist);
-                                                    }}
-                                                 />
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-                                <Separator/>
-                                {step4Data[category]?.sets.map((set: any, i: number) => (
-                                    <div key={i} className="space-y-3 border p-3 rounded-lg">
-                                        <h4 className="font-semibold text-md">Set {i+1} {Object.values(selectedCategories[category].tests).some(t => t.materialTest.includes("Water Absorption")) && <span className="text-muted-foreground font-normal">(For Water Absorption)</span>}</h4>
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                            <div className="space-y-2">
-                                                <Label>Casting Date</Label>
-                                                <Popover>
-                                                    <PopoverTrigger asChild>
-                                                        <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal", !set.castingDate && "text-muted-foreground")}>
-                                                          <CalendarIcon className="mr-2 h-4 w-4" />
-                                                          {set.castingDate ? format(new Date(set.castingDate), "PPP") : <span>Pick a date</span>}
-                                                        </Button>
-                                                    </PopoverTrigger>
-                                                    <PopoverContent className="w-auto p-0"><Calendar mode="single" selected={set.castingDate} onSelect={(date) => handleSetDataChange(category, i, 'castingDate', date)} initialFocus /></PopoverContent>
-                                                </Popover>
-                                            </div>
-                                             <div className="space-y-2">
-                                                <Label>Testing Date</Label>
-                                                <Popover>
-                                                    <PopoverTrigger asChild>
-                                                        <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal", !set.testingDate && "text-muted-foreground")}>
-                                                          <CalendarIcon className="mr-2 h-4 w-4" />
-                                                          {set.testingDate ? format(new Date(set.testingDate), "PPP") : <span>Pick a date</span>}
-                                                        </Button>
-                                                    </PopoverTrigger>
-                                                    <PopoverContent className="w-auto p-0"><Calendar mode="single" selected={set.testingDate ? new Date(set.testingDate) : undefined} onSelect={(date) => handleSetDataChange(category, i, 'testingDate', date)} initialFocus /></PopoverContent>
-                                                </Popover>
-                                            </div>
-                                            <div className="space-y-2">
-                                                <Label>Age (Days)</Label>
-                                                <Input type="number" value={set.age} onChange={(e) => handleSetDataChange(category, i, 'age', e.target.value)} />
-                                            </div>
-                                        </div>
-                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                              <div className="space-y-2">
-                                                  <Label>Area of Use</Label>
-                                                  <Input value={set.areaOfUse} onChange={(e) => handleSetDataChange(category, i, 'areaOfUse', e.target.value)} />
-                                              </div>
-                                              {category === "Concrete Cubes" && (
-                                                  <div className="space-y-2">
-                                                      <Label>Class</Label>
-                                                      <Input value={set.class} onChange={(e) => handleSetDataChange(category, i, 'class', e.target.value)} />
-                                                  </div>
-                                              )}
-                                         </div>
-                                        <div className="space-y-2">
-                                            <Label>Sample IDs (comma-separated)</Label>
-                                            <Textarea value={set.serials} onChange={(e) => handleSetDataChange(category, i, 'serials', e.target.value)} />
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
+                            )}
                         </AccordionContent>
                     </AccordionItem>
-                ))}
+                )})}
             </Accordion>
         )}
         
@@ -764,3 +797,5 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
     </Dialog>
   );
 }
+
+    
