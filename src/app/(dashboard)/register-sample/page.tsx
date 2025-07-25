@@ -2,9 +2,12 @@
 
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
-import React from 'react';
+import React, { useState } from 'react';
+import { ReceiveSampleDialog } from "./components/receive-sample-dialog";
 
 export default function RegisterSamplePage() {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   return (
     <div className="flex-1 flex items-center justify-center bg-gray-50 dark:bg-gray-900">
       <Button
@@ -14,10 +17,12 @@ export default function RegisterSamplePage() {
             backgroundColor: 'hsl(221, 83%, 53%)',
             color: 'white'
         }}
+        onClick={() => setIsDialogOpen(true)}
       >
         <PlusCircle className="w-12 h-12 mb-2" />
         <span>Receive Sample</span>
       </Button>
+      <ReceiveSampleDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
     </div>
   );
 }
