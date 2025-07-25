@@ -266,12 +266,12 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
           </DialogDescription>
         </DialogHeader>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex-grow overflow-y-auto space-y-6 p-1">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="flex-grow overflow-y-auto space-y-4 p-1">
               {step === 1 && (
                 <>
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                       <h3 className="text-lg font-medium">Client Details</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                           <FormField control={form.control} name="clientName" render={({ field }) => (
                               <FormItem><FormLabel>Client Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                           )} />
@@ -286,7 +286,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
                       <Separator />
 
                       <FormField control={form.control} name="sameForBilling" render={({ field }) => (
-                          <FormItem className="space-y-3">
+                          <FormItem className="space-y-2">
                           <FormLabel>Is the client name same for Billing?</FormLabel>
                           <FormControl>
                               <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex items-center space-x-4">
@@ -299,9 +299,9 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
                       )} />
 
                       {watchSameForBilling === 'no' && (
-                          <div className="space-y-4 p-4 border rounded-md bg-muted/50">
+                          <div className="space-y-3 p-3 border rounded-md bg-muted/50">
                               <h4 className="font-medium">Billed Client Details</h4>
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                   <FormField control={form.control} name="billedClientName" render={({ field }) => (
                                       <FormItem><FormLabel>Billed Client Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                                   )} />
@@ -318,9 +318,9 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
                   
                   <Separator />
 
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                       <h3 className="text-lg font-medium">Sample Details</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                           <FormField control={form.control} name="projectTitle" render={({ field }) => (
                               <FormItem><FormLabel>Project Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                           )} />
@@ -328,12 +328,12 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
                               <FormItem><FormLabel>Status of the Sample</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                           )} />
                       </div>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                           <FormItem><FormLabel>Date of Receipt</FormLabel><Input disabled value={currentDate} /></FormItem>
                           <FormItem><FormLabel>Time of Receipt</FormLabel><Input disabled value={currentTime} /></FormItem>
                           <FormItem><FormLabel>Received By</FormLabel><Input disabled value="Admin" /></FormItem>
                       </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                           <FormField control={form.control} name="deliveredBy" render={({ field }) => (
                               <FormItem><FormLabel>Delivered by</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                           )} />
@@ -344,7 +344,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
                       <Separator />
                       <FormField control={form.control} name="resultTransmittal" render={() => (
                           <FormItem>
-                              <div className="mb-4"><FormLabel className="text-base">Mode of Results Transmittal</FormLabel></div>
+                              <div className="mb-2"><FormLabel className="text-base">Mode of Results Transmittal</FormLabel></div>
                               <div className="flex flex-wrap gap-4">
                                   {transmittalOptions.map((item) => (
                                   <FormField key={item.id} control={form.control} name="resultTransmittal" render={({ field }) => (
@@ -367,7 +367,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
                           </FormItem>
                       )} />
                       {(watchResultTransmittal.includes('email') || watchResultTransmittal.includes('whatsapp')) && (
-                          <div className="space-y-4 p-4 border rounded-md bg-muted/50">
+                          <div className="space-y-3 p-3 border rounded-md bg-muted/50">
                               {watchResultTransmittal.includes('email') && <FormField control={form.control} name="transmittalEmail" render={({ field }) => (
                                   <FormItem><FormLabel>Email for Results</FormLabel><FormControl><Input type="email" placeholder="example@test.com" {...field} /></FormControl><FormMessage /></FormItem>
                               )} />}
@@ -382,7 +382,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
 
               {step === 2 && (
                 <ScrollArea className="h-96 w-full rounded-md border p-4">
-                    <div className="space-y-4">
+                    <div className="space-y-2">
                         <h3 className="text-lg font-medium">Material Categories</h3>
                         {isLoading ? (
                             <div className="space-y-2">
@@ -413,31 +413,32 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
               
               {step === 3 && (
                 <ScrollArea className="h-96 w-full rounded-md border p-4">
-                    <Accordion type="multiple" className="w-full space-y-2">
+                    <Accordion type="multiple" className="w-full">
                         {selectedCategories.map((category) => {
                             const categoryTests = allTests.filter(t => t.materialCategory === category);
                             const categoryData = step3Data[category];
                             return (
-                                <AccordionItem key={category} value={category}>
-                                    <div className="flex items-center gap-4 p-2 rounded-md">
-                                        <AccordionTrigger className="flex-grow text-lg font-medium">{category}</AccordionTrigger>
-                                        <div className="flex items-center gap-2">
-                                            <Label htmlFor={`quantity-${category}`}>Quantity</Label>
-                                            <Input
-                                                id={`quantity-${category}`}
-                                                type="number"
-                                                min={1}
-                                                value={categoryData?.quantity || 1}
-                                                onChange={(e) => handleCategoryQuantityChange(category, parseInt(e.target.value, 10))}
-                                                className="w-24"
-                                            />
-                                        </div>
+                                <AccordionItem key={category} value={category} className="border-b-0 mb-2 p-2 rounded-md border">
+                                    <div className="flex items-center justify-between p-2 rounded-md">
+                                      <h3 className="text-lg font-medium">{category}</h3>
+                                      <div className="flex items-center gap-2">
+                                          <Label htmlFor={`quantity-${category}`}>Quantity</Label>
+                                          <Input
+                                              id={`quantity-${category}`}
+                                              type="number"
+                                              min={1}
+                                              value={categoryData?.quantity || 1}
+                                              onChange={(e) => handleCategoryQuantityChange(category, parseInt(e.target.value, 10))}
+                                              className="w-24"
+                                          />
+                                          <AccordionTrigger />
+                                      </div>
                                     </div>
                                     <AccordionContent>
-                                        <div className="space-y-4 pl-4 pt-2">
+                                        <div className="space-y-2 pl-4 pt-2 border-t mt-2">
                                             <h4 className="font-semibold">Available Tests</h4>
                                             {categoryTests.map((test) => (
-                                                <div key={test.id} className="flex items-center gap-4">
+                                                <div key={test.id} className="flex items-center gap-2">
                                                     <Checkbox
                                                         id={test.id}
                                                         checked={!!categoryData?.selectedTests[test.id]}
@@ -445,7 +446,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
                                                     />
                                                     <Label htmlFor={test.id} className="flex-grow">{test.materialTest}</Label>
                                                     <div className="flex items-center gap-2">
-                                                        <Label htmlFor={`quantity-${test.id}`}>Qty</Label>
+                                                        <Label htmlFor={`quantity-${test.id}`} className="text-xs">Qty</Label>
                                                         <Input
                                                             id={`quantity-${test.id}`}
                                                             type="number"
@@ -453,16 +454,16 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
                                                             max={categoryData?.quantity}
                                                             value={categoryData?.testQuantities[test.id] ?? categoryData?.quantity}
                                                             onChange={(e) => handleTestQuantityChange(category, test.id, parseInt(e.target.value, 10))}
-                                                            className="w-24"
+                                                            className="w-20 h-8"
                                                             disabled={!categoryData?.selectedTests[test.id]}
                                                         />
                                                     </div>
                                                 </div>
                                             ))}
-                                            <Collapsible className="space-y-2">
+                                            <Collapsible className="space-y-2 pt-2">
                                                 <CollapsibleTrigger asChild>
-                                                    <Button variant="ghost" className="flex items-center gap-2 text-sm">
-                                                        <ChevronDown className="w-4 h-4" />
+                                                    <Button variant="ghost" size="sm" className="flex items-center gap-1 text-xs">
+                                                        <ChevronDown className="w-3 h-3" />
                                                         Notes
                                                     </Button>
                                                 </CollapsibleTrigger>
@@ -471,6 +472,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
                                                         placeholder="Add any notes for this material category..."
                                                         value={categoryData?.notes || ""}
                                                         onChange={(e) => handleNotesChange(category, e.target.value)}
+                                                        rows={2}
                                                     />
                                                 </CollapsibleContent>
                                             </Collapsible>
