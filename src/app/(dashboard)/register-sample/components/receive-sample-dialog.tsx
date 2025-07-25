@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -132,10 +131,6 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
   const watchSameForBilling = form.watch("sameForBilling");
   const watchResultTransmittal = form.watch("resultTransmittal");
 
-  const hasSpecialCategories = selectedCategories.some(cat => specialCategories.includes(cat));
-  const numSteps = hasSpecialCategories ? 5 : 4;
-  const reviewStepNumber = hasSpecialCategories ? 5 : 4;
-
   const handleNext = async () => {
     if (step === 1) {
       const isValid = await form.trigger();
@@ -161,8 +156,8 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
     }
 
     if (step === 3) {
-      const specialCategoriesSelected = selectedCategories.some(cat => specialCategories.includes(cat));
-      if (specialCategoriesSelected) {
+      const hasSpecial = selectedCategories.some(cat => specialCategories.includes(cat));
+      if (hasSpecial) {
         const newStep4Data: Step4Data = { ...step4Data };
         selectedCategories.forEach(category => {
           if (specialCategories.includes(category) && !newStep4Data[category]) {
@@ -184,7 +179,7 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
         setStep4Data(newStep4Data);
         setStep(4);
       } else {
-        setStep(reviewStepNumber);
+        setStep(5); // This should be review step for non-special
       }
       return;
     }
@@ -196,7 +191,8 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
   };
   
   const handleBack = () => {
-    if (step === reviewStepNumber && !hasSpecialCategories) {
+    const hasSpecial = selectedCategories.some(cat => specialCategories.includes(cat));
+    if (step === 5 && !hasSpecial) {
       setStep(3);
     } else {
       setStep(prev => prev - 1);
@@ -394,6 +390,9 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
       });
   }
 
+  const hasSpecialCategories = selectedCategories.some(cat => specialCategories.includes(cat));
+  const numSteps = hasSpecialCategories ? 5 : 4;
+  const reviewStepNumber = hasSpecialCategories ? 5 : 4;
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => {
@@ -409,7 +408,7 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
             {step === 1 && "Enter the client and sample details below."}
             {step === 2 && "Select the material categories for testing."}
             {step === 3 && "Specify quantities and select tests."}
-            {step === 4 && hasSpecialCategories && "Provide additional details for special samples."}
+            {step === 4 && "Provide additional details for special samples."}
             {step === reviewStepNumber && "Review and confirm the sample registration details."}
           </DialogDescription>
         </DialogHeader>
