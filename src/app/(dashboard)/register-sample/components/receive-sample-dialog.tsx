@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -132,6 +133,7 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
   const watchResultTransmittal = form.watch("resultTransmittal");
 
   const hasSpecialCategories = selectedCategories.some(cat => specialCategories.includes(cat));
+  const numSteps = hasSpecialCategories ? 5 : 4;
 
   const handleNext = async () => {
     let isValid = true;
@@ -151,9 +153,8 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
                 };
             }
             setStep3Data(newStep3Data);
-        }
-        
-        if(step === 3){
+            setStep(3);
+        } else if(step === 3){
             if (hasSpecialCategories) {
                 const newStep4Data: Step4Data = {};
                  for (const category of selectedCategories) {
@@ -175,7 +176,7 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
                 setStep4Data(newStep4Data);
                 setStep(4);
             } else {
-                 setStep(5);
+                 setStep(numSteps);
             }
         }
         else {
@@ -185,7 +186,7 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
   }
   
   const handleBack = () => {
-    if (step === 5 && !hasSpecialCategories) {
+    if (step === numSteps && !hasSpecialCategories) {
       setStep(3);
     } else {
       setStep(prev => prev - 1);
@@ -383,7 +384,7 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
       });
   }
   
-  const numSteps = hasSpecialCategories ? 5 : 4;
+  const reviewStepNumber = numSteps;
 
 
   return (
@@ -401,7 +402,7 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
             {step === 2 && "Select the material categories for testing."}
             {step === 3 && "Specify quantities and select tests."}
             {step === 4 && "Provide additional details for special samples."}
-            {step === 5 && "Review and confirm the sample registration details."}
+            {step === reviewStepNumber && "Review and confirm the sample registration details."}
           </DialogDescription>
         </DialogHeader>
           
@@ -732,7 +733,7 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
                 </ScrollArea>
               )}
                 
-              {step === 5 && (
+              {step === reviewStepNumber && (
                  <ScrollArea className="h-96 w-full rounded-md border p-4">
                     <div className="space-y-6">
                         <div>
@@ -753,7 +754,7 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
                                     <ul className="list-disc pl-5 text-sm">
                                         {Object.keys(step3Data[category].selectedTests).filter(t => step3Data[category].selectedTests[t]).map(testId => {
                                             const test = allTests.find(t => t.id === testId);
-                                            return <li key={testId}>{test?.materialTest} (Qty: {step3Data[category].testQuantities[testId]})</li>
+                                            return <li key={testId}>{test?.materialTest} (Qty: {step3Data[category].testQuantities[testId]}) - <span className="text-muted-foreground">{test?.testMethods}</span></li>
                                         })}
                                     </ul>
                                     {step3Data[category].notes && <p className="text-xs italic mt-1">Notes: {step3Data[category].notes}</p>}
@@ -786,23 +787,22 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
               <DialogFooter className="pt-4">
                   {step > 1 && <Button type="button" variant="ghost" onClick={handleBack}>Back</Button>}
                   
-                  {step < numSteps - 1 && (
+                  {step < numSteps && step !== 3 && (
                       <Button 
                         type="button" 
                         onClick={handleNext} 
                         className="ml-auto" 
                         disabled={
-                            (step === 2 && selectedCategories.length === 0) ||
-                            (step === 3 && !isStep3Valid()) ||
-                            (step === 4 && !isStep4Valid())
+                            (step === 2 && selectedCategories.length === 0)
                         }
                       >
                         Next
                       </Button>
                   )}
-                  {step === numSteps - 1 && hasSpecialCategories && (
-                     <Button type="button" onClick={handleNext} className="ml-auto">
-                        Review
+
+                  {step === 3 && (
+                     <Button type="button" onClick={handleNext} disabled={!isStep3Valid()} className="ml-auto">
+                        Next
                       </Button>
                   )}
 
@@ -812,16 +812,11 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
                       </Button>
                   )}
                   
-                   {step === 3 && !hasSpecialCategories && (
-                     <Button type="button" onClick={() => setStep(5)} disabled={!isStep3Valid()} className="ml-auto">
-                        Review
-                      </Button>
-                  )}
-
-
                    <Button type="button" variant="destructive" onClick={() => onOpenChange(false)} className={step === 1 ? "ml-auto" : ""}>Cancel</Button>
               </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 }
+
+    
