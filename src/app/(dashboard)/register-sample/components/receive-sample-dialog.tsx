@@ -151,66 +151,65 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
   const watchResultTransmittal = form.watch("resultTransmittal");
   const watchCategoryQuantities = form.watch("step3Data");
 
-  const handleNext = async () => {
-    let isValid = false;
-    if (step === 1) {
-      isValid = await form.trigger([
-        "clientName",
-        "clientAddress",
-        "clientContact",
-        "sameForBilling",
-        "billedClientName",
-        "billedClientAddress",
-        "billedClientContact",
-        "projectTitle",
-        "sampleStatus",
-        "deliveredBy",
-        "deliveryContact",
-        "resultTransmittal",
-        "transmittalEmail",
-        "transmittalWhatsapp"
-      ]);
-    } else {
-      // For step 2 and 3, we don't need to trigger validation to proceed.
-      isValid = true;
-    }
-
-
-    if (isValid) {
-      if (step === 2) {
-        // From step 2 to 3
-        const currentStep3Data = form.getValues('step3Data') || [];
+  const handleNext = () => {
+    const handleStepTransition = (isValid: boolean) => {
+        if (isValid) {
+            if (step === 2) {
+                // From step 2 to 3
+                const currentStep3Data = form.getValues('step3Data') || [];
+                
+                // Remove data for categories that are no longer selected
+                const categoriesToRemove: number[] = [];
+                currentStep3Data.forEach((d, index) => {
+                    if(!selectedCategories.includes(d.name)) {
+                        categoriesToRemove.push(index);
+                    }
+                });
+                
+                if (categoriesToRemove.length > 0) {
+                  remove(categoriesToRemove.reverse());
+                }
         
-        // Remove data for categories that are no longer selected
-        const categoriesToRemove: number[] = [];
-        currentStep3Data.forEach((d, index) => {
-            if(!selectedCategories.includes(d.name)) {
-                categoriesToRemove.push(index);
+                const newStep3Data = selectedCategories
+                  .filter(cat => !currentStep3Data.some(d => d.name === cat))
+                  .map(category => ({
+                    name: category,
+                    quantity: 1,
+                    notes: "",
+                    tests: (testsByCategory[category] || []).map(test => ({
+                      id: test.id,
+                      selected: false,
+                      quantity: 1
+                    }))
+                  }));
+        
+                if(newStep3Data.length > 0) {
+                    append(newStep3Data, { shouldFocus: false });
+                }
             }
-        });
-        
-        if (categoriesToRemove.length > 0) {
-          remove(categoriesToRemove.reverse());
+            setStep(prev => prev + 1);
         }
-
-        const newStep3Data = selectedCategories
-          .filter(cat => !currentStep3Data.some(d => d.name === cat))
-          .map(category => ({
-            name: category,
-            quantity: 1,
-            notes: "",
-            tests: (testsByCategory[category] || []).map(test => ({
-              id: test.id,
-              selected: false,
-              quantity: 1
-            }))
-          }));
-
-        if(newStep3Data.length > 0) {
-            append(newStep3Data, { shouldFocus: false });
-        }
-      }
-      setStep(prev => prev + 1);
+    }
+    
+    if (step === 1) {
+        form.trigger([
+            "clientName",
+            "clientAddress",
+            "clientContact",
+            "sameForBilling",
+            "billedClientName",
+            "billedClientAddress",
+            "billedClientContact",
+            "projectTitle",
+            "sampleStatus",
+            "deliveredBy",
+            "deliveryContact",
+            "resultTransmittal",
+            "transmittalEmail",
+            "transmittalWhatsapp"
+        ]).then(handleStepTransition);
+    } else {
+        handleStepTransition(true);
     }
   }
   
@@ -519,5 +518,3 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
     </Dialog>
   );
 }
-
-    
