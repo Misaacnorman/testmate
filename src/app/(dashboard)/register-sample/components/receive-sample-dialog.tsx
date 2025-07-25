@@ -26,6 +26,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Textarea } from "@/components/ui/textarea";
 import { ChevronDown } from "lucide-react";
+import { Label } from "@/components/ui/label";
 
 const receiveSampleSchema = z.object({
   clientName: z.string().min(1, "Client name is required."),
@@ -498,5 +499,3 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
     </Dialog>
   );
 }
-
-    
