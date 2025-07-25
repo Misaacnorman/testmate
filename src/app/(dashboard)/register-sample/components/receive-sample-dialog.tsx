@@ -22,6 +22,10 @@ import { getTests } from "@/services/tests";
 import { Test } from "@/types/test";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Textarea } from "@/components/ui/textarea";
+import { ChevronDown } from "lucide-react";
 
 const receiveSampleSchema = z.object({
   clientName: z.string().min(1, "Client name is required."),
@@ -50,6 +54,14 @@ const receiveSampleSchema = z.object({
     path: ["billedClientName"],
 });
 
+type Step3Data = {
+  [category: string]: {
+    quantity: number;
+    notes: string;
+    selectedTests: { [testId: string]: boolean };
+    testQuantities: { [testId: string]: number };
+  }
+}
 
 type ReceiveSampleDialogProps = {
   open: boolean;
@@ -70,6 +82,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
   const [materialCategories, setMaterialCategories] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [step3Data, setStep3Data] = useState<Step3Data>({});
 
   useEffect(() => {
     const now = new Date();
@@ -112,36 +125,31 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
       fetchTestsAndCategories();
     }
   }, [open, allTests.length]);
-
+  
   const watchSameForBilling = form.watch("sameForBilling");
   const watchResultTransmittal = form.watch("resultTransmittal");
 
-  const handleNext = () => {
-    const handleStepTransition = (isValid: boolean) => {
-        if (isValid) {
-            setStep(prev => prev + 1);
-        }
+  const handleNext = async () => {
+    let isValid = true;
+    if (step === 1) {
+        isValid = await form.trigger();
     }
     
-    if (step === 1) {
-        form.trigger([
-            "clientName",
-            "clientAddress",
-            "clientContact",
-            "sameForBilling",
-            "billedClientName",
-            "billedClientAddress",
-            "billedClientContact",
-            "projectTitle",
-            "sampleStatus",
-            "deliveredBy",
-            "deliveryContact",
-            "resultTransmittal",
-            "transmittalEmail",
-            "transmittalWhatsapp"
-        ]).then(handleStepTransition);
-    } else {
-        handleStepTransition(true);
+    if (isValid) {
+        if (step === 2) {
+            // Initialize step 3 data for selected categories
+            const newStep3Data: Step3Data = {};
+            for (const category of selectedCategories) {
+                newStep3Data[category] = step3Data[category] || {
+                    quantity: 1,
+                    notes: "",
+                    selectedTests: {},
+                    testQuantities: {},
+                };
+            }
+            setStep3Data(newStep3Data);
+        }
+        setStep(prev => prev + 1);
     }
   }
   
@@ -156,20 +164,88 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
         : [...prev, category]
     );
   };
+  
+  const handleCategoryQuantityChange = (category: string, quantity: number) => {
+    setStep3Data(prev => {
+        const newQuantities = { ...prev[category].testQuantities };
+        // Update child quantities if they are now greater than the new parent quantity
+        for (const testId in newQuantities) {
+            if (newQuantities[testId] > quantity) {
+                newQuantities[testId] = quantity;
+            }
+        }
+        return {
+            ...prev,
+            [category]: {
+                ...prev[category],
+                quantity,
+                testQuantities: newQuantities,
+            },
+        };
+    });
+  };
+
+  const handleTestSelectionChange = (category: string, testId: string) => {
+    setStep3Data(prev => ({
+        ...prev,
+        [category]: {
+            ...prev[category],
+            selectedTests: {
+                ...prev[category].selectedTests,
+                [testId]: !prev[category].selectedTests[testId]
+            }
+        }
+    }));
+  };
+  
+  const handleTestQuantityChange = (category: string, testId: string, quantity: number) => {
+    const parentQuantity = step3Data[category].quantity;
+    const newQuantity = Math.min(quantity, parentQuantity); // Enforce max quantity
+    setStep3Data(prev => ({
+        ...prev,
+        [category]: {
+            ...prev[category],
+            testQuantities: {
+                ...prev[category].testQuantities,
+                [testId]: newQuantity >= 0 ? newQuantity : 0
+            }
+        }
+    }));
+  };
+
+  const handleNotesChange = (category: string, notes: string) => {
+    setStep3Data(prev => ({
+        ...prev,
+        [category]: {
+            ...prev[category],
+            notes
+        }
+    }));
+  };
 
   const onSubmit = (values: z.infer<typeof receiveSampleSchema>) => {
+    // This will eventually go to step 4, for now we log
     const finalData = {
-      ...values,
-      selectedCategories: selectedCategories,
+      step1: values,
+      step2: selectedCategories,
+      step3: step3Data,
     }
     console.log(finalData);
-    onOpenChange(false);
+    // onOpenChange(false);
   };
 
   const resetForm = () => {
     form.reset();
     setStep(1);
     setSelectedCategories([]);
+    setStep3Data({});
+  }
+  
+  const isStep3Valid = () => {
+      return selectedCategories.every(category => {
+          const catData = step3Data[category];
+          return catData && catData.quantity > 0;
+      });
   }
 
   return (
@@ -181,10 +257,11 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
     }}>
       <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col">
         <DialogHeader>
-          <DialogTitle>Receive New Sample - Step {step} of 2</DialogTitle>
+          <DialogTitle>Receive New Sample - Step {step} of 4</DialogTitle>
           <DialogDescription>
             {step === 1 && "Enter the client and sample details below."}
             {step === 2 && "Select the material categories for testing."}
+            {step === 3 && "Specify quantities and select tests."}
           </DialogDescription>
         </DialogHeader>
           <Form {...form}>
@@ -332,13 +409,86 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
                     </div>
                 </ScrollArea>
               )}
+              
+              {step === 3 && (
+                <ScrollArea className="h-96 w-full rounded-md border p-4">
+                    <Accordion type="multiple" className="w-full space-y-2">
+                        {selectedCategories.map((category) => {
+                            const categoryTests = allTests.filter(t => t.materialCategory === category);
+                            const categoryData = step3Data[category];
+                            return (
+                                <AccordionItem key={category} value={category}>
+                                    <div className="flex items-center gap-4 p-2 rounded-md">
+                                        <AccordionTrigger className="flex-grow text-lg font-medium">{category}</AccordionTrigger>
+                                        <div className="flex items-center gap-2">
+                                            <Label htmlFor={`quantity-${category}`}>Quantity</Label>
+                                            <Input
+                                                id={`quantity-${category}`}
+                                                type="number"
+                                                min={1}
+                                                value={categoryData?.quantity || 1}
+                                                onChange={(e) => handleCategoryQuantityChange(category, parseInt(e.target.value, 10))}
+                                                className="w-24"
+                                            />
+                                        </div>
+                                    </div>
+                                    <AccordionContent>
+                                        <div className="space-y-4 pl-4 pt-2">
+                                            <h4 className="font-semibold">Available Tests</h4>
+                                            {categoryTests.map((test) => (
+                                                <div key={test.id} className="flex items-center gap-4">
+                                                    <Checkbox
+                                                        id={test.id}
+                                                        checked={!!categoryData?.selectedTests[test.id]}
+                                                        onCheckedChange={() => handleTestSelectionChange(category, test.id)}
+                                                    />
+                                                    <Label htmlFor={test.id} className="flex-grow">{test.materialTest}</Label>
+                                                    <div className="flex items-center gap-2">
+                                                        <Label htmlFor={`quantity-${test.id}`}>Qty</Label>
+                                                        <Input
+                                                            id={`quantity-${test.id}`}
+                                                            type="number"
+                                                            min={0}
+                                                            max={categoryData?.quantity}
+                                                            value={categoryData?.testQuantities[test.id] ?? categoryData?.quantity}
+                                                            onChange={(e) => handleTestQuantityChange(category, test.id, parseInt(e.target.value, 10))}
+                                                            className="w-24"
+                                                            disabled={!categoryData?.selectedTests[test.id]}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            ))}
+                                            <Collapsible className="space-y-2">
+                                                <CollapsibleTrigger asChild>
+                                                    <Button variant="ghost" className="flex items-center gap-2 text-sm">
+                                                        <ChevronDown className="w-4 h-4" />
+                                                        Notes
+                                                    </Button>
+                                                </CollapsibleTrigger>
+                                                <CollapsibleContent>
+                                                    <Textarea
+                                                        placeholder="Add any notes for this material category..."
+                                                        value={categoryData?.notes || ""}
+                                                        onChange={(e) => handleNotesChange(category, e.target.value)}
+                                                    />
+                                                </CollapsibleContent>
+                                            </Collapsible>
+                                        </div>
+                                    </AccordionContent>
+                                </AccordionItem>
+                            )
+                        })}
+                    </Accordion>
+                </ScrollArea>
+              )}
                 
               <DialogFooter className="pt-4">
                   {step > 1 && <Button type="button" variant="ghost" onClick={handleBack}>Back</Button>}
-                  {step < 2 ? (
-                      <Button type="button" onClick={handleNext} className="ml-auto">Next</Button>
+                  
+                  {step < 3 ? (
+                      <Button type="button" onClick={handleNext} className="ml-auto" disabled={step === 2 && selectedCategories.length === 0}>Next</Button>
                   ) : (
-                      <Button type="submit" className="ml-auto" disabled={selectedCategories.length === 0}>Submit</Button>
+                      <Button type="button" className="ml-auto" onClick={() => console.log("To Step 4")} disabled={!isStep3Valid()}>Next</Button>
                   )}
                    <Button type="button" variant="destructive" onClick={() => onOpenChange(false)} className={step === 1 ? "ml-auto" : ""}>Cancel</Button>
               </DialogFooter>
@@ -348,3 +498,5 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
     </Dialog>
   );
 }
+
+    
