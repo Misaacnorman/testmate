@@ -59,7 +59,7 @@ const receiveSampleSchema = z.object({
   step3Data: z.array(categorySchema).optional(),
 }).refine(data => {
     if (data.sameForBilling === 'no') {
-        return data.billedClientName && data.billedClientAddress && data.billedClientContact;
+        return !!data.billedClientName && !!data.billedClientAddress && !!data.billedClientContact;
     }
     return true;
 }, {
@@ -519,3 +519,5 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
     </Dialog>
   );
 }
+
+    
