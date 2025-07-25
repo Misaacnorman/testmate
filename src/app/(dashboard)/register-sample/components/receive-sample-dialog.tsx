@@ -139,30 +139,32 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
   const handleNext = async () => {
     if (step === 1) {
       const isValid = await form.trigger();
-      if (!isValid) return;
-      setStep(2);
+      if (isValid) {
+        setStep(2);
+      }
       return;
     }
 
     if (step === 2) {
       const newStep3Data: Step3Data = {};
-      for (const category of selectedCategories) {
+      selectedCategories.forEach(category => {
         newStep3Data[category] = step3Data[category] || {
           quantity: 1,
           notes: "",
           selectedTests: {},
           testQuantities: {},
         };
-      }
+      });
       setStep3Data(newStep3Data);
       setStep(3);
       return;
     }
-    
+
     if (step === 3) {
-      if (hasSpecialCategories) {
+      const specialCategoriesSelected = selectedCategories.some(cat => specialCategories.includes(cat));
+      if (specialCategoriesSelected) {
         const newStep4Data: Step4Data = { ...step4Data };
-        for (const category of selectedCategories) {
+        selectedCategories.forEach(category => {
           if (specialCategories.includes(category) && !newStep4Data[category]) {
             const totalQuantity = step3Data[category]?.quantity || 1;
             newStep4Data[category] = {
@@ -178,17 +180,18 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
               }))
             };
           }
-        }
+        });
         setStep4Data(newStep4Data);
         setStep(4);
       } else {
-        setStep(reviewStepNumber); // Skip to review
+        setStep(reviewStepNumber);
       }
       return;
     }
-    
-    if (step < reviewStepNumber) {
-        setStep(prev => prev + 1);
+
+    if (step === 4) {
+      setStep(5);
+      return;
     }
   };
   
