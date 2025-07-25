@@ -7,7 +7,7 @@ import { TestActions } from "./components/test-actions";
 import { Test } from "@/types/test";
 import { getTests, addTest, deleteTest, updateTest, deleteAllTests } from "@/services/tests";
 import { useToast } from '@/hooks/use-toast';
-import { EditTestDialog } from './components/edit-test-dialog';
+import { EditTestDialog } from '@/app/tests/components/edit-test-dialog';
 import * as XLSX from 'xlsx';
 
 export default function TestsPage() {
@@ -118,7 +118,19 @@ export default function TestsPage() {
       });
       return;
     }
-    const worksheet = XLSX.utils.json_to_sheet(data.map(({id, ...rest}) => rest)); // Exclude ID from export
+    const worksheet = XLSX.utils.json_to_sheet(data.map(({id, ...rest}) => {
+      const newObj: {[key: string]: any} = {};
+      newObj['MATERIAL CATEGORY'] = rest.materialCategory;
+      newObj['TEST CODE'] = rest.testCode;
+      newObj['MATERIAL TEST'] = rest.materialTest;
+      newObj['TEST METHOD(S)'] = rest.testMethods;
+      newObj['ACCREDITATION'] = rest.accreditation;
+      newObj['UNIT'] = rest.unit;
+      newObj['AMOUNT (UGX)'] = rest.amountUGX;
+      newObj['AMOUNT (USD)'] = rest.amountUSD;
+      newObj['LEAD TIME (DAYS)'] = rest.leadTimeDays;
+      return newObj;
+    }));
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Tests");
     XLSX.writeFile(workbook, "Test_Data.xlsx");

@@ -8,7 +8,7 @@ import {
   SidebarMenuButton,
   SidebarInset,
 } from "@/components/ui/sidebar";
-import { Beaker, TestTubeDiagonal } from "lucide-react";
+import { Beaker, TestTubeDiagonal, FilePlus2 } from "lucide-react";
 import Link from 'next/link';
 
 export default function DashboardLayout({
@@ -28,10 +28,18 @@ export default function DashboardLayout({
         <SidebarContent>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive>
+              <SidebarMenuButton asChild>
                 <Link href="/tests">
                   <TestTubeDiagonal />
                   <span>Tests</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link href="/register-sample">
+                  <FilePlus2 />
+                  <span>Register Sample</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
