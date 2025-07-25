@@ -10,3 +10,16 @@ export type Test = {
   amountUSD: number;
   leadTimeDays: number;
 };
+
+export type SpecialCategoryTest = Test & {
+  numberOfSets: number;
+  setDistribution: number[];
+  sets: {
+    serials: string;
+    castingDate: Date;
+    testingDate: Date;
+    age: number;
+    areaOfUse: string;
+    class?: string;
+  }[];
+};
