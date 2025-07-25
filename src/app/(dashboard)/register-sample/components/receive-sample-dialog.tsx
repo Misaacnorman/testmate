@@ -59,7 +59,6 @@ const transmittalOptions = [
 ]
 
 export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogProps) {
-  const [step, setStep] = useState(1);
   const [currentDate, setCurrentDate] = useState("");
   const [currentTime, setCurrentTime] = useState("");
 
@@ -94,19 +93,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
     console.log(values);
     onOpenChange(false);
     form.reset();
-    setStep(1);
   };
-  
-  const handleNext = async () => {
-    const isValid = await form.trigger(step === 1 ? ["clientName", "clientAddress", "clientContact", "sameForBilling", "billedClientName", "billedClientAddress", "billedClientContact"] : []);
-    if (isValid) {
-      setStep(s => s + 1);
-    }
-  }
-
-  const handleBack = () => {
-    setStep(s => s - 1);
-  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -114,177 +101,173 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
         <DialogHeader>
           <DialogTitle>Receive New Sample</DialogTitle>
           <DialogDescription>
-            {step === 1 && "Step 1 of 2: Enter client information."}
-            {step === 2 && "Step 2 of 2: Enter sample and delivery details."}
+            Enter the client and sample details below.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex-grow overflow-y-auto space-y-6 p-1">
-                {step === 1 && (
-                    <div className="space-y-4">
-                        <h3 className="text-lg font-medium">Client Details</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <FormField control={form.control} name="clientName" render={({ field }) => (
-                                <FormItem><FormLabel>Client Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                            )} />
-                             <FormField control={form.control} name="clientContact" render={({ field }) => (
-                                <FormItem><FormLabel>Client Contact</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                            )} />
-                        </div>
-                        <FormField control={form.control} name="clientAddress" render={({ field }) => (
-                            <FormItem><FormLabel>Client Address</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                <div className="space-y-4">
+                    <h3 className="text-lg font-medium">Client Details</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormField control={form.control} name="clientName" render={({ field }) => (
+                            <FormItem><FormLabel>Client Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                         )} />
-                       
-                        <Separator />
+                         <FormField control={form.control} name="clientContact" render={({ field }) => (
+                            <FormItem><FormLabel>Client Contact</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                        )} />
+                    </div>
+                    <FormField control={form.control} name="clientAddress" render={({ field }) => (
+                        <FormItem><FormLabel>Client Address</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                    )} />
+                   
+                    <Separator />
 
-                        <FormField
-                            control={form.control}
-                            name="sameForBilling"
-                            render={({ field }) => (
-                                <FormItem className="space-y-3">
-                                <FormLabel>Is the client name same for Billing?</FormLabel>
-                                <FormControl>
-                                    <RadioGroup
-                                    onValueChange={field.onChange}
-                                    defaultValue={field.value}
-                                    className="flex items-center space-x-4"
-                                    >
-                                    <FormItem className="flex items-center space-x-2 space-y-0">
-                                        <FormControl>
-                                        <RadioGroupItem value="yes" />
-                                        </FormControl>
-                                        <FormLabel className="font-normal">Yes</FormLabel>
-                                    </FormItem>
-                                    <FormItem className="flex items-center space-x-2 space-y-0">
-                                        <FormControl>
-                                        <RadioGroupItem value="no" />
-                                        </FormControl>
-                                        <FormLabel className="font-normal">No</FormLabel>
-                                    </FormItem>
-                                    </RadioGroup>
-                                </FormControl>
-                                <FormMessage />
+                    <FormField
+                        control={form.control}
+                        name="sameForBilling"
+                        render={({ field }) => (
+                            <FormItem className="space-y-3">
+                            <FormLabel>Is the client name same for Billing?</FormLabel>
+                            <FormControl>
+                                <RadioGroup
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                                className="flex items-center space-x-4"
+                                >
+                                <FormItem className="flex items-center space-x-2 space-y-0">
+                                    <FormControl>
+                                    <RadioGroupItem value="yes" />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">Yes</FormLabel>
                                 </FormItem>
-                            )}
-                        />
+                                <FormItem className="flex items-center space-x-2 space-y-0">
+                                    <FormControl>
+                                    <RadioGroupItem value="no" />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">No</FormLabel>
+                                </FormItem>
+                                </RadioGroup>
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
-                        {watchSameForBilling === 'no' && (
-                            <div className="space-y-4 p-4 border rounded-md bg-muted/50">
-                                <h4 className="font-medium">Billed Client Details</h4>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <FormField control={form.control} name="billedClientName" render={({ field }) => (
-                                        <FormItem><FormLabel>Billed Client Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                                    )} />
-                                    <FormField control={form.control} name="billedClientContact" render={({ field }) => (
-                                        <FormItem><FormLabel>Billed Client Contact</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                                    )} />
-                                </div>
-                                 <FormField control={form.control} name="billedClientAddress" render={({ field }) => (
-                                    <FormItem><FormLabel>Billed Client Address</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                    {watchSameForBilling === 'no' && (
+                        <div className="space-y-4 p-4 border rounded-md bg-muted/50">
+                            <h4 className="font-medium">Billed Client Details</h4>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <FormField control={form.control} name="billedClientName" render={({ field }) => (
+                                    <FormItem><FormLabel>Billed Client Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                                )} />
+                                <FormField control={form.control} name="billedClientContact" render={({ field }) => (
+                                    <FormItem><FormLabel>Billed Client Contact</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                                 )} />
                             </div>
-                        )}
-                    </div>
-                )}
+                             <FormField control={form.control} name="billedClientAddress" render={({ field }) => (
+                                <FormItem><FormLabel>Billed Client Address</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                            )} />
+                        </div>
+                    )}
+                </div>
+                
+                <Separator />
 
-                {step === 2 && (
-                    <div className="space-y-4">
-                        <h3 className="text-lg font-medium">Sample Details</h3>
-                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <FormField control={form.control} name="projectTitle" render={({ field }) => (
-                                <FormItem><FormLabel>Project Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                            )} />
-                            <FormField control={form.control} name="sampleStatus" render={({ field }) => (
-                                <FormItem><FormLabel>Status of the Sample</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                            )} />
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <FormItem>
-                                <FormLabel>Date of Receipt</FormLabel>
-                                <Input disabled value={currentDate} />
-                            </FormItem>
-                             <FormItem>
-                                <FormLabel>Time of Receipt</FormLabel>
-                                <Input disabled value={currentTime} />
-                            </FormItem>
-                            <FormItem>
-                                <FormLabel>Received By</FormLabel>
-                                <Input disabled value="Admin" />
-                            </FormItem>
-                        </div>
-                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <FormField control={form.control} name="deliveredBy" render={({ field }) => (
-                                <FormItem><FormLabel>Delivered by</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                            )} />
-                            <FormField control={form.control} name="deliveryContact" render={({ field }) => (
-                                <FormItem><FormLabel>Contact of Delivery Person</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                            )} />
-                        </div>
-                        <Separator />
-                        <FormField
-                            control={form.control}
-                            name="resultTransmittal"
-                            render={() => (
-                                <FormItem>
-                                    <div className="mb-4">
-                                        <FormLabel className="text-base">Mode of Results Transmittal</FormLabel>
-                                    </div>
-                                    <div className="flex flex-wrap gap-4">
-                                        {transmittalOptions.map((item) => (
-                                        <FormField
-                                            key={item.id}
-                                            control={form.control}
-                                            name="resultTransmittal"
-                                            render={({ field }) => {
-                                            return (
-                                                <FormItem
-                                                key={item.id}
-                                                className="flex flex-row items-start space-x-3 space-y-0"
-                                                >
-                                                <FormControl>
-                                                    <Checkbox
-                                                    checked={field.value?.includes(item.id)}
-                                                    onCheckedChange={(checked) => {
-                                                        return checked
-                                                        ? field.onChange([...field.value, item.id])
-                                                        : field.onChange(
-                                                            field.value?.filter(
-                                                                (value) => value !== item.id
-                                                            )
-                                                            )
-                                                    }}
-                                                    />
-                                                </FormControl>
-                                                <FormLabel className="font-normal">
-                                                    {item.label}
-                                                </FormLabel>
-                                                </FormItem>
-                                            )
-                                            }}
-                                        />
-                                        ))}
-                                    </div>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                         {(watchResultTransmittal.includes('email') || watchResultTransmittal.includes('whatsapp')) && (
-                            <div className="space-y-4 p-4 border rounded-md bg-muted/50">
-                                {watchResultTransmittal.includes('email') && <FormField control={form.control} name="transmittalEmail" render={({ field }) => (
-                                    <FormItem><FormLabel>Email for Results</FormLabel><FormControl><Input type="email" placeholder="example@test.com" {...field} /></FormControl><FormMessage /></FormItem>
-                                )} />}
-                                {watchResultTransmittal.includes('whatsapp') && <FormField control={form.control} name="transmittalWhatsapp" render={({ field }) => (
-                                    <FormItem><FormLabel>Whatsapp Number for Results</FormLabel><FormControl><Input placeholder="+256 123 456789" {...field} /></FormControl><FormMessage /></FormItem>
-                                )} />}
-                            </div>
-                        )}
+                <div className="space-y-4">
+                    <h3 className="text-lg font-medium">Sample Details</h3>
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormField control={form.control} name="projectTitle" render={({ field }) => (
+                            <FormItem><FormLabel>Project Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                        )} />
+                        <FormField control={form.control} name="sampleStatus" render={({ field }) => (
+                            <FormItem><FormLabel>Status of the Sample</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                        )} />
                     </div>
-                )}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <FormItem>
+                            <FormLabel>Date of Receipt</FormLabel>
+                            <Input disabled value={currentDate} />
+                        </FormItem>
+                         <FormItem>
+                            <FormLabel>Time of Receipt</FormLabel>
+                            <Input disabled value={currentTime} />
+                        </FormItem>
+                        <FormItem>
+                            <FormLabel>Received By</FormLabel>
+                            <Input disabled value="Admin" />
+                        </FormItem>
+                    </div>
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormField control={form.control} name="deliveredBy" render={({ field }) => (
+                            <FormItem><FormLabel>Delivered by</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                        )} />
+                        <FormField control={form.control} name="deliveryContact" render={({ field }) => (
+                            <FormItem><FormLabel>Contact of Delivery Person</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                        )} />
+                    </div>
+                    <Separator />
+                    <FormField
+                        control={form.control}
+                        name="resultTransmittal"
+                        render={() => (
+                            <FormItem>
+                                <div className="mb-4">
+                                    <FormLabel className="text-base">Mode of Results Transmittal</FormLabel>
+                                </div>
+                                <div className="flex flex-wrap gap-4">
+                                    {transmittalOptions.map((item) => (
+                                    <FormField
+                                        key={item.id}
+                                        control={form.control}
+                                        name="resultTransmittal"
+                                        render={({ field }) => {
+                                        return (
+                                            <FormItem
+                                            key={item.id}
+                                            className="flex flex-row items-start space-x-3 space-y-0"
+                                            >
+                                            <FormControl>
+                                                <Checkbox
+                                                checked={field.value?.includes(item.id)}
+                                                onCheckedChange={(checked) => {
+                                                    return checked
+                                                    ? field.onChange([...field.value, item.id])
+                                                    : field.onChange(
+                                                        field.value?.filter(
+                                                            (value) => value !== item.id
+                                                        )
+                                                        )
+                                                }}
+                                                />
+                                            </FormControl>
+                                            <FormLabel className="font-normal">
+                                                {item.label}
+                                            </FormLabel>
+                                            </FormItem>
+                                        )
+                                        }}
+                                    />
+                                    ))}
+                                </div>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                     {(watchResultTransmittal.includes('email') || watchResultTransmittal.includes('whatsapp')) && (
+                        <div className="space-y-4 p-4 border rounded-md bg-muted/50">
+                            {watchResultTransmittal.includes('email') && <FormField control={form.control} name="transmittalEmail" render={({ field }) => (
+                                <FormItem><FormLabel>Email for Results</FormLabel><FormControl><Input type="email" placeholder="example@test.com" {...field} /></FormControl><FormMessage /></FormItem>
+                            )} />}
+                            {watchResultTransmittal.includes('whatsapp') && <FormField control={form.control} name="transmittalWhatsapp" render={({ field }) => (
+                                <FormItem><FormLabel>Whatsapp Number for Results</FormLabel><FormControl><Input placeholder="+256 123 456789" {...field} /></FormControl><FormMessage /></FormItem>
+                            )} />}
+                        </div>
+                    )}
+                </div>
                 
                 <DialogFooter className="pt-4">
-                    {step > 1 && <Button type="button" variant="ghost" onClick={handleBack}>Back</Button>}
-                    {step < 2 && <Button type="button" onClick={handleNext} className="ml-auto">Next</Button>}
-                    {step === 2 && <Button type="submit" className="ml-auto">Submit</Button>}
+                    <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>Cancel</Button>
+                    <Button type="submit" className="ml-auto">Next</Button>
                 </DialogFooter>
             </form>
         </Form>
