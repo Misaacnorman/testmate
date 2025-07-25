@@ -87,10 +87,6 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
 
   const specialCategories = useMemo(() => ["Concrete Cubes", "Bricks", "Blocks", "Pavers", "Cylinder"], []);
 
-  const hasSpecialCategories = useMemo(() => {
-    return Object.keys(selectedCategories).some(cat => specialCategories.includes(cat));
-  }, [selectedCategories, specialCategories]);
-
   useEffect(() => {
     if (open) {
       const fetchInitialData = async () => {
@@ -154,10 +150,28 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         return;
       }
       
-      const anySpecialSelected = Object.keys(selectedCategories).some(cat => specialCategories.includes(cat));
-      if (anySpecialSelected) {
+      // --- DEBUGGING CODE START ---
+      console.log("DEBUG - Selected Categories Keys:", Object.keys(selectedCategories));
+      console.log("DEBUG - Special Categories Array:", specialCategories);
+
+      // Original check (case-sensitive)
+      const anySpecialSelectedOriginal = Object.keys(selectedCategories).some(cat => specialCategories.includes(cat));
+      console.log("DEBUG - Any Special Selected (Original, case-sensitive):", anySpecialSelectedOriginal);
+
+      // Case-insensitive check (for debugging)
+      const anySpecialSelectedCaseInsensitive = Object.keys(selectedCategories).some(selectedCat =>
+        specialCategories.some(specialCat =>
+          specialCat.toLowerCase().trim() === selectedCat.toLowerCase().trim()
+        )
+      );
+      console.log("DEBUG - Any Special Selected (Case-insensitive):", anySpecialSelectedCaseInsensitive);
+      // --- DEBUGGING CODE END ---
+
+      if (anySpecialSelectedOriginal) {
+        console.log("DEBUG: Moving to Step 4");
         setCurrentStep(4);
       } else {
+        console.log("DEBUG: Moving to Step 5 (No Special)");
         setCurrentStep(5);
       }
     } else if (currentStep === 4) {
@@ -176,28 +190,33 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
   };
 
   const handleBack = () => {
-     if (currentStep === 5) {
-        const anySpecialSelected = Object.keys(selectedCategories).some(cat => specialCategories.includes(cat));
-        if(anySpecialSelected) {
-            setCurrentStep(4);
-        } else {
-            setCurrentStep(3);
-        }
-     } else {
-        setCurrentStep(s => s - 1);
-     }
+    if (currentStep === 5) {
+      const anySpecialSelected = Object.keys(selectedCategories).some(cat => specialCategories.includes(cat));
+      if (anySpecialSelected) {
+        setCurrentStep(4);
+      } else {
+        setCurrentStep(3);
+      }
+    } else {
+      setCurrentStep(s => s - 1);
+    }
   };
   
   const handleCategoryToggle = (category: string) => {
-      setSelectedCategories(prev => {
-          const newCategories = { ...prev };
-          if (newCategories[category]) {
-              delete newCategories[category];
-          } else {
-              newCategories[category] = { quantity: 1, tests: {} };
-          }
-          return newCategories;
-      });
+    console.log("DEBUG - Toggling Category:", category); // --- ADD THIS ---
+    setSelectedCategories(prev => {
+        const newCategories = { ...prev };
+        console.log("DEBUG - Previous selectedCategories state:", prev); // --- ADD THIS ---
+        if (newCategories[category]) {
+            delete newCategories[category];
+            console.log("DEBUG - Removed category:", category); // --- ADD THIS ---
+        } else {
+            newCategories[category] = { quantity: 1, tests: {} };
+            console.log("DEBUG - Added category:", category); // --- ADD THIS ---
+        }
+        console.log("DEBUG - New selectedCategories state:", newCategories); // --- ADD THIS ---
+        return newCategories;
+    });
   };
 
   const handleCategoryQuantityChange = (category: string, quantity: number) => {
@@ -208,20 +227,20 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
   };
   
   const handleTestToggle = (category: string, test: Test) => {
-      setSelectedCategories(prev => {
-        const newCategories = JSON.parse(JSON.stringify(prev));
-        const categoryData = newCategories[category];
-        
-        if (categoryData.tests[test.id]) {
-            delete categoryData.tests[test.id];
-        } else {
-            categoryData.tests[test.id] = { 
-                quantity: categoryData.quantity, 
-                testMethods: test.testMethods, 
-                materialTest: test.materialTest 
-            };
-        }
-        return newCategories;
+    setSelectedCategories(prev => {
+      const newCategories = JSON.parse(JSON.stringify(prev));
+      const categoryData = newCategories[category];
+      
+      if (categoryData.tests[test.id]) {
+        delete categoryData.tests[test.id];
+      } else {
+        categoryData.tests[test.id] = { 
+          quantity: categoryData.quantity, 
+          testMethods: test.testMethods, 
+          materialTest: test.materialTest 
+        };
+      }
+      return newCategories;
     });
   };
 
@@ -520,7 +539,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
             <Accordion type="multiple" className="w-full space-y-2">
                 {Object.keys(selectedCategories).map(category => (
                     <AccordionItem key={category} value={category}>
-                        <AccordionTrigger className="hover:no-underline border p-2 rounded-md [&_svg]:data-[state=open]:rotate-180">
+                        <AccordionTrigger className="hover:no-underline border p-2 rounded-md">
                            <div className="flex w-full items-center justify-between">
                                 <span className="font-bold text-lg flex-1 text-left">{category}</span>
                                 <div className="flex items-center gap-2 pr-2">
@@ -721,7 +740,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                         ))}
                     </div>
 
-                    {hasSpecialCategories && Object.keys(step4Data).length > 0 && (
+                    {Object.keys(step4Data).length > 0 && (
                          <div className="space-y-4">
                             <Separator/>
                             <h3 className="text-lg font-semibold">Special Sample Details</h3>
@@ -759,5 +778,3 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
     </Dialog>
   );
 }
-
-    
