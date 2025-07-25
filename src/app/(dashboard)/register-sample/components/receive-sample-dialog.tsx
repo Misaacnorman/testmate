@@ -153,8 +153,9 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         toast({ variant: "destructive", title: "Validation Error", description: "Test quantities must be greater than 0 and not exceed the category quantity."});
         return;
       }
-
-      if (hasSpecialCategories) {
+      
+      const hasCats = Object.keys(selectedCategories).some(cat => specialCategories.includes(cat));
+      if (hasCats) {
         setCurrentStep(4);
       } else {
         setCurrentStep(5); // Skip to review
@@ -177,7 +178,8 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
 
   const handleBack = () => {
      if (currentStep === 5) {
-        if(hasSpecialCategories) {
+        const hasCats = Object.keys(selectedCategories).some(cat => specialCategories.includes(cat));
+        if(hasCats) {
             setCurrentStep(4);
         } else {
             setCurrentStep(3);
