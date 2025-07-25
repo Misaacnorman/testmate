@@ -134,55 +134,61 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
 
   const hasSpecialCategories = selectedCategories.some(cat => specialCategories.includes(cat));
   const numSteps = hasSpecialCategories ? 5 : 4;
-  const reviewStepNumber = numSteps;
+  const reviewStepNumber = hasSpecialCategories ? 5 : 4;
 
   const handleNext = async () => {
     if (step === 1) {
       const isValid = await form.trigger();
       if (!isValid) return;
+      setStep(2);
+      return;
     }
 
-    if (step < numSteps) {
-      if (step === 2) {
-        const newStep3Data: Step3Data = {};
-        for (const category of selectedCategories) {
-          newStep3Data[category] = step3Data[category] || {
-            quantity: 1,
-            notes: "",
-            selectedTests: {},
-            testQuantities: {},
-          };
-        }
-        setStep3Data(newStep3Data);
-        setStep(3);
-      } else if (step === 3) {
-        if (hasSpecialCategories) {
-          const newStep4Data: Step4Data = { ...step4Data };
-          for (const category of selectedCategories) {
-            if (specialCategories.includes(category) && !newStep4Data[category]) {
-              const totalQuantity = step3Data[category]?.quantity || 1;
-              newStep4Data[category] = {
-                numberOfSets: 1,
-                setDistribution: [totalQuantity],
-                sets: Array.from({ length: 1 }).map(() => ({
-                  serials: Array.from({ length: totalQuantity }, (_, j) => String(j + 1)).join(', '),
-                  castingDate: new Date(),
-                  testingDate: new Date(),
-                  age: 0,
-                  areaOfUse: "",
-                  class: ""
-                }))
-              };
-            }
-          }
-          setStep4Data(newStep4Data);
-          setStep(4);
-        } else {
-          setStep(reviewStepNumber); // Skip to review
-        }
-      } else {
-        setStep(prev => prev + 1);
+    if (step === 2) {
+      const newStep3Data: Step3Data = {};
+      for (const category of selectedCategories) {
+        newStep3Data[category] = step3Data[category] || {
+          quantity: 1,
+          notes: "",
+          selectedTests: {},
+          testQuantities: {},
+        };
       }
+      setStep3Data(newStep3Data);
+      setStep(3);
+      return;
+    }
+    
+    if (step === 3) {
+      if (hasSpecialCategories) {
+        const newStep4Data: Step4Data = { ...step4Data };
+        for (const category of selectedCategories) {
+          if (specialCategories.includes(category) && !newStep4Data[category]) {
+            const totalQuantity = step3Data[category]?.quantity || 1;
+            newStep4Data[category] = {
+              numberOfSets: 1,
+              setDistribution: [totalQuantity],
+              sets: Array.from({ length: 1 }).map(() => ({
+                serials: Array.from({ length: totalQuantity }, (_, j) => String(j + 1)).join(', '),
+                castingDate: new Date(),
+                testingDate: new Date(),
+                age: 0,
+                areaOfUse: "",
+                class: ""
+              }))
+            };
+          }
+        }
+        setStep4Data(newStep4Data);
+        setStep(4);
+      } else {
+        setStep(reviewStepNumber); // Skip to review
+      }
+      return;
+    }
+    
+    if (step < reviewStepNumber) {
+        setStep(prev => prev + 1);
     }
   };
   
@@ -813,7 +819,3 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
     </Dialog>
   );
 }
-
-    
-
-    
