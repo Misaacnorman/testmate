@@ -573,31 +573,31 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
               )}
               
               {step === 3 && (
-                <ScrollArea className="h-96 w-full rounded-md border p-4">
+                <ScrollArea className="h-96 w-full rounded-md p-1">
                     <Accordion type="multiple" className="w-full">
                         {selectedCategories.map((category) => {
                             const categoryTests = allTests.filter(t => t.materialCategory === category);
                             const categoryData = step3Data[category];
                             return (
-                                <AccordionItem key={category} value={category} className="border-b-0 mb-2 p-2 rounded-md border">
-                                    <div className="flex items-center justify-between p-2 rounded-md">
-                                      <h3 className="text-lg font-medium">{category}</h3>
+                                <AccordionItem key={category} value={category} className="border-b last:border-b-0">
+                                    <AccordionTrigger className="p-4 hover:no-underline">
+                                      <div className="flex-1 text-left font-semibold">{category}</div>
                                       <div className="flex items-center gap-2">
-                                          <Label htmlFor={`quantity-${category}`}>Quantity</Label>
+                                          <Label htmlFor={`quantity-${category}`} onClick={(e) => e.stopPropagation()}>Quantity</Label>
                                           <Input
                                               id={`quantity-${category}`}
                                               type="number"
                                               min={1}
                                               value={categoryData?.quantity || 1}
                                               onChange={(e) => handleCategoryQuantityChange(category, parseInt(e.target.value, 10))}
-                                              className="w-24"
+                                              onClick={(e) => e.stopPropagation()}
+                                              className="w-24 h-8"
                                           />
-                                          <AccordionTrigger />
                                       </div>
-                                    </div>
+                                    </AccordionTrigger>
                                     <AccordionContent>
                                         <div className="space-y-2 pl-4 pt-2 border-t mt-2">
-                                            <h4 className="font-semibold">Available Tests</h4>
+                                            <h4 className="font-semibold text-sm">Available Tests</h4>
                                             {categoryTests.map((test) => (
                                                 <div key={test.id} className="flex items-center gap-2">
                                                     <Checkbox
@@ -605,7 +605,7 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
                                                         checked={!!categoryData?.selectedTests[test.id]}
                                                         onCheckedChange={() => handleTestSelectionChange(category, test.id)}
                                                     />
-                                                    <Label htmlFor={test.id} className="flex-grow">{test.materialTest}</Label>
+                                                    <Label htmlFor={test.id} className="flex-grow font-normal">{test.materialTest}</Label>
                                                     <div className="flex items-center gap-2">
                                                         <Label htmlFor={`quantity-${test.id}`} className="text-xs">Qty</Label>
                                                         <Input
