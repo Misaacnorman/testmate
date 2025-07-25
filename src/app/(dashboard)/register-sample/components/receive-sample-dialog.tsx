@@ -290,9 +290,8 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         const newStep4Data = { ...prev };
         const dataField = subField ? newStep4Data[category][subField] : newStep4Data[category];
         const newSets = [...dataField.sets];
-        const newSerials = [...newSets[setIndex].serials];
-        newSerials[sampleIndex] = value;
-        newSets[setIndex].serials = newSerials;
+        if (!newSets[setIndex].serials) newSets[setIndex].serials = [];
+        newSets[setIndex].serials[sampleIndex] = value;
         
          const finalData = subField
             ? { ...newStep4Data[category], [subField]: { ...dataField, sets: newSets } }
@@ -352,6 +351,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
 
   const handleSetDistribution = (category: string, numSets: number, subField?: string) => {
     const totalQuantity = subField ? step4Data[category][subField].quantity : selectedCategories[category].quantity;
+    if (totalQuantity === 0) return;
     const base = Math.floor(totalQuantity / numSets);
     const remainder = totalQuantity % numSets;
     const distribution = Array(numSets).fill(base);
@@ -359,32 +359,43 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         distribution[i]++;
     }
     
-    if (subField) {
-        handleStep4Change(category, 'setDistribution', distribution, subField);
-        handleStep4Change(category, 'numberOfSets', numSets, subField);
-    } else {
-        handleStep4Change(category, 'setDistribution', distribution);
-        handleStep4Change(category, 'numberOfSets', numSets);
-    }
-
-    const newSets = Array.from({ length: numSets }, (_, i) => {
-        const setQuantity = distribution[i];
-        let serialCounter = 1;
-        if (i > 0) {
-            for(let j=0; j<i; j++) {
-                serialCounter += distribution[j];
+    const setsPayload = {
+        numberOfSets: numSets,
+        setDistribution: distribution,
+        sets: Array.from({ length: numSets }, (_, i) => {
+            const setQuantity = distribution[i];
+            let serialCounter = 1;
+            if (i > 0) {
+                for(let j=0; j<i; j++) {
+                    serialCounter += distribution[j];
+                }
             }
-        }
-        return {
-            serials: Array.from({length: setQuantity}, (_, k) => `${serialCounter + k}`),
-            testingDate: new Date()
-        };
-    });
+            return {
+                serials: Array.from({length: setQuantity}, (_, k) => `${serialCounter + k}`),
+                testingDate: new Date()
+            };
+        })
+    };
     
     if (subField) {
-        handleStep4Change(category, 'sets', newSets, subField);
+        setStep4Data(prev => ({
+            ...prev,
+            [category]: {
+                ...prev[category],
+                [subField]: {
+                    ...prev[category][subField],
+                    ...setsPayload
+                }
+            }
+        }));
     } else {
-        handleStep4Change(category, 'sets', newSets);
+         setStep4Data(prev => ({
+            ...prev,
+            [category]: {
+                ...prev[category],
+                ...setsPayload
+            }
+        }));
     }
   };
   
@@ -652,6 +663,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                                         onClick={e => e.stopPropagation()}
                                      />
                                 </div>
+                                <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
                             </div>
                         </AccordionTrigger>
                         <AccordionContent className="p-4 border border-t-0 rounded-b-md">
@@ -697,8 +709,9 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         
         {currentStep === 4 && (
             <Accordion type="multiple" className="w-full space-y-2" defaultValue={Object.keys(selectedCategories).filter(cat => specialCategories.some(sc => sc.toLowerCase() === cat.toLowerCase()))}>
-                {Object.keys(selectedCategories).filter(cat => specialCategories.some(sc => sc.toLowerCase() === cat.toLowerCase())).map(category => {
+                {Object.keys(selectedCategories).filter(cat => specialCategories.some(sc => sc.toLowerCase().trim() === cat.toLowerCase().trim())).map(category => {
                      const catData = step4Data[category];
+                     if (!catData) return null;
                      return(
                      <AccordionItem key={category} value={category}>
                         <AccordionTrigger className="font-bold text-lg">{category}</AccordionTrigger>
@@ -855,17 +868,42 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                             {Object.entries(step4Data).map(([category, data]) => (
                                 <div key={category} className="space-y-2">
                                     <h4 className="font-medium">{category}</h4>
-                                     {data.sets?.map((set:any, i:number) => (
-                                         <div key={i} className="text-sm pl-4 border-l-2 ml-2 space-y-1">
-                                            <p><strong>Set {i+1}</strong> (Qty: {data.setDistribution[i]})</p>
-                                            <p><strong>Casting Date:</strong> {set.castingDate ? format(new Date(set.castingDate), 'PPP') : 'N/A'}</p>
-                                            <p><strong>Testing Date:</strong> {set.testingDate ? format(new Date(set.testingDate), 'PPP') : 'N/A'}</p>
-                                            <p><strong>Age:</strong> {set.age} days</p>
-                                            <p><strong>Area of Use:</strong> {set.areaOfUse}</p>
-                                            {set.class && <p><strong>Class:</strong> {set.class}</p>}
-                                            <p><strong>Sample IDs:</strong> {Array.isArray(set.serials) ? set.serials.join(', ') : ''}</p>
-                                         </div>
-                                     ))}
+                                     {data.isSpecialPair ? (
+                                        <>
+                                            <div className="mt-2 p-2 border rounded-md">
+                                                <h5 className="font-medium text-primary">Compressive Strength (Qty: {data.compressive.quantity})</h5>
+                                                {data.compressive.sets.map((set: any, i: number) => (
+                                                    <div key={i} className="text-sm pl-4 border-l-2 ml-2 space-y-1 mt-2">
+                                                        <p><strong>Set {i + 1}</strong></p>
+                                                        <p>Casting: {set.castingDate ? format(new Date(set.castingDate), 'PPP') : 'N/A'}, Testing: {set.testingDate ? format(new Date(set.testingDate), 'PPP') : 'N/A'}, Age: {set.age || 'N/A'} days</p>
+                                                        <p>IDs: {Array.isArray(set.serials) ? set.serials.join(', ') : ''}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <div className="mt-2 p-2 border rounded-md">
+                                                <h5 className="font-medium text-primary">Water Absorption (Qty: {data.water.quantity})</h5>
+                                                {data.water.sets.map((set: any, i: number) => (
+                                                    <div key={i} className="text-sm pl-4 border-l-2 ml-2 space-y-1 mt-2">
+                                                        <p><strong>Set {i + 1}</strong></p>
+                                                        <p>Casting: {set.castingDate ? format(new Date(set.castingDate), 'PPP') : 'N/A'}, Testing: {set.testingDate ? format(new Date(set.testingDate), 'PPP') : 'N/A'}, Age: {set.age || 'N/A'} days</p>
+                                                        <p>IDs: {Array.isArray(set.serials) ? set.serials.join(', ') : ''}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </>
+                                     ) : (
+                                         data.sets?.map((set:any, i:number) => (
+                                             <div key={i} className="text-sm pl-4 border-l-2 ml-2 space-y-1">
+                                                <p><strong>Set {i+1}</strong> (Qty: {data.setDistribution[i]})</p>
+                                                <p><strong>Casting Date:</strong> {set.castingDate ? format(new Date(set.castingDate), 'PPP') : 'N/A'}</p>
+                                                <p><strong>Testing Date:</strong> {set.testingDate ? format(new Date(set.testingDate), 'PPP') : 'N/A'}</p>
+                                                <p><strong>Age:</strong> {set.age} days</p>
+                                                <p><strong>Area of Use:</strong> {set.areaOfUse}</p>
+                                                {set.class && <p><strong>Class:</strong> {set.class}</p>}
+                                                <p><strong>Sample IDs:</strong> {Array.isArray(set.serials) ? set.serials.join(', ') : ''}</p>
+                                             </div>
+                                         ))
+                                     )}
                                 </div>
                             ))}
                          </div>
