@@ -131,16 +131,17 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
   const watchSameForBilling = form.watch("sameForBilling");
   const watchResultTransmittal = form.watch("resultTransmittal");
 
+  const hasSpecialCategories = selectedCategories.some(cat => specialCategories.includes(cat));
+  const reviewStepNumber = hasSpecialCategories ? 5 : 4;
+  
   const handleNext = async () => {
     if (step === 1) {
       const isValid = await form.trigger();
-      if (isValid) {
-        setStep(2);
-      }
+      if (isValid) setStep(2);
       return;
     }
-
     if (step === 2) {
+      // Initialize step 3 data for selected categories
       const newStep3Data: Step3Data = {};
       selectedCategories.forEach(category => {
         newStep3Data[category] = step3Data[category] || {
@@ -154,10 +155,10 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
       setStep(3);
       return;
     }
-
     if (step === 3) {
       const hasSpecial = selectedCategories.some(cat => specialCategories.includes(cat));
       if (hasSpecial) {
+        // Initialize step 4 data for special categories
         const newStep4Data: Step4Data = { ...step4Data };
         selectedCategories.forEach(category => {
           if (specialCategories.includes(category) && !newStep4Data[category]) {
@@ -179,24 +180,22 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
         setStep4Data(newStep4Data);
         setStep(4);
       } else {
-        setStep(5); // This should be review step for non-special
+        setStep(reviewStepNumber); // Go to review step
       }
       return;
     }
-
-    if (step === 4) {
-      setStep(5);
+     if (step === 4) {
+      setStep(5); // Go to review step from step 4
       return;
     }
   };
   
   const handleBack = () => {
-    const hasSpecial = selectedCategories.some(cat => specialCategories.includes(cat));
-    if (step === 5 && !hasSpecial) {
-      setStep(3);
-    } else {
-      setStep(prev => prev - 1);
+    if (step === reviewStepNumber) {
+        setStep(hasSpecialCategories ? 4 : 3);
+        return;
     }
+    setStep(prev => prev - 1);
   };
 
   const handleCategoryChange = (category: string) => {
@@ -228,20 +227,24 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
 
   const handleTestSelectionChange = (category: string, testId: string) => {
     setStep3Data(prev => {
-        const isSelected = !prev[category].selectedTests[testId];
-        const newTestQuantities = { ...prev[category].testQuantities };
+        const categoryData = prev[category];
+        const isSelected = !categoryData.selectedTests[testId];
+        const newSelectedTests = { ...categoryData.selectedTests, [testId]: isSelected };
+        const newTestQuantities = { ...categoryData.testQuantities };
+        
         if(isSelected){
-            newTestQuantities[testId] = prev[category].quantity;
+            // Default quantity to parent quantity when selected
+            newTestQuantities[testId] = categoryData.quantity;
+        } else {
+            // Remove quantity when deselected
+            delete newTestQuantities[testId];
         }
 
         return {
             ...prev,
             [category]: {
-                ...prev[category],
-                selectedTests: {
-                    ...prev[category].selectedTests,
-                    [testId]: isSelected
-                },
+                ...categoryData,
+                selectedTests: newSelectedTests,
                 testQuantities: newTestQuantities,
             }
         }
@@ -390,9 +393,16 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
       });
   }
 
-  const hasSpecialCategories = selectedCategories.some(cat => specialCategories.includes(cat));
-  const numSteps = hasSpecialCategories ? 5 : 4;
-  const reviewStepNumber = hasSpecialCategories ? 5 : 4;
+  const getStepTitle = () => {
+      const titles: {[key: number]: string} = {
+          1: "Step 1: Client & Sample Details",
+          2: "Step 2: Select Material Categories",
+          3: "Step 3: Specify Tests & Quantities",
+          4: hasSpecialCategories ? "Step 4: Special Sample Details" : "Step 4: Review & Confirm",
+          5: "Step 5: Review & Confirm"
+      };
+      return titles[step] || "";
+  }
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => {
@@ -403,12 +413,12 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
     }}>
       <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col">
         <DialogHeader>
-          <DialogTitle>Receive New Sample - Step {step} of {numSteps}</DialogTitle>
+          <DialogTitle>{getStepTitle()}</DialogTitle>
           <DialogDescription>
             {step === 1 && "Enter the client and sample details below."}
             {step === 2 && "Select the material categories for testing."}
             {step === 3 && "Specify quantities and select tests."}
-            {step === 4 && "Provide additional details for special samples."}
+            {step === 4 && hasSpecialCategories && "Provide additional details for special samples."}
             {step === reviewStepNumber && "Review and confirm the sample registration details."}
           </DialogDescription>
         </DialogHeader>
