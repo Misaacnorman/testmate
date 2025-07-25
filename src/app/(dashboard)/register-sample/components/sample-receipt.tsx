@@ -24,6 +24,20 @@ export function SampleReceipt({ formData, categories, specialData, receiptDate, 
             notes: catData.notes || '',
         }))
     );
+    
+    const renderSetDetails = (set: any, index: number) => {
+        return (
+             <div key={index} className="text-xs space-y-1 mt-2 p-2 border-t">
+                <p><strong>Set {index + 1}:</strong></p>
+                <div className="pl-2">
+                    <p>Casting: {set.castingDate ? format(new Date(set.castingDate), 'PPP') : 'N/A'}, Testing: {set.testingDate ? format(new Date(set.testingDate), 'PPP') : 'N/A'}, Age: {set.age || 'N/A'} days</p>
+                    <p>Area of Use: {set.areaOfUse || 'N/A'}</p>
+                    {set.class && <p>Class: {set.class}</p>}
+                    <p>Sample IDs: {Array.isArray(set.serials) ? set.serials.join(', ') : ''}</p>
+                </div>
+            </div>
+        )
+    }
 
     return (
         <div className="bg-background text-foreground fixed inset-0 z-50 p-8 flex flex-col items-center">
@@ -90,6 +104,7 @@ export function SampleReceipt({ formData, categories, specialData, receiptDate, 
                     <h3 className="font-semibold text-lg mb-2 border-b pb-1">Sample Information</h3>
                     <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-sm">
                         <p><strong>Project Title:</strong> {formData?.projectTitle}</p>
+                        <p><strong>Received By:</strong> {formData?.receivedBy}</p>
                         <p><strong>Delivered By:</strong> {formData?.deliveredBy} ({formData.deliveredByContact})</p>
                         <p><strong>Status on Arrival:</strong> {formData?.sampleStatus}</p>
                         <p><strong>Results via:</strong> {formData?.transmittalModes?.join(', ')}</p>
@@ -121,6 +136,32 @@ export function SampleReceipt({ formData, categories, specialData, receiptDate, 
                         </tbody>
                     </table>
                 </div>
+
+                 {/* Special Sample Details */}
+                {Object.keys(specialData).length > 0 && (
+                    <div className="my-6">
+                        <h3 className="font-semibold text-lg mb-2 border-b pb-1">Special Sample Details</h3>
+                        {Object.entries(specialData).map(([category, data] : [string, any]) => (
+                            <div key={category} className="text-sm mt-2">
+                                <h4 className="font-semibold">{category}</h4>
+                                {data.isSpecialPair ? (
+                                    <>
+                                        <div className="mt-2 p-2 border rounded-md">
+                                            <h5 className="font-medium text-primary">Compressive Strength (Qty: {data.compressive.quantity})</h5>
+                                            {data.compressive.sets.map(renderSetDetails)}
+                                        </div>
+                                         <div className="mt-2 p-2 border rounded-md">
+                                            <h5 className="font-medium text-primary">Water Absorption (Qty: {data.water.quantity})</h5>
+                                            {data.water.sets.map(renderSetDetails)}
+                                        </div>
+                                    </>
+                                ) : (
+                                    data.sets.map(renderSetDetails)
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                )}
                 
                  {/* Notes */}
                 <div className="my-6">

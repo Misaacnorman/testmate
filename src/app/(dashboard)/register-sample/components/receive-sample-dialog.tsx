@@ -45,6 +45,7 @@ const step1Schema = z.object({
   billingContact: z.string().optional(),
   projectTitle: z.string().min(1, "Project title is required"),
   sampleStatus: z.string().min(1, "Sample status is required"),
+  receivedBy: z.string().min(1, "Receiver's name is required"),
   deliveredBy: z.string().min(1, "Delivered by is required"),
   deliveredByContact: z.string().min(1, "Deliverer contact is required"),
   transmittalModes: z.array(z.string()).min(1, "Select at least one mode"),
@@ -162,7 +163,6 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         setCurrentStep(5);
       }
     } else if (currentStep === 4) {
-       // A more complex validation is needed here for the new structure
       setCurrentStep(5);
     }
   };
@@ -239,23 +239,28 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
       }));
   }
 
-  const handleStep4Change = useCallback((category: string, field: string, value: any) => {
-    setStep4Data(prev => ({
-        ...prev,
-        [category]: {
-            ...prev[category],
-            [field]: value
+  const handleStep4Change = useCallback((category: string, field: string, value: any, subField?: string) => {
+    setStep4Data(prev => {
+        const newStep4Data = { ...prev };
+        if (subField) {
+            if (!newStep4Data[category]) newStep4Data[category] = {};
+            if (!newStep4Data[category][subField]) newStep4Data[category][subField] = {};
+            newStep4Data[category][subField] = { ...newStep4Data[category][subField], [field]: value };
+        } else {
+            newStep4Data[category] = { ...newStep4Data[category], [field]: value };
         }
-    }));
+        return newStep4Data;
+    });
   }, []);
 
-  const handleSetDataChange = useCallback((category: string, setIndex: number, field: string, value: any) => {
+  const handleSetDataChange = useCallback((category: string, setIndex: number, field: string, value: any, subField?: string) => {
        setStep4Data(prev => {
         const newStep4Data = { ...prev };
-        if (!newStep4Data[category]) newStep4Data[category] = { sets: [] };
-        if (!newStep4Data[category].sets) newStep4Data[category].sets = [];
-        
-        const newSets = [...newStep4Data[category].sets];
+        const dataField = subField ? newStep4Data[category][subField] : newStep4Data[category];
+
+        if (!dataField) return prev; // Should not happen if initialized correctly
+
+        const newSets = [...(dataField.sets || [])];
         if (!newSets[setIndex]) newSets[setIndex] = {};
         
         newSets[setIndex] = { ...newSets[setIndex], [field]: value };
@@ -271,31 +276,29 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         } else if (field === 'testingDate' && newSets[setIndex].age !== undefined) {
              newSets[setIndex].castingDate = addDays(new Date(value), -newSets[setIndex].age);
         }
-
-        return {
-            ...prev,
-            [category]: {
-                ...prev[category],
-                sets: newSets
-            }
-        };
+        
+        const finalData = subField
+            ? { ...newStep4Data[category], [subField]: { ...dataField, sets: newSets } }
+            : { ...newStep4Data[category], sets: newSets };
+        
+        return { ...prev, [category]: finalData };
     });
   }, []);
   
-  const handleSampleIdChange = (category: string, setIndex: number, sampleIndex: number, value: string) => {
+  const handleSampleIdChange = (category: string, setIndex: number, sampleIndex: number, value: string, subField?: string) => {
     setStep4Data(prev => {
         const newStep4Data = { ...prev };
-        const newSets = [...newStep4Data[category].sets];
+        const dataField = subField ? newStep4Data[category][subField] : newStep4Data[category];
+        const newSets = [...dataField.sets];
         const newSerials = [...newSets[setIndex].serials];
         newSerials[sampleIndex] = value;
         newSets[setIndex].serials = newSerials;
-        return {
-            ...prev,
-            [category]: {
-                ...prev[category],
-                sets: newSets
-            }
-        };
+        
+         const finalData = subField
+            ? { ...newStep4Data[category], [subField]: { ...dataField, sets: newSets } }
+            : { ...newStep4Data[category], sets: newSets };
+
+        return { ...prev, [category]: finalData };
     });
   };
 
@@ -303,18 +306,39 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
     const initialData: Record<string, any> = {};
     Object.entries(selectedCategories).forEach(([category, data]) => {
       if (specialCategories.some(sc => sc.toLowerCase() === category.toLowerCase())) {
-        initialData[category] = {
-          numberOfSets: 1,
-          setDistribution: [data.quantity],
-          sets: Array.from({ length: 1 }, () => ({
-              serials: Array.from({length: data.quantity}, (_, i) => `${i + 1}`),
-              castingDate: null,
-              testingDate: new Date(),
-              age: '',
-              areaOfUse: '',
-              class: '',
-          }))
-        };
+         const selectedTests = Object.values(data.tests).map((t: any) => t.materialTest);
+         const hasWaterAbsorption = selectedTests.includes("Water Absorption");
+         const hasCompressiveStrength = selectedTests.includes("Compressive Strength");
+         const isSpecialPair = hasWaterAbsorption && hasCompressiveStrength;
+
+        if (isSpecialPair) {
+          const halfQty = Math.floor(data.quantity / 2);
+          initialData[category] = {
+            isSpecialPair: true,
+            compressive: {
+              quantity: halfQty,
+              numberOfSets: 1,
+              setDistribution: [halfQty],
+              sets: [{ serials: Array.from({length: halfQty}, (_, i) => `${i + 1}`), testingDate: new Date() }]
+            },
+            water: {
+              quantity: data.quantity - halfQty,
+              numberOfSets: 1,
+              setDistribution: [data.quantity - halfQty],
+              sets: [{ serials: Array.from({length: data.quantity - halfQty}, (_, i) => `${i + 1}`), testingDate: new Date() }]
+            }
+          }
+        } else {
+          initialData[category] = {
+            isSpecialPair: false,
+            numberOfSets: 1,
+            setDistribution: [data.quantity],
+            sets: Array.from({ length: 1 }, () => ({
+                serials: Array.from({length: data.quantity}, (_, i) => `${i + 1}`),
+                testingDate: new Date(),
+            }))
+          };
+        }
       }
     });
     setStep4Data(initialData);
@@ -326,8 +350,8 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
     }
   }, [currentStep, initializeStep4Data]);
 
-  const handleSetDistribution = (category: string, numSets: number) => {
-    const totalQuantity = selectedCategories[category].quantity;
+  const handleSetDistribution = (category: string, numSets: number, subField?: string) => {
+    const totalQuantity = subField ? step4Data[category][subField].quantity : selectedCategories[category].quantity;
     const base = Math.floor(totalQuantity / numSets);
     const remainder = totalQuantity % numSets;
     const distribution = Array(numSets).fill(base);
@@ -335,8 +359,13 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         distribution[i]++;
     }
     
-    handleStep4Change(category, 'setDistribution', distribution);
-    handleStep4Change(category, 'numberOfSets', numSets);
+    if (subField) {
+        handleStep4Change(category, 'setDistribution', distribution, subField);
+        handleStep4Change(category, 'numberOfSets', numSets, subField);
+    } else {
+        handleStep4Change(category, 'setDistribution', distribution);
+        handleStep4Change(category, 'numberOfSets', numSets);
+    }
 
     const newSets = Array.from({ length: numSets }, (_, i) => {
         const setQuantity = distribution[i];
@@ -348,16 +377,21 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         }
         return {
             serials: Array.from({length: setQuantity}, (_, k) => `${serialCounter + k}`),
-            castingDate: null, testingDate: new Date(), age: '', areaOfUse: '', class: ''
+            testingDate: new Date()
         };
     });
-    handleStep4Change(category, 'sets', newSets);
+    
+    if (subField) {
+        handleStep4Change(category, 'sets', newSets, subField);
+    } else {
+        handleStep4Change(category, 'sets', newSets);
+    }
   };
   
-  const renderSetFields = (category: string, setsData: any, setOffset = 0) => {
+  const renderSetFields = (category: string, setsData: any, setOffset = 0, subField?: string) => {
       return setsData?.sets.map((set: any, i: number) => (
             <div key={i + setOffset} className="space-y-3 border p-3 rounded-lg">
-                <h4 className="font-semibold text-md">Set {i + 1 + setOffset} {Object.values(selectedCategories[category].tests).some((t:any) => t.materialTest.includes("Water Absorption")) && <span className="text-muted-foreground font-normal">(For Water Absorption)</span>}</h4>
+                <h4 className="font-semibold text-md">Set {i + 1 + setOffset}</h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="space-y-2">
                         <Label>Casting Date</Label>
@@ -368,7 +402,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                                   {set.castingDate ? format(new Date(set.castingDate), "PPP") : <span>Pick a date</span>}
                                 </Button>
                             </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0"><Calendar mode="single" selected={set.castingDate} onSelect={(date) => handleSetDataChange(category, i, 'castingDate', date)} initialFocus /></PopoverContent>
+                            <PopoverContent className="w-auto p-0"><Calendar mode="single" selected={set.castingDate} onSelect={(date) => handleSetDataChange(category, i, 'castingDate', date, subField)} initialFocus /></PopoverContent>
                         </Popover>
                     </div>
                      <div className="space-y-2">
@@ -380,23 +414,23 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                                   {set.testingDate ? format(new Date(set.testingDate), "PPP") : <span>Pick a date</span>}
                                 </Button>
                             </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0"><Calendar mode="single" selected={set.testingDate ? new Date(set.testingDate) : undefined} onSelect={(date) => handleSetDataChange(category, i, 'testingDate', date)} initialFocus /></PopoverContent>
+                            <PopoverContent className="w-auto p-0"><Calendar mode="single" selected={set.testingDate ? new Date(set.testingDate) : undefined} onSelect={(date) => handleSetDataChange(category, i, 'testingDate', date, subField)} initialFocus /></PopoverContent>
                         </Popover>
                     </div>
                     <div className="space-y-2">
                         <Label>Age (Days)</Label>
-                        <Input type="number" value={set.age} onChange={(e) => handleSetDataChange(category, i, 'age', e.target.value)} />
+                        <Input type="number" value={set.age || ''} onChange={(e) => handleSetDataChange(category, i, 'age', e.target.value, subField)} />
                     </div>
                 </div>
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                           <Label>Area of Use</Label>
-                          <Input value={set.areaOfUse} onChange={(e) => handleSetDataChange(category, i, 'areaOfUse', e.target.value)} />
+                          <Input value={set.areaOfUse || ''} onChange={(e) => handleSetDataChange(category, i, 'areaOfUse', e.target.value, subField)} />
                       </div>
-                      {category === "Concrete Cubes" && (
+                      {category.toLowerCase() === "concrete cubes" && (
                           <div className="space-y-2">
                               <Label>Class</Label>
-                              <Input value={set.class} onChange={(e) => handleSetDataChange(category, i, 'class', e.target.value)} />
+                              <Input value={set.class || ''} onChange={(e) => handleSetDataChange(category, i, 'class', e.target.value, subField)} />
                           </div>
                       )}
                  </div>
@@ -404,7 +438,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                     <Label>Sample IDs</Label>
                     <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
                       {set.serials.map((serial: string, sIndex: number) => (
-                          <Input key={sIndex} value={serial} onChange={(e) => handleSampleIdChange(category, i, sIndex, e.target.value)} />
+                          <Input key={sIndex} value={serial} onChange={(e) => handleSampleIdChange(category, i, sIndex, e.target.value, subField)} />
                       ))}
                     </div>
                 </div>
@@ -511,17 +545,24 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                          {form1.formState.errors.sampleStatus && <p className="text-sm text-destructive">{form1.formState.errors.sampleStatus.message}</p>}
                     </div>
                     <div className="space-y-2">
+                        <Label htmlFor="receivedBy">Received By</Label>
+                        <Input id="receivedBy" {...form1.register("receivedBy")} />
+                        {form1.formState.errors.receivedBy && <p className="text-sm text-destructive">{form1.formState.errors.receivedBy.message}</p>}
+                    </div>
+                </div>
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
                         <Label htmlFor="deliveredBy">Delivered By</Label>
                         <Input id="deliveredBy" {...form1.register("deliveredBy")} />
                         {form1.formState.errors.deliveredBy && <p className="text-sm text-destructive">{form1.formState.errors.deliveredBy.message}</p>}
                     </div>
-                </div>
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="deliveredByContact">Deliverer's Contact</Label>
                         <Input id="deliveredByContact" {...form1.register("deliveredByContact")} />
                          {form1.formState.errors.deliveredByContact && <p className="text-sm text-destructive">{form1.formState.errors.deliveredByContact.message}</p>}
                     </div>
+                 </div>
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                      <div className="space-y-2">
                         <Label>Mode of Results Transmittal</Label>
                         <Controller
@@ -611,7 +652,6 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                                         onClick={e => e.stopPropagation()}
                                      />
                                 </div>
-                                <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
                             </div>
                         </AccordionTrigger>
                         <AccordionContent className="p-4 border border-t-0 rounded-b-md">
@@ -658,17 +698,65 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         {currentStep === 4 && (
             <Accordion type="multiple" className="w-full space-y-2" defaultValue={Object.keys(selectedCategories).filter(cat => specialCategories.some(sc => sc.toLowerCase() === cat.toLowerCase()))}>
                 {Object.keys(selectedCategories).filter(cat => specialCategories.some(sc => sc.toLowerCase() === cat.toLowerCase())).map(category => {
-                     const selectedTests = Object.values(selectedCategories[category].tests).map((t: any) => t.materialTest);
-                     const hasWaterAbsorption = selectedTests.includes("Water Absorption");
-                     const hasCompressiveStrength = selectedTests.includes("Compressive Strength");
-                     const isSpecialPair = hasWaterAbsorption && hasCompressiveStrength;
-
+                     const catData = step4Data[category];
                      return(
                      <AccordionItem key={category} value={category}>
                         <AccordionTrigger className="font-bold text-lg">{category}</AccordionTrigger>
                         <AccordionContent className="p-4">
-                            {isSpecialPair ? (
-                                <div>Special Pair UI</div>
+                            {catData?.isSpecialPair ? (
+                                <div className="space-y-6">
+                                    <div className="space-y-2 border p-3 rounded-md">
+                                        <div className="flex justify-between items-center">
+                                            <h3 className="font-semibold text-primary">Compressive Strength</h3>
+                                            <div className="flex items-center gap-2">
+                                                <Label>Quantity</Label>
+                                                <Input 
+                                                    type="number"
+                                                    className="w-20"
+                                                    value={catData.compressive.quantity}
+                                                    onChange={e => handleStep4Change(category, 'quantity', parseInt(e.target.value, 10) || 0, 'compressive')}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-4">
+                                            <Label>Number of Sets</Label>
+                                            <Input 
+                                                type="number" 
+                                                className="w-24" 
+                                                min={1} 
+                                                value={catData.compressive.numberOfSets || 1} 
+                                                onChange={e => handleSetDistribution(category, parseInt(e.target.value, 10), 'compressive')}
+                                            />
+                                        </div>
+                                    </div>
+                                    {renderSetFields(category, catData.compressive, 0, 'compressive')}
+
+                                    <div className="space-y-2 border p-3 rounded-md">
+                                        <div className="flex justify-between items-center">
+                                            <h3 className="font-semibold text-primary">Water Absorption</h3>
+                                             <div className="flex items-center gap-2">
+                                                <Label>Quantity</Label>
+                                                <Input 
+                                                    type="number"
+                                                    className="w-20"
+                                                    value={catData.water.quantity}
+                                                    onChange={e => handleStep4Change(category, 'quantity', parseInt(e.target.value, 10) || 0, 'water')}
+                                                />
+                                            </div>
+                                        </div>
+                                         <div className="flex items-center gap-4">
+                                            <Label>Number of Sets</Label>
+                                            <Input 
+                                                type="number" 
+                                                className="w-24" 
+                                                min={1} 
+                                                value={catData.water.numberOfSets || 1} 
+                                                onChange={e => handleSetDistribution(category, parseInt(e.target.value, 10), 'water')}
+                                            />
+                                        </div>
+                                    </div>
+                                    {renderSetFields(category, catData.water, 0, 'water')}
+                                </div>
                             ) : (
                                 <div className="space-y-4">
                                     <div className="flex items-center gap-4">
@@ -677,27 +765,27 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                                             type="number" 
                                             className="w-24" 
                                             min={1} 
-                                            value={step4Data[category]?.numberOfSets || 1} 
+                                            value={catData?.numberOfSets || 1} 
                                             onChange={e => handleSetDistribution(category, parseInt(e.target.value, 10))}
                                         />
                                     </div>
-                                    {step4Data[category]?.numberOfSets > 1 && (
+                                    {catData?.numberOfSets > 1 && (
                                         <div className="space-y-2 border p-2 rounded-md">
                                             <div className="flex justify-between">
                                                 <Label>Set Distribution</Label>
-                                                <span className={cn("text-sm font-bold", step4Data[category]?.setDistribution.reduce((a:number,b:number) => a+b, 0) !== selectedCategories[category].quantity ? "text-destructive" : "text-primary")}>
-                                                   Sum: {step4Data[category]?.setDistribution.reduce((a:number,b:number) => a+b, 0)} / {selectedCategories[category].quantity}
+                                                <span className={cn("text-sm font-bold", catData?.setDistribution.reduce((a:number,b:number) => a+b, 0) !== selectedCategories[category].quantity ? "text-destructive" : "text-primary")}>
+                                                   Sum: {catData?.setDistribution.reduce((a:number,b:number) => a+b, 0)} / {selectedCategories[category].quantity}
                                                 </span>
                                             </div>
                                             <div className="flex gap-2 flex-wrap">
-                                                {step4Data[category]?.setDistribution.map((dist: number, i: number) => (
+                                                {catData?.setDistribution.map((dist: number, i: number) => (
                                                     <Input 
                                                         key={i} 
                                                         type="number" 
                                                         className="w-20" 
                                                         value={dist}
                                                         onChange={e => {
-                                                            const newDist = [...step4Data[category].setDistribution];
+                                                            const newDist = [...catData.setDistribution];
                                                             newDist[i] = parseInt(e.target.value, 10);
                                                             handleStep4Change(category, 'setDistribution', newDist);
                                                         }}
@@ -707,7 +795,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                                         </div>
                                     )}
                                     <Separator/>
-                                    {renderSetFields(category, step4Data[category])}
+                                    {renderSetFields(category, catData)}
                                 </div>
                             )}
                         </AccordionContent>
@@ -738,6 +826,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                         <h3 className="text-lg font-semibold">Sample Details</h3>
                         <div className="text-sm space-y-1">
                            <p><strong>Received on:</strong> {format(receiptDate, "PPP p")}</p>
+                           <p><strong>Received by:</strong> {step1Data?.receivedBy}</p>
                            <p><strong>Delivered by:</strong> {step1Data?.deliveredBy} ({step1Data?.deliveredByContact})</p>
                            <p><strong>Status on Arrival:</strong> {step1Data?.sampleStatus}</p>
                            <p><strong>Results via:</strong> {step1Data?.transmittalModes.join(', ')}</p>
@@ -774,6 +863,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                                             <p><strong>Age:</strong> {set.age} days</p>
                                             <p><strong>Area of Use:</strong> {set.areaOfUse}</p>
                                             {set.class && <p><strong>Class:</strong> {set.class}</p>}
+                                            <p><strong>Sample IDs:</strong> {Array.isArray(set.serials) ? set.serials.join(', ') : ''}</p>
                                          </div>
                                      ))}
                                 </div>
@@ -797,5 +887,3 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
     </Dialog>
   );
 }
-
-    
