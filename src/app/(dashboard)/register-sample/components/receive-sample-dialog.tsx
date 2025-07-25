@@ -27,7 +27,7 @@ import { getTests } from "@/services/tests";
 import { Test } from "@/types/test";
 import { useToast } from "@/hooks/use-toast";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, ChevronDown } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { SampleReceipt } from "./sample-receipt";
@@ -130,14 +130,14 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
       const isValid = await form1.trigger();
       if (isValid) {
         setStep1Data(form1.getValues());
-        setCurrentStep(s => s + 1);
+        setCurrentStep(2);
       }
     } else if (currentStep === 2) {
       if (Object.keys(selectedCategories).length === 0) {
         toast({ variant: "destructive", title: "Validation Error", description: "Please select at least one material category." });
         return;
       }
-      setCurrentStep(s => s + 1);
+      setCurrentStep(3);
     } else if (currentStep === 3) {
       const allQuantitiesSet = Object.entries(selectedCategories).every(([_, data]) => data.quantity > 0);
       if (!allQuantitiesSet) {
@@ -154,16 +154,15 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         return;
       }
       
-      const hasCats = Object.keys(selectedCategories).some(cat => specialCategories.includes(cat));
-      if (hasCats) {
+      const anySpecialSelected = Object.keys(selectedCategories).some(cat => specialCategories.includes(cat));
+      if (anySpecialSelected) {
         setCurrentStep(4);
       } else {
-        setCurrentStep(5); // Skip to review
+        setCurrentStep(5);
       }
     } else if (currentStep === 4) {
-       // Validation for step 4
        const isStep4Valid = Object.entries(step4Data).every(([cat, data]) => {
-           if (!selectedCategories[cat]) return true; // Only validate selected categories
+           if (!selectedCategories[cat]) return true;
            const totalDistribution = data.setDistribution.reduce((a:number, b:number) => a + b, 0);
            return totalDistribution === selectedCategories[cat].quantity;
        });
@@ -178,8 +177,8 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
 
   const handleBack = () => {
      if (currentStep === 5) {
-        const hasCats = Object.keys(selectedCategories).some(cat => specialCategories.includes(cat));
-        if(hasCats) {
+        const anySpecialSelected = Object.keys(selectedCategories).some(cat => specialCategories.includes(cat));
+        if(anySpecialSelected) {
             setCurrentStep(4);
         } else {
             setCurrentStep(3);
@@ -210,21 +209,18 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
   
   const handleTestToggle = (category: string, test: Test) => {
       setSelectedCategories(prev => {
-        const newCategories = { ...prev };
-        const categoryData = { ...newCategories[category] };
-        const newTests = { ...categoryData.tests };
-
-        if (newTests[test.id]) {
-            delete newTests[test.id];
+        const newCategories = JSON.parse(JSON.stringify(prev));
+        const categoryData = newCategories[category];
+        
+        if (categoryData.tests[test.id]) {
+            delete categoryData.tests[test.id];
         } else {
-            newTests[test.id] = { 
+            categoryData.tests[test.id] = { 
                 quantity: categoryData.quantity, 
                 testMethods: test.testMethods, 
                 materialTest: test.materialTest 
             };
         }
-
-        newCategories[category] = { ...categoryData, tests: newTests };
         return newCategories;
     });
   };
@@ -268,7 +264,6 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         
         newSets[setIndex] = { ...newSets[setIndex], [field]: value };
         
-        // Age calculation logic
         if (field === 'castingDate' && newSets[setIndex].testingDate) {
             newSets[setIndex].age = differenceInDays(new Date(newSets[setIndex].testingDate), new Date(value));
         } else if (field === 'testingDate' && newSets[setIndex].castingDate) {
@@ -313,10 +308,10 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
   }, [selectedCategories, specialCategories]);
 
   useEffect(() => {
-    if (currentStep === 3 && hasSpecialCategories) {
+    if (currentStep === 4) {
       initializeStep4Data();
     }
-  }, [currentStep, hasSpecialCategories, initializeStep4Data]);
+  }, [currentStep, initializeStep4Data]);
 
   const handleSetDistribution = (category: string, numSets: number) => {
     const totalQuantity = selectedCategories[category].quantity;
@@ -525,7 +520,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
             <Accordion type="multiple" className="w-full space-y-2">
                 {Object.keys(selectedCategories).map(category => (
                     <AccordionItem key={category} value={category}>
-                        <AccordionTrigger className="hover:no-underline border p-2 rounded-md">
+                        <AccordionTrigger className="hover:no-underline border p-2 rounded-md [&_svg]:data-[state=open]:rotate-180">
                            <div className="flex w-full items-center justify-between">
                                 <span className="font-bold text-lg flex-1 text-left">{category}</span>
                                 <div className="flex items-center gap-2 pr-2">
@@ -538,6 +533,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                                         onClick={e => e.stopPropagation()}
                                      />
                                 </div>
+                                <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
                             </div>
                         </AccordionTrigger>
                         <AccordionContent className="p-4 border border-t-0 rounded-b-md">
@@ -755,7 +751,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
           {currentStep > 1 && (
             <Button variant="ghost" onClick={handleBack} className="mr-auto">Back</Button>
           )}
-          {currentStep < 5 && <Button onClick={handleNext}>Next</Button>}
+          {(currentStep < 5) && <Button onClick={handleNext}>Next</Button>}
           {currentStep === 5 && <Button onClick={() => setShowReceipt(true)}>Confirm & Generate Receipt</Button>}
           <DialogClose asChild><Button variant="outline">Cancel</Button></DialogClose>
         </DialogFooter>
@@ -763,3 +759,5 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
     </Dialog>
   );
 }
+
+    

@@ -34,7 +34,8 @@ const AccordionTrigger = React.forwardRef<
       {...props}
     >
       {children}
-      {!children && <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />}
+      {/* If you pass children, the default icon will be hidden. We want to show it only if there are no children. */}
+      {React.Children.count(children) === 0 && <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />}
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ))
@@ -56,3 +57,5 @@ const AccordionContent = React.forwardRef<
 AccordionContent.displayName = AccordionPrimitive.Content.displayName
 
 export { Accordion, AccordionItem, AccordionTrigger, AccordionContent }
+
+    
