@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,7 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -22,22 +22,6 @@ import { getTests } from "@/services/tests";
 import { Test } from "@/types/test";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Textarea } from "@/components/ui/textarea";
-
-const testSelectionSchema = z.object({
-  id: z.string(),
-  selected: z.boolean(),
-  quantity: z.coerce.number().min(1, "Quantity must be at least 1."),
-});
-
-const categorySchema = z.object({
-  name: z.string(),
-  quantity: z.coerce.number().min(1, "Quantity is required."),
-  notes: z.string().optional(),
-  tests: z.array(testSelectionSchema),
-});
-
 
 const receiveSampleSchema = z.object({
   clientName: z.string().min(1, "Client name is required."),
@@ -56,7 +40,6 @@ const receiveSampleSchema = z.object({
   }),
   transmittalEmail: z.string().optional(),
   transmittalWhatsapp: z.string().optional(),
-  step3Data: z.array(categorySchema).optional(),
 }).refine(data => {
     if (data.sameForBilling === 'no') {
         return !!data.billedClientName && !!data.billedClientAddress && !!data.billedClientContact;
@@ -108,13 +91,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
       resultTransmittal: [],
       transmittalEmail: "",
       transmittalWhatsapp: "",
-      step3Data: [],
     },
-  });
-  
-  const { fields, append, remove } = useFieldArray({
-    control: form.control,
-    name: "step3Data",
   });
   
   useEffect(() => {
@@ -135,58 +112,13 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
       fetchTestsAndCategories();
     }
   }, [open, allTests.length]);
-  
-  const testsByCategory = useMemo(() => {
-    return allTests.reduce((acc, test) => {
-        if (!acc[test.materialCategory]) {
-            acc[test.materialCategory] = [];
-        }
-        acc[test.materialCategory].push(test);
-        return acc;
-    }, {} as Record<string, Test[]>);
-  }, [allTests]);
 
-  
   const watchSameForBilling = form.watch("sameForBilling");
   const watchResultTransmittal = form.watch("resultTransmittal");
-  const watchCategoryQuantities = form.watch("step3Data");
 
   const handleNext = () => {
     const handleStepTransition = (isValid: boolean) => {
         if (isValid) {
-            if (step === 2) {
-                // From step 2 to 3
-                const currentStep3Data = form.getValues('step3Data') || [];
-                
-                // Remove data for categories that are no longer selected
-                const categoriesToRemove: number[] = [];
-                currentStep3Data.forEach((d, index) => {
-                    if(!selectedCategories.includes(d.name)) {
-                        categoriesToRemove.push(index);
-                    }
-                });
-                
-                if (categoriesToRemove.length > 0) {
-                  remove(categoriesToRemove.reverse());
-                }
-        
-                const newStep3Data = selectedCategories
-                  .filter(cat => !currentStep3Data.some(d => d.name === cat))
-                  .map(category => ({
-                    name: category,
-                    quantity: 1,
-                    notes: "",
-                    tests: (testsByCategory[category] || []).map(test => ({
-                      id: test.id,
-                      selected: false,
-                      quantity: 1
-                    }))
-                  }));
-        
-                if(newStep3Data.length > 0) {
-                    append(newStep3Data, { shouldFocus: false });
-                }
-            }
             setStep(prev => prev + 1);
         }
     }
@@ -224,23 +156,13 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
         : [...prev, category]
     );
   };
-  
-  useEffect(() => {
-    if (step === 3 && watchCategoryQuantities) {
-      watchCategoryQuantities.forEach((category, categoryIndex) => {
-        const categoryQuantity = category.quantity;
-        category.tests.forEach((test, testIndex) => {
-          const currentTestQuantity = form.getValues(`step3Data.${categoryIndex}.tests.${testIndex}.quantity`);
-          if (currentTestQuantity !== categoryQuantity) {
-            form.setValue(`step3Data.${categoryIndex}.tests.${testIndex}.quantity`, categoryQuantity, { shouldDirty: true });
-          }
-        });
-      });
-    }
-  }, [watchCategoryQuantities, step, form]);
 
   const onSubmit = (values: z.infer<typeof receiveSampleSchema>) => {
-    console.log(values);
+    const finalData = {
+      ...values,
+      selectedCategories: selectedCategories,
+    }
+    console.log(finalData);
     onOpenChange(false);
   };
 
@@ -248,7 +170,6 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
     form.reset();
     setStep(1);
     setSelectedCategories([]);
-    remove(); // remove all field array items
   }
 
   return (
@@ -260,11 +181,10 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
     }}>
       <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col">
         <DialogHeader>
-          <DialogTitle>Receive New Sample - Step {step} of 3</DialogTitle>
+          <DialogTitle>Receive New Sample - Step {step} of 2</DialogTitle>
           <DialogDescription>
             {step === 1 && "Enter the client and sample details below."}
             {step === 2 && "Select the material categories for testing."}
-            {step === 3 && "Specify quantities, select tests, and add notes."}
           </DialogDescription>
         </DialogHeader>
           <Form {...form}>
@@ -412,103 +332,13 @@ export function ReceiveSampleDialog({ open, onOpenChange }: ReceiveSampleDialogP
                     </div>
                 </ScrollArea>
               )}
-
-              {step === 3 && (
-                <ScrollArea className="h-96 w-full rounded-md border p-4">
-                  <Accordion type="multiple" className="w-full space-y-4">
-                    {fields.map((field, categoryIndex) => (
-                      <AccordionItem key={field.id} value={field.name} className="border rounded-md p-4">
-                        <div className="flex items-center gap-4">
-                           <FormField
-                              control={form.control}
-                              name={`step3Data.${categoryIndex}.name`}
-                              render={({ field }) => (
-                                  <FormItem className="flex-grow">
-                                    <h3 className="font-semibold text-lg">{field.value}</h3>
-                                  </FormItem>
-                              )}
-                            />
-                            <FormField
-                              control={form.control}
-                              name={`step3Data.${categoryIndex}.quantity`}
-                              render={({ field }) => (
-                                  <FormItem>
-                                    <FormLabel>Quantity</FormLabel>
-                                    <FormControl><Input type="number" {...field} className="w-24" /></FormControl>
-                                    <FormMessage />
-                                  </FormItem>
-                              )}
-                            />
-                            <AccordionTrigger />
-                        </div>
-                        <AccordionContent className="pt-4">
-                          <div className="space-y-4">
-                            <h4 className="font-medium">Tests for {field.name}</h4>
-                            <div className="space-y-2">
-                              {testsByCategory[field.name]?.map((test, testIndex) => (
-                                <div key={test.id} className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50">
-                                  <FormField
-                                    control={form.control}
-                                    name={`step3Data.${categoryIndex}.tests.${testIndex}.selected`}
-                                    render={({ field: checkboxField }) => (
-                                      <FormItem className="flex items-center space-x-2">
-                                        <FormControl>
-                                          <Checkbox
-                                            checked={checkboxField.value}
-                                            onCheckedChange={checkboxField.onChange}
-                                          />
-                                        </FormControl>
-                                        <FormLabel className="font-normal">{test.materialTest}</FormLabel>
-                                      </FormItem>
-                                    )}
-                                  />
-                                   <FormField
-                                    control={form.control}
-                                    name={`step3Data.${categoryIndex}.tests.${testIndex}.quantity`}
-                                    render={({ field: quantityField }) => (
-                                      <FormItem className="flex items-center gap-2">
-                                        <FormLabel>Qty:</FormLabel>
-                                        <FormControl>
-                                          <Input type="number" {...quantityField} className="w-20 h-8" />
-                                        </FormControl>
-                                        <FormMessage />
-                                      </FormItem>
-                                    )}
-                                  />
-                                </div>
-                              ))}
-                            </div>
-                             <Accordion type="single" collapsible className="w-full">
-                                <AccordionItem value="notes">
-                                    <AccordionTrigger className="text-sm">Notes</AccordionTrigger>
-                                    <AccordionContent>
-                                        <FormField
-                                            control={form.control}
-                                            name={`step3Data.${categoryIndex}.notes`}
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormControl><Textarea {...field} placeholder={`Add notes for ${field.name}...`}/></FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-                                    </AccordionContent>
-                                </AccordionItem>
-                            </Accordion>
-                          </div>
-                        </AccordionContent>
-                      </AccordionItem>
-                    ))}
-                  </Accordion>
-                </ScrollArea>
-              )}
                 
               <DialogFooter className="pt-4">
                   {step > 1 && <Button type="button" variant="ghost" onClick={handleBack}>Back</Button>}
-                  {step < 3 ? (
-                      <Button type="button" onClick={handleNext} className="ml-auto" disabled={step === 2 && selectedCategories.length === 0}>Next</Button>
+                  {step < 2 ? (
+                      <Button type="button" onClick={handleNext} className="ml-auto">Next</Button>
                   ) : (
-                      <Button type="submit" className="ml-auto">Submit</Button>
+                      <Button type="submit" className="ml-auto" disabled={selectedCategories.length === 0}>Submit</Button>
                   )}
                    <Button type="button" variant="destructive" onClick={() => onOpenChange(false)} className={step === 1 ? "ml-auto" : ""}>Cancel</Button>
               </DialogFooter>
