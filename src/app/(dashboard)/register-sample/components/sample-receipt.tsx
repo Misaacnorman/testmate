@@ -20,31 +20,43 @@ export function SampleReceipt({ formData, categories, specialData, receiptDate, 
 
     const allTests = Object.entries(categories).flatMap(([category, catData] : [string, any]) => 
         Object.entries(catData.tests).map(([testId, testData] : [string, any]) => ({
+            id: testId,
             category,
             ...testData,
             notes: catData.notes || '',
         }))
     );
     
-    const renderSetDetails = (set: any, index: number, distribution?: number[]) => {
-        const quantity = distribution ? distribution[index] : 'N/A';
+    const renderConcreteDetails = (category: string, testId: string) => {
+        const data = specialData[category]?.[testId];
+        if (!data) return null;
+
         return (
-             <div key={index} className="text-xs space-y-1 mt-2 p-2 border-t">
-                <p><strong>Set {index + 1} (Qty: {quantity})</strong></p>
-                <div className="pl-2">
-                    <p>Casting: {set.castingDate ? format(new Date(set.castingDate), 'PPP') : 'N/A'}, Testing: {set.testingDate ? format(new Date(set.testingDate), 'PPP') : 'N/A'}, Age: {set.age || 'N/A'} days</p>
-                    <p>Area of Use: {set.areaOfUse || 'N/A'}</p>
-                    {set.class && <p>Class: {set.class}</p>}
-                    <p>Sample IDs: {Array.isArray(set.serials) ? set.serials.join(', ') : ''}</p>
-                </div>
+            <div className="space-y-2">
+                {data.sets.map((set: any, index: number) => (
+                     <div key={index} className="text-xs space-y-1 p-1 border-t first:border-t-0">
+                        <p><strong>Set {index + 1} (Qty: {data.setDistribution[index]})</strong></p>
+                        <div className="pl-2">
+                            <p>Casting: {set.castingDate ? format(new Date(set.castingDate), 'yy-MM-dd') : 'N/A'}</p>
+                            <p>Testing: {set.testingDate ? format(new Date(set.testingDate), 'yy-MM-dd') : 'N/A'}</p>
+                            <p>Age: {set.age || 'N/A'} days</p>
+                            <p>Area: {set.areaOfUse || 'N/A'}</p>
+                            {set.class && <p>Class: {set.class}</p>}
+                            <p>IDs: {Array.isArray(set.serials) ? set.serials.join(', ') : ''}</p>
+                        </div>
+                    </div>
+                ))}
             </div>
-        )
+        );
     }
 
     return (
         <div className="bg-background text-foreground fixed inset-0 z-50 p-8 flex flex-col items-center">
             <style jsx global>{`
               @media print {
+                @page {
+                  size: landscape;
+                }
                 body * {
                   visibility: hidden;
                 }
@@ -62,33 +74,33 @@ export function SampleReceipt({ formData, categories, specialData, receiptDate, 
                 }
               }
             `}</style>
-            <div id="receipt-content" className="w-full max-w-4xl bg-white text-black p-8 border rounded-lg shadow-lg overflow-y-auto">
+            <div id="receipt-content" className="w-full max-w-6xl bg-white text-black p-8 border rounded-lg shadow-lg overflow-y-auto">
                 {/* Header */}
                 <div className="flex justify-between items-start pb-4 border-b">
                     <div className="flex items-center gap-4">
                         <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
                         <div>
-                            <h1 className="text-3xl font-bold">TestMate Laboratories</h1>
-                            <p className="text-gray-500">Quality Testing Services</p>
+                            <h1 className="text-2xl font-bold">TestMate Laboratories</h1>
+                            <p className="text-gray-500 text-sm">Quality Testing Services</p>
                         </div>
                     </div>
                     <div className="text-right">
-                        <h2 className="text-2xl font-semibold text-red-600">Sample Receipt</h2>
-                        <p className="text-sm">Receipt No: <span className="font-mono">{Date.now()}</span></p>
-                        <p className="text-sm">Date: <span className="font-mono">{format(receiptDate, 'yyyy-MM-dd HH:mm')}</span></p>
+                        <h2 className="text-xl font-semibold text-red-600">Sample Receipt</h2>
+                        <p className="text-xs">Receipt No: <span className="font-mono">{Date.now()}</span></p>
+                        <p className="text-xs">Date: <span className="font-mono">{format(receiptDate, 'yyyy-MM-dd HH:mm')}</span></p>
                     </div>
                 </div>
 
                 {/* Client Info */}
-                <div className="grid grid-cols-2 gap-8 my-6">
+                <div className="grid grid-cols-2 gap-8 my-4 text-xs">
                     <div>
-                        <h3 className="font-semibold text-lg mb-2 border-b pb-1">Primary Client</h3>
+                        <h3 className="font-semibold text-sm mb-2 border-b pb-1">Primary Client</h3>
                         <p><strong>Name:</strong> {formData?.clientName}</p>
                         <p><strong>Address:</strong> {formData?.clientAddress}</p>
                         <p><strong>Contact:</strong> {formData?.clientContact}</p>
                     </div>
                     <div className="text-right">
-                        <h3 className="font-semibold text-lg mb-2 border-b pb-1">Billing Client</h3>
+                        <h3 className="font-semibold text-sm mb-2 border-b pb-1">Billing Client</h3>
                         {formData?.isSameBillingClient === 'yes' ? (
                             <p>Same as Primary Client</p>
                         ) : (
@@ -102,9 +114,9 @@ export function SampleReceipt({ formData, categories, specialData, receiptDate, 
                 </div>
 
                 {/* Sample Info */}
-                 <div className="my-6">
-                    <h3 className="font-semibold text-lg mb-2 border-b pb-1">Sample Information</h3>
-                    <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-sm">
+                 <div className="my-4">
+                    <h3 className="font-semibold text-sm mb-2 border-b pb-1">Sample Information</h3>
+                    <div className="grid grid-cols-3 gap-x-8 gap-y-1 text-xs">
                         <p><strong>Project Title:</strong> {formData?.projectTitle}</p>
                         <p><strong>Received By:</strong> {formData?.receivedBy}</p>
                         <p><strong>Delivered By:</strong> {formData?.deliveredBy} ({formData.deliveredByContact})</p>
@@ -113,63 +125,40 @@ export function SampleReceipt({ formData, categories, specialData, receiptDate, 
                     </div>
                  </div>
 
-
                 {/* Tests Table */}
-                <div className="my-6">
-                    <h3 className="font-semibold text-lg mb-2">Tests to be Performed</h3>
-                    <table className="w-full text-sm border-collapse border">
+                <div className="my-4">
+                    <h3 className="font-semibold text-sm mb-2">Tests to be Performed</h3>
+                    <table className="w-full text-xs border-collapse border">
                         <thead className="bg-gray-100">
                             <tr>
                                 <th className="p-2 border text-left">Material Category</th>
                                 <th className="p-2 border text-left">Material Test</th>
                                 <th className="p-2 border text-left">Test Method(s)</th>
                                 <th className="p-2 border text-center">Quantity</th>
+                                <th className="p-2 border text-left w-1/3">Concrete Details</th>
                             </tr>
                         </thead>
                         <tbody>
                             {allTests.map((test, index) => (
                                 <tr key={index}>
-                                    <td className="p-2 border">{test.category}</td>
-                                    <td className="p-2 border">{test.materialTest}</td>
-                                    <td className="p-2 border">{test.testMethods}</td>
-                                    <td className="p-2 border text-center">{test.quantity}</td>
+                                    <td className="p-2 border align-top">{test.category}</td>
+                                    <td className="p-2 border align-top">{test.materialTest}</td>
+                                    <td className="p-2 border align-top">{test.testMethods}</td>
+                                    <td className="p-2 border text-center align-top">{test.quantity}</td>
+                                    <td className="p-2 border align-top">
+                                        {renderConcreteDetails(test.category, test.id)}
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
-
-                 {/* Special Sample Details */}
-                {Object.keys(specialData).length > 0 && (
-                    <div className="my-6 break-after-page">
-                        <h3 className="font-semibold text-lg mb-2 border-b pb-1">Special Sample Details</h3>
-                        {Object.entries(specialData).map(([category, data] : [string, any]) => (
-                            <div key={category} className="text-sm mt-4">
-                                <h4 className="font-semibold text-base bg-gray-100 p-2 rounded-md">{category}</h4>
-                                {data.isSpecialPair ? (
-                                    <>
-                                        <div className="mt-2 p-2 border rounded-md">
-                                            <h5 className="font-medium text-red-600">Compressive Strength (Total Qty: {data.compressive.quantity})</h5>
-                                            {data.compressive.sets.map((set:any, i:number) => renderSetDetails(set, i, data.compressive.setDistribution))}
-                                        </div>
-                                         <div className="mt-2 p-2 border rounded-md">
-                                            <h5 className="font-medium text-red-600">Water Absorption (Total Qty: {data.water.quantity})</h5>
-                                            {data.water.sets.map((set:any, i:number) => renderSetDetails(set, i, data.water.setDistribution))}
-                                        </div>
-                                    </>
-                                ) : (
-                                    data.sets.map((set:any, i:number) => renderSetDetails(set, i, data.setDistribution))
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                )}
                 
                  {/* Notes */}
-                <div className="my-6">
-                     <h3 className="font-semibold text-lg mb-2">Notes</h3>
+                <div className="my-4">
+                     <h3 className="font-semibold text-sm mb-2">Notes</h3>
                      {allTests.filter(t => t.notes).length > 0 ? (
-                         <div className="text-sm space-y-2">
+                         <div className="text-xs space-y-2">
                          {allTests.filter(t => t.notes).map((test, index) => (
                             <div key={index}>
                                 <p><strong>{test.category}:</strong> {test.notes}</p>
@@ -177,13 +166,12 @@ export function SampleReceipt({ formData, categories, specialData, receiptDate, 
                          ))}
                          </div>
                      ) : (
-                        <p className="text-sm text-gray-500">No special notes provided.</p>
+                        <p className="text-xs text-gray-500">No special notes provided.</p>
                      )}
                 </div>
 
-
                 {/* Footer */}
-                <div className="text-center text-xs text-gray-500 pt-4 border-t mt-8">
+                <div className="text-center text-xs text-gray-500 pt-4 border-t mt-6">
                     <p>Thank you for choosing TestMate Laboratories. Results will be delivered as requested.</p>
                     <p>For inquiries, please contact us at +256-XXX-XXXXXX or visit www.testmate.lab</p>
                 </div>
@@ -196,3 +184,4 @@ export function SampleReceipt({ formData, categories, specialData, receiptDate, 
     );
 }
 
+    
