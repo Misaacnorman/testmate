@@ -76,17 +76,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
   const [showReceipt, setShowReceipt] = useState(false);
 
   const receiptDate = useMemo(() => new Date(), []);
-
-  const specialCategories = useMemo(() => ["Concrete Cubes", "Bricks", "Blocks", "Pavers", "Cylinder"], []);
-
-  const hasSpecialCategories = useMemo(() => {
-      return Object.keys(selectedCategories).some(cat => specialCategories.includes(cat));
-  }, [selectedCategories, specialCategories]);
-
-  const numSteps = hasSpecialCategories ? 5 : 4;
-  const reviewStepNumber = hasSpecialCategories ? 5 : 4;
-
-
+  
   const form1 = useForm<Step1Data>({
     resolver: zodResolver(step1Schema),
     defaultValues: {
@@ -94,6 +84,15 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
       transmittalModes: [],
     },
   });
+
+  const specialCategories = useMemo(() => ["Concrete Cubes", "Bricks", "Blocks", "Pavers", "Cylinder"], []);
+
+  const hasSpecialCategories = useMemo(() => {
+    return Object.keys(selectedCategories).some(cat => specialCategories.includes(cat));
+  }, [selectedCategories, specialCategories]);
+
+  const numSteps = hasSpecialCategories ? 5 : 4;
+  const reviewStepNumber = hasSpecialCategories ? 5 : 4;
 
   useEffect(() => {
     if (open) {
@@ -211,14 +210,22 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
   };
   
   const handleTestToggle = (category: string, test: Test) => {
-    setSelectedCategories(prev => {
+      setSelectedCategories(prev => {
         const newCategories = { ...prev };
-        const catData = newCategories[category];
-        if (catData.tests[test.id]) {
-            delete catData.tests[test.id];
+        const categoryData = { ...newCategories[category] };
+        const newTests = { ...categoryData.tests };
+
+        if (newTests[test.id]) {
+            delete newTests[test.id];
         } else {
-            catData.tests[test.id] = { quantity: catData.quantity, testMethods: test.testMethods, materialTest: test.materialTest };
+            newTests[test.id] = { 
+                quantity: categoryData.quantity, 
+                testMethods: test.testMethods, 
+                materialTest: test.materialTest 
+            };
         }
+
+        newCategories[category] = { ...categoryData, tests: newTests };
         return newCategories;
     });
   };
