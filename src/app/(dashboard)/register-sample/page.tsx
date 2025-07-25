@@ -8,7 +8,7 @@ export default function RegisterSamplePage() {
     <div className="flex-1 flex items-center justify-center bg-gray-50 dark:bg-gray-900">
       <Button
         size="lg"
-        className="animate-bounce shadow-xl rounded-full h-32 w-32 text-xl"
+        className="animate-gentle-bounce shadow-xl rounded-2xl h-32 w-32 text-xl"
         style={{
             backgroundColor: 'hsl(221, 83%, 53%)',
             color: 'white'
