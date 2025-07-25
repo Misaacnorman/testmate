@@ -134,64 +134,65 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
 
   const hasSpecialCategories = selectedCategories.some(cat => specialCategories.includes(cat));
   const numSteps = hasSpecialCategories ? 5 : 4;
+  const reviewStepNumber = numSteps;
 
   const handleNext = async () => {
-    let isValid = true;
     if (step === 1) {
-        isValid = await form.trigger();
+      const isValid = await form.trigger();
+      if (!isValid) return;
     }
-    
-    if (isValid) {
-        if (step === 2) {
-            const newStep3Data: Step3Data = {};
-            for (const category of selectedCategories) {
-                newStep3Data[category] = step3Data[category] || {
-                    quantity: 1,
-                    notes: "",
-                    selectedTests: {},
-                    testQuantities: {},
-                };
-            }
-            setStep3Data(newStep3Data);
-            setStep(3);
-        } else if(step === 3){
-            if (hasSpecialCategories) {
-                const newStep4Data: Step4Data = {};
-                 for (const category of selectedCategories) {
-                    if(specialCategories.includes(category)) {
-                        newStep4Data[category] = step4Data[category] || {
-                            numberOfSets: 1,
-                            setDistribution: [step3Data[category]?.quantity || 1],
-                            sets: Array.from({ length: 1 }).map((_, i) => ({
-                                serials: Array.from({ length: step3Data[category]?.quantity || 1 }, (_, j) => String(j + 1)).join(', '),
-                                castingDate: new Date(),
-                                testingDate: new Date(),
-                                age: 0,
-                                areaOfUse: "",
-                                class: ""
-                            }))
-                        }
-                    }
-                }
-                setStep4Data(newStep4Data);
-                setStep(4);
-            } else {
-                 setStep(numSteps);
-            }
+
+    if (step < numSteps) {
+      if (step === 2) {
+        const newStep3Data: Step3Data = {};
+        for (const category of selectedCategories) {
+          newStep3Data[category] = step3Data[category] || {
+            quantity: 1,
+            notes: "",
+            selectedTests: {},
+            testQuantities: {},
+          };
         }
-        else {
-             setStep(prev => prev + 1);
+        setStep3Data(newStep3Data);
+        setStep(3);
+      } else if (step === 3) {
+        if (hasSpecialCategories) {
+          const newStep4Data: Step4Data = { ...step4Data };
+          for (const category of selectedCategories) {
+            if (specialCategories.includes(category) && !newStep4Data[category]) {
+              const totalQuantity = step3Data[category]?.quantity || 1;
+              newStep4Data[category] = {
+                numberOfSets: 1,
+                setDistribution: [totalQuantity],
+                sets: Array.from({ length: 1 }).map(() => ({
+                  serials: Array.from({ length: totalQuantity }, (_, j) => String(j + 1)).join(', '),
+                  castingDate: new Date(),
+                  testingDate: new Date(),
+                  age: 0,
+                  areaOfUse: "",
+                  class: ""
+                }))
+              };
+            }
+          }
+          setStep4Data(newStep4Data);
+          setStep(4);
+        } else {
+          setStep(reviewStepNumber); // Skip to review
         }
+      } else {
+        setStep(prev => prev + 1);
+      }
     }
-  }
+  };
   
   const handleBack = () => {
-    if (step === numSteps && !hasSpecialCategories) {
+    if (step === reviewStepNumber && !hasSpecialCategories) {
       setStep(3);
     } else {
       setStep(prev => prev - 1);
     }
-  }
+  };
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategories(prev => 
@@ -383,8 +384,6 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
           return totalInDistribution === step3Data[category].quantity;
       });
   }
-  
-  const reviewStepNumber = numSteps;
 
 
   return (
@@ -401,7 +400,7 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
             {step === 1 && "Enter the client and sample details below."}
             {step === 2 && "Select the material categories for testing."}
             {step === 3 && "Specify quantities and select tests."}
-            {step === 4 && "Provide additional details for special samples."}
+            {step === 4 && hasSpecialCategories && "Provide additional details for special samples."}
             {step === reviewStepNumber && "Review and confirm the sample registration details."}
           </DialogDescription>
         </DialogHeader>
@@ -629,7 +628,7 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
                 </ScrollArea>
               )}
 
-              {step === 4 && (
+              {step === 4 && hasSpecialCategories && (
                 <ScrollArea className="h-96 w-full rounded-md border p-4">
                   <Accordion type="multiple" className="w-full">
                     {selectedCategories.filter(cat => specialCategories.includes(cat)).map(category => {
@@ -768,7 +767,7 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
                                 {selectedCategories.filter(cat => specialCategories.includes(cat)).map(category => (
                                     <div key={category} className="mb-4">
                                         <h4 className="font-semibold">{category}</h4>
-                                        {step4Data[category].sets.map((set, setIndex) => (
+                                        {step4Data[category]?.sets.map((set, setIndex) => (
                                             <div key={setIndex} className="text-sm space-y-1 pl-4 mt-2">
                                                 <p><strong>Set {setIndex + 1}:</strong> {step4Data[category].setDistribution[setIndex]} samples</p>
                                                 <p>Casting: {format(set.castingDate, "PPP")}, Testing: {format(set.testingDate, "PPP")}, Age: {set.age} days</p>
@@ -787,26 +786,22 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
               <DialogFooter className="pt-4">
                   {step > 1 && <Button type="button" variant="ghost" onClick={handleBack}>Back</Button>}
                   
-                  {step < numSteps && step !== 3 && (
+                  {step < reviewStepNumber && (
                       <Button 
                         type="button" 
                         onClick={handleNext} 
                         className="ml-auto" 
                         disabled={
-                            (step === 2 && selectedCategories.length === 0)
+                            (step === 2 && selectedCategories.length === 0) ||
+                            (step === 3 && !isStep3Valid()) ||
+                            (step === 4 && !isStep4Valid())
                         }
                       >
                         Next
                       </Button>
                   )}
-
-                  {step === 3 && (
-                     <Button type="button" onClick={handleNext} disabled={!isStep3Valid()} className="ml-auto">
-                        Next
-                      </Button>
-                  )}
-
-                  {step === numSteps && (
+                  
+                  {step === reviewStepNumber && (
                        <Button type="button" onClick={onSubmit} className="ml-auto">
                         Confirm & Generate Receipt
                       </Button>
@@ -818,5 +813,7 @@ export function ReceiveSampleDialog({ open, onOpenChange, onFormSubmit }: Receiv
     </Dialog>
   );
 }
+
+    
 
     
