@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { TestDataTable } from "./components/test-data-table";
+import { TestDataTable } from "@/app/tests/components/test-data-table";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { TestActions } from "./components/test-actions";
+import { TestActions } from "@/app/tests/components/test-actions";
 import { Test } from "@/types/test";
 import { getTests, addTest, deleteTest, updateTest, deleteAllTests } from "@/services/tests";
 import { useToast } from '@/hooks/use-toast';
