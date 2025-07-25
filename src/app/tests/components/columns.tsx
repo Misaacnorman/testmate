@@ -75,7 +75,7 @@ export const getColumns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<Test>[
     accessorKey: "amountUGX",
     header: ({ column }) => {
         return (
-          <div className="text-right">
+          <div className="text-center">
             <Button
               variant="ghost"
               onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -92,14 +92,14 @@ export const getColumns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<Test>[
             style: "currency",
             currency: "UGX",
         }).format(amount)
-        return <div className="text-right font-medium">{formatted}</div>
+        return <div className="text-center font-medium">{formatted}</div>
     }
   },
   {
     accessorKey: "amountUSD",
     header: ({ column }) => {
         return (
-          <div className="text-right">
+          <div className="text-center">
             <Button
               variant="ghost"
               onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -116,7 +116,7 @@ export const getColumns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<Test>[
             style: "currency",
             currency: "USD",
         }).format(amount)
-        return <div className="text-right font-medium">{formatted}</div>
+        return <div className="text-center font-medium">{formatted}</div>
     }
   },
   {
