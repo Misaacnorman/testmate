@@ -33,6 +33,7 @@ import { cn } from "@/lib/utils";
 import { SampleReceipt } from "./sample-receipt";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Calendar } from "@/components/ui/calendar";
 
 // Step 1 Schema
 const step1Schema = z.object({
@@ -848,3 +849,5 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
     </Dialog>
   );
 }
+
+    
