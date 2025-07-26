@@ -711,7 +711,10 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                                             className="w-24" 
                                             min={1} 
                                             value={testDetails.numberOfSets || 1} 
-                                            onChange={e => handleSetDistribution(category, testId, parseInt(e.target.value, 10))}
+                                            onChange={e => {
+                                                const numSets = parseInt(e.target.value, 10) || 1;
+                                                handleSetDistribution(category, testId, numSets);
+                                            }}
                                         />
                                     </div>
                                     {testDetails.numberOfSets > 1 && (
