@@ -639,7 +639,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         )}
 
         {currentStep === 3 && (
-            <Accordion type="multiple" className="w-full space-y-2" defaultValue={Object.keys(selectedCategories)}>
+            <Accordion type="multiple" className="w-full space-y-2">
                 {Object.keys(selectedCategories).map(category => (
                     <AccordionItem key={category} value={category}>
                         <AccordionTrigger>
@@ -702,7 +702,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         )}
         
         {currentStep === 4 && (
-            <Accordion type="multiple" className="w-full space-y-2" defaultValue={Object.keys(step4Data)}>
+            <Accordion type="multiple" className="w-full space-y-2">
                 {Object.entries(step4Data).map(([category, tests]) => (
                      <AccordionItem key={category} value={category}>
                         <AccordionTrigger>
@@ -750,7 +750,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                                         </div>
                                     )}
                                     <Separator/>
-                                     <Accordion type="multiple" className="w-full" defaultValue={['set-0']}>
+                                     <Accordion type="multiple" className="w-full">
                                         {renderSetFields(category, testId, testDetails)}
                                      </Accordion>
                                 </div>
