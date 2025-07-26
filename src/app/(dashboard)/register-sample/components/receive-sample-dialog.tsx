@@ -226,13 +226,8 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         const catData = newCategories[category];
         if (catData) {
             catData.quantity = newQuantity;
-            // Update child test quantities that are now greater than the parent
             Object.keys(catData.tests).forEach(testId => {
-                // We will let the user manage this, just default it when toggling test
-                // if (catData.tests[testId].quantity > newQuantity) {
-                //     catData.tests[testId].quantity = newQuantity;
-                // }
-                catData.tests[testId].quantity = newQuantity; // always default to new parent quantity
+                catData.tests[testId].quantity = newQuantity;
             });
         }
         return newCategories;
@@ -285,7 +280,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         } else if (field === 'testingDate' && newSets[setIndex].castingDate) {
             newSets[setIndex].age = differenceInDays(new Date(value), new Date(newSets[setIndex].castingDate));
         } else if (field === 'age' && newSets[setIndex].castingDate) {
-            newSets[setIndex].testingDate = addDays(new Date(newSets[setIndex].castingDate), Number(value));
+            newSets[setIndex].testingDate = addDays(new Date(value), Number(value));
         } else if (field === 'castingDate' && newSets[setIndex].age !== undefined) {
              newSets[setIndex].testingDate = addDays(new Date(value), newSets[setIndex].age);
         } else if (field === 'testingDate' && newSets[setIndex].age !== undefined) {
@@ -385,7 +380,8 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
   };
   
   const renderSetFields = (category: string, testId: string, setsData: any) => {
-      return setsData?.sets.map((set: any, i: number) => (
+      if (!setsData?.sets) return null;
+      return setsData.sets.map((set: any, i: number) => (
             <AccordionItem key={i} value={`set-${i}`}>
               <AccordionTrigger>
                   <h4 className="font-semibold text-md">Set {i + 1}</h4>
@@ -842,6 +838,8 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
     </Dialog>
   );
 }
+
+    
 
     
 
