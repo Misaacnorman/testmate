@@ -228,9 +228,11 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
             catData.quantity = newQuantity;
             // Update child test quantities that are now greater than the parent
             Object.keys(catData.tests).forEach(testId => {
-                if (catData.tests[testId].quantity > newQuantity) {
-                    catData.tests[testId].quantity = newQuantity;
-                }
+                // We will let the user manage this, just default it when toggling test
+                // if (catData.tests[testId].quantity > newQuantity) {
+                //     catData.tests[testId].quantity = newQuantity;
+                // }
+                catData.tests[testId].quantity = newQuantity; // always default to new parent quantity
             });
         }
         return newCategories;
@@ -242,7 +244,6 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
           const newCategories = JSON.parse(JSON.stringify(prev));
           const catData = newCategories[category];
           if(catData && catData.tests[testId]) {
-              // Quantity can't be more than parent, and not less than 0
               const parentQuantity = catData.quantity;
               const newQuantity = Math.max(0, Math.min(quantity, parentQuantity));
               catData.tests[testId].quantity = newQuantity;
@@ -364,14 +365,8 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         setDistribution: distribution,
         sets: Array.from({ length: numSets }, (_, i) => {
             const setQuantity = distribution[i];
-            let serialCounter = 1;
-            if (i > 0) {
-                for(let j=0; j<i; j++) {
-                    serialCounter += distribution[j];
-                }
-            }
             return {
-                serials: Array.from({length: setQuantity}, (_, k) => `${serialCounter + k}`),
+                serials: Array.from({length: setQuantity}, (_, k) => `${k + 1}`),
                 testingDate: new Date()
             };
         })
@@ -656,7 +651,6 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                                         onChange={(e) => handleCategoryQuantityChange(category, parseInt(e.target.value, 10))}
                                         min={1}
                                     />
-                                    <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
                                 </div>
                             </div>
                         </AccordionTrigger>
@@ -708,7 +702,6 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                      <AccordionItem key={category} value={category}>
                         <AccordionTrigger>
                            <span className="font-bold text-lg flex-1 text-left">{category}</span>
-                           <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
                         </AccordionTrigger>
                         <AccordionContent className="p-4 space-y-6">
                             {Object.entries(tests as Record<string, any>).map(([testId, testDetails]) => (
@@ -751,7 +744,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                                         </div>
                                     )}
                                     <Separator/>
-                                     <Accordion type="multiple" className="w-full">
+                                     <Accordion type="multiple" className="w-full" defaultValue={['set-0']}>
                                         {renderSetFields(category, testId, testDetails)}
                                      </Accordion>
                                 </div>
@@ -849,5 +842,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
     </Dialog>
   );
 }
+
+    
 
     
