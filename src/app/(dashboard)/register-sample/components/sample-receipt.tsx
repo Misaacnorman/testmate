@@ -26,6 +26,23 @@ export function SampleReceipt({ formData, categories, specialData, receiptDate, 
             notes: catData.notes || '',
         }))
     );
+
+    const processedTests = allTests.reduce((acc, test, index) => {
+        if (index > 0 && test.category === allTests[index - 1].category) {
+            acc.push({ ...test, rowSpan: 0 });
+        } else {
+            let rowSpan = 1;
+            for (let i = index + 1; i < allTests.length; i++) {
+                if (allTests[i].category === test.category) {
+                    rowSpan++;
+                } else {
+                    break;
+                }
+            }
+            acc.push({ ...test, rowSpan });
+        }
+        return acc;
+    }, [] as (typeof allTests[0] & { rowSpan: number })[]);
     
     const renderConcreteDetails = (category: string, testId: string) => {
         const data = specialData[category]?.[testId];
@@ -54,10 +71,7 @@ export function SampleReceipt({ formData, categories, specialData, receiptDate, 
         <div className="bg-background text-foreground fixed inset-0 z-50 p-8 flex flex-col items-center">
             <style jsx global>{`
               @media print {
-                @page {
-                  size: landscape;
-                }
-                body * {
+                body, html {
                   visibility: hidden;
                 }
                 #receipt-content, #receipt-content * {
@@ -68,6 +82,9 @@ export function SampleReceipt({ formData, categories, specialData, receiptDate, 
                   left: 0;
                   top: 0;
                   width: 100%;
+                  margin: 0;
+                  border: none;
+                  box-shadow: none;
                 }
                 .no-print {
                   display: none;
@@ -139,9 +156,13 @@ export function SampleReceipt({ formData, categories, specialData, receiptDate, 
                             </tr>
                         </thead>
                         <tbody>
-                            {allTests.map((test, index) => (
+                             {processedTests.map((test, index) => (
                                 <tr key={index}>
-                                    <td className="p-2 border align-top">{test.category}</td>
+                                    {test.rowSpan > 0 && (
+                                        <td className="p-2 border align-top" rowSpan={test.rowSpan}>
+                                            {test.category}
+                                        </td>
+                                    )}
                                     <td className="p-2 border align-top">{test.materialTest}</td>
                                     <td className="p-2 border align-top">{test.testMethods}</td>
                                     <td className="p-2 border text-center align-top">{test.quantity}</td>
@@ -183,5 +204,3 @@ export function SampleReceipt({ formData, categories, specialData, receiptDate, 
         </div>
     );
 }
-
-    
