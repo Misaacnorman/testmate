@@ -64,6 +64,12 @@ const step1Schema = z.object({
 
 type Step1Data = z.infer<typeof step1Schema>;
 
+type SelectedCategory = {
+    quantity: number;
+    notes?: string;
+    tests: Record<string, { quantity: number; testMethods: string; materialTest: string; }>;
+};
+
 // Main Dialog Component
 export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onOpenChange: (open: boolean) => void }) {
   const [currentStep, setCurrentStep] = useState(1);
@@ -72,7 +78,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
   const { toast } = useToast();
 
   const [step1Data, setStep1Data] = useState<Step1Data | null>(null);
-  const [selectedCategories, setSelectedCategories] = useState<Record<string, { notes?: string; tests: Record<string, { quantity: number; testMethods: string; materialTest: string; }> }>>({});
+  const [selectedCategories, setSelectedCategories] = useState<Record<string, SelectedCategory>>({});
   const [step4Data, setStep4Data] = useState<Record<string, any>>({});
   const [showReceipt, setShowReceipt] = useState(false);
 
@@ -122,11 +128,6 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
     return [...new Set(categories)];
   }, [allTests]);
   
-  const getTotalQuantityForCategory = (category: string) => {
-    if (!selectedCategories[category]) return 0;
-    return Object.values(selectedCategories[category].tests).reduce((sum, test) => sum + (test.quantity || 0), 0);
-  };
-
   const handleNext = async () => {
     if (currentStep === 1) {
       const isValid = await form1.trigger();
@@ -156,7 +157,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
           specialCat.toLowerCase().trim() === selectedCat.toLowerCase().trim()
         ) && Object.keys(selectedCategories[selectedCat].tests).length > 0
       );
-
+      
       if (anySpecialSelected) {
         setCurrentStep(4);
       } else {
@@ -194,7 +195,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         if (newCategories[category]) {
             delete newCategories[category];
         } else {
-            newCategories[category] = { tests: {} };
+            newCategories[category] = { quantity: 1, tests: {} };
         }
         return newCategories;
     });
@@ -208,7 +209,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
             delete categoryData.tests[test.id];
         } else {
             categoryData.tests[test.id] = { 
-                quantity: 1, 
+                quantity: categoryData.quantity, // Default to parent quantity
                 testMethods: test.testMethods, 
                 materialTest: test.materialTest 
             };
@@ -217,12 +218,33 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
     });
   };
 
+  const handleCategoryQuantityChange = (category: string, quantity: number) => {
+    const newQuantity = Math.max(1, quantity);
+    setSelectedCategories(prev => {
+        const newCategories = JSON.parse(JSON.stringify(prev));
+        const catData = newCategories[category];
+        if (catData) {
+            catData.quantity = newQuantity;
+            // Update child test quantities that are now greater than the parent
+            Object.keys(catData.tests).forEach(testId => {
+                if (catData.tests[testId].quantity > newQuantity) {
+                    catData.tests[testId].quantity = newQuantity;
+                }
+            });
+        }
+        return newCategories;
+    });
+  };
+
   const handleTestQuantityChange = (category: string, testId: string, quantity: number) => {
       setSelectedCategories(prev => {
-          const newCategories = { ...prev };
+          const newCategories = JSON.parse(JSON.stringify(prev));
           const catData = newCategories[category];
-          if(catData.tests[testId]) {
-              catData.tests[testId].quantity = Math.max(0, quantity);
+          if(catData && catData.tests[testId]) {
+              // Quantity can't be more than parent, and not less than 0
+              const parentQuantity = catData.quantity;
+              const newQuantity = Math.max(0, Math.min(quantity, parentQuantity));
+              catData.tests[testId].quantity = newQuantity;
           }
           return newCategories;
       });
@@ -298,22 +320,24 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
 
   const initializeStep4Data = useCallback(() => {
     const initialData: Record<string, any> = {};
-    Object.entries(selectedCategories).forEach(([category, data]) => {
-      if (specialCategories.some(sc => sc.toLowerCase().trim() === category.toLowerCase().trim())) {
-        Object.entries(data.tests).forEach(([testId, testData]) => {
-          if (!initialData[category]) initialData[category] = {};
-          initialData[category][testId] = {
-            materialTest: testData.materialTest,
-            quantity: testData.quantity,
-            numberOfSets: 1,
-            setDistribution: [testData.quantity],
-            sets: Array.from({ length: 1 }, () => ({
-                serials: Array.from({length: testData.quantity}, (_, i) => `${i + 1}`),
-                testingDate: new Date(),
-            }))
-          };
-        });
-      }
+    Object.entries(selectedCategories).forEach(([category, catData]) => {
+        if (specialCategories.some(sc => sc.toLowerCase().trim() === category.toLowerCase().trim())) {
+            initialData[category] = {};
+            Object.entries(catData.tests).forEach(([testId, testData]) => {
+                if (testData.quantity > 0) {
+                     initialData[category][testId] = {
+                        materialTest: testData.materialTest,
+                        quantity: testData.quantity,
+                        numberOfSets: 1,
+                        setDistribution: [testData.quantity],
+                        sets: Array.from({ length: 1 }, () => ({
+                            serials: Array.from({length: testData.quantity}, (_, i) => `${i + 1}`),
+                            testingDate: new Date(),
+                        }))
+                    };
+                }
+            });
+        }
     });
     setStep4Data(initialData);
   }, [selectedCategories, specialCategories]);
@@ -622,8 +646,15 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                            <div className="flex w-full items-center justify-between">
                                 <span className="font-bold text-lg flex-1 text-left">{category}</span>
                                 <div className="flex items-center gap-2 pr-2">
-                                    <Label>Total Quantity:</Label>
-                                    <span className="font-bold">{getTotalQuantityForCategory(category)}</span>
+                                    <Label>Sample Quantity:</Label>
+                                    <Input
+                                        type="number"
+                                        className="w-24"
+                                        value={selectedCategories[category]?.quantity}
+                                        onClick={(e) => e.stopPropagation()}
+                                        onChange={(e) => handleCategoryQuantityChange(category, parseInt(e.target.value, 10))}
+                                        min={1}
+                                    />
                                     <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
                                 </div>
                             </div>
@@ -648,6 +679,8 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                                                 className="w-24"
                                                 value={selectedCategories[category]?.tests[test.id].quantity}
                                                 onChange={e => handleTestQuantityChange(category, test.id, parseInt(e.target.value, 10))}
+                                                max={selectedCategories[category]?.quantity}
+                                                min={0}
                                             />
                                         )}
                                     </div>
@@ -671,15 +704,16 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         {currentStep === 4 && (
             <Accordion type="multiple" className="w-full space-y-2" defaultValue={Object.keys(step4Data)}>
                 {Object.entries(step4Data).map(([category, tests]) => (
-                    <AccordionItem key={category} value={category}>
+                     <AccordionItem key={category} value={category}>
                         <AccordionTrigger>
                            <span className="font-bold text-lg flex-1 text-left">{category}</span>
                            <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
                         </AccordionTrigger>
                         <AccordionContent className="p-4 space-y-6">
                             {Object.entries(tests as Record<string, any>).map(([testId, testDetails]) => (
-                                <div key={testId} className="space-y-3 border p-3 rounded-lg">
-                                    <h3 className="font-semibold text-primary">{testDetails.materialTest} (Qty: {testDetails.quantity})</h3>
+                               <div key={testId} className="space-y-4 border-2 border-dashed p-4 rounded-lg">
+                                  <h3 className="font-bold text-lg text-primary text-center">{testDetails.materialTest}</h3>
+                                   <div className="space-y-3">
                                     <div className="flex items-center gap-4">
                                         <Label>Number of Sets</Label>
                                         <Input 
@@ -720,6 +754,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                                         {renderSetFields(category, testId, testDetails)}
                                      </Accordion>
                                 </div>
+                               </div>
                             ))}
                         </AccordionContent>
                     </AccordionItem>
@@ -760,7 +795,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                          <h3 className="text-lg font-semibold">Tests to be Performed</h3>
                         {Object.entries(selectedCategories).map(([category, data]) => (
                             <div key={category} className="space-y-2">
-                                <h4 className="font-medium">{category} (Total Quantity: {getTotalQuantityForCategory(category)})</h4>
+                                <h4 className="font-medium">{category} (Total Samples: {data.quantity})</h4>
                                 <ul className="list-disc list-inside text-sm pl-4">
                                     {Object.entries(data.tests).map(([testId, testData]) => (
                                         <li key={testId}>{testData.materialTest} (Qty: {testData.quantity}, Method: {testData.testMethods})</li>
@@ -813,5 +848,3 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
     </Dialog>
   );
 }
-
-    
