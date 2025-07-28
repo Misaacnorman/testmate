@@ -13,12 +13,18 @@ import { ProjectsTable } from './components/projects-table';
 import { Project } from '@/types/project';
 import { getProjects } from '@/services/projects';
 import { getColumns as getProjectColumns } from './components/project-columns';
+import { ConcreteCubesTable } from './components/concrete-cubes-table';
+import { getColumns as getConcreteCubesColumns } from './components/concrete-cubes-columns';
+import { ConcreteCube } from '@/types/concrete-cube';
+import { getConcreteCubes } from '@/services/concrete-cubes';
 
 export default function RegistersPage() {
   const [receipts, setReceipts] = useState<Receipt[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
+  const [concreteCubes, setConcreteCubes] = useState<ConcreteCube[]>([]);
   const [isReceiptsLoading, setIsReceiptsLoading] = useState(true);
   const [isProjectsLoading, setIsProjectsLoading] = useState(true);
+  const [isConcreteCubesLoading, setIsConcreteCubesLoading] = useState(true);
   const { toast } = useToast();
 
   const fetchReceipts = useCallback(async () => {
@@ -55,10 +61,28 @@ export default function RegistersPage() {
     }
   }, [toast]);
 
+  const fetchConcreteCubes = useCallback(async () => {
+    setIsConcreteCubesLoading(true);
+    try {
+        const fetchedData = await getConcreteCubes();
+        setConcreteCubes(fetchedData);
+    } catch (error) {
+        console.error("Failed to fetch concrete cubes:", error);
+        toast({
+            variant: "destructive",
+            title: "Error fetching concrete cubes",
+            description: "Could not retrieve concrete cube data.",
+        });
+    } finally {
+        setIsConcreteCubesLoading(false);
+    }
+  }, [toast]);
+
   useEffect(() => {
     fetchReceipts();
     fetchProjects();
-  }, [fetchReceipts, fetchProjects]);
+    fetchConcreteCubes();
+  }, [fetchReceipts, fetchProjects, fetchConcreteCubes]);
 
   const handleReceiptDeleted = useCallback(async (receiptId: string) => {
     try {
@@ -80,6 +104,7 @@ export default function RegistersPage() {
 
   const receiptColumns = useMemo(() => getReceiptColumns({ onDelete: handleReceiptDeleted }), [handleReceiptDeleted]);
   const projectColumns = useMemo(() => getProjectColumns(), []);
+  const concreteCubesColumns = useMemo(() => getConcreteCubesColumns(), []);
 
 
   return (
@@ -96,6 +121,7 @@ export default function RegistersPage() {
         <TabsList>
           <TabsTrigger value="sample-receipts">Sample Receipts</TabsTrigger>
           <TabsTrigger value="projects">Projects</TabsTrigger>
+          <TabsTrigger value="concrete-cubes">Concrete Cubes</TabsTrigger>
         </TabsList>
         <TabsContent value="sample-receipts">
           <Card>
@@ -116,6 +142,17 @@ export default function RegistersPage() {
             </CardHeader>
             <CardContent>
                 <ProjectsTable columns={projectColumns} data={projects} isLoading={isProjectsLoading} />
+            </CardContent>
+          </Card>
+        </TabsContent>
+         <TabsContent value="concrete-cubes">
+           <Card>
+            <CardHeader>
+              <CardTitle>Concrete Cubes</CardTitle>
+              <CardDescription>A register for all concrete cube tests.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <ConcreteCubesTable columns={concreteCubesColumns} data={concreteCubes} isLoading={isConcreteCubesLoading} />
             </CardContent>
           </Card>
         </TabsContent>
