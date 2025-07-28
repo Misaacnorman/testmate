@@ -5,7 +5,7 @@ import { Project } from "@/types/project"
 import { ColumnDef } from "@tanstack/react-table"
 
 const MultiLineHeader = ({ title, subtitle }: { title: string, subtitle?: string }) => (
-  <div className="text-center font-bold text-black">
+  <div className="text-center font-bold text-black whitespace-normal">
     <div>{title}</div>
     {subtitle && <div>{subtitle}</div>}
   </div>
