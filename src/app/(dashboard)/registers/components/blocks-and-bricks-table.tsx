@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ColumnDef,
   flexRender,
@@ -29,12 +29,14 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   isLoading: boolean;
+  onSelectionChange: (selectedRows: TData[]) => void;
 }
 
 export function BlocksAndBricksTable<TData extends BlockAndBrick, TValue>({
   columns,
   data,
   isLoading,
+  onSelectionChange,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -52,6 +54,12 @@ export function BlocksAndBricksTable<TData extends BlockAndBrick, TValue>({
       rowSelection,
     },
   });
+
+  useEffect(() => {
+    const selectedRowsData = table.getFilteredSelectedRowModel().rows.map(row => row.original);
+    onSelectionChange(selectedRowsData);
+  }, [rowSelection, table, onSelectionChange]);
+
 
   if (isLoading) {
     return (

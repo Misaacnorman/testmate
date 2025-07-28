@@ -42,6 +42,10 @@ import { EditPaverDialog } from './components/edit-paver-dialog';
 import { EditCylinderDialog } from './components/edit-cylinder-dialog';
 import { EditWaterAbsorptionDialog } from './components/edit-water-absorption-dialog';
 import { TestConcreteCubesDialog } from './components/test-concrete-cubes-dialog';
+import { TestBlocksAndBricksDialog } from './components/test-blocks-and-bricks-dialog';
+import { TestPaversDialog } from './components/test-pavers-dialog';
+import { TestCylindersDialog } from './components/test-cylinders-dialog';
+import { TestWaterAbsorptionsDialog } from './components/test-water-absorptions-dialog';
 
 
 export default function RegistersPage() {
@@ -70,6 +74,18 @@ export default function RegistersPage() {
   
   const [isTestCubesDialogOpen, setIsTestCubesDialogOpen] = useState(false);
   const [selectedCubes, setSelectedCubes] = useState<ConcreteCube[]>([]);
+
+  const [isTestBlocksAndBricksDialogOpen, setIsTestBlocksAndBricksDialogOpen] = useState(false);
+  const [selectedBlocksAndBricks, setSelectedBlocksAndBricks] = useState<BlockAndBrick[]>([]);
+
+  const [isTestPaversDialogOpen, setIsTestPaversDialogOpen] = useState(false);
+  const [selectedPavers, setSelectedPavers] = useState<Paver[]>([]);
+
+  const [isTestCylindersDialogOpen, setIsTestCylindersDialogOpen] = useState(false);
+  const [selectedCylinders, setSelectedCylinders] = useState<Cylinder[]>([]);
+
+  const [isTestWaterAbsorptionsDialogOpen, setIsTestWaterAbsorptionsDialogOpen] = useState(false);
+  const [selectedWaterAbsorptions, setSelectedWaterAbsorptions] = useState<WaterAbsorption[]>([]);
 
   const { toast } = useToast();
 
@@ -278,6 +294,26 @@ export default function RegistersPage() {
     }
   };
 
+  const handleBatchBlocksAndBricksUpdate = async (updatedItems: BlockAndBrick[]) => {
+    try {
+      await Promise.all(updatedItems.map(item => updateBlockAndBrick(item)));
+       toast({
+        title: "Batch Update Successful",
+        description: `${updatedItems.length} blocks/bricks tests have been updated.`,
+      });
+      fetchBlocksAndBricks();
+      setIsTestBlocksAndBricksDialogOpen(false);
+      setSelectedBlocksAndBricks([]);
+    } catch(error) {
+       console.error("Failed to batch update blocks/bricks:", error);
+       toast({
+         variant: "destructive",
+         title: "Error during Batch Update",
+         description: "Could not save the updated test data for some items.",
+       });
+    }
+  }
+
   const handlePaverUpdated = async (item: Paver) => {
     try {
       await updatePaver(item);
@@ -296,6 +332,26 @@ export default function RegistersPage() {
        });
     }
   };
+
+  const handleBatchPaversUpdate = async (updatedItems: Paver[]) => {
+    try {
+      await Promise.all(updatedItems.map(item => updatePaver(item)));
+       toast({
+        title: "Batch Update Successful",
+        description: `${updatedItems.length} paver tests have been updated.`,
+      });
+      fetchPavers();
+      setIsTestPaversDialogOpen(false);
+      setSelectedPavers([]);
+    } catch(error) {
+       console.error("Failed to batch update pavers:", error);
+       toast({
+         variant: "destructive",
+         title: "Error during Batch Update",
+         description: "Could not save the updated test data for some items.",
+       });
+    }
+  }
 
   const handleCylinderUpdated = async (item: Cylinder) => {
     try {
@@ -316,6 +372,26 @@ export default function RegistersPage() {
     }
   };
 
+  const handleBatchCylindersUpdate = async (updatedItems: Cylinder[]) => {
+    try {
+      await Promise.all(updatedItems.map(item => updateCylinder(item)));
+       toast({
+        title: "Batch Update Successful",
+        description: `${updatedItems.length} cylinder tests have been updated.`,
+      });
+      fetchCylinders();
+      setIsTestCylindersDialogOpen(false);
+      setSelectedCylinders([]);
+    } catch(error) {
+       console.error("Failed to batch update cylinders:", error);
+       toast({
+         variant: "destructive",
+         title: "Error during Batch Update",
+         description: "Could not save the updated test data for some items.",
+       });
+    }
+  }
+
   const handleWaterAbsorptionUpdated = async (item: WaterAbsorption) => {
     try {
       await updateWaterAbsorption(item);
@@ -334,6 +410,26 @@ export default function RegistersPage() {
        });
     }
   };
+
+   const handleBatchWaterAbsorptionsUpdate = async (updatedItems: WaterAbsorption[]) => {
+    try {
+      await Promise.all(updatedItems.map(item => updateWaterAbsorption(item)));
+       toast({
+        title: "Batch Update Successful",
+        description: `${updatedItems.length} water absorption tests have been updated.`,
+      });
+      fetchWaterAbsorptions();
+      setIsTestWaterAbsorptionsDialogOpen(false);
+      setSelectedWaterAbsorptions([]);
+    } catch(error) {
+       console.error("Failed to batch update water absorptions:", error);
+       toast({
+         variant: "destructive",
+         title: "Error during Batch Update",
+         description: "Could not save the updated test data for some items.",
+       });
+    }
+  }
 
   const receiptColumns = useMemo(() => getReceiptColumns({ onDelete: handleReceiptDeleted }), [handleReceiptDeleted]);
   const projectColumns = useMemo(() => getProjectColumns(), []);
@@ -421,44 +517,88 @@ export default function RegistersPage() {
           <TabsContent value="blocks-and-bricks">
             <Card>
               <CardHeader>
-                <CardTitle>Sample Register/Log for Bricks &amp; Blocks</CardTitle>
-                <CardDescription>A register for all brick and block tests.</CardDescription>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <CardTitle>Sample Register/Log for Bricks &amp; Blocks</CardTitle>
+                    <CardDescription>A register for all brick and block tests.</CardDescription>
+                  </div>
+                   <Button 
+                      onClick={() => setIsTestBlocksAndBricksDialogOpen(true)} 
+                      disabled={selectedBlocksAndBricks.length === 0}
+                    >
+                       <TestTubeDiagonal className="mr-2 h-4 w-4" />
+                       Test ({selectedBlocksAndBricks.length})
+                    </Button>
+                </div>
               </CardHeader>
               <CardContent>
-                  <BlocksAndBricksTable columns={blocksAndBricksColumns} data={blocksAndBricks} isLoading={isBlocksAndBricksLoading} />
+                  <BlocksAndBricksTable columns={blocksAndBricksColumns} data={blocksAndBricks} isLoading={isBlocksAndBricksLoading} onSelectionChange={setSelectedBlocksAndBricks} />
               </CardContent>
             </Card>
           </TabsContent>
           <TabsContent value="pavers">
             <Card>
               <CardHeader>
-                <CardTitle>Sample Register/Log for Pavers</CardTitle>
-                <CardDescription>A register for all paver tests.</CardDescription>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <CardTitle>Sample Register/Log for Pavers</CardTitle>
+                    <CardDescription>A register for all paver tests.</CardDescription>
+                  </div>
+                  <Button 
+                    onClick={() => setIsTestPaversDialogOpen(true)} 
+                    disabled={selectedPavers.length === 0}
+                  >
+                      <TestTubeDiagonal className="mr-2 h-4 w-4" />
+                      Test ({selectedPavers.length})
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent>
-                  <PaversTable columns={paverColumns} data={pavers} isLoading={isPaversLoading} />
+                  <PaversTable columns={paverColumns} data={pavers} isLoading={isPaversLoading} onSelectionChange={setSelectedPavers} />
               </CardContent>
             </Card>
           </TabsContent>
           <TabsContent value="cylinders">
             <Card>
               <CardHeader>
-                <CardTitle>Sample Register/Log for Concrete Cylinders</CardTitle>
-                <CardDescription>A register for all concrete cylinder tests.</CardDescription>
+                <div className="flex justify-between items-center">
+                    <div>
+                      <CardTitle>Sample Register/Log for Concrete Cylinders</CardTitle>
+                      <CardDescription>A register for all concrete cylinder tests.</CardDescription>
+                    </div>
+                     <Button 
+                        onClick={() => setIsTestCylindersDialogOpen(true)} 
+                        disabled={selectedCylinders.length === 0}
+                      >
+                         <TestTubeDiagonal className="mr-2 h-4 w-4" />
+                         Test ({selectedCylinders.length})
+                      </Button>
+                </div>
               </CardHeader>
               <CardContent>
-                  <CylindersTable columns={cylinderColumns} data={cylinders} isLoading={isCylindersLoading} />
+                  <CylindersTable columns={cylinderColumns} data={cylinders} isLoading={isCylindersLoading} onSelectionChange={setSelectedCylinders} />
               </CardContent>
             </Card>
           </TabsContent>
           <TabsContent value="water-absorption">
               <Card>
                   <CardHeader>
-                      <CardTitle>Sample Register/Log for Bricks &amp; Blocks for Water</CardTitle>
-                      <CardDescription>A register for all water absorption tests on bricks and blocks.</CardDescription>
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <CardTitle>Sample Register/Log for Bricks &amp; Blocks for Water</CardTitle>
+                        <CardDescription>A register for all water absorption tests on bricks and blocks.</CardDescription>
+                      </div>
+                      <Button 
+                          onClick={() => setIsTestWaterAbsorptionsDialogOpen(true)} 
+                          disabled={selectedWaterAbsorptions.length === 0}
+                        >
+                           <TestTubeDiagonal className="mr-2 h-4 w-4" />
+                           Test ({selectedWaterAbsorptions.length})
+                        </Button>
+                    </div>
                   </CardHeader>
                   <CardContent>
-                      <WaterAbsorptionTable columns={waterAbsorptionColumns} data={waterAbsorptions} isLoading={isWaterAbsorptionsLoading} />
+                      <WaterAbsorptionTable columns={waterAbsorptionColumns} data={waterAbsorptions} isLoading={isWaterAbsorptionsLoading} onSelectionChange={setSelectedWaterAbsorptions} />
                   </CardContent>
               </Card>
           </TabsContent>
@@ -485,11 +625,25 @@ export default function RegistersPage() {
           onItemUpdated={handleBlockAndBrickUpdated}
         />
       )}
+      {isTestBlocksAndBricksDialogOpen && (
+        <TestBlocksAndBricksDialog
+          items={selectedBlocksAndBricks}
+          onOpenChange={setIsTestBlocksAndBricksDialogOpen}
+          onBatchUpdate={handleBatchBlocksAndBricksUpdate}
+        />
+      )}
       {editingPaver && (
         <EditPaverDialog
           item={editingPaver}
           onOpenChange={(open) => !open && setEditingPaver(null)}
           onItemUpdated={handlePaverUpdated}
+        />
+      )}
+      {isTestPaversDialogOpen && (
+        <TestPaversDialog
+          items={selectedPavers}
+          onOpenChange={setIsTestPaversDialogOpen}
+          onBatchUpdate={handleBatchPaversUpdate}
         />
       )}
       {editingCylinder && (
@@ -499,11 +653,25 @@ export default function RegistersPage() {
           onItemUpdated={handleCylinderUpdated}
         />
       )}
+       {isTestCylindersDialogOpen && (
+        <TestCylindersDialog
+          items={selectedCylinders}
+          onOpenChange={setIsTestCylindersDialogOpen}
+          onBatchUpdate={handleBatchCylindersUpdate}
+        />
+      )}
       {editingWaterAbsorption && (
         <EditWaterAbsorptionDialog
           item={editingWaterAbsorption}
           onOpenChange={(open) => !open && setEditingWaterAbsorption(null)}
           onItemUpdated={handleWaterAbsorptionUpdated}
+        />
+      )}
+       {isTestWaterAbsorptionsDialogOpen && (
+        <TestWaterAbsorptionsDialog
+          items={selectedWaterAbsorptions}
+          onOpenChange={setIsTestWaterAbsorptionsDialogOpen}
+          onBatchUpdate={handleBatchWaterAbsorptionsUpdate}
         />
       )}
     </>
