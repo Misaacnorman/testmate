@@ -17,14 +17,20 @@ import { ConcreteCubesTable } from './components/concrete-cubes-table';
 import { getColumns as getConcreteCubesColumns } from './components/concrete-cubes-columns';
 import { ConcreteCube } from '@/types/concrete-cube';
 import { getConcreteCubes } from '@/services/concrete-cubes';
+import { BlockAndBrick } from '@/types/block-and-brick';
+import { getBlocksAndBricks } from '@/services/blocks-and-bricks';
+import { getColumns as getBlocksAndBricksColumns } from './components/blocks-and-bricks-columns';
+import { BlocksAndBricksTable } from './components/blocks-and-bricks-table';
 
 export default function RegistersPage() {
   const [receipts, setReceipts] = useState<Receipt[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [concreteCubes, setConcreteCubes] = useState<ConcreteCube[]>([]);
+  const [blocksAndBricks, setBlocksAndBricks] = useState<BlockAndBrick[]>([]);
   const [isReceiptsLoading, setIsReceiptsLoading] = useState(true);
   const [isProjectsLoading, setIsProjectsLoading] = useState(true);
   const [isConcreteCubesLoading, setIsConcreteCubesLoading] = useState(true);
+  const [isBlocksAndBricksLoading, setIsBlocksAndBricksLoading] = useState(true);
   const { toast } = useToast();
 
   const fetchReceipts = useCallback(async () => {
@@ -78,11 +84,29 @@ export default function RegistersPage() {
     }
   }, [toast]);
 
+  const fetchBlocksAndBricks = useCallback(async () => {
+    setIsBlocksAndBricksLoading(true);
+    try {
+        const fetchedData = await getBlocksAndBricks();
+        setBlocksAndBricks(fetchedData);
+    } catch (error) {
+        console.error("Failed to fetch blocks and bricks:", error);
+        toast({
+            variant: "destructive",
+            title: "Error fetching blocks and bricks",
+            description: "Could not retrieve blocks and bricks data.",
+        });
+    } finally {
+        setIsBlocksAndBricksLoading(false);
+    }
+  }, [toast]);
+
   useEffect(() => {
     fetchReceipts();
     fetchProjects();
     fetchConcreteCubes();
-  }, [fetchReceipts, fetchProjects, fetchConcreteCubes]);
+    fetchBlocksAndBricks();
+  }, [fetchReceipts, fetchProjects, fetchConcreteCubes, fetchBlocksAndBricks]);
 
   const handleReceiptDeleted = useCallback(async (receiptId: string) => {
     try {
@@ -105,6 +129,7 @@ export default function RegistersPage() {
   const receiptColumns = useMemo(() => getReceiptColumns({ onDelete: handleReceiptDeleted }), [handleReceiptDeleted]);
   const projectColumns = useMemo(() => getProjectColumns(), []);
   const concreteCubesColumns = useMemo(() => getConcreteCubesColumns(), []);
+  const blocksAndBricksColumns = useMemo(() => getBlocksAndBricksColumns(), []);
 
 
   return (
@@ -118,10 +143,11 @@ export default function RegistersPage() {
         </div>
       </div>
       <Tabs defaultValue="sample-receipts">
-        <TabsList>
+        <TabsList className="flex-wrap h-auto">
           <TabsTrigger value="sample-receipts">Sample Receipts</TabsTrigger>
           <TabsTrigger value="projects">Projects</TabsTrigger>
           <TabsTrigger value="concrete-cubes">Concrete Cubes</TabsTrigger>
+          <TabsTrigger value="blocks-and-bricks">Blocks &amp; Bricks</TabsTrigger>
         </TabsList>
         <TabsContent value="sample-receipts">
           <Card>
@@ -153,6 +179,17 @@ export default function RegistersPage() {
             </CardHeader>
             <CardContent>
                 <ConcreteCubesTable columns={concreteCubesColumns} data={concreteCubes} isLoading={isConcreteCubesLoading} />
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="blocks-and-bricks">
+           <Card>
+            <CardHeader>
+              <CardTitle>Sample Register/Log for Bricks &amp; Blocks</CardTitle>
+              <CardDescription>A register for all brick and block tests.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <BlocksAndBricksTable columns={blocksAndBricksColumns} data={blocksAndBricks} isLoading={isBlocksAndBricksLoading} />
             </CardContent>
           </Card>
         </TabsContent>
