@@ -13,22 +13,6 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const placeholderRows = Array.from({ length: 10 }).map((_, i) => ({
   id: i,
-  date: '',
-  bigProject: '',
-  smallProject: '',
-  client: '',
-  project: '',
-  engineer: '',
-  fieldTests: '',
-  fieldTech: '',
-  fieldStart: '',
-  fieldEnd: '',
-  fieldRemarks: '',
-  labTests: '',
-  labTech: '',
-  labStart: '',
-  labDelivery: '',
-  signature: '',
 }));
 
 export function ProjectsTable() {
@@ -43,7 +27,7 @@ export function ProjectsTable() {
                         <TableHead rowSpan={2} className="border border-gray-400 text-center font-bold text-black align-middle">PROJECT</TableHead>
                         <TableHead rowSpan={2} className="border border-gray-400 text-center font-bold text-black align-middle">ENGINEER IN CHARGE</TableHead>
                         <TableHead colSpan={5} className="border border-gray-400 text-center font-bold text-black">FIELD WORK INSTRUCTIONS</TableHead>
-                        <TableHead colSpan={5} className="border border-gray-400 text-center font-bold text-black">SCOPE OF WORK (LABORATORY TESTS)</TableHead>
+                        <TableHead colSpan={10} className="border border-gray-400 text-center font-bold text-black">SCOPE OF WORK (LABORATORY TESTING)</TableHead>
                     </TableRow>
                     <TableRow className="bg-gray-200">
                         <TableHead className="border border-gray-400 text-center font-bold text-black">BIG PROJECTS</TableHead>
@@ -58,11 +42,21 @@ export function ProjectsTable() {
                         <TableHead className="border border-gray-400 text-center font-bold text-black">Start Date</TableHead>
                         <TableHead className="border border-gray-400 text-center font-bold text-black">Agreed Delivery Date</TableHead>
                         <TableHead className="border border-gray-400 text-center font-bold text-black">Signature</TableHead>
+                        <TableHead className="border border-gray-400 text-center font-bold text-black">Actual Delivery date</TableHead>
+                        <TableHead className="border border-gray-400 text-center font-bold text-black">Signature</TableHead>
+                        <TableHead className="border border-gray-400 text-center font-bold text-black">Remark(s)</TableHead>
+                        <TableHead className="border border-gray-400 text-center font-bold text-black">Acknowledgement after Delivery</TableHead>
+                        <TableHead className="border border-gray-400 text-center font-bold text-black">Report issued By</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {placeholderRows.map((row) => (
                         <TableRow key={row.id}>
+                            <TableCell className="border border-gray-400 p-0 h-10"></TableCell>
+                            <TableCell className="border border-gray-400 p-0 h-10"></TableCell>
+                            <TableCell className="border border-gray-400 p-0 h-10"></TableCell>
+                            <TableCell className="border border-gray-400 p-0 h-10"></TableCell>
+                            <TableCell className="border border-gray-400 p-0 h-10"></TableCell>
                             <TableCell className="border border-gray-400 p-0 h-10"></TableCell>
                             <TableCell className="border border-gray-400 p-0 h-10"></TableCell>
                             <TableCell className="border border-gray-400 p-0 h-10"></TableCell>
