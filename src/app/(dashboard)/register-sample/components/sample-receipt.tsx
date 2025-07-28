@@ -85,6 +85,8 @@ export function SampleReceipt({ receiptId, formData, categories, specialData, re
             </div>
         );
     }
+    
+    const notesAvailable = Object.values(categories).some((cat: any) => cat.notes);
 
     return (
         <div className="bg-background text-foreground fixed inset-0 z-50 p-8 flex flex-col items-center">
@@ -175,13 +177,15 @@ export function SampleReceipt({ receiptId, formData, categories, specialData, re
                  {/* Notes */}
                 <div className="my-4">
                      <h3 className="font-semibold text-sm mb-2">Notes</h3>
-                     {allTests.filter(t => t.notes).length > 0 ? (
+                     {notesAvailable ? (
                          <div className="text-xs space-y-2">
-                         {allTests.filter(t => t.notes).map((test, index) => (
-                            <div key={index}>
-                                <p><strong>{test.category}:</strong> {test.notes}</p>
-                            </div>
-                         ))}
+                         {Object.entries(categories).map(([category, catData]: [string, any]) => 
+                            catData.notes ? (
+                                <div key={category}>
+                                    <p><strong>{category}:</strong> {catData.notes}</p>
+                                </div>
+                            ) : null
+                         )}
                          </div>
                      ) : (
                         <p className="text-xs text-gray-500">No special notes provided.</p>
