@@ -4,148 +4,148 @@
 import { ConcreteCube } from "@/types/concrete-cube";
 import { ColumnDef } from "@tanstack/react-table"
 
-const MultiLineHeader = ({ title, subtitle }: { title: string, subtitle?: string }) => (
+const CenteredHeader = ({ title, subtitle }: { title: string, subtitle?: string }) => (
   <div className="text-center font-bold text-black whitespace-normal">
     <div>{title}</div>
-    {subtitle && <div>{subtitle}</div>}
+    {subtitle && <div className="font-normal">{subtitle}</div>}
   </div>
 );
 
 export const getColumns = (): ColumnDef<ConcreteCube>[] => [
   {
     accessorKey: "dateReceived",
-    header: () => <MultiLineHeader title="Date" subtitle="Received" />,
+    header: () => <CenteredHeader title="Date" subtitle="Received" />,
     cell: ({ row }) => <div>{row.getValue("dateReceived")}</div>,
   },
    {
     accessorKey: "client",
-    header: () => <MultiLineHeader title="Client" />,
+    header: () => <CenteredHeader title="Client" />,
     cell: ({ row }) => <div className="min-w-[200px]">{row.getValue("client")}</div>,
   },
   {
     accessorKey: "project",
-    header: () => <MultiLineHeader title="Project" />,
+    header: () => <CenteredHeader title="Project" />,
     cell: ({ row }) => <div className="min-w-[200px]">{row.getValue("project")}</div>,
   },
   {
     accessorKey: "castingDate",
-    header: () => <MultiLineHeader title="Casting" subtitle="Date" />,
+    header: () => <CenteredHeader title="Casting" subtitle="Date" />,
     cell: ({ row }) => <div>{row.getValue("castingDate")}</div>,
   },
   {
     accessorKey: "testingDate",
-    header: () => <MultiLineHeader title="Testing" subtitle="Date" />,
+    header: () => <CenteredHeader title="Testing" subtitle="Date" />,
     cell: ({ row }) => <div>{row.getValue("testingDate")}</div>,
   },
   {
     accessorKey: "class",
-    header: () => <MultiLineHeader title="Class" />,
-    cell: ({ row }) => <div>{row.getValue("class")}</div>,
+    header: () => <CenteredHeader title="Class" />,
+    cell: ({ row }) => <div className="text-center">{row.getValue("class")}</div>,
   },
   {
     accessorKey: "ageDays",
-    header: () => <MultiLineHeader title="Age" subtitle="(Days)" />,
-    cell: ({ row }) => <div>{row.getValue("ageDays")}</div>,
+    header: () => <CenteredHeader title="Age" subtitle="(Days)" />,
+    cell: ({ row }) => <div className="text-center">{row.getValue("ageDays")}</div>,
   },
   {
     accessorKey: "areaOfUse",
-    header: () => <MultiLineHeader title="Area of Use" />,
+    header: () => <CenteredHeader title="Area of Use" />,
     cell: ({ row }) => <div className="min-w-[150px]">{row.getValue("areaOfUse")}</div>,
   },
   {
     accessorKey: "sampleId",
-    header: () => <MultiLineHeader title="Sample ID" />,
-    cell: ({ row }) => <div>{row.getValue("sampleId")}</div>,
+    header: () => <CenteredHeader title="Sample ID" />,
+    cell: ({ row }) => <div className="text-center">{row.getValue("sampleId")}</div>,
   },
   {
     id: "dimensions",
-    header: () => <MultiLineHeader title="Dimensions (mm)" />,
+    header: () => <CenteredHeader title="Dimensions (mm)" />,
     columns: [
       {
         accessorKey: "dimensions.length",
-        header: () => <MultiLineHeader title="Length" />,
-        cell: ({ row }) => row.original.dimensions.length,
+        header: () => <CenteredHeader title="Length" />,
+        cell: ({ row }) => <div className="text-center">{row.original.dimensions.length}</div>,
       },
       {
         accessorKey: "dimensions.width",
-        header: () => <MultiLineHeader title="Width" />,
-        cell: ({ row }) => row.original.dimensions.width,
+        header: () => <CenteredHeader title="Width" />,
+        cell: ({ row }) => <div className="text-center">{row.original.dimensions.width}</div>,
       },
       {
         accessorKey: "dimensions.height",
-        header: () => <MultiLineHeader title="Height" />,
-        cell: ({ row }) => row.original.dimensions.height,
+        header: () => <CenteredHeader title="Height" />,
+        cell: ({ row }) => <div className="text-center">{row.original.dimensions.height}</div>,
       },
     ],
   },
   {
     accessorKey: "weightKg",
-    header: () => <MultiLineHeader title="Weight" subtitle="(kg)" />,
-    cell: ({ row }) => <div>{row.getValue("weightKg")}</div>,
+    header: () => <CenteredHeader title="Weight" subtitle="(kg)" />,
+    cell: ({ row }) => <div className="text-center">{row.getValue("weightKg")}</div>,
   },
   {
     accessorKey: "machineUsed",
-    header: () => <MultiLineHeader title="Machine Used" />,
+    header: () => <CenteredHeader title="Machine Used" />,
     cell: ({ row }) => <div>{row.getValue("machineUsed")}</div>,
   },
   {
     accessorKey: "loadKN",
-    header: () => <MultiLineHeader title="Load" subtitle="(kN)" />,
-    cell: ({ row }) => <div>{row.getValue("loadKN")}</div>,
+    header: () => <CenteredHeader title="Load" subtitle="(kN)" />,
+    cell: ({ row }) => <div className="text-center">{row.getValue("loadKN")}</div>,
   },
   {
     accessorKey: "modeOfFailure",
-    header: () => <MultiLineHeader title="Mode of Failure" />,
+    header: () => <CenteredHeader title="Mode of Failure" />,
     cell: ({ row }) => <div>{row.getValue("modeOfFailure")}</div>,
   },
   {
     accessorKey: "recordedTemperature",
-    header: () => <MultiLineHeader title="Recorded Temperature at the Facility (°C)" />,
-    cell: ({ row }) => <div>{row.getValue("recordedTemperature")}</div>,
+    header: () => <CenteredHeader title="Recorded Temperature" subtitle="at the Facility (°C)" />,
+    cell: ({ row }) => <div className="text-center">{row.getValue("recordedTemperature")}</div>,
   },
   {
     accessorKey: "certificateNumber",
-    header: () => <MultiLineHeader title="Certificate Number" />,
+    header: () => <CenteredHeader title="Certificate Number" />,
     cell: ({ row }) => <div>{row.getValue("certificateNumber")}</div>,
   },
   {
     accessorKey: "comment",
-    header: () => <MultiLineHeader title="Comment" />,
+    header: () => <CenteredHeader title="Comment" />,
     cell: ({ row }) => <div>{row.getValue("comment")}</div>,
   },
   {
     accessorKey: "technician",
-    header: () => <MultiLineHeader title="Technician" />,
+    header: () => <CenteredHeader title="Technician" />,
     cell: ({ row }) => <div>{row.getValue("technician")}</div>,
   },
   {
     accessorKey: "dateOfIssue",
-    header: () => <MultiLineHeader title="Date of Issue" />,
+    header: () => <CenteredHeader title="Date of Issue" />,
     cell: ({ row }) => <div>{row.getValue("dateOfIssue")}</div>,
   },
   {
     accessorKey: "issueIdSerialNo",
-    header: () => <MultiLineHeader title="Issue ID/ Serial No." />,
+    header: () => <CenteredHeader title="Issue ID/ Serial No." />,
     cell: ({ row }) => <div>{row.getValue("issueIdSerialNo")}</div>,
   },
   {
     accessorKey: "takenBy",
-    header: () => <MultiLineHeader title="Taken by" />,
+    header: () => <CenteredHeader title="Taken by" />,
     cell: ({ row }) => <div>{row.getValue("takenBy")}</div>,
   },
   {
     accessorKey: "date",
-    header: () => <MultiLineHeader title="Date" />,
+    header: () => <CenteredHeader title="Date" />,
     cell: ({ row }) => <div>{row.getValue("date")}</div>,
   },
   {
     accessorKey: "contact",
-    header: () => <MultiLineHeader title="Contact" />,
+    header: () => <CenteredHeader title="Contact" />,
     cell: ({ row }) => <div>{row.getValue("contact")}</div>,
   },
   {
     accessorKey: "sampleReceiptNumber",
-    header: () => <MultiLineHeader title="Sample Receipt Number" />,
+    header: () => <CenteredHeader title="Sample Receipt Number" />,
     cell: ({ row }) => <div>{row.getValue("sampleReceiptNumber")}</div>,
   },
 ];

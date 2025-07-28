@@ -44,24 +44,25 @@ export function PaversTable<TData extends Paver, TValue>({
 
   if (isLoading) {
     return (
-      <div className="space-y-2">
+       <div className="space-y-2 p-4">
+        <Skeleton className="h-12 w-full rounded-md" />
         {Array.from({ length: 10 }).map((_, i) => (
-          <Skeleton key={i} className="h-12 w-full rounded-md" />
+          <Skeleton key={i} className="h-10 w-full rounded-md" />
         ))}
       </div>
     );
   }
   
   return (
-    <div>
+    <div className="space-y-4">
     <ScrollArea className="w-full whitespace-nowrap rounded-md border">
-        <Table>
+        <Table className="border-collapse">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} colSpan={header.colSpan} className="border-x">
+                    <TableHead key={header.id} colSpan={header.colSpan} className="border p-2 bg-gray-50">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -80,9 +81,10 @@ export function PaversTable<TData extends Paver, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className="border"
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="border-x h-12">
+                    <TableCell key={cell.id} className="border p-2 h-12">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -94,7 +96,7 @@ export function PaversTable<TData extends Paver, TValue>({
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
+                  colSpan={table.getAllColumns().length}
                   className="h-24 text-center"
                 >
                   No pavers found.
@@ -105,7 +107,7 @@ export function PaversTable<TData extends Paver, TValue>({
         </Table>
       <ScrollBar orientation="horizontal" />
       </ScrollArea>
-      <div className="flex items-center justify-end space-x-2 py-4">
+      <div className="flex items-center justify-end space-x-2">
         <Button
           variant="outline"
           size="sm"
