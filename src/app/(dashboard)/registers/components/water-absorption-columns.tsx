@@ -4,7 +4,9 @@
 import { WaterAbsorption } from "@/types/water-absorption";
 import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 const CenteredHeader = ({ title, subtitle }: { title: string, subtitle?: string }) => (
   <div className="text-center font-bold text-black whitespace-normal">
@@ -24,7 +26,33 @@ const SortableHeader = ({ title, column }: { title: string, column: any }) => (
     </Button>
 );
 
-export const getColumns = (): ColumnDef<WaterAbsorption>[] => [
+type WaterAbsorptionColumnsProps = {
+  onEdit: (item: WaterAbsorption) => void;
+};
+
+export const getColumns = ({ onEdit }: WaterAbsorptionColumnsProps): ColumnDef<WaterAbsorption>[] => [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
   {
     accessorKey: "dateReceived",
     header: ({ column }) => <SortableHeader title="Date Received" column={column} />,
@@ -126,7 +154,7 @@ export const getColumns = (): ColumnDef<WaterAbsorption>[] => [
   },
   {
     accessorKey: "technician",
-    header: () => <CenteredHeader title="Technician" subtitle="(Name & Signature)" />,
+    header: () => <CenteredHeader title="Technician" subtitle="(Name &amp; Signature)" />,
     cell: ({ row }) => <div>{row.getValue("technician")}</div>,
   },
   {
@@ -158,5 +186,27 @@ export const getColumns = (): ColumnDef<WaterAbsorption>[] => [
     accessorKey: "sampleReceiptNo",
     header: () => <CenteredHeader title="Sample Receipt No" />,
     cell: ({ row }) => <div>{row.getValue("sampleReceiptNo")}</div>,
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      const item = row.original
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem onClick={() => onEdit(item)}>
+              Edit
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )
+    },
   },
 ];

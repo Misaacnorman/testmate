@@ -18,23 +18,28 @@ import { getColumns as getConcreteCubesColumns } from './components/concrete-cub
 import { ConcreteCube } from '@/types/concrete-cube';
 import { getConcreteCubes, updateConcreteCube } from '@/services/concrete-cubes';
 import { BlockAndBrick } from '@/types/block-and-brick';
-import { getBlocksAndBricks } from '@/services/blocks-and-bricks';
+import { getBlocksAndBricks, updateBlockAndBrick } from '@/services/blocks-and-bricks';
 import { getColumns as getBlocksAndBricksColumns } from './components/blocks-and-bricks-columns';
 import { BlocksAndBricksTable } from './components/blocks-and-bricks-table';
 import { Paver } from '@/types/paver';
-import { getPavers } from '@/services/pavers';
+import { getPavers, updatePaver } from '@/services/pavers';
 import { getColumns as getPaverColumns } from './components/paver-columns';
 import { PaversTable } from './components/pavers-table';
 import { Cylinder } from '@/types/cylinder';
-import { getCylinders } from '@/services/cylinders';
+import { getCylinders, updateCylinder } from '@/services/cylinders';
 import { getColumns as getCylinderColumns } from './components/cylinder-columns';
 import { CylindersTable } from './components/cylinders-table';
 import { WaterAbsorption } from '@/types/water-absorption';
-import { getWaterAbsorptions } from '@/services/water-absorptions';
+import { getWaterAbsorptions, updateWaterAbsorption } from '@/services/water-absorptions';
 import { getColumns as getWaterAbsorptionColumns } from './components/water-absorption-columns';
 import { WaterAbsorptionTable } from './components/water-absorption-table';
 import { Input } from '@/components/ui/input';
 import { EditConcreteCubeDialog } from './components/edit-concrete-cube-dialog';
+import { EditBlockAndBrickDialog } from './components/edit-block-and-brick-dialog';
+import { EditPaverDialog } from './components/edit-paver-dialog';
+import { EditCylinderDialog } from './components/edit-cylinder-dialog';
+import { EditWaterAbsorptionDialog } from './components/edit-water-absorption-dialog';
+
 
 export default function RegistersPage() {
   const [receipts, setReceipts] = useState<Receipt[]>([]);
@@ -55,6 +60,10 @@ export default function RegistersPage() {
   
   const [projectFilter, setProjectFilter] = useState('');
   const [editingConcreteCube, setEditingConcreteCube] = useState<ConcreteCube | null>(null);
+  const [editingBlockAndBrick, setEditingBlockAndBrick] = useState<BlockAndBrick | null>(null);
+  const [editingPaver, setEditingPaver] = useState<Paver | null>(null);
+  const [editingCylinder, setEditingCylinder] = useState<Cylinder | null>(null);
+  const [editingWaterAbsorption, setEditingWaterAbsorption] = useState<WaterAbsorption | null>(null);
 
   const { toast } = useToast();
 
@@ -224,13 +233,89 @@ export default function RegistersPage() {
     }
   };
 
+  const handleBlockAndBrickUpdated = async (item: BlockAndBrick) => {
+    try {
+      await updateBlockAndBrick(item);
+      toast({
+        title: "Test Updated",
+        description: `Block/Brick Test for sample ${item.sampleId} has been updated.`,
+      });
+      setEditingBlockAndBrick(null);
+      fetchBlocksAndBricks();
+    } catch (error) {
+       console.error("Failed to update block/brick:", error);
+       toast({
+         variant: "destructive",
+         title: "Error updating test",
+         description: "Could not save the updated test data.",
+       });
+    }
+  };
+
+  const handlePaverUpdated = async (item: Paver) => {
+    try {
+      await updatePaver(item);
+      toast({
+        title: "Test Updated",
+        description: `Paver Test for sample ${item.sampleId} has been updated.`,
+      });
+      setEditingPaver(null);
+      fetchPavers();
+    } catch (error) {
+       console.error("Failed to update paver:", error);
+       toast({
+         variant: "destructive",
+         title: "Error updating test",
+         description: "Could not save the updated test data.",
+       });
+    }
+  };
+
+  const handleCylinderUpdated = async (item: Cylinder) => {
+    try {
+      await updateCylinder(item);
+      toast({
+        title: "Test Updated",
+        description: `Cylinder Test for sample ${item.sampleId} has been updated.`,
+      });
+      setEditingCylinder(null);
+      fetchCylinders();
+    } catch (error) {
+       console.error("Failed to update cylinder:", error);
+       toast({
+         variant: "destructive",
+         title: "Error updating test",
+         description: "Could not save the updated test data.",
+       });
+    }
+  };
+
+  const handleWaterAbsorptionUpdated = async (item: WaterAbsorption) => {
+    try {
+      await updateWaterAbsorption(item);
+      toast({
+        title: "Test Updated",
+        description: `Water Absorption Test for sample ${item.sampleId} has been updated.`,
+      });
+      setEditingWaterAbsorption(null);
+      fetchWaterAbsorptions();
+    } catch (error) {
+       console.error("Failed to update water absorption test:", error);
+       toast({
+         variant: "destructive",
+         title: "Error updating test",
+         description: "Could not save the updated test data.",
+       });
+    }
+  };
+
   const receiptColumns = useMemo(() => getReceiptColumns({ onDelete: handleReceiptDeleted }), [handleReceiptDeleted]);
   const projectColumns = useMemo(() => getProjectColumns(), []);
   const concreteCubesColumns = useMemo(() => getConcreteCubesColumns({ onEdit: setEditingConcreteCube }), []);
-  const blocksAndBricksColumns = useMemo(() => getBlocksAndBricksColumns(), []);
-  const paverColumns = useMemo(() => getPaverColumns(), []);
-  const cylinderColumns = useMemo(() => getCylinderColumns(), []);
-  const waterAbsorptionColumns = useMemo(() => getWaterAbsorptionColumns(), []);
+  const blocksAndBricksColumns = useMemo(() => getBlocksAndBricksColumns({ onEdit: setEditingBlockAndBrick }), []);
+  const paverColumns = useMemo(() => getPaverColumns({ onEdit: setEditingPaver }), []);
+  const cylinderColumns = useMemo(() => getCylinderColumns({ onEdit: setEditingCylinder }), []);
+  const waterAbsorptionColumns = useMemo(() => getWaterAbsorptionColumns({ onEdit: setEditingWaterAbsorption }), []);
 
   return (
     <>
@@ -349,8 +434,34 @@ export default function RegistersPage() {
           onCubeUpdated={handleConcreteCubeUpdated}
         />
       )}
+      {editingBlockAndBrick && (
+        <EditBlockAndBrickDialog 
+          item={editingBlockAndBrick}
+          onOpenChange={(open) => !open && setEditingBlockAndBrick(null)}
+          onItemUpdated={handleBlockAndBrickUpdated}
+        />
+      )}
+      {editingPaver && (
+        <EditPaverDialog
+          item={editingPaver}
+          onOpenChange={(open) => !open && setEditingPaver(null)}
+          onItemUpdated={handlePaverUpdated}
+        />
+      )}
+      {editingCylinder && (
+        <EditCylinderDialog
+          item={editingCylinder}
+          onOpenChange={(open) => !open && setEditingCylinder(null)}
+          onItemUpdated={handleCylinderUpdated}
+        />
+      )}
+      {editingWaterAbsorption && (
+        <EditWaterAbsorptionDialog
+          item={editingWaterAbsorption}
+          onOpenChange={(open) => !open && setEditingWaterAbsorption(null)}
+          onItemUpdated={handleWaterAbsorptionUpdated}
+        />
+      )}
     </>
   );
 }
-
-    

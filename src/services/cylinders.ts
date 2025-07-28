@@ -3,7 +3,7 @@
 
 import { db } from '@/lib/firebase';
 import { Cylinder } from '@/types/cylinder';
-import { collection, getDocs, addDoc, DocumentData } from 'firebase/firestore';
+import { collection, getDocs, addDoc, doc, updateDoc, DocumentData } from 'firebase/firestore';
 import { Timestamp } from 'firebase/firestore';
 
 const cylindersCollection = collection(db, 'cylinders');
@@ -44,4 +44,10 @@ export async function getCylinders(): Promise<Cylinder[]> {
 export async function addCylinder(data: Omit<Cylinder, 'id'>): Promise<Cylinder> {
     const docRef = await addDoc(cylindersCollection, data);
     return { id: docRef.id, ...data } as Cylinder;
+}
+
+export async function updateCylinder(item: Cylinder): Promise<void> {
+    const itemDoc = doc(db, 'cylinders', item.id);
+    const { id, ...itemData } = item;
+    await updateDoc(itemDoc, itemData);
 }

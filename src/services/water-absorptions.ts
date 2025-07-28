@@ -3,7 +3,7 @@
 
 import { db } from '@/lib/firebase';
 import { WaterAbsorption } from '@/types/water-absorption';
-import { collection, getDocs, addDoc, DocumentData } from 'firebase/firestore';
+import { collection, getDocs, addDoc, doc, updateDoc, DocumentData } from 'firebase/firestore';
 import { Timestamp } from 'firebase/firestore';
 
 const waterAbsorptionsCollection = collection(db, 'waterAbsorptions');
@@ -43,4 +43,10 @@ export async function getWaterAbsorptions(): Promise<WaterAbsorption[]> {
 export async function addWaterAbsorption(data: Omit<WaterAbsorption, 'id'>): Promise<WaterAbsorption> {
     const docRef = await addDoc(waterAbsorptionsCollection, data);
     return { id: docRef.id, ...data } as WaterAbsorption;
+}
+
+export async function updateWaterAbsorption(item: WaterAbsorption): Promise<void> {
+    const itemDoc = doc(db, 'waterAbsorptions', item.id);
+    const { id, ...itemData } = item;
+    await updateDoc(itemDoc, itemData);
 }

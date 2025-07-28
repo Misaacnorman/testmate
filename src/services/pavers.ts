@@ -3,7 +3,7 @@
 
 import { db } from '@/lib/firebase';
 import { Paver } from '@/types/paver';
-import { collection, getDocs, addDoc, DocumentData } from 'firebase/firestore';
+import { collection, getDocs, addDoc, doc, updateDoc, DocumentData } from 'firebase/firestore';
 import { Timestamp } from 'firebase/firestore';
 
 const paversCollection = collection(db, 'pavers');
@@ -44,4 +44,10 @@ export async function getPavers(): Promise<Paver[]> {
 export async function addPaver(data: Omit<Paver, 'id'>): Promise<Paver> {
     const docRef = await addDoc(paversCollection, data);
     return { id: docRef.id, ...data } as Paver;
+}
+
+export async function updatePaver(item: Paver): Promise<void> {
+    const itemDoc = doc(db, 'pavers', item.id);
+    const { id, ...itemData } = item;
+    await updateDoc(itemDoc, itemData);
 }

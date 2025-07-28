@@ -3,7 +3,7 @@
 
 import { db } from '@/lib/firebase';
 import { BlockAndBrick } from '@/types/block-and-brick';
-import { collection, getDocs, addDoc, DocumentData, QueryDocumentSnapshot } from 'firebase/firestore';
+import { collection, getDocs, addDoc, doc, updateDoc, DocumentData, QueryDocumentSnapshot } from 'firebase/firestore';
 import { Timestamp } from 'firebase/firestore';
 
 const blocksAndBricksCollection = collection(db, 'blocksAndBricks');
@@ -42,4 +42,10 @@ export async function getBlocksAndBricks(): Promise<BlockAndBrick[]> {
 export async function addBlockAndBrick(data: Omit<BlockAndBrick, 'id'>): Promise<BlockAndBrick> {
     const docRef = await addDoc(blocksAndBricksCollection, data);
     return { id: docRef.id, ...data } as BlockAndBrick;
+}
+
+export async function updateBlockAndBrick(item: BlockAndBrick): Promise<void> {
+    const itemDoc = doc(db, 'blocksAndBricks', item.id);
+    const { id, ...itemData } = item;
+    await updateDoc(itemDoc, itemData);
 }

@@ -4,7 +4,9 @@
 import { BlockAndBrick } from "@/types/block-and-brick";
 import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 const CenteredHeader = ({ title, subtitle }: { title: string, subtitle?: string }) => (
   <div className="text-center font-bold text-black whitespace-normal">
@@ -24,8 +26,33 @@ const SortableHeader = ({ title, column }: { title: string, column: any }) => (
     </Button>
 );
 
+type BlocksAndBricksColumnsProps = {
+  onEdit: (item: BlockAndBrick) => void;
+};
 
-export const getColumns = (): ColumnDef<BlockAndBrick>[] => [
+export const getColumns = ({ onEdit }: BlocksAndBricksColumnsProps): ColumnDef<BlockAndBrick>[] => [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
   {
     accessorKey: "dateReceived",
     header: ({ column }) => <SortableHeader title="Date Received" column={column} />,
@@ -97,7 +124,7 @@ export const getColumns = (): ColumnDef<BlockAndBrick>[] => [
   },
   {
     id: "dimensionsOfHoles",
-    header: () => <CenteredHeader title="Dimensions of Holes & No." subtitle="for Hollow Blocks" />,
+    header: () => <CenteredHeader title="Dimensions of Holes &amp; No." subtitle="for Hollow Blocks" />,
     columns: [
         {
             id: 'holeA',
@@ -197,5 +224,27 @@ export const getColumns = (): ColumnDef<BlockAndBrick>[] => [
     accessorKey: "sampleReceiptNo",
     header: () => <CenteredHeader title="Sample Receipt No" />,
     cell: ({ row }) => <div>{row.getValue("sampleReceiptNo")}</div>,
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      const item = row.original
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem onClick={() => onEdit(item)}>
+              Edit
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )
+    },
   },
 ];
