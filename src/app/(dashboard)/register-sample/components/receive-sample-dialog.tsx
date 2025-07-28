@@ -5,7 +5,7 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { format, addDays, differenceInDays } from "date-fns";
+import { format, addDays, differenceInDays, isValid } from "date-fns";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -276,7 +276,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
 
   const handleSetDataChange = useCallback((category: string, testId: string, setIndex: number, field: string, value: any) => {
        setStep4Data(prev => {
-        const newStep4Data = { ...prev };
+        const newStep4Data = JSON.parse(JSON.stringify(prev));
         if (!newStep4Data[category] || !newStep4Data[category][testId]) return prev;
 
         const testData = newStep4Data[category][testId];
@@ -285,22 +285,26 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         
         newSets[setIndex] = { ...newSets[setIndex], [field]: value };
         
-        if (field === 'castingDate' && newSets[setIndex].testingDate) {
-            newSets[setIndex].age = differenceInDays(new Date(newSets[setIndex].testingDate), new Date(value));
-        } else if (field === 'testingDate' && newSets[setIndex].castingDate) {
-            newSets[setIndex].age = differenceInDays(new Date(value), new Date(newSets[setIndex].castingDate));
-        } else if (field === 'age' && newSets[setIndex].castingDate) {
-            newSets[setIndex].testingDate = addDays(new Date(value), Number(value));
-        } else if (field === 'castingDate' && newSets[setIndex].age !== undefined) {
-             newSets[setIndex].testingDate = addDays(new Date(value), newSets[setIndex].age);
-        } else if (field === 'testingDate' && newSets[setIndex].age !== undefined) {
-             newSets[setIndex].castingDate = addDays(new Date(value), -newSets[setIndex].age);
+        const castingDate = newSets[setIndex].castingDate ? new Date(newSets[setIndex].castingDate) : null;
+        const testingDate = newSets[setIndex].testingDate ? new Date(newSets[setIndex].testingDate) : null;
+        const age = value && field === 'age' ? parseInt(value, 10) : newSets[setIndex].age ? parseInt(newSets[setIndex].age, 10) : null;
+
+        if (field === 'castingDate' && testingDate && isValid(testingDate) && isValid(castingDate)) {
+            newSets[setIndex].age = differenceInDays(testingDate, castingDate);
+        } else if (field === 'testingDate' && castingDate && isValid(castingDate) && isValid(testingDate)) {
+            newSets[setIndex].age = differenceInDays(testingDate, castingDate);
+        } else if (field === 'age' && castingDate && isValid(castingDate) && age !== null && !isNaN(age)) {
+            newSets[setIndex].testingDate = addDays(castingDate, age);
+        } else if (field === 'castingDate' && age !== null && !isNaN(age) && isValid(castingDate)) {
+             newSets[setIndex].testingDate = addDays(castingDate, age);
+        } else if (field === 'testingDate' && age !== null && !isNaN(age) && isValid(testingDate)) {
+             newSets[setIndex].castingDate = addDays(testingDate, -age);
         }
         
         return { 
-          ...prev, 
+          ...newStep4Data, 
           [category]: {
-            ...prev[category],
+            ...newStep4Data[category],
             [testId]: { ...testData, sets: newSets }
           }
         };
@@ -891,6 +895,3 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
   );
 }
 
-    
-
-    
