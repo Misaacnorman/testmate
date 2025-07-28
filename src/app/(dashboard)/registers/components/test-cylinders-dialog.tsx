@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -20,15 +19,17 @@ import { Cylinder } from "@/types/cylinder";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+
 
 const itemSchema = z.object({
   dimensions: z.object({
-    diameter: z.coerce.number(),
-    height: z.coerce.number(),
-  }),
-  weightKg: z.coerce.number(),
+    diameter: z.coerce.number().optional(),
+    height: z.coerce.number().optional(),
+  }).optional(),
+  weightKg: z.coerce.number().optional(),
   machineUsed: z.string().optional(),
-  loadKN: z.coerce.number(),
+  loadKN: z.coerce.number().optional(),
   modeOfFailure: z.string().optional(),
   recordedTemperature: z.string().optional(),
   certificateNumber: z.string().optional(),
@@ -46,6 +47,7 @@ type TestCylindersDialogProps = {
 export function TestCylindersDialog({ items, onOpenChange, onBatchUpdate }: TestCylindersDialogProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [updatedItems, setUpdatedItems] = useState<Record<string, Partial<Cylinder>>>({});
+  const [isConfirmingClose, setIsConfirmingClose] = useState(false);
   
   const currentItem = items[currentStep];
   const form = useForm<z.infer<typeof itemSchema>>({
@@ -98,21 +100,36 @@ export function TestCylindersDialog({ items, onOpenChange, onBatchUpdate }: Test
 
   const handleSubmit = () => {
     saveCurrentStep();
-    setTimeout(() => {
-        const finalItemsToUpdate = Object.values(updatedItems).filter(item => Object.keys(item).length > 1) as Cylinder[];
+    setUpdatedItems(currentUpdates => {
+        const finalItemsToUpdate = Object.values(currentUpdates).filter(item => Object.keys(item).length > 1) as Cylinder[];
         if(finalItemsToUpdate.length > 0) {
             onBatchUpdate(finalItemsToUpdate);
         } else {
             onOpenChange(false);
         }
-    }, 0);
+        return currentUpdates;
+    });
+  };
+
+  const handleCloseAttempt = () => {
+    saveCurrentStep();
+    const hasUnsavedChanges = Object.keys(updatedItems).length > 0;
+    if (hasUnsavedChanges) {
+      setIsConfirmingClose(true);
+    } else {
+      onOpenChange(false);
+    }
   };
   
   const progress = ((currentStep + 1) / items.length) * 100;
 
   return (
-    <Dialog open={true} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[90vh] flex flex-col">
+    <>
+    <Dialog open={true} onOpenChange={(open) => { if (!open) handleCloseAttempt(); }}>
+      <DialogContent 
+        className="max-w-3xl max-h-[90vh] flex flex-col"
+        onInteractOutside={(e) => { e.preventDefault(); handleCloseAttempt(); }}
+        >
         <DialogHeader>
           <DialogTitle>Test Concrete Cylinders ({currentStep + 1} of {items.length})</DialogTitle>
           <DialogDescription>
@@ -195,7 +212,7 @@ export function TestCylindersDialog({ items, onOpenChange, onBatchUpdate }: Test
         </ScrollArea>
         <DialogFooter className="pt-4 justify-between">
           <div>
-            <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>Cancel</Button>
+            <Button type="button" variant="ghost" onClick={handleCloseAttempt}>Cancel</Button>
           </div>
           <div className="flex gap-2">
              <Button type="button" variant="outline" onClick={handleBack} disabled={currentStep === 0}>Back</Button>
@@ -208,5 +225,22 @@ export function TestCylindersDialog({ items, onOpenChange, onBatchUpdate }: Test
         </DialogFooter>
       </DialogContent>
     </Dialog>
+     <AlertDialog open={isConfirmingClose} onOpenChange={setIsConfirmingClose}>
+          <AlertDialogContent>
+              <AlertDialogHeader>
+                  <AlertDialogTitle>Discard unsaved changes?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                      You have unsaved changes. Are you sure you want to close the dialog and discard them?
+                  </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                  <AlertDialogCancel>No, continue editing</AlertDialogCancel>
+                  <AlertDialogAction onClick={() => onOpenChange(false)} className="bg-destructive hover:bg-destructive/90">
+                      Yes, discard changes
+                  </AlertDialogAction>
+              </AlertDialogFooter>
+          </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -20,17 +19,19 @@ import { WaterAbsorption } from "@/types/water-absorption";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+
 
 const itemSchema = z.object({
   dimensions: z.object({
-    length: z.coerce.number(),
-    width: z.coerce.number(),
-    height: z.coerce.number(),
-  }),
-  ovenDriedWeightBeforeSoaking: z.coerce.number(),
-  weightAfterSoaking: z.coerce.number(),
-  weightOfWater: z.coerce.number(),
-  calculatedWaterAbsorption: z.coerce.number(),
+    length: z.coerce.number().optional(),
+    width: z.coerce.number().optional(),
+    height: z.coerce.number().optional(),
+  }).optional(),
+  ovenDriedWeightBeforeSoaking: z.coerce.number().optional(),
+  weightAfterSoaking: z.coerce.number().optional(),
+  weightOfWater: z.coerce.number().optional(),
+  calculatedWaterAbsorption: z.coerce.number().optional(),
   certificateNumber: z.string().optional(),
   comment: z.string().optional(),
   technician: z.string().optional(),
@@ -46,6 +47,7 @@ type TestWaterAbsorptionsDialogProps = {
 export function TestWaterAbsorptionsDialog({ items, onOpenChange, onBatchUpdate }: TestWaterAbsorptionsDialogProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [updatedItems, setUpdatedItems] = useState<Record<string, Partial<WaterAbsorption>>>({});
+  const [isConfirmingClose, setIsConfirmingClose] = useState(false);
   
   const currentItem = items[currentStep];
   const form = useForm<z.infer<typeof itemSchema>>({
@@ -97,21 +99,36 @@ export function TestWaterAbsorptionsDialog({ items, onOpenChange, onBatchUpdate 
 
   const handleSubmit = () => {
     saveCurrentStep();
-    setTimeout(() => {
-        const finalItemsToUpdate = Object.values(updatedItems).filter(item => Object.keys(item).length > 1) as WaterAbsorption[];
+    setUpdatedItems(currentUpdates => {
+        const finalItemsToUpdate = Object.values(currentUpdates).filter(item => Object.keys(item).length > 1) as WaterAbsorption[];
         if(finalItemsToUpdate.length > 0) {
             onBatchUpdate(finalItemsToUpdate);
         } else {
             onOpenChange(false);
         }
-    }, 0);
+        return currentUpdates;
+    });
   };
   
+  const handleCloseAttempt = () => {
+    saveCurrentStep();
+    const hasUnsavedChanges = Object.keys(updatedItems).length > 0;
+    if (hasUnsavedChanges) {
+      setIsConfirmingClose(true);
+    } else {
+      onOpenChange(false);
+    }
+  };
+
   const progress = ((currentStep + 1) / items.length) * 100;
 
   return (
-    <Dialog open={true} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[90vh] flex flex-col">
+    <>
+    <Dialog open={true} onOpenChange={(open) => { if (!open) handleCloseAttempt(); }}>
+      <DialogContent 
+        className="max-w-3xl max-h-[90vh] flex flex-col"
+        onInteractOutside={(e) => { e.preventDefault(); handleCloseAttempt(); }}
+        >
         <DialogHeader>
           <DialogTitle>Test Water Absorption ({currentStep + 1} of {items.length})</DialogTitle>
           <DialogDescription>
@@ -160,7 +177,7 @@ export function TestWaterAbsorptionsDialog({ items, onOpenChange, onBatchUpdate 
         </ScrollArea>
         <DialogFooter className="pt-4 justify-between">
           <div>
-            <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>Cancel</Button>
+            <Button type="button" variant="ghost" onClick={handleCloseAttempt}>Cancel</Button>
           </div>
           <div className="flex gap-2">
              <Button type="button" variant="outline" onClick={handleBack} disabled={currentStep === 0}>Back</Button>
@@ -173,5 +190,22 @@ export function TestWaterAbsorptionsDialog({ items, onOpenChange, onBatchUpdate 
         </DialogFooter>
       </DialogContent>
     </Dialog>
+     <AlertDialog open={isConfirmingClose} onOpenChange={setIsConfirmingClose}>
+          <AlertDialogContent>
+              <AlertDialogHeader>
+                  <AlertDialogTitle>Discard unsaved changes?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                      You have unsaved changes. Are you sure you want to close the dialog and discard them?
+                  </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                  <AlertDialogCancel>No, continue editing</AlertDialogCancel>
+                  <AlertDialogAction onClick={() => onOpenChange(false)} className="bg-destructive hover:bg-destructive/90">
+                      Yes, discard changes
+                  </AlertDialogAction>
+              </AlertDialogFooter>
+          </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }
