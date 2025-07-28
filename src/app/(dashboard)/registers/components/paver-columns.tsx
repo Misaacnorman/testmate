@@ -3,6 +3,8 @@
 
 import { Paver } from "@/types/paver";
 import { ColumnDef } from "@tanstack/react-table"
+import { Button } from "@/components/ui/button";
+import { ArrowUpDown } from "lucide-react";
 
 const CenteredHeader = ({ title, subtitle }: { title: string, subtitle?: string }) => (
   <div className="text-center font-bold text-black whitespace-normal">
@@ -11,21 +13,35 @@ const CenteredHeader = ({ title, subtitle }: { title: string, subtitle?: string 
   </div>
 );
 
+const SortableHeader = ({ title, column }: { title: string, column: any }) => (
+    <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        className="w-full"
+    >
+        {title}
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+    </Button>
+);
+
 export const getColumns = (): ColumnDef<Paver>[] => [
   {
     accessorKey: "dateReceived",
-    header: () => <CenteredHeader title="Date" subtitle="Received" />,
+    header: ({ column }) => <SortableHeader title="Date Received" column={column} />,
     cell: ({ row }) => <div>{row.getValue("dateReceived")}</div>,
+    enableSorting: true,
   },
    {
     accessorKey: "client",
-    header: () => <CenteredHeader title="Client" />,
+    header: ({ column }) => <SortableHeader title="Client" column={column} />,
     cell: ({ row }) => <div className="min-w-[200px]">{row.getValue("client")}</div>,
+    enableSorting: true,
   },
   {
     accessorKey: "project",
-    header: () => <CenteredHeader title="Project" />,
+    header: ({ column }) => <SortableHeader title="Project" column={column} />,
     cell: ({ row }) => <div className="min-w-[200px]">{row.getValue("project")}</div>,
+    enableSorting: true,
   },
   {
     accessorKey: "castingDate",
