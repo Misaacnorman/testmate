@@ -20,7 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Project } from "@/types/project";
-import styles from './data-table.module.css';
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 
 interface DataTableProps<TData, TValue> {
@@ -55,14 +55,14 @@ export function ProjectsTable<TData extends Project, TValue>({
   
   return (
     <div className="space-y-4">
-      <div className="rounded-md border">
-        <Table className={styles.dataTable}>
-          <TableHeader className={styles.stickyHeader}>
+      <ScrollArea className="w-full whitespace-nowrap">
+        <Table>
+          <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} colSpan={header.colSpan} rowSpan={header.isPlaceholder ? undefined : header.depth > 1 ? 1 : 2}>
+                    <TableHead key={header.id} colSpan={header.colSpan}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -104,7 +104,8 @@ export function ProjectsTable<TData extends Project, TValue>({
             )}
           </TableBody>
         </Table>
-      </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
       <div className="flex items-center justify-end space-x-2">
         <Button
           variant="outline"

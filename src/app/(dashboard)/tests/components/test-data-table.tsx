@@ -7,7 +7,9 @@ import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
   useReactTable,
+  SortingState,
 } from "@tanstack/react-table";
 import {
   Table,
@@ -19,50 +21,53 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { WaterAbsorption } from "@/types/water-absorption";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Test } from "@/types/test";
+import { getColumns } from "./columns";
 
-
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+interface TestDataTableProps {
+  data: Test[];
   isLoading: boolean;
+  onEditTest: (test: Test) => void;
+  onDeleteTest: (id: string) => void;
 }
 
-export function WaterAbsorptionTable<TData extends WaterAbsorption, TValue>({
-  columns,
-  data,
-  isLoading,
-}: DataTableProps<TData, TValue>) {
+export function TestDataTable({ data, isLoading, onEditTest, onDeleteTest }: TestDataTableProps) {
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+
+  const columns = React.useMemo(() => getColumns({ onEdit: onEditTest, onDelete: onDeleteTest }), [onEditTest, onDeleteTest]);
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+    },
   });
 
   if (isLoading) {
     return (
-      <div className="space-y-2 p-4">
-        <Skeleton className="h-12 w-full rounded-md" />
+      <div className="space-y-2">
         {Array.from({ length: 10 }).map((_, i) => (
-          <Skeleton key={i} className="h-10 w-full rounded-md" />
+          <Skeleton key={i} className="h-12 w-full rounded-md" />
         ))}
       </div>
     );
   }
   
   return (
-    <div className="space-y-4">
-      <ScrollArea className="w-full whitespace-nowrap">
+    <div>
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} colSpan={header.colSpan}>
+                    <TableHead key={header.id}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -95,18 +100,17 @@ export function WaterAbsorptionTable<TData extends WaterAbsorption, TValue>({
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={table.getAllColumns().length}
+                  colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No data found.
+                  No tests found.
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
-        <ScrollBar orientation="horizontal" />
-      </ScrollArea>
-      <div className="flex items-center justify-end space-x-2">
+      </div>
+      <div className="flex items-center justify-end space-x-2 py-4">
         <Button
           variant="outline"
           size="sm"
