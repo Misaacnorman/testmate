@@ -29,6 +29,10 @@ import { Cylinder } from '@/types/cylinder';
 import { getCylinders } from '@/services/cylinders';
 import { getColumns as getCylinderColumns } from './components/cylinder-columns';
 import { CylindersTable } from './components/cylinders-table';
+import { WaterAbsorption } from '@/types/water-absorption';
+import { getWaterAbsorptions } from '@/services/water-absorptions';
+import { getColumns as getWaterAbsorptionColumns } from './components/water-absorption-columns';
+import { WaterAbsorptionTable } from './components/water-absorption-table';
 
 export default function RegistersPage() {
   const [receipts, setReceipts] = useState<Receipt[]>([]);
@@ -37,12 +41,14 @@ export default function RegistersPage() {
   const [blocksAndBricks, setBlocksAndBricks] = useState<BlockAndBrick[]>([]);
   const [pavers, setPavers] = useState<Paver[]>([]);
   const [cylinders, setCylinders] = useState<Cylinder[]>([]);
+  const [waterAbsorptions, setWaterAbsorptions] = useState<WaterAbsorption[]>([]);
   const [isReceiptsLoading, setIsReceiptsLoading] = useState(true);
   const [isProjectsLoading, setIsProjectsLoading] = useState(true);
   const [isConcreteCubesLoading, setIsConcreteCubesLoading] = useState(true);
   const [isBlocksAndBricksLoading, setIsBlocksAndBricksLoading] = useState(true);
   const [isPaversLoading, setIsPaversLoading] = useState(true);
   const [isCylindersLoading, setIsCylindersLoading] = useState(true);
+  const [isWaterAbsorptionsLoading, setIsWaterAbsorptionsLoading] = useState(true);
   const { toast } = useToast();
 
   const fetchReceipts = useCallback(async () => {
@@ -147,6 +153,23 @@ export default function RegistersPage() {
     }
   }, [toast]);
 
+  const fetchWaterAbsorptions = useCallback(async () => {
+    setIsWaterAbsorptionsLoading(true);
+    try {
+        const fetchedData = await getWaterAbsorptions();
+        setWaterAbsorptions(fetchedData);
+    } catch (error) {
+        console.error("Failed to fetch water absorptions:", error);
+        toast({
+            variant: "destructive",
+            title: "Error fetching water absorptions",
+            description: "Could not retrieve water absorption data.",
+        });
+    } finally {
+        setIsWaterAbsorptionsLoading(false);
+    }
+    }, [toast]);
+
   useEffect(() => {
     fetchReceipts();
     fetchProjects();
@@ -154,7 +177,8 @@ export default function RegistersPage() {
     fetchBlocksAndBricks();
     fetchPavers();
     fetchCylinders();
-  }, [fetchReceipts, fetchProjects, fetchConcreteCubes, fetchBlocksAndBricks, fetchPavers, fetchCylinders]);
+    fetchWaterAbsorptions();
+  }, [fetchReceipts, fetchProjects, fetchConcreteCubes, fetchBlocksAndBricks, fetchPavers, fetchCylinders, fetchWaterAbsorptions]);
 
   const handleReceiptDeleted = useCallback(async (receiptId: string) => {
     try {
@@ -180,6 +204,7 @@ export default function RegistersPage() {
   const blocksAndBricksColumns = useMemo(() => getBlocksAndBricksColumns(), []);
   const paverColumns = useMemo(() => getPaverColumns(), []);
   const cylinderColumns = useMemo(() => getCylinderColumns(), []);
+  const waterAbsorptionColumns = useMemo(() => getWaterAbsorptionColumns(), []);
 
 
   return (
@@ -200,6 +225,7 @@ export default function RegistersPage() {
           <TabsTrigger value="blocks-and-bricks">Blocks &amp; Bricks</TabsTrigger>
           <TabsTrigger value="pavers">Pavers</TabsTrigger>
           <TabsTrigger value="cylinders">Cylinders</TabsTrigger>
+          <TabsTrigger value="water-absorption">Water Absorption</TabsTrigger>
         </TabsList>
         <TabsContent value="sample-receipts">
           <Card>
@@ -266,6 +292,17 @@ export default function RegistersPage() {
                 <CylindersTable columns={cylinderColumns} data={cylinders} isLoading={isCylindersLoading} />
             </CardContent>
           </Card>
+        </TabsContent>
+        <TabsContent value="water-absorption">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Sample Register/Log for Bricks &amp; Blocks for Water</CardTitle>
+                    <CardDescription>A register for all water absorption tests on bricks and blocks.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <WaterAbsorptionTable columns={waterAbsorptionColumns} data={waterAbsorptions} isLoading={isWaterAbsorptionsLoading} />
+                </CardContent>
+            </Card>
         </TabsContent>
       </Tabs>
     </div>
