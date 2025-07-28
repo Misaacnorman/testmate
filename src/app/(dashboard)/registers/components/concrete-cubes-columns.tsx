@@ -20,12 +20,12 @@ export const getColumns = (): ColumnDef<ConcreteCube>[] => [
    {
     accessorKey: "client",
     header: () => <MultiLineHeader title="Client" />,
-    cell: ({ row }) => <div>{row.getValue("client")}</div>,
+    cell: ({ row }) => <div className="min-w-[200px]">{row.getValue("client")}</div>,
   },
   {
     accessorKey: "project",
     header: () => <MultiLineHeader title="Project" />,
-    cell: ({ row }) => <div>{row.getValue("project")}</div>,
+    cell: ({ row }) => <div className="min-w-[200px]">{row.getValue("project")}</div>,
   },
   {
     accessorKey: "castingDate",
@@ -50,7 +50,7 @@ export const getColumns = (): ColumnDef<ConcreteCube>[] => [
   {
     accessorKey: "areaOfUse",
     header: () => <MultiLineHeader title="Area of Use" />,
-    cell: ({ row }) => <div>{row.getValue("areaOfUse")}</div>,
+    cell: ({ row }) => <div className="min-w-[150px]">{row.getValue("areaOfUse")}</div>,
   },
   {
     accessorKey: "sampleId",
