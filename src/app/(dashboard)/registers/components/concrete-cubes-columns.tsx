@@ -3,39 +3,55 @@
 
 import { ConcreteCube } from "@/types/concrete-cube";
 import { ColumnDef } from "@tanstack/react-table"
+import { Button } from "@/components/ui/button";
+import { ArrowUpDown } from "lucide-react";
 
 const CenteredHeader = ({ title, subtitle }: { title: string, subtitle?: string }) => (
-  <div className="text-center font-bold text-black whitespace-normal">
+  <div className="text-center font-bold whitespace-normal">
     <div>{title}</div>
-    {subtitle && <div className="font-normal">{subtitle}</div>}
+    {subtitle && <div className="font-normal text-xs">{subtitle}</div>}
   </div>
+);
+
+const SortableHeader = ({ title, column }: { title: string, column: any }) => (
+    <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        className="w-full"
+    >
+        {title}
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+    </Button>
 );
 
 export const getColumns = (): ColumnDef<ConcreteCube>[] => [
   {
     accessorKey: "dateReceived",
-    header: () => <CenteredHeader title="Date" subtitle="Received" />,
-    cell: ({ row }) => <div>{row.getValue("dateReceived")}</div>,
+    header: ({ column }) => <SortableHeader title="Date Received" column={column} />,
+    cell: ({ row }) => <div className="text-center">{row.getValue("dateReceived")}</div>,
+    enableSorting: true,
   },
    {
     accessorKey: "client",
-    header: () => <CenteredHeader title="Client" />,
+    header: ({ column }) => <SortableHeader title="Client" column={column} />,
     cell: ({ row }) => <div className="min-w-[200px]">{row.getValue("client")}</div>,
+    enableSorting: true,
   },
   {
     accessorKey: "project",
-    header: () => <CenteredHeader title="Project" />,
+    header: ({ column }) => <SortableHeader title="Project" column={column} />,
     cell: ({ row }) => <div className="min-w-[200px]">{row.getValue("project")}</div>,
+    enableSorting: true,
   },
   {
     accessorKey: "castingDate",
     header: () => <CenteredHeader title="Casting" subtitle="Date" />,
-    cell: ({ row }) => <div>{row.getValue("castingDate")}</div>,
+    cell: ({ row }) => <div className="text-center">{row.getValue("castingDate")}</div>,
   },
   {
     accessorKey: "testingDate",
     header: () => <CenteredHeader title="Testing" subtitle="Date" />,
-    cell: ({ row }) => <div>{row.getValue("testingDate")}</div>,
+    cell: ({ row }) => <div className="text-center">{row.getValue("testingDate")}</div>,
   },
   {
     accessorKey: "class",
@@ -86,7 +102,7 @@ export const getColumns = (): ColumnDef<ConcreteCube>[] => [
   {
     accessorKey: "machineUsed",
     header: () => <CenteredHeader title="Machine Used" />,
-    cell: ({ row }) => <div>{row.getValue("machineUsed")}</div>,
+    cell: ({ row }) => <div className="min-w-[120px]">{row.getValue("machineUsed")}</div>,
   },
   {
     accessorKey: "loadKN",
@@ -111,7 +127,7 @@ export const getColumns = (): ColumnDef<ConcreteCube>[] => [
   {
     accessorKey: "comment",
     header: () => <CenteredHeader title="Comment" />,
-    cell: ({ row }) => <div>{row.getValue("comment")}</div>,
+    cell: ({ row }) => <div className="min-w-[150px]">{row.getValue("comment")}</div>,
   },
   {
     accessorKey: "technician",
@@ -121,7 +137,7 @@ export const getColumns = (): ColumnDef<ConcreteCube>[] => [
   {
     accessorKey: "dateOfIssue",
     header: () => <CenteredHeader title="Date of Issue" />,
-    cell: ({ row }) => <div>{row.getValue("dateOfIssue")}</div>,
+    cell: ({ row }) => <div className="text-center">{row.getValue("dateOfIssue")}</div>,
   },
   {
     accessorKey: "issueIdSerialNo",
@@ -136,7 +152,7 @@ export const getColumns = (): ColumnDef<ConcreteCube>[] => [
   {
     accessorKey: "date",
     header: () => <CenteredHeader title="Date" />,
-    cell: ({ row }) => <div>{row.getValue("date")}</div>,
+    cell: ({ row }) => <div className="text-center">{row.getValue("date")}</div>,
   },
   {
     accessorKey: "contact",
@@ -146,6 +162,6 @@ export const getColumns = (): ColumnDef<ConcreteCube>[] => [
   {
     accessorKey: "sampleReceiptNumber",
     header: () => <CenteredHeader title="Sample Receipt Number" />,
-    cell: ({ row }) => <div>{row.getValue("sampleReceiptNumber")}</div>,
+    cell: ({ row }) => <div className="min-w-[150px]">{row.getValue("sampleReceiptNumber")}</div>,
   },
 ];

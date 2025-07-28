@@ -33,6 +33,7 @@ import { WaterAbsorption } from '@/types/water-absorption';
 import { getWaterAbsorptions } from '@/services/water-absorptions';
 import { getColumns as getWaterAbsorptionColumns } from './components/water-absorption-columns';
 import { WaterAbsorptionTable } from './components/water-absorption-table';
+import { Input } from '@/components/ui/input';
 
 export default function RegistersPage() {
   const [receipts, setReceipts] = useState<Receipt[]>([]);
@@ -42,6 +43,7 @@ export default function RegistersPage() {
   const [pavers, setPavers] = useState<Paver[]>([]);
   const [cylinders, setCylinders] = useState<Cylinder[]>([]);
   const [waterAbsorptions, setWaterAbsorptions] = useState<WaterAbsorption[]>([]);
+  
   const [isReceiptsLoading, setIsReceiptsLoading] = useState(true);
   const [isProjectsLoading, setIsProjectsLoading] = useState(true);
   const [isConcreteCubesLoading, setIsConcreteCubesLoading] = useState(true);
@@ -49,6 +51,8 @@ export default function RegistersPage() {
   const [isPaversLoading, setIsPaversLoading] = useState(true);
   const [isCylindersLoading, setIsCylindersLoading] = useState(true);
   const [isWaterAbsorptionsLoading, setIsWaterAbsorptionsLoading] = useState(true);
+  
+  const [projectFilter, setProjectFilter] = useState('');
   const { toast } = useToast();
 
   const fetchReceipts = useCallback(async () => {
@@ -217,7 +221,7 @@ export default function RegistersPage() {
           </p>
         </div>
       </div>
-      <Tabs defaultValue="sample-receipts">
+      <Tabs defaultValue="projects">
         <TabsList className="flex-wrap h-auto">
           <TabsTrigger value="sample-receipts">Sample Receipts</TabsTrigger>
           <TabsTrigger value="projects">Projects</TabsTrigger>
@@ -241,11 +245,21 @@ export default function RegistersPage() {
         <TabsContent value="projects">
            <Card>
             <CardHeader>
-              <CardTitle>Projects and Samples Register/Log Book</CardTitle>
-              <CardDescription>A log of all projects and their associated details.</CardDescription>
+              <div className="flex justify-between items-center">
+                <div>
+                    <CardTitle>Projects and Samples Register/Log Book</CardTitle>
+                    <CardDescription>A log of all projects and their associated details.</CardDescription>
+                </div>
+                <Input 
+                    placeholder="Search all projects..."
+                    value={projectFilter}
+                    onChange={(event) => setProjectFilter(event.target.value)}
+                    className="w-1/3"
+                />
+              </div>
             </CardHeader>
             <CardContent>
-                <ProjectsTable columns={projectColumns} data={projects} isLoading={isProjectsLoading} />
+                <ProjectsTable columns={projectColumns} data={projects} isLoading={isProjectsLoading} globalFilter={projectFilter} />
             </CardContent>
           </Card>
         </TabsContent>

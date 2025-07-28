@@ -1,12 +1,14 @@
 
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
   useReactTable,
 } from "@tanstack/react-table";
 import {
@@ -20,8 +22,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { WaterAbsorption } from "@/types/water-absorption";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-
+import styles from './data-table.module.css';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -34,12 +35,18 @@ export function WaterAbsorptionTable<TData extends WaterAbsorption, TValue>({
   data,
   isLoading,
 }: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = useState<SortingState>([]);
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+    },
   });
 
   if (isLoading) {
@@ -55,14 +62,14 @@ export function WaterAbsorptionTable<TData extends WaterAbsorption, TValue>({
   
   return (
     <div className="space-y-4">
-      <ScrollArea className="w-full whitespace-nowrap">
-        <Table>
-          <TableHeader>
+      <div className={styles.scrollContainer}>
+        <Table className={styles.dataTable}>
+          <TableHeader className={styles.tableHeader}>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} colSpan={header.colSpan}>
+                    <TableHead key={header.id} colSpan={header.colSpan} className={styles.tableHead}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -81,9 +88,10 @@ export function WaterAbsorptionTable<TData extends WaterAbsorption, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className={styles.dataTableRow}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className={styles.dataTableCell}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -104,8 +112,7 @@ export function WaterAbsorptionTable<TData extends WaterAbsorption, TValue>({
             )}
           </TableBody>
         </Table>
-        <ScrollBar orientation="horizontal" />
-      </ScrollArea>
+      </div>
       <div className="flex items-center justify-end space-x-2">
         <Button
           variant="outline"

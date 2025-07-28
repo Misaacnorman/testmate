@@ -5,7 +5,7 @@ import { Cylinder } from "@/types/cylinder";
 import { ColumnDef } from "@tanstack/react-table"
 
 const CenteredHeader = ({ title, subtitle }: { title: string, subtitle?: string }) => (
-  <div className="text-center font-bold text-black whitespace-normal">
+  <div className="text-center font-bold whitespace-normal">
     <div>{title}</div>
     {subtitle && <div className="font-normal">{subtitle}</div>}
   </div>
@@ -15,7 +15,7 @@ export const getColumns = (): ColumnDef<Cylinder>[] => [
   {
     accessorKey: "dateReceived",
     header: () => <CenteredHeader title="Date" subtitle="Received" />,
-    cell: ({ row }) => <div>{row.getValue("dateReceived")}</div>,
+    cell: ({ row }) => <div className="text-center">{row.getValue("dateReceived")}</div>,
   },
    {
     accessorKey: "client",
@@ -30,12 +30,12 @@ export const getColumns = (): ColumnDef<Cylinder>[] => [
   {
     accessorKey: "castingDate",
     header: () => <CenteredHeader title="Casting" subtitle="Date" />,
-    cell: ({ row }) => <div>{row.getValue("castingDate")}</div>,
+    cell: ({ row }) => <div className="text-center">{row.getValue("castingDate")}</div>,
   },
   {
     accessorKey: "testingDate",
     header: () => <CenteredHeader title="Testing" subtitle="Date" />,
-    cell: ({ row }) => <div>{row.getValue("testingDate")}</div>,
+    cell: ({ row }) => <div className="text-center">{row.getValue("testingDate")}</div>,
   },
   {
     accessorKey: "class",

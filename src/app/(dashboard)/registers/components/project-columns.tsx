@@ -3,19 +3,33 @@
 
 import { Project } from "@/types/project"
 import { ColumnDef } from "@tanstack/react-table"
+import { Button } from "@/components/ui/button"
+import { ArrowUpDown } from "lucide-react"
 
 const CenteredHeader = ({ title, subtitle }: { title: string, subtitle?: string }) => (
-  <div className="text-center font-bold text-black whitespace-normal">
+  <div className="text-center font-bold whitespace-normal">
     <div>{title}</div>
-    {subtitle && <div className="font-normal">{subtitle}</div>}
+    {subtitle && <div className="font-normal text-xs">{subtitle}</div>}
   </div>
+);
+
+const SortableHeader = ({ title, column }: { title: string, column: any }) => (
+    <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        className="w-full flex items-center justify-center"
+    >
+        <span className="text-center">{title}</span>
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+    </Button>
 );
 
 export const getColumns = (): ColumnDef<Project>[] => [
   {
     accessorKey: "date",
-    header: () => <CenteredHeader title="DATE" />,
-    cell: ({ row }) => <div>{row.getValue("date")}</div>,
+    header: ({ column }) => <SortableHeader title="DATE" column={column} />,
+    cell: ({ row }) => <div className="text-center">{row.getValue("date")}</div>,
+    enableSorting: true,
   },
   {
     id: "projectId",
@@ -35,18 +49,20 @@ export const getColumns = (): ColumnDef<Project>[] => [
   },
   {
     accessorKey: "client",
-    header: () => <CenteredHeader title="CLIENT" />,
+    header: ({ column }) => <SortableHeader title="CLIENT" column={column} />,
     cell: ({ row }) => <div className="min-w-[200px]">{row.getValue("client")}</div>,
+    enableSorting: true,
   },
   {
     accessorKey: "project",
-    header: () => <CenteredHeader title="PROJECT" />,
+    header: ({ column }) => <SortableHeader title="PROJECT" column={column} />,
     cell: ({ row }) => <div className="min-w-[200px]">{row.getValue("project")}</div>,
+    enableSorting: true,
   },
   {
     accessorKey: "engineerInCharge",
     header: () => <CenteredHeader title="ENGINEER" subtitle="IN CHARGE" />,
-    cell: ({ row }) => <div>{row.getValue("engineerInCharge")}</div>,
+    cell: ({ row }) => <div className="min-w-[120px]">{row.getValue("engineerInCharge")}</div>,
   },
   {
     id: "fieldWork",
@@ -60,7 +76,7 @@ export const getColumns = (): ColumnDef<Project>[] => [
         {
             accessorKey: 'fieldWork.technician',
             header: () => <CenteredHeader title="Technician" subtitle="in Charge" />,
-            cell: ({ row }) => <div>{row.original.fieldWork.technician}</div>,
+            cell: ({ row }) => <div className="min-w-[120px]">{row.original.fieldWork.technician}</div>,
         },
         {
             accessorKey: 'fieldWork.startDate',
@@ -75,7 +91,7 @@ export const getColumns = (): ColumnDef<Project>[] => [
         {
             accessorKey: 'fieldWork.remarks',
             header: () => <CenteredHeader title="Remark(s)" />,
-            cell: ({ row }) => <div>{row.original.fieldWork.remarks}</div>,
+            cell: ({ row }) => <div className="min-w-[150px]">{row.original.fieldWork.remarks}</div>,
         },
     ]
   },
@@ -91,7 +107,7 @@ export const getColumns = (): ColumnDef<Project>[] => [
         {
             accessorKey: 'labWork.technician',
             header: () => <CenteredHeader title="Technician" subtitle="in Charge" />,
-            cell: ({ row }) => <div>{row.original.labWork.technician}</div>,
+            cell: ({ row }) => <div className="min-w-[120px]">{row.original.labWork.technician}</div>,
         },
         {
             accessorKey: 'labWork.startDate',
@@ -121,7 +137,7 @@ export const getColumns = (): ColumnDef<Project>[] => [
         {
             accessorKey: 'labWork.remarks',
             header: () => <CenteredHeader title="Remark(s)" />,
-            cell: ({ row }) => <div>{row.original.labWork.remarks}</div>,
+            cell: ({ row }) => <div className="min-w-[150px]">{row.original.labWork.remarks}</div>,
         },
     ]
   },
@@ -137,12 +153,12 @@ export const getColumns = (): ColumnDef<Project>[] => [
         {
             accessorKey: 'dispatch.issuedBy',
             header: () => <CenteredHeader title="Report" subtitle="issued By" />,
-            cell: ({ row }) => <div>{row.original.dispatch.issuedBy}</div>,
+            cell: ({ row }) => <div className="min-w-[120px]">{row.original.dispatch.issuedBy}</div>,
         },
         {
             accessorKey: 'dispatch.deliveredTo',
             header: () => <CenteredHeader title="Report Picked/" subtitle="Delivered to" />,
-            cell: ({ row }) => <div>{row.original.dispatch.deliveredTo}</div>,
+            cell: ({ row }) => <div className="min-w-[120px]">{row.original.dispatch.deliveredTo}</div>,
         },
         {
             accessorKey: 'dispatch.contact',
@@ -152,7 +168,7 @@ export const getColumns = (): ColumnDef<Project>[] => [
         {
             accessorKey: 'dispatch.dateTime',
             header: () => <CenteredHeader title="Date and Time" />,
-            cell: ({ row }) => <div className="text-center">{row.original.dispatch.dateTime}</div>,
+            cell: ({ row }) => <div className="text-center min-w-[150px]">{row.original.dispatch.dateTime}</div>,
         },
     ]
   },

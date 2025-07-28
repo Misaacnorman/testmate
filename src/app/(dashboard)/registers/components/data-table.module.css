@@ -1,0 +1,36 @@
+.scrollContainer {
+  @apply w-full overflow-x-auto rounded-lg border;
+}
+
+.dataTable {
+  @apply w-full border-collapse;
+}
+
+.tableHeader {
+  @apply sticky top-0 z-10;
+}
+
+.tableHead {
+  @apply bg-gray-100 p-3 text-left text-sm font-bold text-gray-700 border-b-2 border-gray-200 border-x;
+  white-space: normal;
+  word-wrap: break-word;
+}
+.tableHead:first-child {
+    @apply rounded-tl-lg;
+}
+.tableHead:last-child {
+    @apply rounded-tr-lg;
+}
+
+
+.dataTableRow:nth-child(even) {
+  @apply bg-gray-50;
+}
+
+.dataTableRow:hover {
+  @apply bg-blue-50;
+}
+
+.dataTableCell {
+  @apply p-3 text-sm text-gray-700 border-b border-gray-200;
+}
