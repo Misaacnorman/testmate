@@ -25,6 +25,10 @@ import { Paver } from '@/types/paver';
 import { getPavers } from '@/services/pavers';
 import { getColumns as getPaverColumns } from './components/paver-columns';
 import { PaversTable } from './components/pavers-table';
+import { Cylinder } from '@/types/cylinder';
+import { getCylinders } from '@/services/cylinders';
+import { getColumns as getCylinderColumns } from './components/cylinder-columns';
+import { CylindersTable } from './components/cylinders-table';
 
 export default function RegistersPage() {
   const [receipts, setReceipts] = useState<Receipt[]>([]);
@@ -32,11 +36,13 @@ export default function RegistersPage() {
   const [concreteCubes, setConcreteCubes] = useState<ConcreteCube[]>([]);
   const [blocksAndBricks, setBlocksAndBricks] = useState<BlockAndBrick[]>([]);
   const [pavers, setPavers] = useState<Paver[]>([]);
+  const [cylinders, setCylinders] = useState<Cylinder[]>([]);
   const [isReceiptsLoading, setIsReceiptsLoading] = useState(true);
   const [isProjectsLoading, setIsProjectsLoading] = useState(true);
   const [isConcreteCubesLoading, setIsConcreteCubesLoading] = useState(true);
   const [isBlocksAndBricksLoading, setIsBlocksAndBricksLoading] = useState(true);
   const [isPaversLoading, setIsPaversLoading] = useState(true);
+  const [isCylindersLoading, setIsCylindersLoading] = useState(true);
   const { toast } = useToast();
 
   const fetchReceipts = useCallback(async () => {
@@ -124,13 +130,31 @@ export default function RegistersPage() {
     }
   }, [toast]);
 
+  const fetchCylinders = useCallback(async () => {
+    setIsCylindersLoading(true);
+    try {
+        const fetchedData = await getCylinders();
+        setCylinders(fetchedData);
+    } catch (error) {
+        console.error("Failed to fetch cylinders:", error);
+        toast({
+            variant: "destructive",
+            title: "Error fetching cylinders",
+            description: "Could not retrieve cylinder data.",
+        });
+    } finally {
+        setIsCylindersLoading(false);
+    }
+  }, [toast]);
+
   useEffect(() => {
     fetchReceipts();
     fetchProjects();
     fetchConcreteCubes();
     fetchBlocksAndBricks();
     fetchPavers();
-  }, [fetchReceipts, fetchProjects, fetchConcreteCubes, fetchBlocksAndBricks, fetchPavers]);
+    fetchCylinders();
+  }, [fetchReceipts, fetchProjects, fetchConcreteCubes, fetchBlocksAndBricks, fetchPavers, fetchCylinders]);
 
   const handleReceiptDeleted = useCallback(async (receiptId: string) => {
     try {
@@ -155,6 +179,7 @@ export default function RegistersPage() {
   const concreteCubesColumns = useMemo(() => getConcreteCubesColumns(), []);
   const blocksAndBricksColumns = useMemo(() => getBlocksAndBricksColumns(), []);
   const paverColumns = useMemo(() => getPaverColumns(), []);
+  const cylinderColumns = useMemo(() => getCylinderColumns(), []);
 
 
   return (
@@ -174,6 +199,7 @@ export default function RegistersPage() {
           <TabsTrigger value="concrete-cubes">Concrete Cubes</TabsTrigger>
           <TabsTrigger value="blocks-and-bricks">Blocks &amp; Bricks</TabsTrigger>
           <TabsTrigger value="pavers">Pavers</TabsTrigger>
+          <TabsTrigger value="cylinders">Cylinders</TabsTrigger>
         </TabsList>
         <TabsContent value="sample-receipts">
           <Card>
@@ -227,6 +253,17 @@ export default function RegistersPage() {
             </CardHeader>
             <CardContent>
                 <PaversTable columns={paverColumns} data={pavers} isLoading={isPaversLoading} />
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="cylinders">
+           <Card>
+            <CardHeader>
+              <CardTitle>Sample Register/Log for Concrete Cylinders</CardTitle>
+              <CardDescription>A register for all concrete cylinder tests.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <CylindersTable columns={cylinderColumns} data={cylinders} isLoading={isCylindersLoading} />
             </CardContent>
           </Card>
         </TabsContent>
