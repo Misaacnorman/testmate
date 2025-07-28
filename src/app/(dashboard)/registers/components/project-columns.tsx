@@ -18,6 +18,7 @@ export const getColumns = (): ColumnDef<Project>[] => [
     cell: ({ row }) => <div>{row.getValue("date")}</div>,
   },
   {
+    id: "projectId",
     header: () => <MultiLineHeader title="PROJECT ID" subtitle="NUMBER" />,
     columns: [
         {
@@ -48,6 +49,7 @@ export const getColumns = (): ColumnDef<Project>[] => [
     cell: ({ row }) => <div>{row.getValue("engineerInCharge")}</div>,
   },
   {
+    id: "fieldWork",
     header: () => <MultiLineHeader title="FIELD WORK" subtitle="INSTRUCTIONS" />,
     columns: [
         {
@@ -78,6 +80,7 @@ export const getColumns = (): ColumnDef<Project>[] => [
     ]
   },
   {
+    id: "labWork",
     header: () => <MultiLineHeader title="SCOPE OF WORK" subtitle="(LABORATORY TESTING)" />,
     columns: [
         {
@@ -123,6 +126,7 @@ export const getColumns = (): ColumnDef<Project>[] => [
     ]
   },
   {
+    id: "dispatch",
     header: () => <MultiLineHeader title="REPORT DISPATCH" subtitle="DETAILS" />,
     columns: [
         {
