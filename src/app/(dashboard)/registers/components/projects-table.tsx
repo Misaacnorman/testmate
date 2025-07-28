@@ -20,7 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Project } from "@/types/project";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import styles from './data-table.module.css';
 
 
 interface DataTableProps<TData, TValue> {
@@ -55,14 +55,14 @@ export function ProjectsTable<TData extends Project, TValue>({
   
   return (
     <div className="space-y-4">
-    <ScrollArea className="w-full whitespace-nowrap rounded-md border">
-        <Table className="border-collapse">
-          <TableHeader>
+      <div className={styles.scrollContainer}>
+        <Table className={styles.dataTable}>
+          <TableHeader className={styles.stickyHeader}>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} colSpan={header.colSpan} rowSpan={header.depth > 1 ? 1 : 2} className="border p-2 align-middle bg-gray-50">
+                    <TableHead key={header.id} colSpan={header.colSpan} rowSpan={header.isPlaceholder ? undefined : header.depth > 1 ? 1 : 2}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -81,10 +81,9 @@ export function ProjectsTable<TData extends Project, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className="border"
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="border p-2 h-12">
+                    <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -105,8 +104,7 @@ export function ProjectsTable<TData extends Project, TValue>({
             )}
           </TableBody>
         </Table>
-      <ScrollBar orientation="horizontal" />
-      </ScrollArea>
+      </div>
       <div className="flex items-center justify-end space-x-2">
         <Button
           variant="outline"
