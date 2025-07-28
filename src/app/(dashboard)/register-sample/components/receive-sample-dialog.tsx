@@ -210,10 +210,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         const newCategories = JSON.parse(JSON.stringify(prev));
         const categoryData = newCategories[category];
         
-        // Ensure categoryData exists before proceeding
         if (!categoryData) {
-            // This case should ideally not happen if categories are toggled first,
-            // but as a safeguard, we can initialize it.
             newCategories[category] = { quantity: 1, tests: {} };
         }
 
@@ -221,7 +218,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
             delete newCategories[category].tests[test.id];
         } else {
             newCategories[category].tests[test.id] = { 
-                quantity: newCategories[category].quantity, // Default to parent quantity
+                quantity: newCategories[category].quantity, 
                 testMethods: test.testMethods, 
                 materialTest: test.materialTest 
             };
@@ -232,9 +229,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
 
   const handleCategoryQuantityChange = (category: string, quantityStr: string) => {
     const quantity = parseInt(quantityStr, 10);
-    // If parsing results in NaN (e.g., empty string), default to 1 or maintain current.
-    // Here we default to 1 to prevent invalid states.
-    const newQuantity = isNaN(quantity) ? 1 : Math.max(1, quantity);
+    const newQuantity = isNaN(quantity) || quantity < 1 ? 1 : quantity;
 
     setSelectedCategories(prev => {
         const newCategories = JSON.parse(JSON.stringify(prev));
@@ -495,7 +490,14 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[95vh] flex flex-col">
+      <DialogContent 
+        className="max-w-4xl max-h-[95vh] flex flex-col"
+        onInteractOutside={(e) => {
+          if (currentStep > 1) {
+            e.preventDefault();
+          }
+        }}
+      >
         <DialogHeader>
           <DialogTitle>Receive New Sample (Step {currentStep} of 5)</DialogTitle>
            <DialogDescription>
@@ -888,5 +890,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
     </Dialog>
   );
 }
+
+    
 
     
