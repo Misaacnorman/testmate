@@ -28,6 +28,7 @@ export function ProjectsTable() {
                         <TableHead rowSpan={2} className="border border-gray-400 text-center font-bold text-black align-middle">ENGINEER IN CHARGE</TableHead>
                         <TableHead colSpan={5} className="border border-gray-400 text-center font-bold text-black">FIELD WORK INSTRUCTIONS</TableHead>
                         <TableHead colSpan={8} className="border border-gray-400 text-center font-bold text-black">SCOPE OF WORK (LABORATORY TESTING)</TableHead>
+                        <TableHead colSpan={5} className="border border-gray-400 text-center font-bold text-black">REPORT DISPATCH DETAILS</TableHead>
                     </TableRow>
                     <TableRow className="bg-gray-200">
                         <TableHead className="border border-gray-400 text-center font-bold text-black">BIG PROJECTS</TableHead>
@@ -45,6 +46,11 @@ export function ProjectsTable() {
                         <TableHead className="border border-gray-400 text-center font-bold text-black">Actual Delivery date</TableHead>
                         <TableHead className="border border-gray-400 text-center font-bold text-black">Signature</TableHead>
                         <TableHead className="border border-gray-400 text-center font-bold text-black">Remark(s)</TableHead>
+                        <TableHead className="border border-gray-400 text-center font-bold text-black">Acknowledgement after Delivery</TableHead>
+                        <TableHead className="border border-gray-400 text-center font-bold text-black">Report issued By</TableHead>
+                        <TableHead className="border border-gray-400 text-center font-bold text-black">Report Picked/ Delivered to</TableHead>
+                        <TableHead className="border border-gray-400 text-center font-bold text-black">Contact</TableHead>
+                        <TableHead className="border border-gray-400 text-center font-bold text-black">Date and Time</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -61,6 +67,11 @@ export function ProjectsTable() {
                             <TableCell className="border border-gray-400 p-0 h-10"></TableCell>
                             <TableCell className="border border-gray-400 p-0 h-10"></TableCell>
                             <TableCell className="border border-gray-400 p-0 h-10"></TableCell>
+                            <TableCell className="border border-gray-400 p-0 h-10"></TableCell>
+                            <TableCell className="border border-gray-400 p-0 h-10"></TableCell>
+                            <TableCell className="border border-gray-400 p-0 h-10"></TableCell>
+                            <TableCell className="border border-gray-400 p-0 h-10"></TableCell>
+                            <TableCell className="border border-gray-400 p-0 h-1e0"></TableCell>
                             <TableCell className="border border-gray-400 p-0 h-10"></TableCell>
                             <TableCell className="border border-gray-400 p-0 h-10"></TableCell>
                             <TableCell className="border border-gray-400 p-0 h-10"></TableCell>
