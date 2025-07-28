@@ -55,7 +55,7 @@ export function CylindersTable<TData extends Cylinder, TValue>({
   
   return (
     <div className="space-y-4">
-      <div className={styles.scrollContainer}>
+      <div className="rounded-md border">
         <Table className={styles.dataTable}>
           <TableHeader className={styles.stickyHeader}>
             {table.getHeaderGroups().map((headerGroup) => (

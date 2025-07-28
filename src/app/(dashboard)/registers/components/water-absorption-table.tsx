@@ -55,7 +55,7 @@ export function WaterAbsorptionTable<TData extends WaterAbsorption, TValue>({
   
   return (
     <div className="space-y-4">
-      <div className={styles.scrollContainer}>
+       <div className="rounded-md border">
         <Table className={styles.dataTable}>
           <TableHeader className={styles.stickyHeader}>
             {table.getHeaderGroups().map((headerGroup) => (

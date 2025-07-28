@@ -1,14 +1,8 @@
 
-.scrollContainer {
-    max-width: 100%;
-    overflow-x: auto;
-    border-radius: var(--radius);
-    border: 1px solid hsl(var(--border));
-}
-
 .dataTable {
     border-collapse: separate;
     border-spacing: 0;
+    width: 100%;
 }
 
 .stickyHeader {
@@ -40,7 +34,6 @@
     font-size: 12px;
     border-bottom: 1px solid hsl(var(--border));
     border-right: 1px solid hsl(var(--border));
-    white-space: nowrap;
 }
 
 .dataTable td:last-child {
