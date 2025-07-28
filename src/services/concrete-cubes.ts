@@ -3,7 +3,7 @@
 
 import { db } from '@/lib/firebase';
 import { ConcreteCube } from '@/types/concrete-cube';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, addDoc } from 'firebase/firestore';
 
 const concreteCubesCollection = collection(db, 'concreteCubes');
 
@@ -65,5 +65,24 @@ const sampleCubes: ConcreteCube[] = [
 ];
 
 export async function getConcreteCubes(): Promise<ConcreteCube[]> {
+    // This is a temporary measure to keep the UI populated.
+    // In a real scenario, you'd fetch from Firestore like this:
+    // const snapshot = await getDocs(concreteCubesCollection);
+    // return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as ConcreteCube));
     return Promise.resolve(sampleCubes);
 }
+
+export async function addConcreteCube(data: Omit<ConcreteCube, 'id'>): Promise<ConcreteCube> {
+    // For now, we add to the local sample data.
+    // Replace with Firestore logic in production.
+    const newCube: ConcreteCube = {
+        id: `CUBE-${Date.now()}`,
+        ...data,
+    };
+    sampleCubes.push(newCube);
+    // const docRef = await addDoc(concreteCubesCollection, data);
+    // return { id: docRef.id, ...data };
+    return Promise.resolve(newCube);
+}
+
+    

@@ -3,7 +3,7 @@
 
 import { db } from '@/lib/firebase';
 import { BlockAndBrick } from '@/types/block-and-brick';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, addDoc } from 'firebase/firestore';
 
 const blocksAndBricksCollection = collection(db, 'blocksAndBricks');
 
@@ -76,5 +76,24 @@ const sampleBlocksAndBricks: BlockAndBrick[] = [
 
 
 export async function getBlocksAndBricks(): Promise<BlockAndBrick[]> {
+    // This is a temporary measure to keep the UI populated.
+    // In a real scenario, you'd fetch from Firestore like this:
+    // const snapshot = await getDocs(blocksAndBricksCollection);
+    // return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as BlockAndBrick));
     return Promise.resolve(sampleBlocksAndBricks);
 }
+
+export async function addBlockAndBrick(data: Omit<BlockAndBrick, 'id'>): Promise<BlockAndBrick> {
+    // For now, we add to the local sample data.
+    // Replace with Firestore logic in production.
+    const newEntry: BlockAndBrick = {
+        id: `BB-${Date.now()}`,
+        ...data,
+    };
+    sampleBlocksAndBricks.push(newEntry);
+    // const docRef = await addDoc(blocksAndBricksCollection, data);
+    // return { id: docRef.id, ...data };
+    return Promise.resolve(newEntry);
+}
+
+    

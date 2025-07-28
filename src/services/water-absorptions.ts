@@ -3,7 +3,7 @@
 
 import { db } from '@/lib/firebase';
 import { WaterAbsorption } from '@/types/water-absorption';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, addDoc } from 'firebase/firestore';
 
 const waterAbsorptionsCollection = collection(db, 'waterAbsorptions');
 
@@ -63,5 +63,24 @@ const sampleWaterAbsorptions: WaterAbsorption[] = [
 ];
 
 export async function getWaterAbsorptions(): Promise<WaterAbsorption[]> {
+    // This is a temporary measure to keep the UI populated.
+    // In a real scenario, you'd fetch from Firestore like this:
+    // const snapshot = await getDocs(waterAbsorptionsCollection);
+    // return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as WaterAbsorption));
     return Promise.resolve(sampleWaterAbsorptions);
 }
+
+export async function addWaterAbsorption(data: Omit<WaterAbsorption, 'id'>): Promise<WaterAbsorption> {
+    // For now, we add to the local sample data.
+    // Replace with Firestore logic in production.
+    const newEntry: WaterAbsorption = {
+        id: `WA-${Date.now()}`,
+        ...data,
+    };
+    sampleWaterAbsorptions.push(newEntry);
+    // const docRef = await addDoc(waterAbsorptionsCollection, data);
+    // return { id: docRef.id, ...data };
+    return Promise.resolve(newEntry);
+}
+
+    

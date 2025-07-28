@@ -3,7 +3,7 @@
 
 import { db } from '@/lib/firebase';
 import { Cylinder } from '@/types/cylinder';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, addDoc } from 'firebase/firestore';
 
 const cylindersCollection = collection(db, 'cylinders');
 
@@ -65,5 +65,25 @@ const sampleCylinders: Cylinder[] = [
 ];
 
 export async function getCylinders(): Promise<Cylinder[]> {
+    // This is a temporary measure to keep the UI populated.
+    // In a real scenario, you'd fetch from Firestore like this:
+    // const snapshot = await getDocs(cylindersCollection);
+    // return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Cylinder));
     return Promise.resolve(sampleCylinders);
 }
+
+
+export async function addCylinder(data: Omit<Cylinder, 'id'>): Promise<Cylinder> {
+    // For now, we add to the local sample data.
+    // Replace with Firestore logic in production.
+    const newEntry: Cylinder = {
+        id: `CYL-${Date.now()}`,
+        ...data,
+    };
+    sampleCylinders.push(newEntry);
+    // const docRef = await addDoc(cylindersCollection, data);
+    // return { id: docRef.id, ...data };
+    return Promise.resolve(newEntry);
+}
+
+    

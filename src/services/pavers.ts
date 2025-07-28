@@ -3,7 +3,7 @@
 
 import { db } from '@/lib/firebase';
 import { Paver } from '@/types/paver';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, addDoc } from 'firebase/firestore';
 
 const paversCollection = collection(db, 'pavers');
 
@@ -69,5 +69,25 @@ const samplePavers: Paver[] = [
 ];
 
 export async function getPavers(): Promise<Paver[]> {
+    // This is a temporary measure to keep the UI populated.
+    // In a real scenario, you'd fetch from Firestore like this:
+    // const snapshot = await getDocs(paversCollection);
+    // return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Paver));
     return Promise.resolve(samplePavers);
 }
+
+
+export async function addPaver(data: Omit<Paver, 'id'>): Promise<Paver> {
+    // For now, we add to the local sample data.
+    // Replace with Firestore logic in production.
+    const newEntry: Paver = {
+        id: `PAVER-${Date.now()}`,
+        ...data,
+    };
+    samplePavers.push(newEntry);
+    // const docRef = await addDoc(paversCollection, data);
+    // return { id: docRef.id, ...data };
+    return Promise.resolve(newEntry);
+}
+
+    

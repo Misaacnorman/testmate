@@ -25,7 +25,7 @@ import { Separator } from "@/components/ui/separator";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Textarea } from "@/components/ui/textarea";
 import { getTests } from "@/services/tests";
-import { addReceipt } from "@/services/receipts";
+import { processAndSaveReceipt } from "@/services/receipts";
 import { Test } from "@/types/test";
 import { useToast } from "@/hooks/use-toast";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -425,18 +425,19 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
     };
 
     try {
-        const newReceipt = await addReceipt(receiptData);
+        const newReceipt = await processAndSaveReceipt(receiptData);
         toast({
             title: "Receipt Saved",
-            description: `Receipt with ID ${newReceipt.id} has been saved successfully.`,
+            description: `Receipt with ID ${newReceipt.id} has been saved and registers have been updated.`,
         });
         onOpenChange(false);
         router.push(`/logs/${newReceipt.id}`);
     } catch(error) {
+        console.error(error);
          toast({
             variant: "destructive",
             title: "Error",
-            description: "Could not save the receipt.",
+            description: "Could not save the receipt and update registers.",
           });
     } finally {
       setIsSubmitting(false);
@@ -909,5 +910,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
   );
 }
 
+
+    
 
     

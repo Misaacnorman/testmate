@@ -3,7 +3,7 @@
 
 import { db } from '@/lib/firebase';
 import { Project } from '@/types/project';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, addDoc } from 'firebase/firestore';
 
 const projectsCollection = collection(db, 'projects');
 
@@ -75,5 +75,24 @@ const sampleProjects: Project[] = [
 ];
 
 export async function getProjects(): Promise<Project[]> {
+    // This is a temporary measure to keep the UI populated.
+    // In a real scenario, you'd fetch from Firestore like this:
+    // const snapshot = await getDocs(projectsCollection);
+    // return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Project));
     return Promise.resolve(sampleProjects);
 }
+
+export async function addProject(data: Omit<Project, 'id'>): Promise<Project> {
+    // For now, we add to the local sample data.
+    // Replace with Firestore logic in production.
+    const newProject: Project = {
+        id: `PROJ-${Date.now()}`,
+        ...data,
+    };
+    sampleProjects.push(newProject);
+    // const docRef = await addDoc(projectsCollection, data);
+    // return { id: docRef.id, ...data };
+    return Promise.resolve(newProject);
+}
+
+    
