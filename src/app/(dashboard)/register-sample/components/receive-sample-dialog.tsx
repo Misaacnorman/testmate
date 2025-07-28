@@ -29,7 +29,7 @@ import { addReceipt } from "@/services/receipts";
 import { Test } from "@/types/test";
 import { useToast } from "@/hooks/use-toast";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SampleReceipt } from "./sample-receipt";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -85,8 +85,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
   const [step1Data, setStep1Data] = useState<Step1Data | null>(null);
   const [selectedCategories, setSelectedCategories] = useState<Record<string, SelectedCategory>>({});
   const [step4Data, setStep4Data] = useState<Record<string, any>>({});
-  const [showReceipt, setShowReceipt] = useState(false);
-  const [receiptId, setReceiptId] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const receiptDate = useMemo(() => new Date(), []);
   
@@ -125,7 +124,6 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
       setStep1Data(null);
       setSelectedCategories({});
       setStep4Data({});
-      setShowReceipt(false);
     }
   }, [open, toast, form1]);
 
@@ -352,7 +350,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
 
   const handleSetDistribution = (category: string, testId: string, numSets: number) => {
     const totalQuantity = selectedCategories[category].tests[testId].quantity;
-    if (totalQuantity === 0 || numSets <= 0) return;
+    if (totalQuantity === 0 || numSets <= 0 || isNaN(numSets)) return;
     
     if (isNaN(numSets) || numSets < 1) {
         numSets = 1;
@@ -390,7 +388,9 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
   };
 
   const handleConfirmAndGenerate = async () => {
-    if (!step1Data) return;
+    if (!step1Data || isSubmitting) return;
+
+    setIsSubmitting(true);
     
     const receiptData = {
         receiptDate,
@@ -401,18 +401,20 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
 
     try {
         const newReceipt = await addReceipt(receiptData);
-        setReceiptId(newReceipt.id);
         toast({
             title: "Receipt Saved",
             description: `Receipt with ID ${newReceipt.id} has been saved successfully.`,
         });
-        setShowReceipt(true);
+        onOpenChange(false);
+        router.push(`/logs/${newReceipt.id}`);
     } catch(error) {
          toast({
             variant: "destructive",
             title: "Error",
             description: "Could not save the receipt.",
           });
+    } finally {
+      setIsSubmitting(false);
     }
   };
   
@@ -477,22 +479,6 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
               </AccordionContent>
             </AccordionItem>
         ));
-  }
-
-  if (showReceipt && receiptId) {
-    return (
-        <SampleReceipt 
-            receiptId={receiptId}
-            formData={step1Data} 
-            categories={selectedCategories} 
-            specialData={step4Data} 
-            receiptDate={receiptDate} 
-            onClose={() => {
-                onOpenChange(false);
-                router.push(`/logs/${receiptId}`);
-            }} 
-        />
-    );
   }
 
   return (
@@ -883,7 +869,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
             <Button variant="ghost" onClick={handleBack} className="mr-auto">Back</Button>
           )}
           {(currentStep < 5) && <Button onClick={handleNext}>Next</Button>}
-          {currentStep === 5 && <Button onClick={handleConfirmAndGenerate}>Confirm & Generate Receipt</Button>}
+          {currentStep === 5 && <Button onClick={handleConfirmAndGenerate} disabled={isSubmitting}>{isSubmitting ? "Saving..." : "Confirm & Generate Receipt"}</Button>}
           <DialogClose asChild><Button variant="outline">Cancel</Button></DialogClose>
         </DialogFooter>
       </DialogContent>
