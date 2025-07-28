@@ -1,13 +1,13 @@
 
 "use client";
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getReceipts } from '@/services/receipts';
+import { getReceipts, deleteReceipt } from '@/services/receipts';
 import { Receipt } from '@/types/receipt';
 import { useToast } from '@/hooks/use-toast';
-import { columns } from './components/columns';
+import { getColumns } from './components/columns';
 import { DataTable } from './components/data-table';
 
 export default function RegistersPage() {
@@ -35,6 +35,26 @@ export default function RegistersPage() {
   useEffect(() => {
     fetchReceipts();
   }, [fetchReceipts]);
+
+  const handleReceiptDeleted = useCallback(async (receiptId: string) => {
+    try {
+      await deleteReceipt(receiptId);
+      toast({
+        title: "Receipt Deleted",
+        description: "The receipt has been successfully deleted.",
+      });
+      fetchReceipts(); // Refetch data to update the table
+    } catch (error) {
+      console.error("Failed to delete receipt:", error);
+      toast({
+        variant: "destructive",
+        title: "Error deleting receipt",
+        description: "Could not delete the receipt.",
+      });
+    }
+  }, [fetchReceipts, toast]);
+
+  const columns = useMemo(() => getColumns({ onDelete: handleReceiptDeleted }), [handleReceiptDeleted]);
 
   return (
     <div className="flex-1 space-y-4 p-4 sm:p-6 md:p-8">

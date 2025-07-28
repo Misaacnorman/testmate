@@ -3,7 +3,7 @@
 
 import { db } from '@/lib/firebase';
 import { Receipt } from '@/types/receipt';
-import { collection, getDocs, doc, getDoc, setDoc, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc, setDoc, query, orderBy, deleteDoc } from 'firebase/firestore';
 
 const receiptsCollection = collection(db, 'receipts');
 
@@ -30,4 +30,9 @@ export async function addReceipt(receipt: Omit<Receipt, 'id'>): Promise<Receipt>
     const docRef = doc(db, 'receipts', id);
     await setDoc(docRef, receipt);
     return newReceipt;
+}
+
+export async function deleteReceipt(receiptId: string): Promise<void> {
+    const receiptDoc = doc(db, 'receipts', receiptId);
+    await deleteDoc(receiptDoc);
 }
