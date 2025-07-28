@@ -3,7 +3,7 @@
 
 import { db } from '@/lib/firebase';
 import { Receipt } from '@/types/receipt';
-import { collection, getDocs, doc, getDoc, setDoc, query, orderBy, deleteDoc, Timestamp, addDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc, deleteDoc, Timestamp, addDoc, query, orderBy, DocumentData } from 'firebase/firestore';
 import { format } from 'date-fns';
 import { addConcreteCube } from './concrete-cubes';
 import { addBlockAndBrick } from './blocks-and-bricks';
@@ -14,28 +14,38 @@ import { addProject } from './projects';
 
 const receiptsCollection = collection(db, 'receipts');
 
-const convertDocToReceipt = (doc: any): Receipt => {
+// Generic helper to convert Firestore Timestamps to JS Dates in any object
+export const fromFirestore = <T extends { id: string }>(doc: DocumentData): T => {
     const data = doc.data();
-    const receipt: any = { id: doc.id };
+    const convertedData: { [key: string]: any } = { id: doc.id };
 
     for (const key in data) {
         if (Object.prototype.hasOwnProperty.call(data, key)) {
             const value = data[key];
             if (value instanceof Timestamp) {
-                receipt[key] = value.toDate();
+                convertedData[key] = value.toDate();
+            } else if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+                // Recursively convert nested objects, but not arrays for now
+                const nestedData = { ...value };
+                for(const nestedKey in nestedData) {
+                    if (nestedData[nestedKey] instanceof Timestamp) {
+                        nestedData[nestedKey] = nestedData[nestedKey].toDate();
+                    }
+                }
+                 convertedData[key] = nestedData;
             } else {
-                receipt[key] = value;
+                convertedData[key] = value;
             }
         }
     }
-    return receipt as Receipt;
+    return convertedData as T;
 };
 
 
 export async function getReceipts(): Promise<Receipt[]> {
     const q = query(receiptsCollection, orderBy("receiptDate", "desc"));
     const snapshot = await getDocs(q);
-    return snapshot.docs.map(convertDocToReceipt);
+    return snapshot.docs.map(doc => fromFirestore<Receipt>(doc));
 }
 
 export async function getReceiptById(id: string): Promise<Receipt | null> {
@@ -43,14 +53,20 @@ export async function getReceiptById(id: string): Promise<Receipt | null> {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-        return convertDocToReceipt(docSnap);
+        return fromFirestore<Receipt>(docSnap);
     } else {
         return null;
     }
 }
 
 export async function addReceipt(receipt: Omit<Receipt, 'id'>): Promise<Receipt> {
-    const docRef = await addDoc(receiptsCollection, receipt);
+    // Convert JS Dates to Firestore Timestamps before saving
+    const dataToSave = { ...receipt };
+    if (dataToSave.receiptDate) {
+        (dataToSave as any).receiptDate = Timestamp.fromDate(dataToSave.receiptDate);
+    }
+
+    const docRef = await addDoc(receiptsCollection, dataToSave);
     return { id: docRef.id, ...receipt };
 }
 
@@ -88,8 +104,8 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
                     for (const sampleId of set.serials) {
                         const commonSetData = {
                             ...baseData,
-                            castingDate: set.castingDate ? format(set.castingDate, "yyyy-MM-dd") : '',
-                            testingDate: set.testingDate ? format(set.testingDate, "yyyy-MM-dd") : '',
+                            castingDate: set.castingDate ? format(new Date(set.castingDate), "yyyy-MM-dd") : '',
+                            testingDate: set.testingDate ? format(new Date(set.testingDate), "yyyy-MM-dd") : '',
                             ageDays: set.age || 0,
                             areaOfUse: set.areaOfUse || '',
                             sampleId,
@@ -176,8 +192,8 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
                         for (const sampleId of set.serials) {
                              await addWaterAbsorption({
                                 ...baseData,
-                                castingDate: set.castingDate ? format(set.castingDate, "yyyy-MM-dd") : '',
-                                testingDate: set.testingDate ? format(set.testingDate, "yyyy-MM-dd") : '',
+                                castingDate: set.castingDate ? format(new Date(set.castingDate), "yyyy-MM-dd") : '',
+                                testingDate: set.testingDate ? format(new Date(set.testingDate), "yyyy-MM-dd") : '',
                                 ageDays: set.age || 0,
                                 areaOfUse: set.areaOfUse || '',
                                 sampleId,
@@ -230,5 +246,3 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
 
     return newReceipt;
 }
-
-    

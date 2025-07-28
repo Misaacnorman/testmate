@@ -4,12 +4,13 @@
 import { db } from '@/lib/firebase';
 import { Cylinder } from '@/types/cylinder';
 import { collection, getDocs, addDoc } from 'firebase/firestore';
+import { fromFirestore } from './receipts';
 
 const cylindersCollection = collection(db, 'cylinders');
 
 export async function getCylinders(): Promise<Cylinder[]> {
     const snapshot = await getDocs(cylindersCollection);
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Cylinder));
+    return snapshot.docs.map(doc => fromFirestore<Cylinder>(doc));
 }
 
 
