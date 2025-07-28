@@ -9,6 +9,7 @@ import { Receipt } from '@/types/receipt';
 import { useToast } from '@/hooks/use-toast';
 import { getColumns } from './components/columns';
 import { DataTable } from './components/data-table';
+import { ProjectsTable } from './components/projects-table';
 
 export default function RegistersPage() {
   const [receipts, setReceipts] = useState<Receipt[]>([]);
@@ -69,6 +70,7 @@ export default function RegistersPage() {
       <Tabs defaultValue="sample-receipts">
         <TabsList>
           <TabsTrigger value="sample-receipts">Sample Receipts</TabsTrigger>
+          <TabsTrigger value="projects">Projects</TabsTrigger>
         </TabsList>
         <TabsContent value="sample-receipts">
           <Card>
@@ -78,6 +80,17 @@ export default function RegistersPage() {
             </CardHeader>
             <CardContent>
               <DataTable columns={columns} data={receipts} isLoading={isLoading} />
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="projects">
+           <Card>
+            <CardHeader>
+              <CardTitle>Projects and Samples Register/Log Book</CardTitle>
+              <CardDescription>A log of all projects and their associated details.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <ProjectsTable />
             </CardContent>
           </Card>
         </TabsContent>
