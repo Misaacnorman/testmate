@@ -2,7 +2,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { format, isValid } from "date-fns";
+import { format, isValid, parseISO } from "date-fns";
 import React from 'react';
 
 type SampleReceiptProps = {
@@ -14,22 +14,22 @@ type SampleReceiptProps = {
     onClose: () => void;
 };
 
-// Helper function to safely format dates
-const formatDate = (date: any) => {
+// Helper to safely format dates that might be strings or Date objects
+const safeFormat = (date: string | Date | undefined | null, formatString: string) => {
     if (!date) return 'N/A';
-    // It might be a Firestore Timestamp object from the server, convert it.
-    if (typeof date === 'object' && date.seconds) {
-        date = new Date(date.seconds * 1000);
-    }
-    // It might be a date string
-    else if (typeof date === 'string') {
-        date = new Date(date);
+    
+    let dateObj: Date;
+    if (typeof date === 'string') {
+        dateObj = parseISO(date);
+    } else {
+        dateObj = date;
     }
 
-    if (isValid(date)) {
-        return format(date, 'yy-MM-dd');
+    if (isValid(dateObj)) {
+        return format(dateObj, formatString);
     }
-    return 'N/A';
+    
+    return 'Invalid Date';
 };
 
 export function SampleReceipt({ receiptId, formData, categories, specialData, receiptDate, onClose }: SampleReceiptProps) {
@@ -73,8 +73,8 @@ export function SampleReceipt({ receiptId, formData, categories, specialData, re
                      <div key={index} className="text-xs space-y-1 p-1 border-t first:border-t-0">
                         <p><strong>Set {index + 1} (Qty: {data.setDistribution[index]})</strong></p>
                         <div className="pl-2">
-                            <p>Casting: {formatDate(set.castingDate)}</p>
-                            <p>Testing: {formatDate(set.testingDate)}</p>
+                            <p>Casting: {safeFormat(set.castingDate, 'yy-MM-dd')}</p>
+                            <p>Testing: {safeFormat(set.testingDate, 'yy-MM-dd')}</p>
                             <p>Age: {set.age || 'N/A'} days</p>
                             <p>Area: {set.areaOfUse || 'N/A'}</p>
                             {set.class && <p>Class: {set.class}</p>}
@@ -101,7 +101,7 @@ export function SampleReceipt({ receiptId, formData, categories, specialData, re
                     <div className="text-right">
                         <h2 className="text-xl font-semibold text-red-600">Sample Receipt</h2>
                         <p className="text-xs">Receipt No: <span className="font-mono">{receiptId}</span></p>
-                        <p className="text-xs">Date: <span className="font-mono">{format(receiptDate, 'yyyy-MM-dd HH:mm')}</span></p>
+                        <p className="text-xs">Date: <span className="font-mono">{safeFormat(receiptDate, 'yyyy-MM-dd HH:mm')}</span></p>
                     </div>
                 </div>
 
