@@ -47,6 +47,7 @@ import { TestPaversDialog } from './components/test-pavers-dialog';
 import { TestCylindersDialog } from './components/test-cylinders-dialog';
 import { TestWaterAbsorptionsDialog } from './components/test-water-absorptions-dialog';
 import { EditProjectDialog } from './components/edit-project-dialog';
+import { CreateProjectDialog } from './components/create-project-dialog';
 
 
 export default function RegistersPage() {
@@ -495,17 +496,20 @@ export default function RegistersPage() {
           <TabsContent value="projects">
             <Card>
               <CardHeader>
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center gap-4">
                   <div>
                       <CardTitle>Projects and Samples Register/Log Book</CardTitle>
                       <CardDescription>A log of all projects and their associated details.</CardDescription>
                   </div>
-                  <Input 
-                      placeholder="Search all projects..."
-                      value={projectFilter}
-                      onChange={(event) => setProjectFilter(event.target.value)}
-                      className="w-1/3"
-                  />
+                  <div className="flex items-center gap-2">
+                    <Input 
+                        placeholder="Search all projects..."
+                        value={projectFilter}
+                        onChange={(event) => setProjectFilter(event.target.value)}
+                        className="w-64"
+                    />
+                    <CreateProjectDialog onProjectCreated={fetchProjects} />
+                  </div>
                 </div>
               </CardHeader>
               <CardContent>
