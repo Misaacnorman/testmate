@@ -209,11 +209,19 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
     setSelectedCategories(prev => {
         const newCategories = JSON.parse(JSON.stringify(prev));
         const categoryData = newCategories[category];
-        if (categoryData.tests[test.id]) {
-            delete categoryData.tests[test.id];
+        
+        // Ensure categoryData exists before proceeding
+        if (!categoryData) {
+            // This case should ideally not happen if categories are toggled first,
+            // but as a safeguard, we can initialize it.
+            newCategories[category] = { quantity: 1, tests: {} };
+        }
+
+        if (newCategories[category].tests[test.id]) {
+            delete newCategories[category].tests[test.id];
         } else {
-            categoryData.tests[test.id] = { 
-                quantity: categoryData.quantity, // Default to parent quantity
+            newCategories[category].tests[test.id] = { 
+                quantity: newCategories[category].quantity, // Default to parent quantity
                 testMethods: test.testMethods, 
                 materialTest: test.materialTest 
             };
@@ -222,8 +230,12 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
     });
   };
 
-  const handleCategoryQuantityChange = (category: string, quantity: number) => {
-    const newQuantity = Math.max(1, quantity);
+  const handleCategoryQuantityChange = (category: string, quantityStr: string) => {
+    const quantity = parseInt(quantityStr, 10);
+    // If parsing results in NaN (e.g., empty string), default to 1 or maintain current.
+    // Here we default to 1 to prevent invalid states.
+    const newQuantity = isNaN(quantity) ? 1 : Math.max(1, quantity);
+
     setSelectedCategories(prev => {
         const newCategories = JSON.parse(JSON.stringify(prev));
         const catData = newCategories[category];
@@ -679,7 +691,7 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                                         className="w-24"
                                         value={selectedCategories[category]?.quantity}
                                         onClick={(e) => e.stopPropagation()}
-                                        onChange={(e) => handleCategoryQuantityChange(category, parseInt(e.target.value, 10))}
+                                        onChange={(e) => handleCategoryQuantityChange(category, e.target.value)}
                                         min={1}
                                     />
                                 </div>
@@ -876,3 +888,5 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
     </Dialog>
   );
 }
+
+    
