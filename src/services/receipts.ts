@@ -3,14 +3,32 @@
 
 import { db } from '@/lib/firebase';
 import { Receipt } from '@/types/receipt';
-import { collection, getDocs, doc, getDoc, setDoc, query, orderBy, deleteDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc, setDoc, query, orderBy, deleteDoc, Timestamp } from 'firebase/firestore';
 
 const receiptsCollection = collection(db, 'receipts');
+
+const convertDocToReceipt = (doc: any): Receipt => {
+    const data = doc.data();
+    const receipt: any = { id: doc.id };
+
+    for (const key in data) {
+        if (Object.prototype.hasOwnProperty.call(data, key)) {
+            const value = data[key];
+            if (value instanceof Timestamp) {
+                receipt[key] = value.toDate();
+            } else {
+                receipt[key] = value;
+            }
+        }
+    }
+    return receipt as Receipt;
+};
+
 
 export async function getReceipts(): Promise<Receipt[]> {
     const q = query(receiptsCollection, orderBy("receiptDate", "desc"));
     const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Receipt));
+    return snapshot.docs.map(convertDocToReceipt);
 }
 
 export async function getReceiptById(id: string): Promise<Receipt | null> {
@@ -18,7 +36,8 @@ export async function getReceiptById(id: string): Promise<Receipt | null> {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-        return { id: docSnap.id, ...docSnap.data() } as Receipt;
+        // We can reuse the same converter, but need to pass the doc snapshot
+        return convertDocToReceipt(docSnap);
     } else {
         return null;
     }
