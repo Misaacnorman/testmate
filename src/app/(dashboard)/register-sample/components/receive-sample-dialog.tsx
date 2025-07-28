@@ -25,15 +25,18 @@ import { Separator } from "@/components/ui/separator";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Textarea } from "@/components/ui/textarea";
 import { getTests } from "@/services/tests";
+import { addReceipt } from "@/services/receipts";
 import { Test } from "@/types/test";
 import { useToast } from "@/hooks/use-toast";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon, ChevronDown } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SampleReceipt } from "./sample-receipt";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Calendar } from "@/components/ui/calendar";
+import { useRouter } from "next/navigation";
+
 
 // Step 1 Schema
 const step1Schema = z.object({
@@ -77,11 +80,13 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
   const [allTests, setAllTests] = useState<Test[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
+  const router = useRouter();
 
   const [step1Data, setStep1Data] = useState<Step1Data | null>(null);
   const [selectedCategories, setSelectedCategories] = useState<Record<string, SelectedCategory>>({});
   const [step4Data, setStep4Data] = useState<Record<string, any>>({});
   const [showReceipt, setShowReceipt] = useState(false);
+  const [receiptId, setReceiptId] = useState<string | null>(null);
 
   const receiptDate = useMemo(() => new Date(), []);
   
@@ -348,6 +353,11 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
   const handleSetDistribution = (category: string, testId: string, numSets: number) => {
     const totalQuantity = selectedCategories[category].tests[testId].quantity;
     if (totalQuantity === 0 || numSets <= 0) return;
+    
+    if (isNaN(numSets) || numSets < 1) {
+        numSets = 1;
+    }
+
     const base = Math.floor(totalQuantity / numSets);
     const remainder = totalQuantity % numSets;
     const distribution = Array(numSets).fill(base);
@@ -377,6 +387,33 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
             }
         }
     }));
+  };
+
+  const handleConfirmAndGenerate = async () => {
+    if (!step1Data) return;
+    
+    const receiptData = {
+        receiptDate,
+        formData: step1Data,
+        categories: selectedCategories,
+        specialData: step4Data,
+    };
+
+    try {
+        const newReceipt = await addReceipt(receiptData);
+        setReceiptId(newReceipt.id);
+        toast({
+            title: "Receipt Saved",
+            description: `Receipt with ID ${newReceipt.id} has been saved successfully.`,
+        });
+        setShowReceipt(true);
+    } catch(error) {
+         toast({
+            variant: "destructive",
+            title: "Error",
+            description: "Could not save the receipt.",
+          });
+    }
   };
   
   const renderSetFields = (category: string, testId: string, setsData: any) => {
@@ -442,8 +479,20 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         ));
   }
 
-  if (showReceipt) {
-    return <SampleReceipt formData={step1Data} categories={selectedCategories} specialData={step4Data} receiptDate={receiptDate} onClose={() => onOpenChange(false)} />;
+  if (showReceipt && receiptId) {
+    return (
+        <SampleReceipt 
+            receiptId={receiptId}
+            formData={step1Data} 
+            categories={selectedCategories} 
+            specialData={step4Data} 
+            receiptDate={receiptDate} 
+            onClose={() => {
+                onOpenChange(false);
+                router.push(`/logs/${receiptId}`);
+            }} 
+        />
+    );
   }
 
   return (
@@ -834,16 +883,10 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
             <Button variant="ghost" onClick={handleBack} className="mr-auto">Back</Button>
           )}
           {(currentStep < 5) && <Button onClick={handleNext}>Next</Button>}
-          {currentStep === 5 && <Button onClick={() => setShowReceipt(true)}>Confirm & Generate Receipt</Button>}
+          {currentStep === 5 && <Button onClick={handleConfirmAndGenerate}>Confirm & Generate Receipt</Button>}
           <DialogClose asChild><Button variant="outline">Cancel</Button></DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 }
-
-    
-
-    
-
-    
