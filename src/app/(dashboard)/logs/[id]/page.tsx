@@ -9,38 +9,6 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Terminal } from 'lucide-react';
 import { useParams } from 'next/navigation';
 
-// Helper function to recursively convert Firestore Timestamps to JS Dates
-// This needs to be robust to handle all nested levels of the receipt object.
-const convertTimestamps = (obj: any): any => {
-    if (obj === null || obj === undefined) {
-        return obj;
-    }
-
-    // Check if the object is a Firestore Timestamp
-    if (obj && typeof obj === 'object' && typeof obj.toDate === 'function') {
-        return obj.toDate();
-    }
-    
-    // Check for array and recursively convert its items
-    if (Array.isArray(obj)) {
-        return obj.map(item => convertTimestamps(item));
-    }
-
-    // Check for object and recursively convert its values
-    if (typeof obj === 'object') {
-        const newObj: { [key: string]: any } = {};
-        for (const key in obj) {
-            if (Object.prototype.hasOwnProperty.call(obj, key)) {
-                newObj[key] = convertTimestamps(obj[key]);
-            }
-        }
-        return newObj;
-    }
-
-    return obj;
-};
-
-
 export default function ReceiptPage() {
     const params = useParams();
     const id = params.id as string;
@@ -56,9 +24,7 @@ export default function ReceiptPage() {
                 try {
                     const fetchedReceipt = await getReceiptById(id);
                     if (fetchedReceipt) {
-                        // Recursively convert all timestamps before setting state
-                        const serializableReceipt = convertTimestamps(fetchedReceipt);
-                        setReceipt(serializableReceipt);
+                        setReceipt(fetchedReceipt);
                     } else {
                         setError("Receipt not found.");
                     }
@@ -104,18 +70,13 @@ export default function ReceiptPage() {
             }
         };
         
-        // Ensure receiptDate is a valid Date object before passing.
-        const receiptDate = typeof receipt.receiptDate === 'string' 
-            ? new Date(receipt.receiptDate) 
-            : receipt.receiptDate;
-
         return (
             <SampleReceiptComponent
                 receiptId={receipt.id}
                 formData={receipt.formData}
                 categories={receipt.categories}
                 specialData={receipt.specialData}
-                receiptDate={receiptDate}
+                receiptDate={receipt.receiptDate}
                 onClose={handleClose}
             />
         );
