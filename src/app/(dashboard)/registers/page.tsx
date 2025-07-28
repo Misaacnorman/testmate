@@ -11,7 +11,7 @@ import { getColumns as getReceiptColumns } from './components/receipt-columns';
 import { ReceiptsTable } from './components/receipts-table';
 import { ProjectsTable } from './components/projects-table';
 import { Project } from '@/types/project';
-import { getProjects } from '@/services/projects';
+import { getProjects, updateProject } from '@/services/projects';
 import { getColumns as getProjectColumns } from './components/project-columns';
 import { ConcreteCubesTable } from './components/concrete-cubes-table';
 import { getColumns as getConcreteCubesColumns } from './components/concrete-cubes-columns';
@@ -46,6 +46,7 @@ import { TestBlocksAndBricksDialog } from './components/test-blocks-and-bricks-d
 import { TestPaversDialog } from './components/test-pavers-dialog';
 import { TestCylindersDialog } from './components/test-cylinders-dialog';
 import { TestWaterAbsorptionsDialog } from './components/test-water-absorptions-dialog';
+import { EditProjectDialog } from './components/edit-project-dialog';
 
 
 export default function RegistersPage() {
@@ -66,6 +67,7 @@ export default function RegistersPage() {
   const [isWaterAbsorptionsLoading, setIsWaterAbsorptionsLoading] = useState(true);
   
   const [projectFilter, setProjectFilter] = useState('');
+  const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [editingConcreteCube, setEditingConcreteCube] = useState<ConcreteCube | null>(null);
   const [editingBlockAndBrick, setEditingBlockAndBrick] = useState<BlockAndBrick | null>(null);
   const [editingPaver, setEditingPaver] = useState<Paver | null>(null);
@@ -235,6 +237,25 @@ export default function RegistersPage() {
       });
     }
   }, [fetchReceipts, toast]);
+
+  const handleProjectUpdated = async (project: Project) => {
+    try {
+      await updateProject(project);
+      toast({
+        title: "Project Updated",
+        description: `Project ${project.project} has been updated.`,
+      });
+      setEditingProject(null);
+      fetchProjects();
+    } catch (error) {
+       console.error("Failed to update project:", error);
+       toast({
+         variant: "destructive",
+         title: "Error updating project",
+         description: "Could not save the updated project data.",
+       });
+    }
+  };
 
   const handleConcreteCubeUpdated = async (cube: ConcreteCube) => {
     try {
@@ -432,7 +453,7 @@ export default function RegistersPage() {
   }
 
   const receiptColumns = useMemo(() => getReceiptColumns({ onDelete: handleReceiptDeleted }), [handleReceiptDeleted]);
-  const projectColumns = useMemo(() => getProjectColumns(), []);
+  const projectColumns = useMemo(() => getProjectColumns({ onEdit: setEditingProject }), []);
   const concreteCubesColumns = useMemo(() => getConcreteCubesColumns({ onEdit: setEditingConcreteCube }), []);
   const blocksAndBricksColumns = useMemo(() => getBlocksAndBricksColumns({ onEdit: setEditingBlockAndBrick }), []);
   const paverColumns = useMemo(() => getPaverColumns({ onEdit: setEditingPaver }), []);
@@ -604,6 +625,13 @@ export default function RegistersPage() {
           </TabsContent>
         </Tabs>
       </div>
+      {editingProject && (
+        <EditProjectDialog
+            project={editingProject}
+            onOpenChange={(open) => !open && setEditingProject(null)}
+            onProjectUpdated={handleProjectUpdated}
+        />
+      )}
       {editingConcreteCube && (
         <EditConcreteCubeDialog 
           cube={editingConcreteCube}

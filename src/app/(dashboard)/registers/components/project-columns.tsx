@@ -4,7 +4,8 @@
 import { Project } from "@/types/project"
 import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
-import { ArrowUpDown } from "lucide-react"
+import { ArrowUpDown, MoreHorizontal } from "lucide-react"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 const CenteredHeader = ({ title, subtitle }: { title: string, subtitle?: string }) => (
   <div className="text-center font-bold whitespace-normal">
@@ -24,7 +25,11 @@ const SortableHeader = ({ title, column }: { title: string, column: any }) => (
     </Button>
 );
 
-export const getColumns = (): ColumnDef<Project>[] => [
+type ProjectColumnsProps = {
+  onEdit: (project: Project) => void;
+};
+
+export const getColumns = ({ onEdit }: ProjectColumnsProps): ColumnDef<Project>[] => [
   {
     accessorKey: "date",
     header: ({ column }) => <SortableHeader title="DATE" column={column} />,
@@ -63,37 +68,6 @@ export const getColumns = (): ColumnDef<Project>[] => [
     accessorKey: "engineerInCharge",
     header: () => <CenteredHeader title="ENGINEER" subtitle="IN CHARGE" />,
     cell: ({ row }) => <div className="min-w-[120px]">{row.getValue("engineerInCharge")}</div>,
-  },
-  {
-    id: "fieldWork",
-    header: () => <CenteredHeader title="FIELD WORK" subtitle="INSTRUCTIONS" />,
-    columns: [
-        {
-            accessorKey: 'fieldWork.details',
-            header: () => <CenteredHeader title="Field Tests in Detail" subtitle="including number of tests" />,
-            cell: ({ row }) => <div className="min-w-[200px]">{row.original.fieldWork.details}</div>,
-        },
-        {
-            accessorKey: 'fieldWork.technician',
-            header: () => <CenteredHeader title="Technician" subtitle="in Charge" />,
-            cell: ({ row }) => <div className="min-w-[120px]">{row.original.fieldWork.technician}</div>,
-        },
-        {
-            accessorKey: 'fieldWork.startDate',
-            header: () => <CenteredHeader title="Start Date" />,
-            cell: ({ row }) => <div className="text-center">{row.original.fieldWork.startDate}</div>,
-        },
-        {
-            accessorKey: 'fieldWork.endDate',
-            header: () => <CenteredHeader title="End Date" />,
-            cell: ({ row }) => <div className="text-center">{row.original.fieldWork.endDate}</div>,
-        },
-        {
-            accessorKey: 'fieldWork.remarks',
-            header: () => <CenteredHeader title="Remark(s)" />,
-            cell: ({ row }) => <div className="min-w-[150px]">{row.original.fieldWork.remarks}</div>,
-        },
-    ]
   },
   {
     id: "labWork",
@@ -142,6 +116,37 @@ export const getColumns = (): ColumnDef<Project>[] => [
     ]
   },
   {
+    id: "fieldWork",
+    header: () => <CenteredHeader title="FIELD WORK" subtitle="INSTRUCTIONS" />,
+    columns: [
+        {
+            accessorKey: 'fieldWork.details',
+            header: () => <CenteredHeader title="Field Tests in Detail" subtitle="including number of tests" />,
+            cell: ({ row }) => <div className="min-w-[200px]">{row.original.fieldWork.details}</div>,
+        },
+        {
+            accessorKey: 'fieldWork.technician',
+            header: () => <CenteredHeader title="Technician" subtitle="in Charge" />,
+            cell: ({ row }) => <div className="min-w-[120px]">{row.original.fieldWork.technician}</div>,
+        },
+        {
+            accessorKey: 'fieldWork.startDate',
+            header: () => <CenteredHeader title="Start Date" />,
+            cell: ({ row }) => <div className="text-center">{row.original.fieldWork.startDate}</div>,
+        },
+        {
+            accessorKey: 'fieldWork.endDate',
+            header: () => <CenteredHeader title="End Date" />,
+            cell: ({ row }) => <div className="text-center">{row.original.fieldWork.endDate}</div>,
+        },
+        {
+            accessorKey: 'fieldWork.remarks',
+            header: () => <CenteredHeader title="Remark(s)" />,
+            cell: ({ row }) => <div className="min-w-[150px]">{row.original.fieldWork.remarks}</div>,
+        },
+    ]
+  },
+  {
     id: "dispatch",
     header: () => <CenteredHeader title="REPORT DISPATCH" subtitle="DETAILS" />,
     columns: [
@@ -171,5 +176,27 @@ export const getColumns = (): ColumnDef<Project>[] => [
             cell: ({ row }) => <div className="text-center min-w-[150px]">{row.original.dispatch.dateTime}</div>,
         },
     ]
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      const item = row.original
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem onClick={() => onEdit(item)}>
+              Edit Project
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )
+    },
   },
 ]
