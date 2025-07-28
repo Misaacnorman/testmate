@@ -126,7 +126,7 @@ export function CreateProjectDialog({ onProjectCreated }: CreateProjectDialogPro
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="flex-grow pr-6 -mr-6">
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form id="create-project-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-4 p-4 border rounded-lg">
                 <h4 className="font-semibold text-lg mb-2">Project Identifiers</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -174,13 +174,14 @@ export function CreateProjectDialog({ onProjectCreated }: CreateProjectDialogPro
                 </div>
                 <div className="space-y-2"><Label>Date and Time</Label><Input {...form.register("dispatch.dateTime")} placeholder="YYYY-MM-DD HH:MM" /></div>
             </div>
-            
-            <DialogFooter className="pt-4">
-              <DialogClose asChild><Button type="button" variant="ghost">Cancel</Button></DialogClose>
-              <Button type="submit" disabled={isSubmitting}>{isSubmitting ? "Saving..." : "Save Project"}</Button>
-            </DialogFooter>
           </form>
         </ScrollArea>
+        <DialogFooter className="pt-4">
+            <DialogClose asChild><Button type="button" variant="ghost">Cancel</Button></DialogClose>
+            <Button type="submit" form="create-project-form" disabled={isSubmitting}>
+              {isSubmitting ? "Saving..." : "Save Project"}
+            </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
