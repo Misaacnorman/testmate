@@ -21,16 +21,22 @@ import { BlockAndBrick } from '@/types/block-and-brick';
 import { getBlocksAndBricks } from '@/services/blocks-and-bricks';
 import { getColumns as getBlocksAndBricksColumns } from './components/blocks-and-bricks-columns';
 import { BlocksAndBricksTable } from './components/blocks-and-bricks-table';
+import { Paver } from '@/types/paver';
+import { getPavers } from '@/services/pavers';
+import { getColumns as getPaverColumns } from './components/paver-columns';
+import { PaversTable } from './components/pavers-table';
 
 export default function RegistersPage() {
   const [receipts, setReceipts] = useState<Receipt[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [concreteCubes, setConcreteCubes] = useState<ConcreteCube[]>([]);
   const [blocksAndBricks, setBlocksAndBricks] = useState<BlockAndBrick[]>([]);
+  const [pavers, setPavers] = useState<Paver[]>([]);
   const [isReceiptsLoading, setIsReceiptsLoading] = useState(true);
   const [isProjectsLoading, setIsProjectsLoading] = useState(true);
   const [isConcreteCubesLoading, setIsConcreteCubesLoading] = useState(true);
   const [isBlocksAndBricksLoading, setIsBlocksAndBricksLoading] = useState(true);
+  const [isPaversLoading, setIsPaversLoading] = useState(true);
   const { toast } = useToast();
 
   const fetchReceipts = useCallback(async () => {
@@ -101,12 +107,30 @@ export default function RegistersPage() {
     }
   }, [toast]);
 
+  const fetchPavers = useCallback(async () => {
+    setIsPaversLoading(true);
+    try {
+        const fetchedData = await getPavers();
+        setPavers(fetchedData);
+    } catch (error) {
+        console.error("Failed to fetch pavers:", error);
+        toast({
+            variant: "destructive",
+            title: "Error fetching pavers",
+            description: "Could not retrieve paver data.",
+        });
+    } finally {
+        setIsPaversLoading(false);
+    }
+  }, [toast]);
+
   useEffect(() => {
     fetchReceipts();
     fetchProjects();
     fetchConcreteCubes();
     fetchBlocksAndBricks();
-  }, [fetchReceipts, fetchProjects, fetchConcreteCubes, fetchBlocksAndBricks]);
+    fetchPavers();
+  }, [fetchReceipts, fetchProjects, fetchConcreteCubes, fetchBlocksAndBricks, fetchPavers]);
 
   const handleReceiptDeleted = useCallback(async (receiptId: string) => {
     try {
@@ -130,6 +154,7 @@ export default function RegistersPage() {
   const projectColumns = useMemo(() => getProjectColumns(), []);
   const concreteCubesColumns = useMemo(() => getConcreteCubesColumns(), []);
   const blocksAndBricksColumns = useMemo(() => getBlocksAndBricksColumns(), []);
+  const paverColumns = useMemo(() => getPaverColumns(), []);
 
 
   return (
@@ -148,6 +173,7 @@ export default function RegistersPage() {
           <TabsTrigger value="projects">Projects</TabsTrigger>
           <TabsTrigger value="concrete-cubes">Concrete Cubes</TabsTrigger>
           <TabsTrigger value="blocks-and-bricks">Blocks &amp; Bricks</TabsTrigger>
+          <TabsTrigger value="pavers">Pavers</TabsTrigger>
         </TabsList>
         <TabsContent value="sample-receipts">
           <Card>
@@ -190,6 +216,17 @@ export default function RegistersPage() {
             </CardHeader>
             <CardContent>
                 <BlocksAndBricksTable columns={blocksAndBricksColumns} data={blocksAndBricks} isLoading={isBlocksAndBricksLoading} />
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="pavers">
+           <Card>
+            <CardHeader>
+              <CardTitle>Sample Register/Log for Pavers</CardTitle>
+              <CardDescription>A register for all paver tests.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <PaversTable columns={paverColumns} data={pavers} isLoading={isPaversLoading} />
             </CardContent>
           </Card>
         </TabsContent>
