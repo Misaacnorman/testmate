@@ -15,7 +15,7 @@ import { addProject } from './projects';
 const receiptsCollection = collection(db, 'receipts');
 
 // Generic helper to convert Firestore Timestamps to JS Dates in any object
-export const fromFirestore = <T extends { id: string }>(doc: DocumentData): T => {
+const fromFirestore = <T extends { id: string }>(doc: DocumentData): T => {
     const data = doc.data();
     const convertedData: { [key: string]: any } = { id: doc.id };
 
