@@ -98,6 +98,18 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
   });
 
   const specialCategories = useMemo(() => ["Concrete Cubes", "Bricks", "Blocks", "Pavers", "Cylinder"], []);
+  
+  const resetAllState = useCallback(() => {
+    setCurrentStep(1);
+    form1.reset({
+      isSameBillingClient: "yes",
+      transmittalModes: [],
+    });
+    setStep1Data(null);
+    setSelectedCategories({});
+    setStep4Data({});
+    setIsSubmitting(false);
+  }, [form1]);
 
   useEffect(() => {
     if (open) {
@@ -118,14 +130,12 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
       };
       fetchInitialData();
     } else {
-      // Reset state on close
-      setCurrentStep(1);
-      form1.reset();
-      setStep1Data(null);
-      setSelectedCategories({});
-      setStep4Data({});
+       // Only reset state when dialog is fully closed
+       setTimeout(() => {
+         if(!open) resetAllState();
+       }, 200);
     }
-  }, [open, toast, form1]);
+  }, [open, toast, resetAllState]);
 
   const uniqueMaterialCategories = useMemo(() => {
     const categories = allTests.map(test => test.materialCategory);
@@ -208,17 +218,18 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
   const handleTestToggle = (category: string, test: Test) => {
     setSelectedCategories(prev => {
         const newCategories = JSON.parse(JSON.stringify(prev));
-        const categoryData = newCategories[category];
+        let categoryData = newCategories[category];
         
         if (!categoryData) {
             newCategories[category] = { quantity: 1, tests: {} };
+            categoryData = newCategories[category];
         }
 
-        if (newCategories[category].tests[test.id]) {
-            delete newCategories[category].tests[test.id];
+        if (categoryData.tests[test.id]) {
+            delete categoryData.tests[test.id];
         } else {
-            newCategories[category].tests[test.id] = { 
-                quantity: newCategories[category].quantity, 
+            categoryData.tests[test.id] = { 
+                quantity: categoryData.quantity, 
                 testMethods: test.testMethods, 
                 materialTest: test.materialTest 
             };
@@ -287,7 +298,8 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         
         const castingDate = newSets[setIndex].castingDate ? new Date(newSets[setIndex].castingDate) : null;
         const testingDate = newSets[setIndex].testingDate ? new Date(newSets[setIndex].testingDate) : null;
-        const age = value && field === 'age' ? parseInt(value, 10) : newSets[setIndex].age ? parseInt(newSets[setIndex].age, 10) : null;
+        const ageStr = String(value);
+        const age = (field === 'age' && ageStr) ? parseInt(ageStr, 10) : (newSets[setIndex].age ? parseInt(String(newSets[setIndex].age), 10) : null);
 
         if (field === 'castingDate' && testingDate && isValid(testingDate) && isValid(castingDate)) {
             newSets[setIndex].age = differenceInDays(testingDate, castingDate);
@@ -299,6 +311,8 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
              newSets[setIndex].testingDate = addDays(castingDate, age);
         } else if (field === 'testingDate' && age !== null && !isNaN(age) && isValid(testingDate)) {
              newSets[setIndex].castingDate = addDays(testingDate, -age);
+        } else if (field === 'age' && !ageStr) {
+             newSets[setIndex].age = '';
         }
         
         return { 
@@ -808,19 +822,19 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
             </Accordion>
         )}
         
-        {currentStep === 5 && (
+        {currentStep === 5 && step1Data && (
             <ScrollArea className="h-full">
                 <div className="space-y-6 pr-4">
                     <div className="space-y-2">
                         <h3 className="text-lg font-semibold">Client & Project Details</h3>
                         <div className="text-sm space-y-1">
-                            <p><strong>Client:</strong> {step1Data?.clientName} ({step1Data?.clientContact})</p>
-                            <p><strong>Address:</strong> {step1Data?.clientAddress}</p>
-                            <p><strong>Project:</strong> {step1Data?.projectTitle}</p>
-                             {step1Data?.isSameBillingClient === 'no' && (
+                            <p><strong>Client:</strong> {step1Data.clientName} ({step1Data.clientContact})</p>
+                            <p><strong>Address:</strong> {step1Data.clientAddress}</p>
+                            <p><strong>Project:</strong> {step1Data.projectTitle}</p>
+                             {step1Data.isSameBillingClient === 'no' && (
                                 <div className="pt-2">
-                                    <p><strong>Billing Client:</strong> {step1Data?.billingName} ({step1Data?.billingContact})</p>
-                                    <p><strong>Billing Address:</strong> {step1Data?.billingAddress}</p>
+                                    <p><strong>Billing Client:</strong> {step1Data.billingName} ({step1Data.billingContact})</p>
+                                    <p><strong>Billing Address:</strong> {step1Data.billingAddress}</p>
                                 </div>
                             )}
                         </div>
@@ -830,10 +844,10 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
                         <h3 className="text-lg font-semibold">Sample Details</h3>
                         <div className="text-sm space-y-1">
                            <p><strong>Received on:</strong> {format(receiptDate, "PPP p")}</p>
-                           <p><strong>Received by:</strong> {step1Data?.receivedBy}</p>
-                           <p><strong>Delivered by:</strong> {step1Data?.deliveredBy} ({step1Data?.deliveredByContact})</p>
-                           <p><strong>Status on Arrival:</strong> {step1Data?.sampleStatus}</p>
-                           <p><strong>Results via:</strong> {step1Data?.transmittalModes.join(', ')}</p>
+                           <p><strong>Received by:</strong> {step1Data.receivedBy}</p>
+                           <p><strong>Delivered by:</strong> {step1Data.deliveredBy} ({step1Data.deliveredByContact})</p>
+                           <p><strong>Status on Arrival:</strong> {step1Data.sampleStatus}</p>
+                           <p><strong>Results via:</strong> {step1Data.transmittalModes.join(', ')}</p>
                         </div>
                     </div>
                      <Separator/>
@@ -888,10 +902,12 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
           )}
           {(currentStep < 5) && <Button onClick={handleNext}>Next</Button>}
           {currentStep === 5 && <Button onClick={handleConfirmAndGenerate} disabled={isSubmitting}>{isSubmitting ? "Saving..." : "Confirm & Generate Receipt"}</Button>}
-          <DialogClose asChild><Button variant="outline">Cancel</Button></DialogClose>
+          <DialogClose asChild><Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button></DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 }
 
+
+    
