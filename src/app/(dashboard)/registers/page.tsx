@@ -34,11 +34,14 @@ import { getWaterAbsorptions, updateWaterAbsorption } from '@/services/water-abs
 import { getColumns as getWaterAbsorptionColumns } from './components/water-absorption-columns';
 import { WaterAbsorptionTable } from './components/water-absorption-table';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { TestTubeDiagonal } from 'lucide-react';
 import { EditConcreteCubeDialog } from './components/edit-concrete-cube-dialog';
 import { EditBlockAndBrickDialog } from './components/edit-block-and-brick-dialog';
 import { EditPaverDialog } from './components/edit-paver-dialog';
 import { EditCylinderDialog } from './components/edit-cylinder-dialog';
 import { EditWaterAbsorptionDialog } from './components/edit-water-absorption-dialog';
+import { TestConcreteCubesDialog } from './components/test-concrete-cubes-dialog';
 
 
 export default function RegistersPage() {
@@ -64,6 +67,9 @@ export default function RegistersPage() {
   const [editingPaver, setEditingPaver] = useState<Paver | null>(null);
   const [editingCylinder, setEditingCylinder] = useState<Cylinder | null>(null);
   const [editingWaterAbsorption, setEditingWaterAbsorption] = useState<WaterAbsorption | null>(null);
+  
+  const [isTestCubesDialogOpen, setIsTestCubesDialogOpen] = useState(false);
+  const [selectedCubes, setSelectedCubes] = useState<ConcreteCube[]>([]);
 
   const { toast } = useToast();
 
@@ -232,6 +238,26 @@ export default function RegistersPage() {
        });
     }
   };
+  
+  const handleBatchCubesUpdate = async (updatedCubes: ConcreteCube[]) => {
+    try {
+      await Promise.all(updatedCubes.map(cube => updateConcreteCube(cube)));
+       toast({
+        title: "Batch Update Successful",
+        description: `${updatedCubes.length} concrete cube tests have been updated.`,
+      });
+      fetchConcreteCubes();
+      setIsTestCubesDialogOpen(false);
+      setSelectedCubes([]);
+    } catch(error) {
+       console.error("Failed to batch update concrete cubes:", error);
+       toast({
+         variant: "destructive",
+         title: "Error during Batch Update",
+         description: "Could not save the updated test data for some items.",
+       });
+    }
+  }
 
   const handleBlockAndBrickUpdated = async (item: BlockAndBrick) => {
     try {
@@ -373,11 +399,22 @@ export default function RegistersPage() {
           <TabsContent value="concrete-cubes">
             <Card>
               <CardHeader>
-                <CardTitle>Concrete Cubes</CardTitle>
-                <CardDescription>A register for all concrete cube tests.</CardDescription>
+                <div className="flex justify-between items-center">
+                    <div>
+                      <CardTitle>Concrete Cubes</CardTitle>
+                      <CardDescription>A register for all concrete cube tests.</CardDescription>
+                    </div>
+                    <Button 
+                      onClick={() => setIsTestCubesDialogOpen(true)} 
+                      disabled={selectedCubes.length === 0}
+                    >
+                       <TestTubeDiagonal className="mr-2 h-4 w-4" />
+                       Test ({selectedCubes.length})
+                    </Button>
+                </div>
               </CardHeader>
               <CardContent>
-                  <ConcreteCubesTable columns={concreteCubesColumns} data={concreteCubes} isLoading={isConcreteCubesLoading} />
+                  <ConcreteCubesTable columns={concreteCubesColumns} data={concreteCubes} isLoading={isConcreteCubesLoading} onSelectionChange={setSelectedCubes}/>
               </CardContent>
             </Card>
           </TabsContent>
@@ -432,6 +469,13 @@ export default function RegistersPage() {
           cube={editingConcreteCube}
           onOpenChange={(open) => !open && setEditingConcreteCube(null)}
           onCubeUpdated={handleConcreteCubeUpdated}
+        />
+      )}
+      {isTestCubesDialogOpen && (
+        <TestConcreteCubesDialog
+          cubes={selectedCubes}
+          onOpenChange={setIsTestCubesDialogOpen}
+          onBatchUpdate={handleBatchCubesUpdate}
         />
       )}
       {editingBlockAndBrick && (
