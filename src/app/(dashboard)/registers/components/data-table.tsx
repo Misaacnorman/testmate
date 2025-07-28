@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from "react";
@@ -28,7 +29,7 @@ interface DataTableProps<TData, TValue> {
   isLoading: boolean;
 }
 
-export function DataTable<TData extends Receipt, TValue>({
+export function DataTable<TData, TValue>({
   columns,
   data,
   isLoading,

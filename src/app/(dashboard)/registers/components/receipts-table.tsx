@@ -7,7 +7,9 @@ import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
   useReactTable,
+  SortingState,
 } from "@tanstack/react-table";
 import {
   Table,
@@ -19,9 +21,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Project } from "@/types/project";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-
+import { Receipt } from "@/types/receipt";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -29,17 +29,23 @@ interface DataTableProps<TData, TValue> {
   isLoading: boolean;
 }
 
-export function ProjectsTable<TData extends Project, TValue>({
+export function ReceiptsTable<TData extends Receipt, TValue>({
   columns,
   data,
   isLoading,
 }: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = React.useState<SortingState>([]);
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+    },
   });
 
   if (isLoading) {
@@ -54,14 +60,14 @@ export function ProjectsTable<TData extends Project, TValue>({
   
   return (
     <div>
-    <ScrollArea className="w-full whitespace-nowrap rounded-md border">
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} colSpan={header.colSpan} className="border-x">
+                    <TableHead key={header.id}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -82,7 +88,7 @@ export function ProjectsTable<TData extends Project, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="border-x h-12">
+                    <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -97,14 +103,13 @@ export function ProjectsTable<TData extends Project, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No projects found.
+                  No receipts found.
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
-      <ScrollBar orientation="horizontal" />
-      </ScrollArea>
+      </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button
           variant="outline"

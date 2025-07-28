@@ -7,17 +7,22 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getReceipts, deleteReceipt } from '@/services/receipts';
 import { Receipt } from '@/types/receipt';
 import { useToast } from '@/hooks/use-toast';
-import { getColumns } from './components/columns';
-import { DataTable } from './components/data-table';
+import { getColumns as getReceiptColumns } from './components/receipt-columns';
+import { ReceiptsTable } from './components/receipts-table';
 import { ProjectsTable } from './components/projects-table';
+import { Project } from '@/types/project';
+import { getProjects } from '@/services/projects';
+import { getColumns as getProjectColumns } from './components/project-columns';
 
 export default function RegistersPage() {
   const [receipts, setReceipts] = useState<Receipt[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [isReceiptsLoading, setIsReceiptsLoading] = useState(true);
+  const [isProjectsLoading, setIsProjectsLoading] = useState(true);
   const { toast } = useToast();
 
   const fetchReceipts = useCallback(async () => {
-    setIsLoading(true);
+    setIsReceiptsLoading(true);
     try {
       const fetchedReceipts = await getReceipts();
       setReceipts(fetchedReceipts);
@@ -29,13 +34,31 @@ export default function RegistersPage() {
         description: "Could not retrieve receipts from the database.",
       });
     } finally {
-      setIsLoading(false);
+      setIsReceiptsLoading(false);
+    }
+  }, [toast]);
+  
+  const fetchProjects = useCallback(async () => {
+    setIsProjectsLoading(true);
+    try {
+      const fetchedProjects = await getProjects();
+      setProjects(fetchedProjects);
+    } catch (error) {
+      console.error("Failed to fetch projects:", error);
+      toast({
+        variant: "destructive",
+        title: "Error fetching projects",
+        description: "Could not retrieve projects from the database.",
+      });
+    } finally {
+      setIsProjectsLoading(false);
     }
   }, [toast]);
 
   useEffect(() => {
     fetchReceipts();
-  }, [fetchReceipts]);
+    fetchProjects();
+  }, [fetchReceipts, fetchProjects]);
 
   const handleReceiptDeleted = useCallback(async (receiptId: string) => {
     try {
@@ -55,7 +78,9 @@ export default function RegistersPage() {
     }
   }, [fetchReceipts, toast]);
 
-  const columns = useMemo(() => getColumns({ onDelete: handleReceiptDeleted }), [handleReceiptDeleted]);
+  const receiptColumns = useMemo(() => getReceiptColumns({ onDelete: handleReceiptDeleted }), [handleReceiptDeleted]);
+  const projectColumns = useMemo(() => getProjectColumns(), []);
+
 
   return (
     <div className="flex-1 space-y-4 p-4 sm:p-6 md:p-8">
@@ -79,7 +104,7 @@ export default function RegistersPage() {
               <CardDescription>A log of all sample receipts generated.</CardDescription>
             </CardHeader>
             <CardContent>
-              <DataTable columns={columns} data={receipts} isLoading={isLoading} />
+              <ReceiptsTable columns={receiptColumns} data={receipts} isLoading={isReceiptsLoading} />
             </CardContent>
           </Card>
         </TabsContent>
@@ -90,7 +115,7 @@ export default function RegistersPage() {
               <CardDescription>A log of all projects and their associated details.</CardDescription>
             </CardHeader>
             <CardContent>
-                <ProjectsTable />
+                <ProjectsTable columns={projectColumns} data={projects} isLoading={isProjectsLoading} />
             </CardContent>
           </Card>
         </TabsContent>
