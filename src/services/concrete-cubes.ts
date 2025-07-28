@@ -3,7 +3,7 @@
 
 import { db } from '@/lib/firebase';
 import { ConcreteCube } from '@/types/concrete-cube';
-import { collection, getDocs, addDoc, DocumentData } from 'firebase/firestore';
+import { collection, getDocs, addDoc, doc, updateDoc, DocumentData } from 'firebase/firestore';
 import { Timestamp } from 'firebase/firestore';
 
 const concreteCubesCollection = collection(db, 'concreteCubes');
@@ -18,7 +18,6 @@ const fromFirestore = <T extends { id: string }>(doc: DocumentData): T => {
             if (value instanceof Timestamp) {
                 convertedData[key] = value.toDate();
             } else if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-                // Recursively convert nested objects, but not arrays for now
                 const nestedData = { ...value };
                 for(const nestedKey in nestedData) {
                     if (nestedData[nestedKey] instanceof Timestamp) {
@@ -43,3 +42,11 @@ export async function addConcreteCube(data: Omit<ConcreteCube, 'id'>): Promise<C
     const docRef = await addDoc(concreteCubesCollection, data);
     return { id: docRef.id, ...data } as ConcreteCube;
 }
+
+export async function updateConcreteCube(cube: ConcreteCube): Promise<void> {
+    const cubeDoc = doc(db, 'concreteCubes', cube.id);
+    const { id, ...cubeData } = cube;
+    await updateDoc(cubeDoc, cubeData);
+}
+
+    

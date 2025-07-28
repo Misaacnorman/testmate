@@ -10,6 +10,7 @@ import {
   getSortedRowModel,
   SortingState,
   useReactTable,
+  RowSelectionState,
 } from "@tanstack/react-table";
 import {
   Table,
@@ -36,6 +37,7 @@ export function ConcreteCubesTable<TData extends ConcreteCube, TValue>({
   isLoading,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
   const table = useReactTable({
     data,
@@ -44,8 +46,10 @@ export function ConcreteCubesTable<TData extends ConcreteCube, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
+      rowSelection,
     },
   });
 
@@ -116,6 +120,10 @@ export function ConcreteCubesTable<TData extends ConcreteCube, TValue>({
         </div>
       </div>
       <div className="flex items-center justify-end space-x-2">
+        <div className="flex-1 text-sm text-muted-foreground">
+          {table.getFilteredSelectedRowModel().rows.length} of{" "}
+          {table.getFilteredRowModel().rows.length} row(s) selected.
+        </div>
         <Button
           variant="outline"
           size="sm"
@@ -136,3 +144,5 @@ export function ConcreteCubesTable<TData extends ConcreteCube, TValue>({
     </div>
   );
 }
+
+    

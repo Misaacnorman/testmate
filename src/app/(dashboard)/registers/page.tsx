@@ -16,7 +16,7 @@ import { getColumns as getProjectColumns } from './components/project-columns';
 import { ConcreteCubesTable } from './components/concrete-cubes-table';
 import { getColumns as getConcreteCubesColumns } from './components/concrete-cubes-columns';
 import { ConcreteCube } from '@/types/concrete-cube';
-import { getConcreteCubes } from '@/services/concrete-cubes';
+import { getConcreteCubes, updateConcreteCube } from '@/services/concrete-cubes';
 import { BlockAndBrick } from '@/types/block-and-brick';
 import { getBlocksAndBricks } from '@/services/blocks-and-bricks';
 import { getColumns as getBlocksAndBricksColumns } from './components/blocks-and-bricks-columns';
@@ -34,6 +34,7 @@ import { getWaterAbsorptions } from '@/services/water-absorptions';
 import { getColumns as getWaterAbsorptionColumns } from './components/water-absorption-columns';
 import { WaterAbsorptionTable } from './components/water-absorption-table';
 import { Input } from '@/components/ui/input';
+import { EditConcreteCubeDialog } from './components/edit-concrete-cube-dialog';
 
 export default function RegistersPage() {
   const [receipts, setReceipts] = useState<Receipt[]>([]);
@@ -53,6 +54,8 @@ export default function RegistersPage() {
   const [isWaterAbsorptionsLoading, setIsWaterAbsorptionsLoading] = useState(true);
   
   const [projectFilter, setProjectFilter] = useState('');
+  const [editingConcreteCube, setEditingConcreteCube] = useState<ConcreteCube | null>(null);
+
   const { toast } = useToast();
 
   const fetchReceipts = useCallback(async () => {
@@ -202,123 +205,152 @@ export default function RegistersPage() {
     }
   }, [fetchReceipts, toast]);
 
+  const handleConcreteCubeUpdated = async (cube: ConcreteCube) => {
+    try {
+      await updateConcreteCube(cube);
+      toast({
+        title: "Test Updated",
+        description: `Concrete Cube Test for sample ${cube.sampleId} has been updated.`,
+      });
+      setEditingConcreteCube(null);
+      fetchConcreteCubes();
+    } catch (error) {
+       console.error("Failed to update concrete cube:", error);
+       toast({
+         variant: "destructive",
+         title: "Error updating test",
+         description: "Could not save the updated test data.",
+       });
+    }
+  };
+
   const receiptColumns = useMemo(() => getReceiptColumns({ onDelete: handleReceiptDeleted }), [handleReceiptDeleted]);
   const projectColumns = useMemo(() => getProjectColumns(), []);
-  const concreteCubesColumns = useMemo(() => getConcreteCubesColumns(), []);
+  const concreteCubesColumns = useMemo(() => getConcreteCubesColumns({ onEdit: setEditingConcreteCube }), []);
   const blocksAndBricksColumns = useMemo(() => getBlocksAndBricksColumns(), []);
   const paverColumns = useMemo(() => getPaverColumns(), []);
   const cylinderColumns = useMemo(() => getCylinderColumns(), []);
   const waterAbsorptionColumns = useMemo(() => getWaterAbsorptionColumns(), []);
 
-
   return (
-    <div className="flex-1 space-y-4 p-4 sm:p-6 md:p-8">
-      <div className="flex items-center justify-between space-y-2">
-        <div>
-          <h2 className="text-3xl font-bold tracking-tight">Registers</h2>
-          <p className="text-muted-foreground">
-            View and manage all laboratory registers.
-          </p>
+    <>
+      <div className="flex-1 space-y-4 p-4 sm:p-6 md:p-8">
+        <div className="flex items-center justify-between space-y-2">
+          <div>
+            <h2 className="text-3xl font-bold tracking-tight">Registers</h2>
+            <p className="text-muted-foreground">
+              View and manage all laboratory registers.
+            </p>
+          </div>
         </div>
-      </div>
-      <Tabs defaultValue="projects">
-        <TabsList className="flex-wrap h-auto">
-          <TabsTrigger value="sample-receipts">Sample Receipts</TabsTrigger>
-          <TabsTrigger value="projects">Projects</TabsTrigger>
-          <TabsTrigger value="concrete-cubes">Concrete Cubes</TabsTrigger>
-          <TabsTrigger value="blocks-and-bricks">Blocks &amp; Bricks</TabsTrigger>
-          <TabsTrigger value="pavers">Pavers</TabsTrigger>
-          <TabsTrigger value="cylinders">Cylinders</TabsTrigger>
-          <TabsTrigger value="water-absorption">Water Absorption</TabsTrigger>
-        </TabsList>
-        <TabsContent value="sample-receipts">
-          <Card>
-            <CardHeader>
-              <CardTitle>Sample Receipt Log</CardTitle>
-              <CardDescription>A log of all sample receipts generated.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ReceiptsTable columns={receiptColumns} data={receipts} isLoading={isReceiptsLoading} />
-            </CardContent>
-          </Card>
-        </TabsContent>
-        <TabsContent value="projects">
-           <Card>
-            <CardHeader>
-              <div className="flex justify-between items-center">
-                <div>
-                    <CardTitle>Projects and Samples Register/Log Book</CardTitle>
-                    <CardDescription>A log of all projects and their associated details.</CardDescription>
-                </div>
-                <Input 
-                    placeholder="Search all projects..."
-                    value={projectFilter}
-                    onChange={(event) => setProjectFilter(event.target.value)}
-                    className="w-1/3"
-                />
-              </div>
-            </CardHeader>
-            <CardContent>
-                <ProjectsTable columns={projectColumns} data={projects} isLoading={isProjectsLoading} globalFilter={projectFilter} />
-            </CardContent>
-          </Card>
-        </TabsContent>
-         <TabsContent value="concrete-cubes">
-           <Card>
-            <CardHeader>
-              <CardTitle>Concrete Cubes</CardTitle>
-              <CardDescription>A register for all concrete cube tests.</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <ConcreteCubesTable columns={concreteCubesColumns} data={concreteCubes} isLoading={isConcreteCubesLoading} />
-            </CardContent>
-          </Card>
-        </TabsContent>
-        <TabsContent value="blocks-and-bricks">
-           <Card>
-            <CardHeader>
-              <CardTitle>Sample Register/Log for Bricks &amp; Blocks</CardTitle>
-              <CardDescription>A register for all brick and block tests.</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <BlocksAndBricksTable columns={blocksAndBricksColumns} data={blocksAndBricks} isLoading={isBlocksAndBricksLoading} />
-            </CardContent>
-          </Card>
-        </TabsContent>
-        <TabsContent value="pavers">
-           <Card>
-            <CardHeader>
-              <CardTitle>Sample Register/Log for Pavers</CardTitle>
-              <CardDescription>A register for all paver tests.</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <PaversTable columns={paverColumns} data={pavers} isLoading={isPaversLoading} />
-            </CardContent>
-          </Card>
-        </TabsContent>
-        <TabsContent value="cylinders">
-           <Card>
-            <CardHeader>
-              <CardTitle>Sample Register/Log for Concrete Cylinders</CardTitle>
-              <CardDescription>A register for all concrete cylinder tests.</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <CylindersTable columns={cylinderColumns} data={cylinders} isLoading={isCylindersLoading} />
-            </CardContent>
-          </Card>
-        </TabsContent>
-        <TabsContent value="water-absorption">
+        <Tabs defaultValue="projects">
+          <TabsList className="flex-wrap h-auto">
+            <TabsTrigger value="sample-receipts">Sample Receipts</TabsTrigger>
+            <TabsTrigger value="projects">Projects</TabsTrigger>
+            <TabsTrigger value="concrete-cubes">Concrete Cubes</TabsTrigger>
+            <TabsTrigger value="blocks-and-bricks">Blocks &amp; Bricks</TabsTrigger>
+            <TabsTrigger value="pavers">Pavers</TabsTrigger>
+            <TabsTrigger value="cylinders">Cylinders</TabsTrigger>
+            <TabsTrigger value="water-absorption">Water Absorption</TabsTrigger>
+          </TabsList>
+          <TabsContent value="sample-receipts">
             <Card>
-                <CardHeader>
-                    <CardTitle>Sample Register/Log for Bricks &amp; Blocks for Water</CardTitle>
-                    <CardDescription>A register for all water absorption tests on bricks and blocks.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <WaterAbsorptionTable columns={waterAbsorptionColumns} data={waterAbsorptions} isLoading={isWaterAbsorptionsLoading} />
-                </CardContent>
+              <CardHeader>
+                <CardTitle>Sample Receipt Log</CardTitle>
+                <CardDescription>A log of all sample receipts generated.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ReceiptsTable columns={receiptColumns} data={receipts} isLoading={isReceiptsLoading} />
+              </CardContent>
             </Card>
-        </TabsContent>
-      </Tabs>
-    </div>
+          </TabsContent>
+          <TabsContent value="projects">
+            <Card>
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <div>
+                      <CardTitle>Projects and Samples Register/Log Book</CardTitle>
+                      <CardDescription>A log of all projects and their associated details.</CardDescription>
+                  </div>
+                  <Input 
+                      placeholder="Search all projects..."
+                      value={projectFilter}
+                      onChange={(event) => setProjectFilter(event.target.value)}
+                      className="w-1/3"
+                  />
+                </div>
+              </CardHeader>
+              <CardContent>
+                  <ProjectsTable columns={projectColumns} data={projects} isLoading={isProjectsLoading} globalFilter={projectFilter} />
+              </CardContent>
+            </Card>
+          </TabsContent>
+          <TabsContent value="concrete-cubes">
+            <Card>
+              <CardHeader>
+                <CardTitle>Concrete Cubes</CardTitle>
+                <CardDescription>A register for all concrete cube tests.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                  <ConcreteCubesTable columns={concreteCubesColumns} data={concreteCubes} isLoading={isConcreteCubesLoading} />
+              </CardContent>
+            </Card>
+          </TabsContent>
+          <TabsContent value="blocks-and-bricks">
+            <Card>
+              <CardHeader>
+                <CardTitle>Sample Register/Log for Bricks &amp; Blocks</CardTitle>
+                <CardDescription>A register for all brick and block tests.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                  <BlocksAndBricksTable columns={blocksAndBricksColumns} data={blocksAndBricks} isLoading={isBlocksAndBricksLoading} />
+              </CardContent>
+            </Card>
+          </TabsContent>
+          <TabsContent value="pavers">
+            <Card>
+              <CardHeader>
+                <CardTitle>Sample Register/Log for Pavers</CardTitle>
+                <CardDescription>A register for all paver tests.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                  <PaversTable columns={paverColumns} data={pavers} isLoading={isPaversLoading} />
+              </CardContent>
+            </Card>
+          </TabsContent>
+          <TabsContent value="cylinders">
+            <Card>
+              <CardHeader>
+                <CardTitle>Sample Register/Log for Concrete Cylinders</CardTitle>
+                <CardDescription>A register for all concrete cylinder tests.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                  <CylindersTable columns={cylinderColumns} data={cylinders} isLoading={isCylindersLoading} />
+              </CardContent>
+            </Card>
+          </TabsContent>
+          <TabsContent value="water-absorption">
+              <Card>
+                  <CardHeader>
+                      <CardTitle>Sample Register/Log for Bricks &amp; Blocks for Water</CardTitle>
+                      <CardDescription>A register for all water absorption tests on bricks and blocks.</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                      <WaterAbsorptionTable columns={waterAbsorptionColumns} data={waterAbsorptions} isLoading={isWaterAbsorptionsLoading} />
+                  </CardContent>
+              </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+      {editingConcreteCube && (
+        <EditConcreteCubeDialog 
+          cube={editingConcreteCube}
+          onOpenChange={(open) => !open && setEditingConcreteCube(null)}
+          onCubeUpdated={handleConcreteCubeUpdated}
+        />
+      )}
+    </>
   );
 }
+
+    
