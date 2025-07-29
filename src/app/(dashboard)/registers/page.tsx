@@ -11,7 +11,7 @@ import { getColumns as getReceiptColumns } from './components/receipt-columns';
 import { ReceiptsTable } from './components/receipts-table';
 import { ProjectsTable } from './components/projects-table';
 import { Project } from '@/types/project';
-import { getProjects, updateProject } from '@/services/projects';
+import { getProjects, updateProject, deleteProject } from '@/services/projects';
 import { getColumns as getProjectColumns } from './components/project-columns';
 import { ConcreteCubesTable } from './components/concrete-cubes-table';
 import { getColumns as getConcreteCubesColumns } from './components/concrete-cubes-columns';
@@ -258,6 +258,24 @@ export default function RegistersPage() {
     }
   };
 
+  const handleProjectDeleted = async (projectId: string) => {
+    try {
+      await deleteProject(projectId);
+      toast({
+        title: "Project Deleted",
+        description: "The project has been successfully deleted.",
+      });
+      fetchProjects();
+    } catch (error) {
+       console.error("Failed to delete project:", error);
+       toast({
+         variant: "destructive",
+         title: "Error deleting project",
+         description: "Could not delete the project.",
+       });
+    }
+  };
+
   const handleConcreteCubeUpdated = async (cube: ConcreteCube) => {
     try {
       await updateConcreteCube(cube);
@@ -454,7 +472,7 @@ export default function RegistersPage() {
   }
 
   const receiptColumns = useMemo(() => getReceiptColumns({ onDelete: handleReceiptDeleted }), [handleReceiptDeleted]);
-  const projectColumns = useMemo(() => getProjectColumns({ onEdit: setEditingProject }), []);
+  const projectColumns = useMemo(() => getProjectColumns({ onEdit: setEditingProject, onDelete: handleProjectDeleted }), [handleProjectDeleted]);
   const concreteCubesColumns = useMemo(() => getConcreteCubesColumns({ onEdit: setEditingConcreteCube }), []);
   const blocksAndBricksColumns = useMemo(() => getBlocksAndBricksColumns({ onEdit: setEditingBlockAndBrick }), []);
   const paverColumns = useMemo(() => getPaverColumns({ onEdit: setEditingPaver }), []);

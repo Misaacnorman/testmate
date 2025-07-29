@@ -1,7 +1,6 @@
-
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -69,7 +68,7 @@ export function EditProjectDialog({ project, onOpenChange, onProjectUpdated }: E
     resolver: zodResolver(projectSchema),
     defaultValues: project,
   });
-
+  
   useEffect(() => {
     form.reset(project);
   }, [project, form]);
@@ -78,8 +77,8 @@ export function EditProjectDialog({ project, onOpenChange, onProjectUpdated }: E
     onProjectUpdated({ id: project.id, ...values });
   };
   
-  const handleNext = () => setCurrentStep(prev => prev + 1);
-  const handleBack = () => setCurrentStep(prev => prev - 1);
+  const handleNext = () => setCurrentStep(prev => prev < 4 ? prev + 1 : prev);
+  const handleBack = () => setCurrentStep(prev => prev > 1 ? prev - 1 : prev);
 
   return (
     <Dialog open={true} onOpenChange={onOpenChange}>
@@ -87,7 +86,7 @@ export function EditProjectDialog({ project, onOpenChange, onProjectUpdated }: E
         <DialogHeader>
           <DialogTitle>Edit Project (Step {currentStep} of 4)</DialogTitle>
           <DialogDescription>
-            Update the details for project: {project.project}. Click save when you're done.
+            Update the details for project: {project.project}.
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="flex-grow pr-6 -mr-6">
@@ -96,8 +95,8 @@ export function EditProjectDialog({ project, onOpenChange, onProjectUpdated }: E
                  <div className="space-y-4 p-4 border rounded-lg">
                     <h4 className="font-semibold text-lg mb-2">Project Identifiers</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2"><Label>Client</Label><Input {...form.register("client")} readOnly /></div>
-                        <div className="space-y-2"><Label>Project Title</Label><Input {...form.register("project")} readOnly /></div>
+                        <div className="space-y-2"><Label>Client</Label><Input {...form.register("client")} readOnly className="bg-muted/50" /></div>
+                        <div className="space-y-2"><Label>Project Title</Label><Input {...form.register("project")} readOnly className="bg-muted/50" /></div>
                         <div className="space-y-2"><Label>Project ID (Big)</Label><Input {...form.register("projectId.big")} /></div>
                         <div className="space-y-2"><Label>Project ID (Small)</Label><Input {...form.register("projectId.small")} /></div>
                         <div className="space-y-2"><Label>Engineer in Charge</Label><Input {...form.register("engineerInCharge")} /></div>
@@ -110,9 +109,9 @@ export function EditProjectDialog({ project, onOpenChange, onProjectUpdated }: E
                     <div className="space-y-2"><Label>Test Description</Label><Textarea {...form.register("labWork.details")} /></div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2"><Label>Technician</Label><Input {...form.register("labWork.technician")} /></div>
-                        <div className="space-y-2"><Label>Start Date</Label><Input {...form.register("labWork.startDate")} placeholder="YYYY-MM-DD" /></div>
-                        <div className="space-y-2"><Label>Agreed Delivery Date</Label><Input {...form.register("labWork.agreedDeliveryDate")} placeholder="YYYY-MM-DD" /></div>
-                        <div className="space-y-2"><Label>Actual Delivery Date</Label><Input {...form.register("labWork.actualDeliveryDate")} placeholder="YYYY-MM-DD" /></div>
+                        <div className="space-y-2"><Label>Start Date</Label><Input type="date" {...form.register("labWork.startDate")} /></div>
+                        <div className="space-y-2"><Label>Agreed Delivery Date</Label><Input type="date" {...form.register("labWork.agreedDeliveryDate")} /></div>
+                        <div className="space-y-2"><Label>Actual Delivery Date</Label><Input type="date" {...form.register("labWork.actualDeliveryDate")} /></div>
                         <div className="space-y-2"><Label>Signature (Agreed)</Label><Input {...form.register("labWork.signatureAgreed")} /></div>
                         <div className="space-y-2"><Label>Signature (Actual)</Label><Input {...form.register("labWork.signatureActual")} /></div>
                     </div>
@@ -125,8 +124,8 @@ export function EditProjectDialog({ project, onOpenChange, onProjectUpdated }: E
                     <div className="space-y-2"><Label>Field Test Details</Label><Textarea {...form.register("fieldWork.details")} /></div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="space-y-2"><Label>Technician</Label><Input {...form.register("fieldWork.technician")} /></div>
-                        <div className="space-y-2"><Label>Start Date</Label><Input {...form.register("fieldWork.startDate")} placeholder="YYYY-MM-DD" /></div>
-                        <div className="space-y-2"><Label>End Date</Label><Input {...form.register("fieldWork.endDate")} placeholder="YYYY-MM-DD" /></div>
+                        <div className="space-y-2"><Label>Start Date</Label><Input type="date" {...form.register("fieldWork.startDate")} /></div>
+                        <div className="space-y-2"><Label>End Date</Label><Input type="date" {...form.register("fieldWork.endDate")} /></div>
                     </div>
                     <div className="space-y-2"><Label>Remarks</Label><Textarea {...form.register("fieldWork.remarks")} /></div>
                 </div>
@@ -140,7 +139,7 @@ export function EditProjectDialog({ project, onOpenChange, onProjectUpdated }: E
                         <div className="space-y-2"><Label>Report Delivered To</Label><Input {...form.register("dispatch.deliveredTo")} /></div>
                         <div className="space-y-2"><Label>Contact</Label><Input {...form.register("dispatch.contact")} /></div>
                     </div>
-                    <div className="space-y-2"><Label>Date and Time</Label><Input {...form.register("dispatch.dateTime")} placeholder="YYYY-MM-DD HH:MM" /></div>
+                    <div className="space-y-2"><Label>Date and Time</Label><Input type="datetime-local" {...form.register("dispatch.dateTime")} /></div>
                 </div>
              )}
           </form>
@@ -164,4 +163,3 @@ export function EditProjectDialog({ project, onOpenChange, onProjectUpdated }: E
     </Dialog>
   );
 }
-

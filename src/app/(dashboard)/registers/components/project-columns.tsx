@@ -5,7 +5,8 @@ import { Project } from "@/types/project"
 import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
 import { ArrowUpDown, MoreHorizontal } from "lucide-react"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 const CenteredHeader = ({ title, subtitle }: { title: string, subtitle?: string }) => (
   <div className="text-center font-bold whitespace-normal">
@@ -27,9 +28,10 @@ const SortableHeader = ({ title, column }: { title: string, column: any }) => (
 
 type ProjectColumnsProps = {
   onEdit: (project: Project) => void;
+  onDelete: (id: string) => void;
 };
 
-export const getColumns = ({ onEdit }: ProjectColumnsProps): ColumnDef<Project>[] => [
+export const getColumns = ({ onEdit, onDelete }: ProjectColumnsProps): ColumnDef<Project>[] => [
   {
     accessorKey: "date",
     header: ({ column }) => <SortableHeader title="DATE" column={column} />,
@@ -180,23 +182,49 @@ export const getColumns = ({ onEdit }: ProjectColumnsProps): ColumnDef<Project>[
   {
     id: "actions",
     cell: ({ row }) => {
-      const item = row.original
+      const item = row.original;
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => onEdit(item)}>
-              Edit Project
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
+        <AlertDialog>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem onClick={() => onEdit(item)}>
+                Edit Project
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+               <AlertDialogTrigger asChild>
+                <DropdownMenuItem
+                  className="text-destructive focus:text-destructive focus:bg-destructive/10"
+                  onSelect={(e) => e.preventDefault()}
+                >
+                  Delete Project
+                </DropdownMenuItem>
+              </AlertDialogTrigger>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete this project
+                  and remove its data from our servers.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={() => onDelete(item.id)} className="bg-destructive hover:bg-destructive/90">
+                  Delete
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+      );
     },
   },
 ]

@@ -3,7 +3,7 @@
 
 import { db } from '@/lib/firebase';
 import { Project } from '@/types/project';
-import { collection, getDocs, addDoc, doc, updateDoc, DocumentData } from 'firebase/firestore';
+import { collection, getDocs, addDoc, doc, updateDoc, DocumentData, deleteDoc } from 'firebase/firestore';
 import { Timestamp } from 'firebase/firestore';
 
 const projectsCollection = collection(db, 'projects');
@@ -49,4 +49,9 @@ export async function updateProject(project: Project): Promise<void> {
     const projectDoc = doc(db, 'projects', project.id);
     const { id, ...projectData } = project;
     await updateDoc(projectDoc, projectData);
+}
+
+export async function deleteProject(projectId: string): Promise<void> {
+    const projectDoc = doc(db, 'projects', projectId);
+    await deleteDoc(projectDoc);
 }
