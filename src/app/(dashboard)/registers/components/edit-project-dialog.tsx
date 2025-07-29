@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -19,7 +19,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Project } from "@/types/project";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 
 const projectSchema = z.object({
@@ -64,6 +63,8 @@ type EditProjectDialogProps = {
 };
 
 export function EditProjectDialog({ project, onOpenChange, onProjectUpdated }: EditProjectDialogProps) {
+  const [currentStep, setCurrentStep] = useState(1);
+  
   const form = useForm<z.infer<typeof projectSchema>>({
     resolver: zodResolver(projectSchema),
     defaultValues: project,
@@ -76,72 +77,91 @@ export function EditProjectDialog({ project, onOpenChange, onProjectUpdated }: E
   const onSubmit = (values: z.infer<typeof projectSchema>) => {
     onProjectUpdated({ id: project.id, ...values });
   };
+  
+  const handleNext = () => setCurrentStep(prev => prev + 1);
+  const handleBack = () => setCurrentStep(prev => prev - 1);
 
   return (
     <Dialog open={true} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl max-h-[90vh] flex flex-col">
         <DialogHeader>
-          <DialogTitle>Edit Project</DialogTitle>
+          <DialogTitle>Edit Project (Step {currentStep} of 4)</DialogTitle>
           <DialogDescription>
             Update the details for project: {project.project}. Click save when you're done.
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="flex-grow pr-6 -mr-6">
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="space-y-4 p-4 border rounded-lg">
-                <h4 className="font-semibold text-lg mb-2">Project Identifiers</h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2"><Label>Client</Label><Input {...form.register("client")} readOnly /></div>
-                    <div className="space-y-2"><Label>Project Title</Label><Input {...form.register("project")} readOnly /></div>
-                    <div className="space-y-2"><Label>Project ID (Big)</Label><Input {...form.register("projectId.big")} /></div>
-                    <div className="space-y-2"><Label>Project ID (Small)</Label><Input {...form.register("projectId.small")} /></div>
-                    <div className="space-y-2"><Label>Engineer in Charge</Label><Input {...form.register("engineerInCharge")} /></div>
+          <form id="edit-project-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            {currentStep === 1 && (
+                 <div className="space-y-4 p-4 border rounded-lg">
+                    <h4 className="font-semibold text-lg mb-2">Project Identifiers</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2"><Label>Client</Label><Input {...form.register("client")} readOnly /></div>
+                        <div className="space-y-2"><Label>Project Title</Label><Input {...form.register("project")} readOnly /></div>
+                        <div className="space-y-2"><Label>Project ID (Big)</Label><Input {...form.register("projectId.big")} /></div>
+                        <div className="space-y-2"><Label>Project ID (Small)</Label><Input {...form.register("projectId.small")} /></div>
+                        <div className="space-y-2"><Label>Engineer in Charge</Label><Input {...form.register("engineerInCharge")} /></div>
+                    </div>
                 </div>
-            </div>
-
-            <div className="space-y-4 p-4 border rounded-lg">
-                <h4 className="font-semibold text-lg mb-2">Laboratory Work</h4>
-                <div className="space-y-2"><Label>Test Description</Label><Textarea {...form.register("labWork.details")} /></div>
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2"><Label>Technician</Label><Input {...form.register("labWork.technician")} /></div>
-                    <div className="space-y-2"><Label>Start Date</Label><Input {...form.register("labWork.startDate")} placeholder="YYYY-MM-DD" /></div>
-                    <div className="space-y-2"><Label>Agreed Delivery Date</Label><Input {...form.register("labWork.agreedDeliveryDate")} placeholder="YYYY-MM-DD" /></div>
-                    <div className="space-y-2"><Label>Actual Delivery Date</Label><Input {...form.register("labWork.actualDeliveryDate")} placeholder="YYYY-MM-DD" /></div>
-                    <div className="space-y-2"><Label>Signature (Agreed)</Label><Input {...form.register("labWork.signatureAgreed")} /></div>
-                    <div className="space-y-2"><Label>Signature (Actual)</Label><Input {...form.register("labWork.signatureActual")} /></div>
+            )}
+            {currentStep === 2 && (
+                <div className="space-y-4 p-4 border rounded-lg">
+                    <h4 className="font-semibold text-lg mb-2">Laboratory Work</h4>
+                    <div className="space-y-2"><Label>Test Description</Label><Textarea {...form.register("labWork.details")} /></div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2"><Label>Technician</Label><Input {...form.register("labWork.technician")} /></div>
+                        <div className="space-y-2"><Label>Start Date</Label><Input {...form.register("labWork.startDate")} placeholder="YYYY-MM-DD" /></div>
+                        <div className="space-y-2"><Label>Agreed Delivery Date</Label><Input {...form.register("labWork.agreedDeliveryDate")} placeholder="YYYY-MM-DD" /></div>
+                        <div className="space-y-2"><Label>Actual Delivery Date</Label><Input {...form.register("labWork.actualDeliveryDate")} placeholder="YYYY-MM-DD" /></div>
+                        <div className="space-y-2"><Label>Signature (Agreed)</Label><Input {...form.register("labWork.signatureAgreed")} /></div>
+                        <div className="space-y-2"><Label>Signature (Actual)</Label><Input {...form.register("labWork.signatureActual")} /></div>
+                    </div>
+                    <div className="space-y-2"><Label>Remarks</Label><Textarea {...form.register("labWork.remarks")} /></div>
                 </div>
-                <div className="space-y-2"><Label>Remarks</Label><Textarea {...form.register("labWork.remarks")} /></div>
-            </div>
-
-            <div className="space-y-4 p-4 border rounded-lg">
-                <h4 className="font-semibold text-lg mb-2">Field Work</h4>
-                <div className="space-y-2"><Label>Field Test Details</Label><Textarea {...form.register("fieldWork.details")} /></div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="space-y-2"><Label>Technician</Label><Input {...form.register("fieldWork.technician")} /></div>
-                    <div className="space-y-2"><Label>Start Date</Label><Input {...form.register("fieldWork.startDate")} placeholder="YYYY-MM-DD" /></div>
-                    <div className="space-y-2"><Label>End Date</Label><Input {...form.register("fieldWork.endDate")} placeholder="YYYY-MM-DD" /></div>
+            )}
+             {currentStep === 3 && (
+                <div className="space-y-4 p-4 border rounded-lg">
+                    <h4 className="font-semibold text-lg mb-2">Field Work</h4>
+                    <div className="space-y-2"><Label>Field Test Details</Label><Textarea {...form.register("fieldWork.details")} /></div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="space-y-2"><Label>Technician</Label><Input {...form.register("fieldWork.technician")} /></div>
+                        <div className="space-y-2"><Label>Start Date</Label><Input {...form.register("fieldWork.startDate")} placeholder="YYYY-MM-DD" /></div>
+                        <div className="space-y-2"><Label>End Date</Label><Input {...form.register("fieldWork.endDate")} placeholder="YYYY-MM-DD" /></div>
+                    </div>
+                    <div className="space-y-2"><Label>Remarks</Label><Textarea {...form.register("fieldWork.remarks")} /></div>
                 </div>
-                <div className="space-y-2"><Label>Remarks</Label><Textarea {...form.register("fieldWork.remarks")} /></div>
-            </div>
-
-             <div className="space-y-4 p-4 border rounded-lg">
-                <h4 className="font-semibold text-lg mb-2">Report Dispatch</h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2"><Label>Acknowledgement</Label><Input {...form.register("dispatch.acknowledgement")} /></div>
-                    <div className="space-y-2"><Label>Report Issued By</Label><Input {...form.register("dispatch.issuedBy")} /></div>
-                    <div className="space-y-2"><Label>Report Delivered To</Label><Input {...form.register("dispatch.deliveredTo")} /></div>
-                    <div className="space-y-2"><Label>Contact</Label><Input {...form.register("dispatch.contact")} /></div>
+             )}
+             {currentStep === 4 && (
+                 <div className="space-y-4 p-4 border rounded-lg">
+                    <h4 className="font-semibold text-lg mb-2">Report Dispatch</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2"><Label>Acknowledgement</Label><Input {...form.register("dispatch.acknowledgement")} /></div>
+                        <div className="space-y-2"><Label>Report Issued By</Label><Input {...form.register("dispatch.issuedBy")} /></div>
+                        <div className="space-y-2"><Label>Report Delivered To</Label><Input {...form.register("dispatch.deliveredTo")} /></div>
+                        <div className="space-y-2"><Label>Contact</Label><Input {...form.register("dispatch.contact")} /></div>
+                    </div>
+                    <div className="space-y-2"><Label>Date and Time</Label><Input {...form.register("dispatch.dateTime")} placeholder="YYYY-MM-DD HH:MM" /></div>
                 </div>
-                <div className="space-y-2"><Label>Date and Time</Label><Input {...form.register("dispatch.dateTime")} placeholder="YYYY-MM-DD HH:MM" /></div>
-            </div>
-            
-            <DialogFooter className="pt-4">
-              <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>Cancel</Button>
-              <Button type="submit">Save Changes</Button>
-            </DialogFooter>
+             )}
           </form>
         </ScrollArea>
+        <DialogFooter className="pt-4 justify-between">
+            <div>
+                 <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>Cancel</Button>
+            </div>
+            <div className="flex gap-2">
+                {currentStep > 1 && (
+                    <Button type="button" variant="outline" onClick={handleBack}>Back</Button>
+                )}
+                {currentStep < 4 ? (
+                    <Button type="button" onClick={handleNext}>Next</Button>
+                ) : (
+                    <Button type="submit" form="edit-project-form">Save Changes</Button>
+                )}
+            </div>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 }
+
