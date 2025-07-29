@@ -388,13 +388,15 @@ export function ReceiveSampleDialog({ open, onOpenChange }: { open: boolean, onO
         distribution[i]++;
     }
     
+    let sampleCounter = 1;
     const setsPayload = {
         numberOfSets: numSets,
         setDistribution: distribution,
         sets: Array.from({ length: numSets }, (_, i) => {
             const setQuantity = distribution[i];
+            const serials = Array.from({length: setQuantity}, () => `${sampleCounter++}`);
             return {
-                serials: Array.from({length: setQuantity}, (_, k) => `${k + 1}`),
+                serials,
                 testingDate: new Date()
             };
         })
