@@ -4,7 +4,7 @@
 import { db } from '@/lib/firebase';
 import { Receipt } from '@/types/receipt';
 import { collection, getDocs, doc, getDoc, deleteDoc, Timestamp, addDoc, query, orderBy, DocumentData } from 'firebase/firestore';
-import { format } from 'date-fns';
+import { format, isValid, parseISO } from 'date-fns';
 import { addConcreteCube } from './concrete-cubes';
 import { addBlockAndBrick } from './blocks-and-bricks';
 import { addPaver } from './pavers';
@@ -61,11 +61,28 @@ export async function getReceiptById(id: string): Promise<Receipt | null> {
 
 export async function addReceipt(receipt: Omit<Receipt, 'id'>): Promise<Receipt> {
     // Convert JS Dates to Firestore Timestamps before saving
-    const dataToSave = { ...receipt };
-    if (dataToSave.receiptDate) {
-        (dataToSave as any).receiptDate = Timestamp.fromDate(dataToSave.receiptDate);
-    }
+    const dataToSave: any = { ...receipt };
+    
+    const convertDatesToTimestamps = (obj: any) => {
+        for (const key in obj) {
+            if (obj[key] instanceof Date) {
+                obj[key] = Timestamp.fromDate(obj[key]);
+            } else if (typeof obj[key] === 'string') {
+                const parsedDate = parseISO(obj[key]);
+                if(isValid(parsedDate)) {
+                    const isJustDate = /^\d{4}-\d{2}-\d{2}$/.test(obj[key]);
+                    if (!isJustDate) {
+                         obj[key] = Timestamp.fromDate(parsedDate);
+                    }
+                }
+            } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+                convertDatesToTimestamps(obj[key]);
+            }
+        }
+    };
 
+    convertDatesToTimestamps(dataToSave);
+    
     const docRef = await addDoc(receiptsCollection, dataToSave);
     return { id: docRef.id, ...receipt };
 }
@@ -216,7 +233,10 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
             }
         } else {
             // Handle non-special categories by adding them to the Projects table
-            const labTestDetails = Object.values(categoryData.tests).map(t => `${t.materialTest} (Qty: ${t.quantity})`).join(', ');
+            const testsList = Object.values(categoryData.tests)
+                .map(t => `- ${t.materialTest} (Qty: ${t.quantity})`)
+                .join('\n');
+            const labTestDetails = `${category}:\n${testsList}`;
             
             await addProject({
                 date: format(receiptDate, "yyyy-MM-dd"),
