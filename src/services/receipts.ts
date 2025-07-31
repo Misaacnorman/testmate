@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { db } from '@/lib/firebase';
@@ -232,7 +233,7 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
                 }
             }
         } else {
-            // Handle non-special categories by adding them to the Projects table
+             // Handle non-special categories by adding them to the Projects table
             const testsList = Object.values(categoryData.tests)
                 .map(t => `- ${t.materialTest} (Qty: ${t.quantity})`)
                 .join('\n');
