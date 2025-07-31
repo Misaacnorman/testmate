@@ -28,6 +28,7 @@ const itemSchema = z.object({
     width: z.coerce.number().optional(),
     height: z.coerce.number().optional(),
   }).optional(),
+  areaOfUse: z.string().optional(),
   paverType: z.string().optional(),
   paversPerSqMetre: z.coerce.number().optional(),
   calculatedArea: z.coerce.number().optional(),
@@ -63,6 +64,7 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
     const updatesForThisItem = updatedItems[itemToLoad.id] || {};
     form.reset({
       dimensions: updatesForThisItem.dimensions ?? itemToLoad.dimensions,
+      areaOfUse: updatesForThisItem.areaOfUse ?? itemToLoad.areaOfUse,
       paverType: updatesForThisItem.paverType ?? itemToLoad.paverType,
       paversPerSqMetre: updatesForThisItem.paversPerSqMetre ?? itemToLoad.paversPerSqMetre,
       calculatedArea: updatesForThisItem.calculatedArea ?? itemToLoad.calculatedArea,
@@ -168,10 +170,11 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
                 <div className="space-y-2"><Label>Load (kN)</Label><Input type="number" step="any" {...form.register("loadKN")} /></div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="space-y-2"><Label>Paver Type</Label><Input {...form.register("paverType")} /></div>
-                <div className="space-y-2"><Label>Pavers per m²</Label><Input type="number" {...form.register("paversPerSqMetre")} /></div>
-                <div className="space-y-2"><Label>Calculated Area (mm²)</Label><Input type="number" step="any" {...form.register("calculatedArea")} /></div>
+                 <div className="space-y-2"><Label>Area of Use</Label><Input {...form.register("areaOfUse")} /></div>
+                 <div className="space-y-2"><Label>Paver Type</Label><Input {...form.register("paverType")} /></div>
+                 <div className="space-y-2"><Label>Pavers per m²</Label><Input type="number" {...form.register("paversPerSqMetre")} /></div>
               </div>
+               <div className="space-y-2"><Label>Calculated Area (mm²)</Label><Input type="number" step="any" {...form.register("calculatedArea")} /></div>
               <Separator/>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2"><Label>Machine Used</Label><Input {...form.register("machineUsed")} /></div>
