@@ -18,8 +18,9 @@ import { Label } from "@/components/ui/label";
 import { Paver } from "@/types/paver";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
-import { Separator } from "@/components/ui/separator";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 
 const itemSchema = z.object({
@@ -37,10 +38,11 @@ const itemSchema = z.object({
   loadKN: z.coerce.number().optional(),
   modeOfFailure: z.string().optional(),
   recordedTemperature: z.string().optional(),
-  certificateNumber: z.string().optional(),
   comment: z.string().optional(),
   technician: z.string().optional(),
+  certificateNumber: z.string().optional(),
   dateOfIssue: z.string().optional(),
+  issueIdSerialNo: z.string().optional(),
 });
 
 type TestPaversDialogProps = {
@@ -73,10 +75,11 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
       machineUsed: updatesForThisItem.machineUsed ?? itemToLoad.machineUsed,
       modeOfFailure: updatesForThisItem.modeOfFailure ?? itemToLoad.modeOfFailure,
       recordedTemperature: updatesForThisItem.recordedTemperature ?? itemToLoad.recordedTemperature,
-      certificateNumber: updatesForThisItem.certificateNumber ?? itemToLoad.certificateNumber,
       comment: updatesForThisItem.comment ?? itemToLoad.comment,
       technician: updatesForThisItem.technician ?? itemToLoad.technician,
+      certificateNumber: updatesForThisItem.certificateNumber ?? itemToLoad.certificateNumber,
       dateOfIssue: updatesForThisItem.dateOfIssue ?? itemToLoad.dateOfIssue,
+      issueIdSerialNo: updatesForThisItem.issueIdSerialNo ?? itemToLoad.issueIdSerialNo,
     });
   }, [currentStep, items, form, updatedItems]);
 
@@ -136,13 +139,13 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
     <>
     <Dialog open={true} onOpenChange={(open) => { if (!open) handleCloseAttempt(); }}>
       <DialogContent 
-        className="max-w-3xl max-h-[90vh] flex flex-col"
+        className="max-w-4xl max-h-[90vh] flex flex-col"
         onInteractOutside={(e) => { e.preventDefault(); handleCloseAttempt(); }}
         >
         <DialogHeader>
           <DialogTitle>Test Pavers ({currentStep + 1} of {items.length})</DialogTitle>
           <DialogDescription>
-            Enter the test results for the selected samples.
+            Enter the test results for the selected samples. Use the accordions to enter data.
           </DialogDescription>
            <Progress value={progress} className="mt-2" />
         </DialogHeader>
@@ -159,37 +162,49 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
               </div>
             </div>
             
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="space-y-2"><Label>Length (mm)</Label><Input {...form.register("dimensions.length")} /></div>
-                <div className="space-y-2"><Label>Width (mm)</Label><Input {...form.register("dimensions.width")} /></div>
-                <div className="space-y-2"><Label>Height (mm)</Label><Input {...form.register("dimensions.height")} /></div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2"><Label>Weight (kg)</Label><Input type="number" step="any" {...form.register("weightKg")} /></div>
-                <div className="space-y-2"><Label>Load (kN)</Label><Input type="number" step="any" {...form.register("loadKN")} /></div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                 <div className="space-y-2"><Label>Area of Use</Label><Input {...form.register("areaOfUse")} /></div>
-                 <div className="space-y-2"><Label>Paver Type</Label><Input {...form.register("paverType")} /></div>
-                 <div className="space-y-2"><Label>Pavers per m²</Label><Input type="number" {...form.register("paversPerSqMetre")} /></div>
-              </div>
-               <div className="space-y-2"><Label>Calculated Area (mm²)</Label><Input type="number" step="any" {...form.register("calculatedArea")} /></div>
-              <Separator/>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2"><Label>Machine Used</Label><Input {...form.register("machineUsed")} /></div>
-                <div className="space-y-2"><Label>Mode of Failure</Label><Input {...form.register("modeOfFailure")} /></div>
-              </div>
-              <div className="space-y-2"><Label>Comment</Label><Input {...form.register("comment")} /></div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2"><Label>Technician</Label><Input {...form.register("technician")} /></div>
-                <div className="space-y-2"><Label>Recorded Temperature (°C)</Label><Input {...form.register("recordedTemperature")} /></div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2"><Label>Date of Issue</Label><Input {...form.register("dateOfIssue")} placeholder="YYYY-MM-DD"/></div>
-                <div className="space-y-2"><Label>Certificate Number</Label><Input {...form.register("certificateNumber")} /></div>
-              </div>
-            </div>
+            <Accordion type="multiple" defaultValue={['results']} className="w-full">
+              <AccordionItem value="results">
+                <AccordionTrigger className="font-semibold text-lg">Test Results</AccordionTrigger>
+                <AccordionContent className="p-1">
+                  <div className="space-y-4 p-4 border rounded-lg">
+                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="space-y-2"><Label>Length (mm)</Label><Input type="number" step="any" {...form.register("dimensions.length")} /></div>
+                        <div className="space-y-2"><Label>Width (mm)</Label><Input type="number" step="any" {...form.register("dimensions.width")} /></div>
+                        <div className="space-y-2"><Label>Height (mm)</Label><Input type="number" step="any" {...form.register("dimensions.height")} /></div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="space-y-2"><Label>Weight (kg)</Label><Input type="number" step="any" {...form.register("weightKg")} /></div>
+                        <div className="space-y-2"><Label>Load (kN)</Label><Input type="number" step="any" {...form.register("loadKN")} /></div>
+                        <div className="space-y-2"><Label>Calculated Area (mm²)</Label><Input type="number" step="any" {...form.register("calculatedArea")} /></div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="space-y-2"><Label>Area of Use</Label><Input {...form.register("areaOfUse")} /></div>
+                        <div className="space-y-2"><Label>Paver Type</Label><Input {...form.register("paverType")} /></div>
+                        <div className="space-y-2"><Label>Pavers per m²</Label><Input type="number" {...form.register("paversPerSqMetre")} /></div>
+                      </div>
+                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2"><Label>Machine Used</Label><Input {...form.register("machineUsed")} /></div>
+                        <div className="space-y-2"><Label>Mode of Failure</Label><Input {...form.register("modeOfFailure")} /></div>
+                      </div>
+                      <div className="space-y-2"><Label>Recorded Temp. (°C)</Label><Input {...form.register("recordedTemperature")} /></div>
+                      <div className="space-y-2"><Label>Comment</Label><Textarea {...form.register("comment")} /></div>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="issuance">
+                <AccordionTrigger className="font-semibold text-lg">Issuance Details</AccordionTrigger>
+                <AccordionContent className="p-1">
+                  <div className="space-y-4 p-4 border rounded-lg">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2"><Label>Technician</Label><Input {...form.register("technician")} /></div>
+                      <div className="space-y-2"><Label>Certificate Number</Label><Input {...form.register("certificateNumber")} /></div>
+                      <div className="space-y-2"><Label>Date of Issue</Label><Input {...form.register("dateOfIssue")} placeholder="YYYY-MM-DD"/></div>
+                      <div className="space-y-2"><Label>Issue ID/Serial No.</Label><Input {...form.register("issueIdSerialNo")} /></div>
+                    </div>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </form>
         </ScrollArea>
         <DialogFooter className="pt-4 justify-between">
