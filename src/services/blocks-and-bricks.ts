@@ -7,6 +7,8 @@ import { collection, getDocs, addDoc, doc, updateDoc, DocumentData, QueryDocumen
 import { Timestamp } from 'firebase/firestore';
 import { format } from 'date-fns';
 
+const blocksAndBricksCollection = collection(db, 'blocksAndBricks');
+
 const fromFirestore = <T extends { id: string }>(doc: DocumentData): T => {
     const data = doc.data();
     
