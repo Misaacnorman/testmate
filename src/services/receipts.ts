@@ -25,13 +25,13 @@ const fromFirestore = <T extends { id: string }>(doc: DocumentData): T => {
         }
 
         if (obj instanceof Timestamp) {
-            return format(obj.toDate(), 'yyyy-MM-dd HH:mm:ss');
+            return format(obj.toDate(), 'yyyy-MM-dd');
         }
         
         // Firestore Timestamps in arrays from older receipts might be objects
         if (typeof obj === 'object' && obj.seconds !== undefined && obj.nanoseconds !== undefined) {
              try {
-                return format(new Timestamp(obj.seconds, obj.nanoseconds).toDate(), 'yyyy-MM-dd HH:mm:ss');
+                return format(new Timestamp(obj.seconds, obj.nanoseconds).toDate(), 'yyyy-MM-dd');
              } catch (e) {
                 return obj; // if it fails, return original
              }
@@ -136,8 +136,8 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
                     for (const sampleId of set.serials) {
                         const commonSetData = {
                             ...baseData,
-                            castingDate: set.castingDate ? format(new Date(set.castingDate), "yyyy-MM-dd") : '',
-                            testingDate: set.testingDate ? format(new Date(set.testingDate), "yyyy-MM-dd") : '',
+                            castingDate: set.castingDate ? format(set.castingDate, "yyyy-MM-dd") : '',
+                            testingDate: set.testingDate ? format(set.testingDate, "yyyy-MM-dd") : '',
                             ageDays: set.age || 0,
                             areaOfUse: set.areaOfUse || '',
                             sampleId,
@@ -224,8 +224,8 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
                         for (const sampleId of set.serials) {
                              await addWaterAbsorption({
                                 ...baseData,
-                                castingDate: set.castingDate ? format(new Date(set.castingDate), "yyyy-MM-dd") : '',
-                                testingDate: set.testingDate ? format(new Date(set.testingDate), "yyyy-MM-dd") : '',
+                                castingDate: set.castingDate ? format(set.castingDate, "yyyy-MM-dd") : '',
+                                testingDate: set.testingDate ? format(set.testingDate, "yyyy-MM-dd") : '',
                                 ageDays: set.age || 0,
                                 areaOfUse: set.areaOfUse || '',
                                 sampleId,
