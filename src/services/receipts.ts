@@ -15,7 +15,6 @@ import { addProject } from './projects';
 
 const receiptsCollection = collection(db, 'receipts');
 
-// Generic helper to convert Firestore Timestamps to JS Dates in any object
 const fromFirestore = <T extends { id: string }>(doc: DocumentData): T => {
     const data = doc.data();
     
@@ -28,12 +27,11 @@ const fromFirestore = <T extends { id: string }>(doc: DocumentData): T => {
             return format(obj.toDate(), 'yyyy-MM-dd');
         }
         
-        // Firestore Timestamps in arrays from older receipts might be objects
         if (typeof obj === 'object' && obj.seconds !== undefined && obj.nanoseconds !== undefined) {
              try {
                 return format(new Timestamp(obj.seconds, obj.nanoseconds).toDate(), 'yyyy-MM-dd');
              } catch (e) {
-                return obj; // if it fails, return original
+                return obj; 
              }
         }
 
@@ -75,7 +73,6 @@ export async function getReceiptById(id: string): Promise<Receipt | null> {
 }
 
 export async function addReceipt(receipt: Omit<Receipt, 'id'>): Promise<Receipt> {
-    // Convert JS Dates to Firestore Timestamps before saving
     const dataToSave: any = { ...receipt };
     
     const convertDatesToTimestamps = (obj: any) => {
@@ -85,7 +82,7 @@ export async function addReceipt(receipt: Omit<Receipt, 'id'>): Promise<Receipt>
             } else if (typeof obj[key] === 'string') {
                 const parsedDate = parseISO(obj[key]);
                 if(isValid(parsedDate)) {
-                    const isJustDate = /^d{4}-d{2}-d{2}$/.test(obj[key]);
+                    const isJustDate = /^\d{4}-\d{2}-\d{2}$/.test(obj[key]);
                     if (!isJustDate) {
                          obj[key] = Timestamp.fromDate(parsedDate);
                     }
@@ -108,14 +105,34 @@ export async function deleteReceipt(receiptId: string): Promise<void> {
 }
 
 
-// This is the new central function to handle the entire process
 export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): Promise<Receipt> {
-    // 1. Save the main receipt
+    let validatedReceiptDate: Date;
+
+    if (!receiptData.receiptDate) {
+        throw new Error("Invalid receipt data: receiptDate is required.");
+    }
+
+    if (receiptData.receiptDate instanceof Date) {
+        if (isNaN(receiptData.receiptDate.getTime())) {
+             throw new Error("Invalid receipt data: receiptDate is not a valid Date.");
+        }
+        validatedReceiptDate = receiptData.receiptDate;
+    } else if (typeof receiptData.receiptDate === 'string') {
+        const parsedDate = parseISO(receiptData.receiptDate);
+        if (!isValid(parsedDate)) {
+            throw new Error("Invalid receipt data: receiptDate string is not valid.");
+        }
+        validatedReceiptDate = parsedDate;
+    } else {
+        throw new Error("Invalid receipt data: receiptDate must be a valid Date object or a parseable date string.");
+    }
+    
     const newReceipt = await addReceipt(receiptData);
-    const { id: receiptId, formData, categories, specialData, receiptDate } = newReceipt;
+    const { id: receiptId, formData, categories, specialData } = newReceipt;
+    const formattedReceiptDate = format(validatedReceiptDate, "yyyy-MM-dd");
 
     const baseData = {
-        dateReceived: format(receiptDate, "yyyy-MM-dd"),
+        dateReceived: formattedReceiptDate,
         client: formData.clientName,
         project: formData.projectTitle,
         sampleReceiptNo: receiptId,
@@ -124,20 +141,36 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
         takenBy: formData.deliveredBy,
     };
     
-    // 2. Iterate through categories and tests to populate other registers
     for (const [category, categoryData] of Object.entries(categories)) {
         
         const isSpecialCategory = Object.keys(specialData).includes(category);
         
         if (isSpecialCategory) {
-            // Handle special categories (Cubes, Bricks, etc.)
             for (const [testId, testDetails] of Object.entries(specialData[category])) {
                 for (const [setIndex, set] of testDetails.sets.entries()) {
+                     let formattedCastingDate = '';
+                     let formattedTestingDate = '';
+
+                     if (set.castingDate && isValid(new Date(set.castingDate))) {
+                        try {
+                            formattedCastingDate = format(new Date(set.castingDate), "yyyy-MM-dd");
+                        } catch (e) {
+                            console.error(`Invalid castingDate at set index ${setIndex}:`, set.castingDate);
+                        }
+                     }
+                     if (set.testingDate && isValid(new Date(set.testingDate))) {
+                        try {
+                           formattedTestingDate = format(new Date(set.testingDate), "yyyy-MM-dd");
+                        } catch (e) {
+                            console.error(`Invalid testingDate at set index ${setIndex}:`, set.testingDate);
+                        }
+                     }
+
                     for (const sampleId of set.serials) {
                         const commonSetData = {
                             ...baseData,
-                            castingDate: set.castingDate ? format(set.castingDate, "yyyy-MM-dd") : '',
-                            testingDate: set.testingDate ? format(set.testingDate, "yyyy-MM-dd") : '',
+                            castingDate: formattedCastingDate,
+                            testingDate: formattedTestingDate,
                             ageDays: set.age || 0,
                             areaOfUse: set.areaOfUse || '',
                             sampleId,
@@ -147,7 +180,6 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
                             await addConcreteCube({
                                 ...commonSetData,
                                 class: set.class || '',
-                                // Fields to be filled later
                                 dimensions: { length: 0, width: 0, height: 0 },
                                 weightKg: 0,
                                 machineUsed: '',
@@ -165,7 +197,6 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
                              await addBlockAndBrick({
                                  ...commonSetData,
                                  sampleType: category,
-                                 // Fields to be filled later
                                  dimensions: { length: 0, width: 0, height: 0 },
                                  dimensionsOfHoles: { holeA: { no: 0, l: 0, w: 0 }, holeB: { no: 0, l: 0, w: 0 }, notch: { no: 0, l: 0, w: 0 } },
                                  weightKg: 0,
@@ -182,8 +213,7 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
                         } else if (category.toLowerCase() === 'pavers') {
                              await addPaver({
                                 ...commonSetData,
-                                paverType: '', // This might need to be collected
-                                // Fields to be filled later
+                                paverType: '',
                                 dimensions: { length: 0, width: 0, height: 0 },
                                 paversPerSqMetre: 0,
                                 calculatedArea: 0,
@@ -201,8 +231,7 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
                         } else if (category.toLowerCase() === 'cylinder') {
                             await addCylinder({
                                 ...commonSetData,
-                                class: set.class || '', // Cylinders might have class
-                                // Fields to be filled later
+                                class: set.class || '',
                                 dimensions: { diameter: 0, height: 0 },
                                 weightKg: 0,
                                 machineUsed: '',
@@ -218,19 +247,17 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
                         }
                     }
                 }
-                 // Check for Water Absorption test within the special category
                 if (testDetails.materialTest.toLowerCase().includes('water absorption')) {
                     for (const set of testDetails.sets) {
                         for (const sampleId of set.serials) {
                              await addWaterAbsorption({
                                 ...baseData,
-                                castingDate: set.castingDate ? format(set.castingDate, "yyyy-MM-dd") : '',
-                                testingDate: set.testingDate ? format(set.testingDate, "yyyy-MM-dd") : '',
+                                castingDate: set.castingDate ? format(new Date(set.castingDate), "yyyy-MM-dd") : '',
+                                testingDate: set.testingDate ? format(new Date(set.testingDate), "yyyy-MM-dd") : '',
                                 ageDays: set.age || 0,
                                 areaOfUse: set.areaOfUse || '',
                                 sampleId,
                                 sampleType: category,
-                                // Fields to be filled later
                                 dimensions: { length: 0, width: 0, height: 0 },
                                 ovenDriedWeightBeforeSoaking: 0,
                                 weightAfterSoaking: 0,
@@ -247,7 +274,6 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
                 }
             }
         } else {
-             // Handle non-special categories by adding them to the Projects table
             const testsList = Object.values(categoryData.tests)
                 .map(t => `- ${t.materialTest} (Qty: ${t.quantity})`)
                 .join('\n');
@@ -255,18 +281,18 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
             const labTestDetails = `**${category}**\n${testsList}`;
             
             await addProject({
-                date: format(receiptDate, "yyyy-MM-dd"),
+                date: formattedReceiptDate,
                 projectId: { big: '', small: `S-${receiptId}` },
                 client: formData.clientName,
                 project: formData.projectTitle,
-                engineerInCharge: '', // To be filled later
+                engineerInCharge: '',
                 fieldWork: {
                     details: 'N/A', technician: '', startDate: '', endDate: '', remarks: ''
                 },
                 labWork: {
                     details: labTestDetails,
                     technician: formData.receivedBy,
-                    startDate: format(receiptDate, "yyyy-MM-dd"),
+                    startDate: formattedReceiptDate,
                     agreedDeliveryDate: '',
                     signatureAgreed: '',
                     actualDeliveryDate: '',
