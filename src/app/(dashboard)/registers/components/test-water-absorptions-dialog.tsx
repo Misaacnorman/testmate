@@ -70,7 +70,7 @@ export function TestWaterAbsorptionsDialog({ items, onOpenChange, onBatchUpdate 
   const [currentStep, setCurrentStep] = useState(0);
   const [isConfirmingClose, setIsConfirmingClose] = useState(false);
 
-  const originalItems = useMemo(() => items, []);
+  const originalItems = useMemo(() => items, [items]);
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
