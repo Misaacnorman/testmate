@@ -679,7 +679,7 @@ export default function RegistersPage() {
           onCubeUpdated={handleConcreteCubeUpdated}
         />
       )}
-      {isTestCubesDialogOpen && (
+      {isTestCubesDialogOpen && selectedCubes.length > 0 && (
         <TestConcreteCubesDialog
           cubes={selectedCubes}
           onOpenChange={setIsTestCubesDialogOpen}
@@ -693,7 +693,7 @@ export default function RegistersPage() {
           onItemUpdated={handleBlockAndBrickUpdated}
         />
       )}
-      {isTestBlocksAndBricksDialogOpen && (
+      {isTestBlocksAndBricksDialogOpen && selectedBlocksAndBricks.length > 0 && (
         <TestBlocksAndBricksDialog
           items={selectedBlocksAndBricks}
           onOpenChange={setIsTestBlocksAndBricksDialogOpen}
@@ -707,7 +707,7 @@ export default function RegistersPage() {
           onItemUpdated={handlePaverUpdated}
         />
       )}
-      {isTestPaversDialogOpen && (
+      {isTestPaversDialogOpen && selectedPavers.length > 0 && (
         <TestPaversDialog
           items={selectedPavers}
           onOpenChange={setIsTestPaversDialogOpen}
@@ -721,7 +721,7 @@ export default function RegistersPage() {
           onItemUpdated={handleCylinderUpdated}
         />
       )}
-       {isTestCylindersDialogOpen && (
+       {isTestCylindersDialogOpen && selectedCylinders.length > 0 && (
         <TestCylindersDialog
           items={selectedCylinders}
           onOpenChange={setIsTestCylindersDialogOpen}
@@ -735,7 +735,7 @@ export default function RegistersPage() {
           onItemUpdated={handleWaterAbsorptionUpdated}
         />
       )}
-       {isTestWaterAbsorptionsDialogOpen && (
+       {isTestWaterAbsorptionsDialogOpen && selectedWaterAbsorptions.length > 0 && (
         <TestWaterAbsorptionsDialog
           items={selectedWaterAbsorptions}
           onOpenChange={setIsTestWaterAbsorptionsDialogOpen}
