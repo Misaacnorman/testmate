@@ -152,8 +152,8 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
         client: formData.clientName,
         project: formData.projectTitle,
         sampleReceiptNo: receiptId,
-        technician: '',
         contact: formData.clientContact,
+        technician: '',
         takenBy: '',
         date: '',
     };
@@ -195,21 +195,37 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
                                 sampleReceiptNumber: receiptId
                             });
                         } else if (category.toLowerCase() === 'bricks' || category.toLowerCase() === 'blocks') {
-                             await addBlockAndBrick({
-                                 ...commonSetData,
-                                 sampleType: category,
-                                 dimensions: { length: 0, width: 0, height: 0 },
-                                 dimensionsOfHoles: { holeA: { no: 0, l: 0, w: 0 }, holeB: { no: 0, l: 0, w: 0 }, notch: { no: 0, l: 0, w: 0 } },
-                                 weightKg: 0,
-                                 machineUsed: '',
-                                 loadKN: 0,
-                                 modeOfFailure: '',
-                                 recordedTemperature: '',
-                                 certificateNumber: '',
-                                 comment: '',
-                                 dateOfIssue: '',
-                                 issueIdSerialNo: '',
-                             });
+                             if (testDetails.materialTest.toLowerCase().includes('water absorption')) {
+                                await addWaterAbsorption({
+                                    ...commonSetData,
+                                    sampleType: category,
+                                    dimensions: { length: 0, width: 0, height: 0 },
+                                    ovenDriedWeightBeforeSoaking: 0,
+                                    weightAfterSoaking: 0,
+                                    weightOfWater: 0,
+                                    calculatedWaterAbsorption: 0,
+                                    certificateNumber: '',
+                                    comment: '',
+                                    dateOfIssue: '',
+                                    issueIdSerialNo: '',
+                                });
+                            } else {
+                                await addBlockAndBrick({
+                                     ...commonSetData,
+                                     sampleType: category,
+                                     dimensions: { length: 0, width: 0, height: 0 },
+                                     dimensionsOfHoles: { holeA: { no: 0, l: 0, w: 0 }, holeB: { no: 0, l: 0, w: 0 }, notch: { no: 0, l: 0, w: 0 } },
+                                     weightKg: 0,
+                                     machineUsed: '',
+                                     loadKN: 0,
+                                     modeOfFailure: '',
+                                     recordedTemperature: '',
+                                     certificateNumber: '',
+                                     comment: '',
+                                     dateOfIssue: '',
+                                     issueIdSerialNo: '',
+                                 });
+                            }
                         } else if (category.toLowerCase() === 'pavers') {
                              await addPaver({
                                 ...commonSetData,
@@ -237,32 +253,6 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
                                 loadKN: 0,
                                 modeOfFailure: '',
                                 recordedTemperature: '',
-                                certificateNumber: '',
-                                comment: '',
-                                dateOfIssue: '',
-                                issueIdSerialNo: '',
-                            });
-                        }
-                    }
-                }
-                if (testDetails.materialTest.toLowerCase().includes('water absorption')) {
-                    for (const set of testDetails.sets) {
-                        const formattedCastingDate = set.castingDate ? safeFormat(set.castingDate, "yyyy-MM-dd") : '';
-                        const formattedTestingDate = set.testingDate ? safeFormat(set.testingDate, "yyyy-MM-dd") : '';
-                        for (const sampleId of set.serials) {
-                             await addWaterAbsorption({
-                                ...baseData,
-                                castingDate: formattedCastingDate,
-                                testingDate: formattedTestingDate,
-                                ageDays: set.age || 0,
-                                areaOfUse: set.areaOfUse || '',
-                                sampleId,
-                                sampleType: category,
-                                dimensions: { length: 0, width: 0, height: 0 },
-                                ovenDriedWeightBeforeSoaking: 0,
-                                weightAfterSoaking: 0,
-                                weightOfWater: 0,
-                                calculatedWaterAbsorption: 0,
                                 certificateNumber: '',
                                 comment: '',
                                 dateOfIssue: '',
