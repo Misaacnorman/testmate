@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect } from "react";
@@ -83,7 +82,7 @@ export function EditPaverDialog({ item, onOpenChange, onItemUpdated }: EditPaver
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="flex-grow pr-6 -mr-6">
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form id="edit-paver-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-4 p-4 border rounded-lg bg-muted/50">
               <h4 className="font-semibold text-lg mb-2">Initial Information</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
@@ -127,13 +126,12 @@ export function EditPaverDialog({ item, onOpenChange, onItemUpdated }: EditPaver
                 <div className="space-y-2"><Label>Issue ID/Serial No.</Label><Input {...form.register("issueIdSerialNo")} /></div>
               </div>
             </div>
-            
-            <DialogFooter className="pt-4">
-              <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>Cancel</Button>
-              <Button type="submit">Save Changes</Button>
-            </DialogFooter>
           </form>
         </ScrollArea>
+        <DialogFooter className="pt-4">
+          <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>Cancel</Button>
+          <Button type="submit" form="edit-paver-form">Save Changes</Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

@@ -22,7 +22,7 @@ import { getBlocksAndBricks, updateBlockAndBrick } from '@/services/blocks-and-b
 import { getColumns as getBlocksAndBricksColumns } from './components/blocks-and-bricks-columns';
 import { BlocksAndBricksTable } from './components/blocks-and-bricks-table';
 import { Paver } from '@/types/paver';
-import { getPavers, updatePaver } from '@/services/pavers';
+import { getPavers, updatePaver, deletePaver } from '@/services/pavers';
 import { getColumns as getPaverColumns } from './components/paver-columns';
 import { PaversTable } from './components/pavers-table';
 import { Cylinder } from '@/types/cylinder';
@@ -373,6 +373,24 @@ export default function RegistersPage() {
     }
   };
 
+  const handlePaverDeleted = async (paverId: string) => {
+    try {
+      await deletePaver(paverId);
+      toast({
+        title: "Paver Test Deleted",
+        description: "The paver test record has been successfully deleted.",
+      });
+      fetchPavers();
+    } catch (error) {
+      console.error("Failed to delete paver:", error);
+      toast({
+        variant: "destructive",
+        title: "Error Deleting Paver",
+        description: "Could not delete the paver test record.",
+      });
+    }
+  };
+
   const handleBatchPaversUpdate = async (updatedItems: Paver[]) => {
     try {
       await Promise.all(updatedItems.map(item => updatePaver(item)));
@@ -475,7 +493,7 @@ export default function RegistersPage() {
   const projectColumns = useMemo(() => getProjectColumns({ onEdit: setEditingProject, onDelete: handleProjectDeleted }), [handleProjectDeleted]);
   const concreteCubesColumns = useMemo(() => getConcreteCubesColumns({ onEdit: setEditingConcreteCube }), []);
   const blocksAndBricksColumns = useMemo(() => getBlocksAndBricksColumns({ onEdit: setEditingBlockAndBrick }), []);
-  const paverColumns = useMemo(() => getPaverColumns({ onEdit: setEditingPaver }), []);
+  const paverColumns = useMemo(() => getPaverColumns({ onEdit: setEditingPaver, onDelete: handlePaverDeleted }), [handlePaverDeleted]);
   const cylinderColumns = useMemo(() => getCylinderColumns({ onEdit: setEditingCylinder }), []);
   const waterAbsorptionColumns = useMemo(() => getWaterAbsorptionColumns({ onEdit: setEditingWaterAbsorption }), []);
 
