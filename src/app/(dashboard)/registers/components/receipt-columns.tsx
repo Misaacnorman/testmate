@@ -7,7 +7,7 @@ import { MoreHorizontal, ArrowUpDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
 import Link from "next/link"
-import { format } from "date-fns"
+import { format, parseISO } from "date-fns"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 
 type ColumnsProps = {
@@ -61,15 +61,13 @@ export const getColumns = ({ onDelete }: ColumnsProps): ColumnDef<Receipt>[] => 
       )
     },
     cell: ({ row }) => {
-        const date = row.getValue("receiptDate") as Date | string;
-        // Firestore timestamps might be deserialized as objects
-        const validDate = date instanceof Date ? date : (date as any)?.toDate ? (date as any).toDate() : new Date(date);
-        
-        if (isNaN(validDate.getTime())) {
-            return <div>Invalid Date</div>;
+        const dateStr = row.getValue("receiptDate") as string;
+        try {
+            const date = parseISO(dateStr);
+            return <div>{format(date, "PPP")}</div>
+        } catch (e) {
+            return <div>Invalid Date</div>
         }
-
-        return <div>{format(validDate, "PPP")}</div>
     },
   },
   {
@@ -88,7 +86,7 @@ export const getColumns = ({ onDelete }: ColumnsProps): ColumnDef<Receipt>[] => 
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem asChild>
-                <Link href={`/logs/${receipt.id}`}>View Receipt</Link>
+                  <Link href={`/logs/${receipt.id}`}>View Receipt</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <AlertDialogTrigger asChild>
@@ -105,14 +103,14 @@ export const getColumns = ({ onDelete }: ColumnsProps): ColumnDef<Receipt>[] => 
             <AlertDialogHeader>
               <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
               <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete this receipt
-                and remove its data from our servers.
+                  This action cannot be undone. This will permanently delete this receipt
+                  and remove its data from our servers.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
               <AlertDialogAction onClick={() => onDelete(receipt.id)} className="bg-destructive hover:bg-destructive/90">
-                Delete
+                  Delete
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

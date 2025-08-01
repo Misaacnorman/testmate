@@ -5,31 +5,38 @@ import { db } from '@/lib/firebase';
 import { ConcreteCube } from '@/types/concrete-cube';
 import { collection, getDocs, addDoc, doc, updateDoc, DocumentData } from 'firebase/firestore';
 import { Timestamp } from 'firebase/firestore';
+import { format } from 'date-fns';
 
 const concreteCubesCollection = collection(db, 'concreteCubes');
 
 const fromFirestore = <T extends { id: string }>(doc: DocumentData): T => {
     const data = doc.data();
-    const convertedData: { [key: string]: any } = { id: doc.id };
+    
+    const convertTimestamps = (obj: any): any => {
+        if (obj === null || typeof obj !== 'object') {
+            return obj;
+        }
 
-    for (const key in data) {
-        if (Object.prototype.hasOwnProperty.call(data, key)) {
-            const value = data[key];
-            if (value instanceof Timestamp) {
-                convertedData[key] = value.toDate();
-            } else if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-                const nestedData = { ...value };
-                for(const nestedKey in nestedData) {
-                    if (nestedData[nestedKey] instanceof Timestamp) {
-                        nestedData[nestedKey] = nestedData[nestedKey].toDate();
-                    }
-                }
-                 convertedData[key] = nestedData;
-            } else {
-                convertedData[key] = value;
+        if (obj instanceof Timestamp) {
+            return format(obj.toDate(), 'yyyy-MM-dd');
+        }
+
+        if (Array.isArray(obj)) {
+            return obj.map(convertTimestamps);
+        }
+
+        const newObj: { [key: string]: any } = {};
+        for (const key in obj) {
+            if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                newObj[key] = convertTimestamps(obj[key]);
             }
         }
-    }
+        return newObj;
+    };
+
+    const convertedData = convertTimestamps(data);
+    convertedData.id = doc.id;
+    
     return convertedData as T;
 };
 

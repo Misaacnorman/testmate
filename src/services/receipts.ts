@@ -18,27 +18,41 @@ const receiptsCollection = collection(db, 'receipts');
 // Generic helper to convert Firestore Timestamps to JS Dates in any object
 const fromFirestore = <T extends { id: string }>(doc: DocumentData): T => {
     const data = doc.data();
-    const convertedData: { [key: string]: any } = { id: doc.id };
+    
+    const convertTimestamps = (obj: any): any => {
+        if (obj === null || typeof obj !== 'object') {
+            return obj;
+        }
 
-    for (const key in data) {
-        if (Object.prototype.hasOwnProperty.call(data, key)) {
-            const value = data[key];
-            if (value instanceof Timestamp) {
-                convertedData[key] = value.toDate();
-            } else if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-                // Recursively convert nested objects, but not arrays for now
-                const nestedData = { ...value };
-                for(const nestedKey in nestedData) {
-                    if (nestedData[nestedKey] instanceof Timestamp) {
-                        nestedData[nestedKey] = nestedData[nestedKey].toDate();
-                    }
-                }
-                 convertedData[key] = nestedData;
-            } else {
-                convertedData[key] = value;
+        if (obj instanceof Timestamp) {
+            return format(obj.toDate(), 'yyyy-MM-dd HH:mm:ss');
+        }
+        
+        // Firestore Timestamps in arrays from older receipts might be objects
+        if (typeof obj === 'object' && obj.seconds !== undefined && obj.nanoseconds !== undefined) {
+             try {
+                return format(new Timestamp(obj.seconds, obj.nanoseconds).toDate(), 'yyyy-MM-dd HH:mm:ss');
+             } catch (e) {
+                return obj; // if it fails, return original
+             }
+        }
+
+        if (Array.isArray(obj)) {
+            return obj.map(convertTimestamps);
+        }
+
+        const newObj: { [key: string]: any } = {};
+        for (const key in obj) {
+            if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                newObj[key] = convertTimestamps(obj[key]);
             }
         }
-    }
+        return newObj;
+    };
+
+    const convertedData = convertTimestamps(data);
+    convertedData.id = doc.id;
+    
     return convertedData as T;
 };
 
@@ -71,7 +85,7 @@ export async function addReceipt(receipt: Omit<Receipt, 'id'>): Promise<Receipt>
             } else if (typeof obj[key] === 'string') {
                 const parsedDate = parseISO(obj[key]);
                 if(isValid(parsedDate)) {
-                    const isJustDate = /^\d{4}-\d{2}-\d{2}$/.test(obj[key]);
+                    const isJustDate = /^d{4}-d{2}-d{2}$/.test(obj[key]);
                     if (!isJustDate) {
                          obj[key] = Timestamp.fromDate(parsedDate);
                     }
@@ -237,7 +251,8 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
             const testsList = Object.values(categoryData.tests)
                 .map(t => `- ${t.materialTest} (Qty: ${t.quantity})`)
                 .join('\n');
-            const labTestDetails = `${category}:\n${testsList}`;
+            
+            const labTestDetails = `**${category}**\n${testsList}`;
             
             await addProject({
                 date: format(receiptDate, "yyyy-MM-dd"),

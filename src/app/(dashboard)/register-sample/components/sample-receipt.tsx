@@ -10,7 +10,7 @@ type SampleReceiptProps = {
     formData: any;
     categories: any;
     specialData: any;
-    receiptDate: Date;
+    receiptDate: string; // Should be a string now
     onClose: () => void;
 };
 
