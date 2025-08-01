@@ -105,31 +105,48 @@ export async function deleteReceipt(receiptId: string): Promise<void> {
 }
 
 
-export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): Promise<Receipt> {
-    let validatedReceiptDate: Date;
+function safeFormat(dateInput: any, formatString: string): string {
+  if (!dateInput) {
+    console.warn("safeFormat: Date input is falsy:", dateInput);
+    return '';
+  }
 
-    if (!receiptData.receiptDate) {
-        throw new Error("Invalid receipt data: receiptDate is required.");
-    }
+  let dateObj: Date | null = null;
 
-    if (receiptData.receiptDate instanceof Date) {
-        if (isNaN(receiptData.receiptDate.getTime())) {
-             throw new Error("Invalid receipt data: receiptDate is not a valid Date.");
-        }
-        validatedReceiptDate = receiptData.receiptDate;
-    } else if (typeof receiptData.receiptDate === 'string') {
-        const parsedDate = parseISO(receiptData.receiptDate);
-        if (!isValid(parsedDate)) {
-            throw new Error("Invalid receipt data: receiptDate string is not valid.");
-        }
-        validatedReceiptDate = parsedDate;
+  if (dateInput instanceof Date) {
+    dateObj = dateInput;
+  } else if (typeof dateInput === 'string') {
+    const parsedDate = parseISO(dateInput);
+    if (isValid(parsedDate)) {
+      dateObj = parsedDate;
     } else {
-        throw new Error("Invalid receipt data: receiptDate must be a valid Date object or a parseable date string.");
+      console.error("safeFormat: Could not parse date string:", dateInput);
     }
-    
+  } else {
+    console.error("safeFormat: Unsupported date input type:", typeof dateInput, dateInput);
+  }
+
+  if (dateObj && isValid(dateObj)) {
+    try {
+      return format(dateObj, formatString);
+    } catch (formatError) {
+       console.error("safeFormat: Error formatting date:", dateObj, formatError);
+       return '';
+    }
+  } else {
+    console.error("safeFormat: Invalid date object provided:", dateInput);
+    return '';
+  }
+}
+
+export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): Promise<Receipt> {
     const newReceipt = await addReceipt(receiptData);
-    const { id: receiptId, formData, categories, specialData } = newReceipt;
-    const formattedReceiptDate = format(validatedReceiptDate, "yyyy-MM-dd");
+    const { id: receiptId, formData, categories, specialData, receiptDate } = newReceipt;
+
+    const formattedReceiptDate = safeFormat(receiptDate, "yyyy-MM-dd");
+    if (!formattedReceiptDate) {
+        throw new Error("processAndSaveReceipt: Invalid or missing receiptDate. Cannot proceed.");
+    }
 
     const baseData = {
         dateReceived: formattedReceiptDate,
@@ -148,23 +165,8 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
         if (isSpecialCategory) {
             for (const [testId, testDetails] of Object.entries(specialData[category])) {
                 for (const [setIndex, set] of testDetails.sets.entries()) {
-                     let formattedCastingDate = '';
-                     let formattedTestingDate = '';
-
-                     if (set.castingDate && isValid(new Date(set.castingDate))) {
-                        try {
-                            formattedCastingDate = format(new Date(set.castingDate), "yyyy-MM-dd");
-                        } catch (e) {
-                            console.error(`Invalid castingDate at set index ${setIndex}:`, set.castingDate);
-                        }
-                     }
-                     if (set.testingDate && isValid(new Date(set.testingDate))) {
-                        try {
-                           formattedTestingDate = format(new Date(set.testingDate), "yyyy-MM-dd");
-                        } catch (e) {
-                            console.error(`Invalid testingDate at set index ${setIndex}:`, set.testingDate);
-                        }
-                     }
+                     const formattedCastingDate = set.castingDate ? safeFormat(set.castingDate, "yyyy-MM-dd") : '';
+                     const formattedTestingDate = set.testingDate ? safeFormat(set.testingDate, "yyyy-MM-dd") : '';
 
                     for (const sampleId of set.serials) {
                         const commonSetData = {
@@ -249,11 +251,13 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
                 }
                 if (testDetails.materialTest.toLowerCase().includes('water absorption')) {
                     for (const set of testDetails.sets) {
+                        const formattedCastingDate = set.castingDate ? safeFormat(set.castingDate, "yyyy-MM-dd") : '';
+                        const formattedTestingDate = set.testingDate ? safeFormat(set.testingDate, "yyyy-MM-dd") : '';
                         for (const sampleId of set.serials) {
                              await addWaterAbsorption({
                                 ...baseData,
-                                castingDate: set.castingDate ? format(new Date(set.castingDate), "yyyy-MM-dd") : '',
-                                testingDate: set.testingDate ? format(new Date(set.testingDate), "yyyy-MM-dd") : '',
+                                castingDate: formattedCastingDate,
+                                testingDate: formattedTestingDate,
                                 ageDays: set.age || 0,
                                 areaOfUse: set.areaOfUse || '',
                                 sampleId,
