@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect, useState, useMemo } from "react";
+import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
@@ -19,10 +19,12 @@ import { WaterAbsorption } from "@/types/water-absorption";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import isEqual from 'lodash.isequal';
 
 
 const itemSchema = z.object({
+  id: z.string(),
   dimensions: z.object({
     length: z.coerce.number().optional(),
     width: z.coerce.number().optional(),
@@ -36,7 +38,27 @@ const itemSchema = z.object({
   comment: z.string().optional(),
   technician: z.string().optional(),
   dateOfIssue: z.string().optional(),
+  // Read-only
+  client: z.string(),
+  project: z.string(),
+  sampleId: z.string(),
+  sampleType: z.string(),
+  dateReceived: z.string(),
+  castingDate: z.string(),
+  testingDate: z.string(),
+  ageDays: z.number(),
+  areaOfUse: z.string(),
+  issueIdSerialNo: z.string(),
+  takenBy: z.string(),
+  date: z.string(),
+  contact: z.string(),
+  sampleReceiptNo: z.string(),
 });
+
+const formSchema = z.object({
+  items: z.array(itemSchema),
+});
+
 
 type TestWaterAbsorptionsDialogProps = {
   items: WaterAbsorption[];
@@ -46,73 +68,53 @@ type TestWaterAbsorptionsDialogProps = {
 
 export function TestWaterAbsorptionsDialog({ items, onOpenChange, onBatchUpdate }: TestWaterAbsorptionsDialogProps) {
   const [currentStep, setCurrentStep] = useState(0);
-  const [updatedItems, setUpdatedItems] = useState<Record<string, Partial<WaterAbsorption>>>({});
   const [isConfirmingClose, setIsConfirmingClose] = useState(false);
+
+  const originalItems = useMemo(() => items, []);
   
-  const currentItem = items[currentStep];
-  const form = useForm<z.infer<typeof itemSchema>>({
-    resolver: zodResolver(itemSchema),
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      items: originalItems,
+    }
   });
 
-  useEffect(() => {
-    const itemToLoad = items[currentStep];
-    const updatesForThisItem = updatedItems[itemToLoad.id] || {};
-    form.reset({
-      dimensions: updatesForThisItem.dimensions ?? itemToLoad.dimensions,
-      ovenDriedWeightBeforeSoaking: updatesForThisItem.ovenDriedWeightBeforeSoaking ?? itemToLoad.ovenDriedWeightBeforeSoaking,
-      weightAfterSoaking: updatesForThisItem.weightAfterSoaking ?? itemToLoad.weightAfterSoaking,
-      weightOfWater: updatesForThisItem.weightOfWater ?? itemToLoad.weightOfWater,
-      calculatedWaterAbsorption: updatesForThisItem.calculatedWaterAbsorption ?? itemToLoad.calculatedWaterAbsorption,
-      certificateNumber: updatesForThisItem.certificateNumber ?? itemToLoad.certificateNumber,
-      comment: updatesForThisItem.comment ?? itemToLoad.comment,
-      technician: updatesForThisItem.technician ?? itemToLoad.technician,
-      dateOfIssue: updatesForThisItem.dateOfIssue ?? itemToLoad.dateOfIssue,
-    });
-  }, [currentStep, items, form, updatedItems]);
-
-  const saveCurrentStep = () => {
-    const currentValues = form.getValues();
-    const existingItemData = items[currentStep];
-    
-    setUpdatedItems(prev => ({
-        ...prev,
-        [existingItemData.id]: {
-            ...existingItemData,
-            ...currentValues
-        }
-    }));
-  }
+  const { fields } = useFieldArray({
+    control: form.control,
+    name: "items",
+  });
+  
+  const currentItem = originalItems[currentStep];
 
   const handleNext = () => {
-    saveCurrentStep();
     if (currentStep < items.length - 1) {
       setCurrentStep(currentStep + 1);
     }
   };
 
   const handleBack = () => {
-    saveCurrentStep();
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }
   };
 
-  const handleSubmit = () => {
-    saveCurrentStep();
-    setUpdatedItems(currentUpdates => {
-        const finalItemsToUpdate = Object.values(currentUpdates).filter(item => Object.keys(item).length > 1) as WaterAbsorption[];
-        if(finalItemsToUpdate.length > 0) {
-            onBatchUpdate(finalItemsToUpdate);
-        } else {
-            onOpenChange(false);
-        }
-        return currentUpdates;
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
+    const changedItems = data.items.filter((updatedItem, index) => {
+      const originalItem = originalItems[index];
+      return !isEqual(originalItem, updatedItem);
     });
+
+    if (changedItems.length > 0) {
+      onBatchUpdate(changedItems as WaterAbsorption[]);
+    } else {
+      onOpenChange(false);
+    }
   };
   
   const handleCloseAttempt = () => {
-    saveCurrentStep();
-    const hasUnsavedChanges = Object.keys(updatedItems).length > 0;
+    const currentFormValues = form.getValues().items;
+    const hasUnsavedChanges = !isEqual(originalItems, currentFormValues);
+    
     if (hasUnsavedChanges) {
       setIsConfirmingClose(true);
     } else {
@@ -137,7 +139,7 @@ export function TestWaterAbsorptionsDialog({ items, onOpenChange, onBatchUpdate 
            <Progress value={progress} className="mt-2" />
         </DialogHeader>
         <ScrollArea className="flex-grow pr-6 -mr-6">
-          <form className="space-y-6">
+          <form id="test-wa-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-4 p-4 border rounded-lg bg-muted/50">
               <h4 className="font-semibold text-lg mb-2">Sample Information</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
@@ -150,27 +152,27 @@ export function TestWaterAbsorptionsDialog({ items, onOpenChange, onBatchUpdate 
             
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="space-y-2"><Label>Length (mm)</Label><Input {...form.register("dimensions.length")} /></div>
-                <div className="space-y-2"><Label>Width (mm)</Label><Input {...form.register("dimensions.width")} /></div>
-                <div className="space-y-2"><Label>Height (mm)</Label><Input {...form.register("dimensions.height")} /></div>
+                <div className="space-y-2"><Label>Length (mm)</Label><Input {...form.register(`items.${currentStep}.dimensions.length`)} /></div>
+                <div className="space-y-2"><Label>Width (mm)</Label><Input {...form.register(`items.${currentStep}.dimensions.width`)} /></div>
+                <div className="space-y-2"><Label>Height (mm)</Label><Input {...form.register(`items.${currentStep}.dimensions.height`)} /></div>
               </div>
               <Separator/>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2"><Label>Oven Dried Weight Before Soaking (kg)</Label><Input type="number" step="any" {...form.register("ovenDriedWeightBeforeSoaking")} /></div>
-                <div className="space-y-2"><Label>Weight After Soaking (kg)</Label><Input type="number" step="any" {...form.register("weightAfterSoaking")} /></div>
+                <div className="space-y-2"><Label>Oven Dried Weight Before Soaking (kg)</Label><Input type="number" step="any" {...form.register(`items.${currentStep}.ovenDriedWeightBeforeSoaking`)} /></div>
+                <div className="space-y-2"><Label>Weight After Soaking (kg)</Label><Input type="number" step="any" {...form.register(`items.${currentStep}.weightAfterSoaking`)} /></div>
               </div>
                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2"><Label>Weight of Water (kg)</Label><Input type="number" step="any" {...form.register("weightOfWater")} /></div>
-                <div className="space-y-2"><Label>Calculated Water Absorption (%)</Label><Input type="number" step="any" {...form.register("calculatedWaterAbsorption")} /></div>
+                <div className="space-y-2"><Label>Weight of Water (kg)</Label><Input type="number" step="any" {...form.register(`items.${currentStep}.weightOfWater`)} /></div>
+                <div className="space-y-2"><Label>Calculated Water Absorption (%)</Label><Input type="number" step="any" {...form.register(`items.${currentStep}.calculatedWaterAbsorption`)} /></div>
               </div>
               <Separator/>
-              <div className="space-y-2"><Label>Comment</Label><Input {...form.register("comment")} /></div>
+              <div className="space-y-2"><Label>Comment</Label><Input {...form.register(`items.${currentStep}.comment`)} /></div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                 <div className="space-y-2"><Label>Technician</Label><Input {...form.register("technician")} /></div>
-                 <div className="space-y-2"><Label>Date of Issue</Label><Input {...form.register("dateOfIssue")} placeholder="YYYY-MM-DD"/></div>
+                 <div className="space-y-2"><Label>Technician</Label><Input {...form.register(`items.${currentStep}.technician`)} /></div>
+                 <div className="space-y-2"><Label>Date of Issue</Label><Input {...form.register(`items.${currentStep}.dateOfIssue`)} placeholder="YYYY-MM-DD"/></div>
               </div>
                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                 <div className="space-y-2"><Label>Certificate Number</Label><Input {...form.register("certificateNumber")} /></div>
+                 <div className="space-y-2"><Label>Certificate Number</Label><Input {...form.register(`items.${currentStep}.certificateNumber`)} /></div>
               </div>
             </div>
           </form>
@@ -184,7 +186,7 @@ export function TestWaterAbsorptionsDialog({ items, onOpenChange, onBatchUpdate 
             {currentStep < items.length - 1 ? (
               <Button type="button" onClick={handleNext}>Next</Button>
             ) : (
-              <Button type="button" onClick={handleSubmit}>Finish & Save All</Button>
+              <Button type="submit" form="test-wa-form">Finish & Save All</Button>
             )}
           </div>
         </DialogFooter>

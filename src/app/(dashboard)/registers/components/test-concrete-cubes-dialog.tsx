@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect, useState, useMemo } from "react";
+import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
@@ -19,10 +19,12 @@ import { ConcreteCube } from "@/types/concrete-cube";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import isEqual from 'lodash.isequal';
 
 
 const cubeSchema = z.object({
+  id: z.string(),
   dimensions: z.object({
     length: z.coerce.number().optional(),
     width: z.coerce.number().optional(),
@@ -37,7 +39,27 @@ const cubeSchema = z.object({
   comment: z.string().optional(),
   technician: z.string().optional(),
   dateOfIssue: z.string().optional(),
+  // Read-only fields for context
+  client: z.string(),
+  project: z.string(),
+  sampleId: z.string(),
+  castingDate: z.string(),
+  testingDate: z.string(),
+  ageDays: z.number(),
+  sampleReceiptNumber: z.string(),
+  areaOfUse: z.string(),
+  class: z.string(),
+  contact: z.string(),
+  date: z.string(),
+  dateReceived: z.string(),
+  issueIdSerialNo: z.string(),
+  takenBy: z.string(),
 });
+
+const formSchema = z.object({
+  cubes: z.array(cubeSchema),
+});
+
 
 type TestConcreteCubesDialogProps = {
   cubes: ConcreteCube[];
@@ -47,82 +69,53 @@ type TestConcreteCubesDialogProps = {
 
 export function TestConcreteCubesDialog({ cubes, onOpenChange, onBatchUpdate }: TestConcreteCubesDialogProps) {
   const [currentStep, setCurrentStep] = useState(0);
-  const [updatedCubes, setUpdatedCubes] = useState<Record<string, Partial<ConcreteCube>>>({});
   const [isConfirmingClose, setIsConfirmingClose] = useState(false);
+
+  const originalItems = useMemo(() => cubes, []);
   
-  const currentCube = cubes[currentStep];
-  const form = useForm<z.infer<typeof cubeSchema>>({
-    resolver: zodResolver(cubeSchema),
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      cubes: originalItems,
+    }
   });
 
-  useEffect(() => {
-    const cubeToLoad = cubes[currentStep];
-    const updatesForThisCube = updatedCubes[cubeToLoad.id] || {};
-    form.reset({
-      dimensions: updatesForThisCube.dimensions ?? cubeToLoad.dimensions,
-      weightKg: updatesForThisCube.weightKg ?? cubeToLoad.weightKg,
-      loadKN: updatesForThisCube.loadKN ?? cubeToLoad.loadKN,
-      machineUsed: updatesForThisCube.machineUsed ?? cubeToLoad.machineUsed,
-      modeOfFailure: updatesForThisCube.modeOfFailure ?? cubeToLoad.modeOfFailure,
-      recordedTemperature: updatesForThisCube.recordedTemperature ?? cubeToLoad.recordedTemperature,
-      certificateNumber: updatesForThisCube.certificateNumber ?? cubeToLoad.certificateNumber,
-      comment: updatesForThisCube.comment ?? cubeToLoad.comment,
-      technician: updatesForThisCube.technician ?? cubeToLoad.technician,
-      dateOfIssue: updatesForThisCube.dateOfIssue ?? cubeToLoad.dateOfIssue,
-    });
-  }, [currentStep, cubes, form, updatedCubes]);
-
-  const saveCurrentStep = () => {
-    const currentValues = form.getValues();
-    const existingCubeData = cubes[currentStep];
-    
-    // Check if any value has actually changed
-    const hasChanged = Object.keys(currentValues).some(key => 
-        JSON.stringify((currentValues as any)[key]) !== JSON.stringify((form.formState.defaultValues as any)[key])
-    );
-
-    if (hasChanged) {
-        setUpdatedCubes(prev => ({
-            ...prev,
-            [existingCubeData.id]: {
-                ...existingCubeData,
-                ...currentValues
-            }
-        }));
-    }
-  }
+  const { fields } = useFieldArray({
+    control: form.control,
+    name: "cubes",
+  });
+  
+  const currentItem = originalItems[currentStep];
 
   const handleNext = () => {
-    saveCurrentStep();
     if (currentStep < cubes.length - 1) {
       setCurrentStep(currentStep + 1);
     }
   };
 
   const handleBack = () => {
-    saveCurrentStep();
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }
   };
 
-  const handleSubmit = () => {
-    saveCurrentStep();
-    // Use a callback with setUpdatedCubes to ensure we have the latest state before submitting
-    setUpdatedCubes(currentUpdates => {
-        const finalCubesToUpdate = Object.values(currentUpdates).filter(cube => Object.keys(cube).length > 1) as ConcreteCube[];
-        if (finalCubesToUpdate.length > 0) {
-            onBatchUpdate(finalCubesToUpdate);
-        } else {
-            onOpenChange(false); // Close if no changes were made
-        }
-        return currentUpdates; // Return the state unchanged
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
+    const changedItems = data.cubes.filter((updatedItem, index) => {
+      const originalItem = originalItems[index];
+      return !isEqual(originalItem, updatedItem);
     });
+
+    if (changedItems.length > 0) {
+      onBatchUpdate(changedItems as ConcreteCube[]);
+    } else {
+      onOpenChange(false);
+    }
   };
 
   const handleCloseAttempt = () => {
-    saveCurrentStep();
-    const hasUnsavedChanges = Object.keys(updatedCubes).length > 0;
+    const currentFormValues = form.getValues().cubes;
+    const hasUnsavedChanges = !isEqual(originalItems, currentFormValues);
+    
     if (hasUnsavedChanges) {
       setIsConfirmingClose(true);
     } else {
@@ -134,14 +127,7 @@ export function TestConcreteCubesDialog({ cubes, onOpenChange, onBatchUpdate }: 
 
   return (
     <>
-      <Dialog 
-        open={true} 
-        onOpenChange={(open) => {
-            if(!open) {
-                handleCloseAttempt();
-            }
-        }}
-      >
+      <Dialog open={true} onOpenChange={(open) => { if (!open) handleCloseAttempt(); }}>
         <DialogContent 
             className="max-w-3xl max-h-[90vh] flex flex-col"
             onInteractOutside={(e) => { e.preventDefault(); handleCloseAttempt(); }}
@@ -154,77 +140,77 @@ export function TestConcreteCubesDialog({ cubes, onOpenChange, onBatchUpdate }: 
             <Progress value={progress} className="mt-2" />
           </DialogHeader>
           <ScrollArea className="flex-grow pr-6 -mr-6">
-            <form className="space-y-6">
+            <form id="test-cubes-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <div className="space-y-4 p-4 border rounded-lg bg-muted/50">
                 <h4 className="font-semibold text-lg mb-2">Sample Information</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
-                  <div><Label>Client:</Label><p>{currentCube.client}</p></div>
-                  <div><Label>Project:</Label><p>{currentCube.project}</p></div>
-                  <div><Label>Sample ID:</Label><p className="font-mono">{currentCube.sampleId}</p></div>
-                  <div><Label>Casting Date:</Label><p>{currentCube.castingDate}</p></div>
-                  <div><Label>Testing Date:</Label><p>{currentCube.testingDate}</p></div>
-                  <div><Label>Age (Days):</Label><p>{currentCube.ageDays}</p></div>
+                  <div><Label>Client:</Label><p>{currentItem.client}</p></div>
+                  <div><Label>Project:</Label><p>{currentItem.project}</p></div>
+                  <div><Label>Sample ID:</Label><p className="font-mono">{currentItem.sampleId}</p></div>
+                  <div><Label>Casting Date:</Label><p>{currentItem.castingDate}</p></div>
+                  <div><Label>Testing Date:</Label><p>{currentItem.testingDate}</p></div>
+                  <div><Label>Age (Days):</Label><p>{currentItem.ageDays}</p></div>
                 </div>
               </div>
               
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="dimensions.length">Length (mm)</Label>
-                    <Input id="dimensions.length" {...form.register("dimensions.length")} />
+                    <Label htmlFor={`cubes.${currentStep}.dimensions.length`}>Length (mm)</Label>
+                    <Input id={`cubes.${currentStep}.dimensions.length`} {...form.register(`cubes.${currentStep}.dimensions.length`)} />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="dimensions.width">Width (mm)</Label>
-                    <Input id="dimensions.width" {...form.register("dimensions.width")} />
+                    <Label htmlFor={`cubes.${currentStep}.dimensions.width`}>Width (mm)</Label>
+                    <Input id={`cubes.${currentStep}.dimensions.width`} {...form.register(`cubes.${currentStep}.dimensions.width`)} />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="dimensions.height">Height (mm)</Label>
-                    <Input id="dimensions.height" {...form.register("dimensions.height")} />
+                    <Label htmlFor={`cubes.${currentStep}.dimensions.height`}>Height (mm)</Label>
+                    <Input id={`cubes.${currentStep}.dimensions.height`} {...form.register(`cubes.${currentStep}.dimensions.height`)} />
                   </div>
                 </div>
                 <Separator />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                      <Label htmlFor="weightKg">Weight (kg)</Label>
-                      <Input id="weightKg" type="number" step="any" {...form.register("weightKg")} />
+                      <Label htmlFor={`cubes.${currentStep}.weightKg`}>Weight (kg)</Label>
+                      <Input id={`cubes.${currentStep}.weightKg`} type="number" step="any" {...form.register(`cubes.${currentStep}.weightKg`)} />
                   </div>
                   <div className="space-y-2">
-                      <Label htmlFor="loadKN">Load (kN)</Label>
-                      <Input id="loadKN" type="number" step="any" {...form.register("loadKN")} />
+                      <Label htmlFor={`cubes.${currentStep}.loadKN`}>Load (kN)</Label>
+                      <Input id={`cubes.${currentStep}.loadKN`} type="number" step="any" {...form.register(`cubes.${currentStep}.loadKN`)} />
                   </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                      <Label htmlFor="machineUsed">Machine Used</Label>
-                      <Input id="machineUsed" {...form.register("machineUsed")} />
+                      <Label htmlFor={`cubes.${currentStep}.machineUsed`}>Machine Used</Label>
+                      <Input id={`cubes.${currentStep}.machineUsed`} {...form.register(`cubes.${currentStep}.machineUsed`)} />
                   </div>
                   <div className="space-y-2">
-                      <Label htmlFor="modeOfFailure">Mode of Failure</Label>
-                      <Input id="modeOfFailure" {...form.register("modeOfFailure")} />
+                      <Label htmlFor={`cubes.${currentStep}.modeOfFailure`}>Mode of Failure</Label>
+                      <Input id={`cubes.${currentStep}.modeOfFailure`} {...form.register(`cubes.${currentStep}.modeOfFailure`)} />
                   </div>
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="comment">Comment</Label>
-                    <Input id="comment" {...form.register("comment")} />
+                    <Label htmlFor={`cubes.${currentStep}.comment`}>Comment</Label>
+                    <Input id={`cubes.${currentStep}.comment`} {...form.register(`cubes.${currentStep}.comment`)} />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                      <Label htmlFor="technician">Technician</Label>
-                      <Input id="technician" {...form.register("technician")} />
+                      <Label htmlFor={`cubes.${currentStep}.technician`}>Technician</Label>
+                      <Input id={`cubes.${currentStep}.technician`} {...form.register(`cubes.${currentStep}.technician`)} />
                   </div>
                   <div className="space-y-2">
-                      <Label htmlFor="recordedTemperature">Recorded Temperature (°C)</Label>
-                      <Input id="recordedTemperature" {...form.register("recordedTemperature")} />
+                      <Label htmlFor={`cubes.${currentStep}.recordedTemperature`}>Recorded Temperature (°C)</Label>
+                      <Input id={`cubes.${currentStep}.recordedTemperature`} {...form.register(`cubes.${currentStep}.recordedTemperature`)} />
                   </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                      <Label htmlFor="dateOfIssue">Date of Issue</Label>
-                      <Input id="dateOfIssue" {...form.register("dateOfIssue")} placeholder="YYYY-MM-DD"/>
+                      <Label htmlFor={`cubes.${currentStep}.dateOfIssue`}>Date of Issue</Label>
+                      <Input id={`cubes.${currentStep}.dateOfIssue`} {...form.register(`cubes.${currentStep}.dateOfIssue`)} placeholder="YYYY-MM-DD"/>
                   </div>
                   <div className="space-y-2">
-                      <Label htmlFor="certificateNumber">Certificate Number</Label>
-                      <Input id="certificateNumber" {...form.register("certificateNumber")} />
+                      <Label htmlFor={`cubes.${currentStep}.certificateNumber`}>Certificate Number</Label>
+                      <Input id={`cubes.${currentStep}.certificateNumber`} {...form.register(`cubes.${currentStep}.certificateNumber`)} />
                   </div>
                 </div>
               </div>
@@ -239,7 +225,7 @@ export function TestConcreteCubesDialog({ cubes, onOpenChange, onBatchUpdate }: 
               {currentStep < cubes.length - 1 ? (
                 <Button type="button" onClick={handleNext}>Next</Button>
               ) : (
-                <Button type="button" onClick={handleSubmit}>Finish & Save All</Button>
+                <Button type="submit" form="test-cubes-form">Finish & Save All</Button>
               )}
             </div>
           </DialogFooter>

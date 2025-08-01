@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect, useState, useMemo } from "react";
+import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
@@ -20,8 +20,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import isEqual from 'lodash.isequal';
 
 const itemSchema = z.object({
+  id: z.string(),
   dimensions: z.object({
     length: z.coerce.number().optional(),
     width: z.coerce.number().optional(),
@@ -41,6 +43,25 @@ const itemSchema = z.object({
   comment: z.string().optional(),
   technician: z.string().optional(),
   dateOfIssue: z.string().optional(),
+  // Read-only
+  dateReceived: z.string(),
+  client: z.string(),
+  project: z.string(),
+  castingDate: z.string(),
+  testingDate: z.string(),
+  ageDays: z.number(),
+  areaOfUse: z.string(),
+  sampleId: z.string(),
+  sampleType: z.string(),
+  issueIdSerialNo: z.string(),
+  takenBy: z.string(),
+  date: z.string(),
+  contact: z.string(),
+  sampleReceiptNo: z.string(),
+});
+
+const formSchema = z.object({
+  items: z.array(itemSchema),
 });
 
 type TestBlocksAndBricksDialogProps = {
@@ -51,75 +72,53 @@ type TestBlocksAndBricksDialogProps = {
 
 export function TestBlocksAndBricksDialog({ items, onOpenChange, onBatchUpdate }: TestBlocksAndBricksDialogProps) {
   const [currentStep, setCurrentStep] = useState(0);
-  const [updatedItems, setUpdatedItems] = useState<Record<string, Partial<BlockAndBrick>>>({});
   const [isConfirmingClose, setIsConfirmingClose] = useState(false);
+
+  const originalItems = useMemo(() => items, []);
   
-  const currentItem = items[currentStep];
-  const form = useForm<z.infer<typeof itemSchema>>({
-    resolver: zodResolver(itemSchema),
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      items: originalItems,
+    }
   });
 
-  useEffect(() => {
-    const itemToLoad = items[currentStep];
-    const updatesForThisItem = updatedItems[itemToLoad.id] || {};
-    form.reset({
-      dimensions: updatesForThisItem.dimensions ?? itemToLoad.dimensions,
-      dimensionsOfHoles: updatesForThisItem.dimensionsOfHoles ?? itemToLoad.dimensionsOfHoles,
-      weightKg: updatesForThisItem.weightKg ?? itemToLoad.weightKg,
-      loadKN: updatesForThisItem.loadKN ?? itemToLoad.loadKN,
-      machineUsed: updatesForThisItem.machineUsed ?? itemToLoad.machineUsed,
-      modeOfFailure: updatesForThisItem.modeOfFailure ?? itemToLoad.modeOfFailure,
-      recordedTemperature: updatesForThisItem.recordedTemperature ?? itemToLoad.recordedTemperature,
-      certificateNumber: updatesForThisItem.certificateNumber ?? itemToLoad.certificateNumber,
-      comment: updatesForThisItem.comment ?? itemToLoad.comment,
-      technician: updatesForThisItem.technician ?? itemToLoad.technician,
-      dateOfIssue: updatesForThisItem.dateOfIssue ?? itemToLoad.dateOfIssue,
-    });
-  }, [currentStep, items, form, updatedItems]);
-
-  const saveCurrentStep = () => {
-    const currentValues = form.getValues();
-    const existingItemData = items[currentStep];
-    
-    setUpdatedItems(prev => ({
-        ...prev,
-        [existingItemData.id]: {
-            ...existingItemData,
-            ...currentValues
-        }
-    }));
-  }
+  const { fields } = useFieldArray({
+    control: form.control,
+    name: "items",
+  });
+  
+  const currentItem = originalItems[currentStep];
 
   const handleNext = () => {
-    saveCurrentStep();
     if (currentStep < items.length - 1) {
       setCurrentStep(currentStep + 1);
     }
   };
 
   const handleBack = () => {
-    saveCurrentStep();
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }
   };
 
-  const handleSubmit = () => {
-    saveCurrentStep();
-    setUpdatedItems(currentUpdates => {
-        const finalItemsToUpdate = Object.values(currentUpdates).filter(item => Object.keys(item).length > 1) as BlockAndBrick[];
-        if(finalItemsToUpdate.length > 0) {
-            onBatchUpdate(finalItemsToUpdate);
-        } else {
-            onOpenChange(false);
-        }
-        return currentUpdates;
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
+    const changedItems = data.items.filter((updatedItem, index) => {
+      const originalItem = originalItems[index];
+      return !isEqual(originalItem, updatedItem);
     });
+
+    if (changedItems.length > 0) {
+      onBatchUpdate(changedItems as BlockAndBrick[]);
+    } else {
+      onOpenChange(false);
+    }
   };
 
   const handleCloseAttempt = () => {
-    saveCurrentStep();
-    const hasUnsavedChanges = Object.keys(updatedItems).length > 0;
+    const currentFormValues = form.getValues().items;
+    const hasUnsavedChanges = !isEqual(originalItems, currentFormValues);
+    
     if (hasUnsavedChanges) {
       setIsConfirmingClose(true);
     } else {
@@ -144,7 +143,7 @@ export function TestBlocksAndBricksDialog({ items, onOpenChange, onBatchUpdate }
            <Progress value={progress} className="mt-2" />
         </DialogHeader>
         <ScrollArea className="flex-grow pr-6 -mr-6">
-          <form className="space-y-6">
+          <form id="test-b-and-b-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-4 p-4 border rounded-lg bg-muted/50">
                 <h4 className="font-semibold text-lg mb-2">Sample Information</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
@@ -159,46 +158,46 @@ export function TestBlocksAndBricksDialog({ items, onOpenChange, onBatchUpdate }
             
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="space-y-2"><Label>Length (mm)</Label><Input {...form.register("dimensions.length")} /></div>
-                <div className="space-y-2"><Label>Width (mm)</Label><Input {...form.register("dimensions.width")} /></div>
-                <div className="space-y-2"><Label>Height (mm)</Label><Input {...form.register("dimensions.height")} /></div>
+                <div className="space-y-2"><Label>Length (mm)</Label><Input {...form.register(`items.${currentStep}.dimensions.length`)} /></div>
+                <div className="space-y-2"><Label>Width (mm)</Label><Input {...form.register(`items.${currentStep}.dimensions.width`)} /></div>
+                <div className="space-y-2"><Label>Height (mm)</Label><Input {...form.register(`items.${currentStep}.dimensions.height`)} /></div>
               </div>
 
               <Separator />
               <Label className="font-semibold">Dimensions of Holes &amp; No. (for Hollow Blocks)</Label>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-2 p-2 border rounded-md">
                  <Label className="md:col-span-3 font-medium">Hole A</Label>
-                 <div className="space-y-2"><Label>No.</Label><Input {...form.register("dimensionsOfHoles.holeA.no")} /></div>
-                 <div className="space-y-2"><Label>L (mm)</Label><Input {...form.register("dimensionsOfHoles.holeA.l")} /></div>
-                 <div className="space-y-2"><Label>W (mm)</Label><Input {...form.register("dimensionsOfHoles.holeA.w")} /></div>
+                 <div className="space-y-2"><Label>No.</Label><Input {...form.register(`items.${currentStep}.dimensionsOfHoles.holeA.no`)} /></div>
+                 <div className="space-y-2"><Label>L (mm)</Label><Input {...form.register(`items.${currentStep}.dimensionsOfHoles.holeA.l`)} /></div>
+                 <div className="space-y-2"><Label>W (mm)</Label><Input {...form.register(`items.${currentStep}.dimensionsOfHoles.holeA.w`)} /></div>
                  
                  <Label className="md:col-span-3 font-medium">Hole B</Label>
-                 <div className="space-y-2"><Label>No.</Label><Input {...form.register("dimensionsOfHoles.holeB.no")} /></div>
-                 <div className="space-y-2"><Label>L (mm)</Label><Input {...form.register("dimensionsOfHoles.holeB.l")} /></div>
-                 <div className="space-y-2"><Label>W (mm)</Label><Input {...form.register("dimensionsOfHoles.holeB.w")} /></div>
+                 <div className="space-y-2"><Label>No.</Label><Input {...form.register(`items.${currentStep}.dimensionsOfHoles.holeB.no`)} /></div>
+                 <div className="space-y-2"><Label>L (mm)</Label><Input {...form.register(`items.${currentStep}.dimensionsOfHoles.holeB.l`)} /></div>
+                 <div className="space-y-2"><Label>W (mm)</Label><Input {...form.register(`items.${currentStep}.dimensionsOfHoles.holeB.w`)} /></div>
 
                  <Label className="md:col-span-3 font-medium">Notch</Label>
-                 <div className="space-y-2"><Label>No.</Label><Input {...form.register("dimensionsOfHoles.notch.no")} /></div>
-                 <div className="space-y-2"><Label>L (mm)</Label><Input {...form.register("dimensionsOfHoles.notch.l")} /></div>
-                 <div className="space-y-2"><Label>W (mm)</Label><Input {...form.register("dimensionsOfHoles.notch.w")} /></div>
+                 <div className="space-y-2"><Label>No.</Label><Input {...form.register(`items.${currentStep}.dimensionsOfHoles.notch.no`)} /></div>
+                 <div className="space-y-2"><Label>L (mm)</Label><Input {...form.register(`items.${currentStep}.dimensionsOfHoles.notch.l`)} /></div>
+                 <div className="space-y-2"><Label>W (mm)</Label><Input {...form.register(`items.${currentStep}.dimensionsOfHoles.notch.w`)} /></div>
               </div>
               <Separator />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                 <div className="space-y-2"><Label>Weight (kg)</Label><Input type="number" step="any" {...form.register("weightKg")} /></div>
-                 <div className="space-y-2"><Label>Load (kN)</Label><Input type="number" step="any" {...form.register("loadKN")} /></div>
+                 <div className="space-y-2"><Label>Weight (kg)</Label><Input type="number" step="any" {...form.register(`items.${currentStep}.weightKg`)} /></div>
+                 <div className="space-y-2"><Label>Load (kN)</Label><Input type="number" step="any" {...form.register(`items.${currentStep}.loadKN`)} /></div>
               </div>
                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                 <div className="space-y-2"><Label>Machine Used</Label><Input {...form.register("machineUsed")} /></div>
-                 <div className="space-y-2"><Label>Mode of Failure</Label><Input {...form.register("modeOfFailure")} /></div>
+                 <div className="space-y-2"><Label>Machine Used</Label><Input {...form.register(`items.${currentStep}.machineUsed`)} /></div>
+                 <div className="space-y-2"><Label>Mode of Failure</Label><Input {...form.register(`items.${currentStep}.modeOfFailure`)} /></div>
               </div>
-              <div className="space-y-2"><Label>Comment</Label><Input {...form.register("comment")} /></div>
+              <div className="space-y-2"><Label>Comment</Label><Input {...form.register(`items.${currentStep}.comment`)} /></div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                 <div className="space-y-2"><Label>Technician</Label><Input {...form.register("technician")} /></div>
-                 <div className="space-y-2"><Label>Recorded Temperature (°C)</Label><Input {...form.register("recordedTemperature")} /></div>
+                 <div className="space-y-2"><Label>Technician</Label><Input {...form.register(`items.${currentStep}.technician`)} /></div>
+                 <div className="space-y-2"><Label>Recorded Temperature (°C)</Label><Input {...form.register(`items.${currentStep}.recordedTemperature`)} /></div>
               </div>
                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                 <div className="space-y-2"><Label>Date of Issue</Label><Input {...form.register("dateOfIssue")} placeholder="YYYY-MM-DD"/></div>
-                 <div className="space-y-2"><Label>Certificate Number</Label><Input {...form.register("certificateNumber")} /></div>
+                 <div className="space-y-2"><Label>Date of Issue</Label><Input {...form.register(`items.${currentStep}.dateOfIssue`)} placeholder="YYYY-MM-DD"/></div>
+                 <div className="space-y-2"><Label>Certificate Number</Label><Input {...form.register(`items.${currentStep}.certificateNumber`)} /></div>
               </div>
             </div>
           </form>
@@ -212,7 +211,7 @@ export function TestBlocksAndBricksDialog({ items, onOpenChange, onBatchUpdate }
             {currentStep < items.length - 1 ? (
               <Button type="button" onClick={handleNext}>Next</Button>
             ) : (
-              <Button type="button" onClick={handleSubmit}>Finish & Save All</Button>
+              <Button type="submit" form="test-b-and-b-form">Finish & Save All</Button>
             )}
           </div>
         </DialogFooter>
