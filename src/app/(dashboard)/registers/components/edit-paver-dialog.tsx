@@ -139,5 +139,3 @@ export function EditPaverDialog({ item, onOpenChange, onItemUpdated }: EditPaver
     </Dialog>
   );
 }
-
-    
