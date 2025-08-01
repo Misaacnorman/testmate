@@ -104,7 +104,6 @@ export async function deleteReceipt(receiptId: string): Promise<void> {
     await deleteDoc(receiptDoc);
 }
 
-
 function safeFormat(dateInput: any, formatString: string): string {
   if (!dateInput) {
     console.warn("safeFormat: Date input is falsy:", dateInput);
@@ -153,9 +152,10 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
         client: formData.clientName,
         project: formData.projectTitle,
         sampleReceiptNo: receiptId,
-        technician: formData.receivedBy,
+        technician: '',
         contact: formData.clientContact,
-        takenBy: formData.deliveredBy,
+        takenBy: '',
+        date: '',
     };
     
     for (const [category, categoryData] of Object.entries(categories)) {
@@ -192,7 +192,6 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
                                 comment: '',
                                 dateOfIssue: '',
                                 issueIdSerialNo: '',
-                                date: '',
                                 sampleReceiptNumber: receiptId
                             });
                         } else if (category.toLowerCase() === 'bricks' || category.toLowerCase() === 'blocks') {
@@ -210,7 +209,6 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
                                  comment: '',
                                  dateOfIssue: '',
                                  issueIdSerialNo: '',
-                                 date: '',
                              });
                         } else if (category.toLowerCase() === 'pavers') {
                              await addPaver({
@@ -228,7 +226,6 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
                                 comment: '',
                                 dateOfIssue: '',
                                 issueIdSerialNo: '',
-                                date: '',
                              });
                         } else if (category.toLowerCase() === 'cylinder') {
                             await addCylinder({
@@ -244,7 +241,6 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
                                 comment: '',
                                 dateOfIssue: '',
                                 issueIdSerialNo: '',
-                                date: '',
                             });
                         }
                     }
@@ -271,7 +267,6 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
                                 comment: '',
                                 dateOfIssue: '',
                                 issueIdSerialNo: '',
-                                date: '',
                             });
                         }
                     }
@@ -295,7 +290,7 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
                 },
                 labWork: {
                     details: labTestDetails,
-                    technician: formData.receivedBy,
+                    technician: '',
                     startDate: formattedReceiptDate,
                     agreedDeliveryDate: '',
                     signatureAgreed: '',
