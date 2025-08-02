@@ -2,8 +2,8 @@
 'use server';
 
 import { db } from '@/lib/firebase';
-import { Cylinder } from '@/types/cylinder';
-import { collection, getDocs, addDoc, doc, updateDoc, DocumentData } from 'firebase/firestore';
+import { Cylinder, CylinderSet } from '@/types/cylinder';
+import { collection, getDocs, addDoc, doc, updateDoc, DocumentData, writeBatch } from 'firebase/firestore';
 import { Timestamp } from 'firebase/firestore';
 import { format } from 'date-fns';
 
@@ -46,14 +46,45 @@ export async function getCylinders(): Promise<Cylinder[]> {
     return snapshot.docs.map(doc => fromFirestore<Cylinder>(doc));
 }
 
+export async function getCylinderSets(): Promise<CylinderSet[]> {
+    const samples = await getCylinders();
+    const sets: { [key: string]: CylinderSet } = {};
+
+    samples.forEach(sample => {
+        const setKey = `${sample.sampleReceiptNo}-${sample.castingDate}-${sample.testingDate}-${sample.areaOfUse}-${sample.class}`;
+
+        if (!sets[setKey]) {
+            sets[setKey] = {
+                ...sample,
+                id: setKey, 
+                sampleIds: [sample.sampleId],
+                docIds: [sample.id]
+            };
+        } else {
+            sets[setKey].sampleIds.push(sample.sampleId);
+            sets[setKey].docIds.push(sample.id);
+        }
+    });
+
+    return Object.values(sets);
+}
+
 
 export async function addCylinder(data: Omit<Cylinder, 'id'>): Promise<Cylinder> {
     const docRef = await addDoc(cylindersCollection, data);
     return { id: docRef.id, ...data } as Cylinder;
 }
 
-export async function updateCylinder(item: Cylinder): Promise<void> {
-    const itemDoc = doc(db, 'cylinders', item.id);
-    const { id, ...itemData } = item;
-    await updateDoc(itemDoc, itemData);
+export async function updateCylinderSet(itemSet: CylinderSet): Promise<void> {
+    const batch = writeBatch(db);
+    const { docIds, sampleIds, ...setData } = itemSet;
+
+    docIds.forEach(docId => {
+        const docRef = doc(db, 'cylinders', docId);
+        const dataToUpdate = { ...setData };
+        delete (dataToUpdate as any).id;
+        batch.update(docRef, dataToUpdate);
+    });
+    
+    await batch.commit();
 }

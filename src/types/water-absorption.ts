@@ -29,3 +29,10 @@ export type WaterAbsorption = {
     contact: string;
     sampleReceiptNo: string;
 };
+
+// Represents a set of samples with common properties, for UI display
+export type WaterAbsorptionSet = Omit<WaterAbsorption, 'id' | 'sampleId'> & {
+    id: string; // Composite key for the set
+    sampleIds: string[];
+    docIds: string[]; // Firestore document IDs for each sample in the set
+};

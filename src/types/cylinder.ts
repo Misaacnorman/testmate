@@ -29,3 +29,10 @@ export type Cylinder = {
     contact: string;
     sampleReceiptNo: string;
 };
+
+// Represents a set of samples with common properties, for UI display
+export type CylinderSet = Omit<Cylinder, 'id' | 'sampleId'> & {
+    id: string; // Composite key for the set
+    sampleIds: string[];
+    docIds: string[]; // Firestore document IDs for each sample in the set
+};
