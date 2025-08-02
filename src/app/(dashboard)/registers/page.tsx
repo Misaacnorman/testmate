@@ -7,7 +7,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getReceipts, deleteReceipt } from '@/services/receipts';
 import { Receipt } from '@/types/receipt';
 import { useToast } from '@/hooks/use-toast';
-import { getColumns as getReceiptColumns } from './components/receipt-columns';
 import { ReceiptsTable } from './components/receipts-table';
 import { ProjectsTable } from './components/projects-table';
 import { Project } from '@/types/project';
@@ -25,11 +24,11 @@ import { Paver, PaverSet } from '@/types/paver';
 import { getPavers, updatePaver, deletePaverSet } from '@/services/pavers';
 import { getColumns as getPaverColumns } from './components/paver-columns';
 import { PaversTable } from './components/pavers-table';
-import { Cylinder, CylinderSet } from '@/types/cylinder';
+import { Cylinder } from '@/types/cylinder';
 import { getCylinders, updateCylinder } from '@/services/cylinders';
 import { getColumns as getCylinderColumns } from './components/cylinder-columns';
 import { CylindersTable } from './components/cylinders-table';
-import { WaterAbsorption, WaterAbsorptionSet } from '@/types/water-absorption';
+import { WaterAbsorption } from '@/types/water-absorption';
 import { getWaterAbsorptions, updateWaterAbsorption } from '@/services/water-absorptions';
 import { getColumns as getWaterAbsorptionColumns } from './components/water-absorption-columns';
 import { WaterAbsorptionTable } from './components/water-absorption-table';
@@ -48,6 +47,7 @@ import { TestCylindersDialog } from './components/test-cylinders-dialog';
 import { TestWaterAbsorptionsDialog } from './components/test-water-absorptions-dialog';
 import { EditProjectDialog } from './components/edit-project-dialog';
 import { CreateProjectDialog } from './components/create-project-dialog';
+import { getColumns as getReceiptColumns } from './components/receipt-columns';
 
 export default function RegistersPage() {
   const [receipts, setReceipts] = useState<Receipt[]>([]);
@@ -68,20 +68,21 @@ export default function RegistersPage() {
   
   const [projectFilter, setProjectFilter] = useState('');
   const [editingProject, setEditingProject] = useState<Project | null>(null);
-  const [editingConcreteCube, setEditingConcreteCube] = useState<ConcreteCube | null>(null);
+  
   const [editingBlockAndBrick, setEditingBlockAndBrick] = useState<BlockAndBrick | null>(null);
-  const [editingPaver, setEditingPaver] = useState<Paver | null>(null);
   const [editingCylinder, setEditingCylinder] = useState<Cylinder | null>(null);
   const [editingWaterAbsorption, setEditingWaterAbsorption] = useState<WaterAbsorption | null>(null);
   
   const [isTestCubesDialogOpen, setIsTestCubesDialogOpen] = useState(false);
   const [selectedCubes, setSelectedCubes] = useState<ConcreteCube[]>([]);
+  const [editingConcreteCube, setEditingConcreteCube] = useState<ConcreteCube | null>(null);
 
   const [isTestBlocksAndBricksDialogOpen, setIsTestBlocksAndBricksDialogOpen] = useState(false);
   const [selectedBlocksAndBricks, setSelectedBlocksAndBricks] = useState<BlockAndBrick[]>([]);
-
+  
   const [isTestPaversDialogOpen, setIsTestPaversDialogOpen] = useState(false);
   const [selectedPavers, setSelectedPavers] = useState<Paver[]>([]);
+  const [editingPaverSet, setEditingPaverSet] = useState<PaverSet | null>(null);
 
   const [isTestCylindersDialogOpen, setIsTestCylindersDialogOpen] = useState(false);
   const [selectedCylinders, setSelectedCylinders] = useState<Cylinder[]>([]);
@@ -119,7 +120,6 @@ export default function RegistersPage() {
   }, [fetchAndSetData]);
 
   const handleReceiptDeleted = useCallback(async (receiptId: string) => {
-    // This function logic can be expanded to delete related test entries if needed
     try {
       await deleteReceipt(receiptId);
       toast({ title: "Receipt Deleted" });
@@ -155,31 +155,39 @@ export default function RegistersPage() {
         await Promise.all(items.map(item => updater(item)));
         toast({
             title: "Batch Update Successful",
-            description: `${items.length} ${entityName} records have been updated.`,
+            description: `${items.length} ${entityName}(s) have been updated.`,
         });
-        fetcher().then(setter);
         dialogCloser();
+        fetcher().then(data => {
+            setter(data);
+            loaderSetter(false);
+        });
     } catch (error) {
         console.error(`Failed to batch update ${entityName}:`, error);
         toast({
             variant: "destructive",
             title: "Error during Batch Update",
-            description: `Could not save updated data for some ${entityName}.`,
+            description: `Could not save updated data for some ${entityName}(s).`,
         });
     }
   };
 
   const handlePaverSetDeleted = async (item: PaverSet) => {
     try {
-      await deletePaverSet(item.samples.map(s => s.id));
+      await deletePaverSet(item.docIds);
       toast({ title: "Paver Test Set Deleted" });
       fetchAndSetData(getPavers, setPavers, setIsPaversLoading, 'pavers');
     } catch (error) {
       toast({ variant: "destructive", title: "Error Deleting Paver Set" });
     }
   };
+  
+  const groupIntoSets = <T extends { [key: string]: any; id: string }>(
+    samples: T[],
+    keyFields: string[]
+  ): { id: string; samples: T[], [key: string]: any }[] => {
+    if (!samples || samples.length === 0) return [];
 
-  const groupIntoSets = <T extends { [key: string]: any; id: string }>(samples: T[], keyFields: string[]): any[] => {
     const sets = new Map<string, T[]>();
     samples.forEach(sample => {
       const key = keyFields.map(field => sample[field] ?? '').join('-');
@@ -189,24 +197,43 @@ export default function RegistersPage() {
       sets.get(key)!.push(sample);
     });
     
-    return Array.from(sets.entries()).map(([key, samples]) => {
-      const firstSample = samples[0];
+    return Array.from(sets.entries()).map(([key, groupedSamples]) => {
+      const firstSample = groupedSamples[0];
       const commonData: { [key: string]: any } = {};
       keyFields.forEach(field => commonData[field] = firstSample[field]);
 
       return {
         id: key,
-        samples: samples,
+        samples: groupedSamples,
         ...commonData,
       };
     });
   };
 
-  const concreteCubeSets = useMemo(() => groupIntoSets<ConcreteCube>(concreteCubes, ['client', 'project', 'dateReceived', 'castingDate', 'testingDate', 'class', 'areaOfUse']), [concreteCubes]);
-  const blocksAndBricksSets = useMemo(() => groupIntoSets<BlockAndBrick>(blocksAndBricks, ['client', 'project', 'dateReceived', 'castingDate', 'testingDate', 'areaOfUse', 'sampleType']), [blocksAndBricks]);
-  const paverSets = useMemo(() => groupIntoSets<Paver>(pavers, ['client', 'project', 'dateReceived', 'castingDate', 'testingDate', 'areaOfUse', 'paverType']), [pavers]);
-  const cylinderSets = useMemo(() => groupIntoSets<Cylinder>(cylinders, ['client', 'project', 'dateReceived', 'castingDate', 'testingDate', 'class', 'areaOfUse']), [cylinders]);
-  const waterAbsorptionSets = useMemo(() => groupIntoSets<WaterAbsorption>(waterAbsorptions, ['client', 'project', 'dateReceived', 'castingDate', 'testingDate', 'areaOfUse', 'sampleType']), [waterAbsorptions]);
+  const concreteCubeSets: ConcreteCubeSet[] = useMemo(() => {
+    const grouped = groupIntoSets<ConcreteCube>(concreteCubes, ['client', 'project', 'dateReceived', 'castingDate', 'testingDate', 'class', 'areaOfUse']);
+    return grouped.map(g => ({ ...g, sampleIds: g.samples.map(s => s.sampleId) })) as ConcreteCubeSet[];
+  }, [concreteCubes]);
+
+  const blocksAndBricksSets: BlockAndBrickSet[] = useMemo(() => {
+    const grouped = groupIntoSets<BlockAndBrick>(blocksAndBricks, ['client', 'project', 'dateReceived', 'castingDate', 'testingDate', 'areaOfUse', 'sampleType']);
+    return grouped.map(g => ({ ...g, docIds: g.samples.map(s => s.id), sampleIds: g.samples.map(s => s.sampleId) }));
+  }, [blocksAndBricks]);
+  
+  const paverSets: PaverSet[] = useMemo(() => {
+    const grouped = groupIntoSets<Paver>(pavers, ['client', 'project', 'dateReceived', 'castingDate', 'testingDate', 'areaOfUse', 'paverType']);
+    return grouped.map(g => ({ ...g, docIds: g.samples.map(s => s.id), sampleIds: g.samples.map(s => s.sampleId) }));
+  }, [pavers]);
+
+  const cylinderSets = useMemo(() => {
+    const grouped = groupIntoSets<Cylinder>(cylinders, ['client', 'project', 'dateReceived', 'castingDate', 'testingDate', 'class', 'areaOfUse']);
+    return grouped.map(g => ({ ...g, docIds: g.samples.map(s => s.id), sampleIds: g.samples.map(s => s.sampleId) }));
+  }, [cylinders]);
+
+  const waterAbsorptionSets = useMemo(() => {
+    const grouped = groupIntoSets<WaterAbsorption>(waterAbsorptions, ['client', 'project', 'dateReceived', 'castingDate', 'testingDate', 'areaOfUse', 'sampleType']);
+    return grouped.map(g => ({ ...g, docIds: g.samples.map(s => s.id), sampleIds: g.samples.map(s => s.sampleId) }));
+  }, [waterAbsorptions]);
 
   return (
     <>
@@ -258,7 +285,7 @@ export default function RegistersPage() {
           <TabsContent value="pavers">
             <Card>
               <CardHeader><div className="flex justify-between items-center"><div><CardTitle>Sample Register/Log for Pavers</CardTitle><CardDescription>A register for all paver tests.</CardDescription></div><Button onClick={() => setIsTestPaversDialogOpen(true)} disabled={selectedPavers.length === 0}><TestTubeDiagonal className="mr-2 h-4 w-4" />Test ({selectedPavers.length})</Button></div></CardHeader>
-              <CardContent><PaversTable columns={getPaverColumns({ onEdit: setEditingPaver, onDelete: handlePaverSetDeleted })} data={paverSets} isLoading={isPaversLoading} onSelectionChange={(rows) => setSelectedPavers(rows.flatMap(set => set.samples))} /></CardContent>
+              <CardContent><PaversTable columns={getPaverColumns({ onEdit: setEditingPaverSet, onDelete: handlePaverSetDeleted })} data={paverSets} isLoading={isPaversLoading} onSelectionChange={(rows) => setSelectedPavers(rows.flatMap(set => set.samples))} /></CardContent>
             </Card>
           </TabsContent>
 
@@ -282,7 +309,7 @@ export default function RegistersPage() {
       {editingProject && <EditProjectDialog project={editingProject} onOpenChange={(open) => !open && setEditingProject(null)} onProjectUpdated={handleProjectUpdated} />}
       {editingConcreteCube && <EditConcreteCubeDialog item={editingConcreteCube} onOpenChange={(open) => !open && setEditingConcreteCube(null)} onItemUpdated={(item) => handleBatchUpdate([item], updateConcreteCube, getConcreteCubes, setConcreteCubes, setIsConcreteCubesLoading, 'concrete cube', () => setEditingConcreteCube(null))} />}
       {editingBlockAndBrick && <EditBlockAndBrickDialog item={editingBlockAndBrick} onOpenChange={(open) => !open && setEditingBlockAndBrick(null)} onItemUpdated={(item) => handleBatchUpdate([item], updateBlockAndBrick, getBlocksAndBricks, setBlocksAndBricks, setIsBlocksAndBricksLoading, 'block/brick', () => setEditingBlockAndBrick(null))} />}
-      {editingPaver && <EditPaverDialog item={editingPaver} onOpenChange={(open) => !open && setEditingPaver(null)} onItemUpdated={(item) => handleBatchUpdate([item], updatePaver, getPavers, setPavers, setIsPaversLoading, 'paver', () => setEditingPaver(null))} />}
+      {editingPaverSet && <EditPaverDialog item={editingPaverSet} onOpenChange={(open) => !open && setEditingPaverSet(null)} onItemUpdated={(items) => handleBatchUpdate(items.samples, updatePaver, getPavers, setPavers, setIsPaversLoading, 'paver', () => setEditingPaverSet(null))} />}
       {editingCylinder && <EditCylinderDialog item={editingCylinder} onOpenChange={(open) => !open && setEditingCylinder(null)} onItemUpdated={(item) => handleBatchUpdate([item], updateCylinder, getCylinders, setCylinders, setIsCylindersLoading, 'cylinder', () => setEditingCylinder(null))} />}
       {editingWaterAbsorption && <EditWaterAbsorptionDialog item={editingWaterAbsorption} onOpenChange={(open) => !open && setEditingWaterAbsorption(null)} onItemUpdated={(item) => handleBatchUpdate([item], updateWaterAbsorption, getWaterAbsorptions, setWaterAbsorptions, setIsWaterAbsorptionsLoading, 'water absorption', () => setEditingWaterAbsorption(null))} />}
       
@@ -294,3 +321,5 @@ export default function RegistersPage() {
     </>
   );
 }
+
+    

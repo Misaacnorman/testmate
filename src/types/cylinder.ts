@@ -31,8 +31,15 @@ export type Cylinder = {
 };
 
 // Represents a set of samples with common properties, for UI display
-export type CylinderSet = Omit<Cylinder, 'id' | 'sampleId'> & {
+export type CylinderSet = {
     id: string; // Composite key for the set
-    sampleIds: string[];
-    docIds: string[]; // Firestore document IDs for each sample in the set
+    samples: Cylinder[];
+    // Common properties for quick access
+    client: string;
+    project: string;
+    dateReceived: string;
+    castingDate: string;
+    testingDate: string;
+    class: string;
+    areaOfUse: string;
 };

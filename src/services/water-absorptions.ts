@@ -46,44 +46,14 @@ export async function getWaterAbsorptions(): Promise<WaterAbsorption[]> {
     return snapshot.docs.map(doc => fromFirestore<WaterAbsorption>(doc));
 }
 
-export async function getWaterAbsorptionSets(): Promise<WaterAbsorptionSet[]> {
-    const samples = await getWaterAbsorptions();
-    const sets: { [key: string]: WaterAbsorptionSet } = {};
-
-    samples.forEach(sample => {
-        const setKey = `${sample.sampleReceiptNo}-${sample.castingDate}-${sample.testingDate}-${sample.areaOfUse}-${sample.sampleType}`;
-
-        if (!sets[setKey]) {
-            sets[setKey] = {
-                ...sample,
-                id: setKey, 
-                sampleIds: [sample.sampleId],
-                docIds: [sample.id]
-            };
-        } else {
-            sets[setKey].sampleIds.push(sample.sampleId);
-            sets[setKey].docIds.push(sample.id);
-        }
-    });
-
-    return Object.values(sets);
-}
-
 export async function addWaterAbsorption(data: Omit<WaterAbsorption, 'id'>): Promise<WaterAbsorption> {
     const docRef = await addDoc(waterAbsorptionsCollection, data);
     return { id: docRef.id, ...data } as WaterAbsorption;
 }
 
-export async function updateWaterAbsorptionSet(itemSet: WaterAbsorptionSet): Promise<void> {
-    const batch = writeBatch(db);
-    const { docIds, sampleIds, ...setData } = itemSet;
-
-    docIds.forEach(docId => {
-        const docRef = doc(db, 'waterAbsorptions', docId);
-        const dataToUpdate = { ...setData };
-        delete (dataToUpdate as any).id;
-        batch.update(docRef, dataToUpdate);
-    });
-    
-    await batch.commit();
+export async function updateWaterAbsorption(item: WaterAbsorption): Promise<void> {
+    const docRef = doc(db, 'waterAbsorptions', item.id);
+    const { id, ...dataToUpdate } = item;
+    await updateDoc(docRef, dataToUpdate);
 }
+
