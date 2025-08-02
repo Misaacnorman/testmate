@@ -117,7 +117,8 @@ export function TestConcreteCubesDialog({ items, onOpenChange, onBatchUpdate }: 
 
     const changedItems = itemsToUpdate.filter((updatedItem, index) => {
       const originalItem = originalItems[index];
-      return !isEqual(originalItem, updatedItem);
+      const checkOriginal = {...originalItem, ...finalSetData};
+      return !isEqual(checkOriginal, updatedItem);
     });
 
     if (changedItems.length > 0) {

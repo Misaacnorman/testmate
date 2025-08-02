@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo } from "react";
@@ -30,20 +31,12 @@ const paverSchema = z.object({
     width: z.coerce.number().optional(),
     height: z.coerce.number().optional(),
   }).optional(),
-  areaOfUse: z.string().optional(),
-  paverType: z.string().optional(),
   paversPerSqMetre: z.coerce.number().optional(),
   calculatedArea: z.coerce.number().optional(),
   weightKg: z.coerce.number().optional(),
-  machineUsed: z.string().optional(),
   loadKN: z.coerce.number().optional(),
   modeOfFailure: z.string().optional(),
-  recordedTemperature: z.string().optional(),
-  comment: z.string().optional(),
-  technician: z.string().optional(),
-  certificateNumber: z.string().optional(),
-  dateOfIssue: z.string().optional(),
-  issueIdSerialNo: z.string().optional(),
+  
   // read-only fields for context
   client: z.string(),
   project: z.string(),
@@ -52,6 +45,17 @@ const paverSchema = z.object({
   testingDate: z.string(),
   ageDays: z.number(),
   dateReceived: z.string(),
+  areaOfUse: z.string(),
+  paverType: z.string(),
+
+  // Set-specific
+  machineUsed: z.string().optional(),
+  recordedTemperature: z.string().optional(),
+  comment: z.string().optional(),
+  technician: z.string().optional(),
+  certificateNumber: z.string().optional(),
+  dateOfIssue: z.string().optional(),
+  issueIdSerialNo: z.string().optional(),
   takenBy: z.string(),
   date: z.string(),
   contact: z.string(),
@@ -88,28 +92,44 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
   });
   
   const currentItem = originalItems[activePaverIndex];
+  const isFinalStep = activePaverIndex === items.length -1 && currentSubStep === 2;
 
-  const handleNextPaver = () => {
-    if (activePaverIndex < items.length - 1) {
-      setActivePaverIndex(activePaverIndex + 1);
-      setCurrentSubStep(1);
-    }
-  };
 
-  const handleBackPaver = () => {
-    if (activePaverIndex > 0) {
-      setActivePaverIndex(activePaverIndex - 1);
-      setCurrentSubStep(1);
+  const handleNext = () => {
+     if (currentSubStep === 1) {
+        setCurrentSubStep(2);
+     } else if (currentSubStep === 2 && activePaverIndex < items.length - 1) {
+        setActivePaverIndex(activePaverIndex + 1);
+        setCurrentSubStep(1);
+     }
+  }
+
+  const handleBack = () => {
+    if (currentSubStep === 2) {
+        setCurrentSubStep(1);
+    } else if (currentSubStep === 1 && activePaverIndex > 0) {
+        setActivePaverIndex(activePaverIndex - 1);
+        setCurrentSubStep(2);
     }
-  };
-  
-  const handleNextSubStep = () => setCurrentSubStep(prev => prev < 2 ? prev + 1 : prev);
-  const handleBackSubStep = () => setCurrentSubStep(prev => prev > 1 ? prev - 1 : prev);
+  }
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    const changedItems = data.pavers.filter((updatedItem, index) => {
+    const finalSetData = data.pavers[0];
+    const itemsToUpdate = data.pavers.map(item => ({
+        ...item,
+        machineUsed: finalSetData.machineUsed,
+        recordedTemperature: finalSetData.recordedTemperature,
+        comment: finalSetData.comment,
+        technician: finalSetData.technician,
+        certificateNumber: finalSetData.certificateNumber,
+        dateOfIssue: finalSetData.dateOfIssue,
+        issueIdSerialNo: finalSetData.issueIdSerialNo,
+    }));
+    
+    const changedItems = itemsToUpdate.filter((updatedItem, index) => {
       const originalItem = originalItems[index];
-      return !isEqual(originalItem, updatedItem);
+      const checkOriginal = {...originalItem, ...finalSetData};
+      return !isEqual(checkOriginal, updatedItem);
     });
 
     if (changedItems.length > 0) {
@@ -130,7 +150,7 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
     }
   };
   
-  const progress = ((activePaverIndex + 1) / items.length) * 100;
+  const progress = (activePaverIndex / items.length) * 100 + (currentSubStep / 2) * (100 / items.length);
 
   return (
     <>
@@ -154,8 +174,8 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
                   <div><Label>Client:</Label><p>{currentItem.client}</p></div>
                   <div><Label>Project:</Label><p>{currentItem.project}</p></div>
                   <div><Label>Sample ID:</Label><p className="font-mono">{currentItem.sampleId}</p></div>
-                  <div><Label>Casting Date:</Label><p>{currentItem.castingDate}</p></div>
-                  <div><Label>Testing Date:</Label><p>{currentItem.testingDate}</p></div>
+                  <div><Label>Paver Type:</Label><p>{currentItem.paverType}</p></div>
+                  <div><Label>Area of Use:</Label><p>{currentItem.areaOfUse}</p></div>
                 </div>
               </div>
               
@@ -175,26 +195,22 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
                       <div className="space-y-2"><Label>Calculated Area (mm²)</Label><Input type="number" step="any" {...form.register(`pavers.${activePaverIndex}.calculatedArea`)} /></div>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="space-y-2"><Label>Area of Use</Label><Input {...form.register(`pavers.${activePaverIndex}.areaOfUse`)} /></div>
-                      <div className="space-y-2"><Label>Paver Type</Label><Input {...form.register(`pavers.${activePaverIndex}.paverType`)} /></div>
                       <div className="space-y-2"><Label>Pavers per m²</Label><Input type="number" {...form.register(`pavers.${activePaverIndex}.paversPerSqMetre`)} /></div>
+                       <div className="space-y-2"><Label>Mode of Failure</Label><Input {...form.register(`pavers.${activePaverIndex}.modeOfFailure`)} /></div>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2"><Label>Machine Used</Label><Input {...form.register(`pavers.${activePaverIndex}.machineUsed`)} /></div>
-                      <div className="space-y-2"><Label>Mode of Failure</Label><Input {...form.register(`pavers.${activePaverIndex}.modeOfFailure`)} /></div>
-                    </div>
-                    <div className="space-y-2"><Label>Recorded Temp. (°C)</Label><Input {...form.register(`pavers.${activePaverIndex}.recordedTemperature`)} /></div>
-                    <div className="space-y-2"><Label>Comment</Label><Textarea {...form.register(`pavers.${activePaverIndex}.comment`)} /></div>
                   </div>
               )}
               {currentSubStep === 2 && (
                  <div className="space-y-4 p-4 border rounded-lg">
-                    <h4 className="font-semibold text-lg mb-2">Issuance Details</h4>
+                    <h4 className="font-semibold text-lg mb-2">Issuance & Set Details</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2"><Label>Technician</Label><Input {...form.register(`pavers.${activePaverIndex}.technician`)} /></div>
-                      <div className="space-y-2"><Label>Certificate Number</Label><Input {...form.register(`pavers.${activePaverIndex}.certificateNumber`)} /></div>
-                      <div className="space-y-2"><Label>Date of Issue</Label><Input {...form.register(`pavers.${activePaverIndex}.dateOfIssue`)} placeholder="YYYY-MM-DD"/></div>
-                      <div className="space-y-2"><Label>Issue ID/Serial No.</Label><Input {...form.register(`pavers.${activePaverIndex}.issueIdSerialNo`)} /></div>
+                      <div className="space-y-2"><Label>Machine Used</Label><Input {...form.register('pavers.0.machineUsed')} /></div>
+                      <div className="space-y-2"><Label>Recorded Temp. (°C)</Label><Input {...form.register('pavers.0.recordedTemperature')} /></div>
+                      <div className="space-y-2 md:col-span-2"><Label>Comment</Label><Textarea {...form.register('pavers.0.comment')} /></div>
+                      <div className="space-y-2"><Label>Technician</Label><Input {...form.register('pavers.0.technician')} /></div>
+                      <div className="space-y-2"><Label>Certificate Number</Label><Input {...form.register('pavers.0.certificateNumber')} /></div>
+                      <div className="space-y-2"><Label>Date of Issue</Label><Input type="date" {...form.register('pavers.0.dateOfIssue')} placeholder="YYYY-MM-DD"/></div>
+                      <div className="space-y-2"><Label>Issue ID/Serial No.</Label><Input {...form.register('pavers.0.issueIdSerialNo')} /></div>
                     </div>
                   </div>
               )}
@@ -206,16 +222,11 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
             </div>
             
             <div className="flex gap-2">
-                {currentSubStep > 1 && <Button type="button" variant="outline" onClick={handleBackSubStep}>Back Step</Button>}
-                {currentSubStep < 2 && <Button type="button" onClick={handleNextSubStep}>Next Step</Button>}
-            </div>
-
-            <div className="flex gap-2">
-              <Button type="button" variant="outline" onClick={handleBackPaver} disabled={activePaverIndex === 0}>Previous Paver</Button>
-              {activePaverIndex < items.length - 1 ? (
-                <Button type="button" onClick={handleNextPaver}>Next Paver</Button>
+              <Button type="button" variant="outline" onClick={handleBack} disabled={activePaverIndex === 0 && currentSubStep === 1}>Back</Button>
+              {!isFinalStep ? (
+                <Button type="button" onClick={handleNext}>Next</Button>
               ) : (
-                <Button type="submit" form="test-pavers-form" disabled={currentSubStep !== 2}>Finish & Save All</Button>
+                <Button type="submit" form="test-pavers-form">Finish & Save All</Button>
               )}
             </div>
           </DialogFooter>
