@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Cylinder } from "@/types/cylinder";
+import { Cylinder, CylinderSet } from "@/types/cylinder";
 import styles from './data-table.module.css';
 
 interface DataTableProps<TData, TValue> {
@@ -32,7 +32,7 @@ interface DataTableProps<TData, TValue> {
   onSelectionChange: (selectedRows: TData[]) => void;
 }
 
-export function CylindersTable<TData extends Cylinder, TValue>({
+export function CylindersTable<TData extends CylinderSet, TValue>({
   columns,
   data,
   isLoading,
@@ -48,17 +48,18 @@ export function CylindersTable<TData extends Cylinder, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-     onRowSelectionChange: setRowSelection,
+    onRowSelectionChange: (updater) => {
+      const newRowSelection = typeof updater === 'function' ? updater(rowSelection) : updater;
+      const selectedRows = table.getFilteredSelectedRowModel().rows.map(row => row.original);
+      onSelectionChange(selectedRows);
+      setRowSelection(newRowSelection);
+    },
     state: {
       sorting,
       rowSelection,
     },
+    enableRowSelection: true,
   });
-
-  useEffect(() => {
-    const selectedRowsData = table.getFilteredSelectedRowModel().rows.map(row => row.original);
-    onSelectionChange(selectedRowsData);
-  }, [rowSelection, table, onSelectionChange]);
 
   if (isLoading) {
     return (

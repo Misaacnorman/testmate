@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { WaterAbsorption } from "@/types/water-absorption";
+import { WaterAbsorption, WaterAbsorptionSet } from "@/types/water-absorption";
 import styles from './data-table.module.css';
 
 interface DataTableProps<TData, TValue> {
@@ -32,7 +32,7 @@ interface DataTableProps<TData, TValue> {
   onSelectionChange: (selectedRows: TData[]) => void;
 }
 
-export function WaterAbsorptionTable<TData extends WaterAbsorption, TValue>({
+export function WaterAbsorptionTable<TData extends WaterAbsorptionSet, TValue>({
   columns,
   data,
   isLoading,
@@ -48,18 +48,18 @@ export function WaterAbsorptionTable<TData extends WaterAbsorption, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-    onRowSelectionChange: setRowSelection,
+    onRowSelectionChange: (updater) => {
+      const newRowSelection = typeof updater === 'function' ? updater(rowSelection) : updater;
+      const selectedRows = table.getFilteredSelectedRowModel().rows.map(row => row.original);
+      onSelectionChange(selectedRows);
+      setRowSelection(newRowSelection);
+    },
     state: {
       sorting,
       rowSelection,
     },
+    enableRowSelection: true,
   });
-
-  useEffect(() => {
-    const selectedRowsData = table.getFilteredSelectedRowModel().rows.map(row => row.original);
-    onSelectionChange(selectedRowsData);
-  }, [rowSelection, table, onSelectionChange]);
-
 
   if (isLoading) {
     return (

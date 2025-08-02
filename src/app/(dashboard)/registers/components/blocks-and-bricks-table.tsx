@@ -48,17 +48,18 @@ export function BlocksAndBricksTable<TData extends BlockAndBrickSet, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-    onRowSelectionChange: setRowSelection,
+     onRowSelectionChange: (updater) => {
+      const newRowSelection = typeof updater === 'function' ? updater(rowSelection) : updater;
+      const selectedRows = table.getFilteredSelectedRowModel().rows.map(row => row.original);
+      onSelectionChange(selectedRows);
+      setRowSelection(newRowSelection);
+    },
     state: {
       sorting,
       rowSelection,
     },
+    enableRowSelection: true,
   });
-
-  useEffect(() => {
-    const selectedRowsData = table.getFilteredSelectedRowModel().rows.map(row => row.original);
-    onSelectionChange(selectedRowsData);
-  }, [rowSelection, table, onSelectionChange]);
 
 
   if (isLoading) {
