@@ -138,7 +138,7 @@ export function TestWaterAbsorptionsDialog({ items, onOpenChange, onBatchUpdate 
         <ScrollArea className="flex-grow pr-6 -mr-6">
           <form id="test-wa-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             {currentItem && (
-                <>
+                <div className="p-1">
                     <div className="space-y-4 p-4 border rounded-lg bg-muted/50">
                       <h4 className="font-semibold text-lg mb-2">Sample Information</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
@@ -149,7 +149,7 @@ export function TestWaterAbsorptionsDialog({ items, onOpenChange, onBatchUpdate 
                       </div>
                     </div>
                     
-                    <div className="space-y-4">
+                    <div className="space-y-4 mt-4">
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="space-y-2"><Label>Length (mm)</Label><Input {...form.register(`items.${currentStep}.dimensions.length`)} /></div>
                         <div className="space-y-2"><Label>Width (mm)</Label><Input {...form.register(`items.${currentStep}.dimensions.width`)} /></div>
@@ -157,15 +157,15 @@ export function TestWaterAbsorptionsDialog({ items, onOpenChange, onBatchUpdate 
                       </div>
                       <Separator/>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2"><Label>Oven Dried Weight Before Soaking (kg)</Label><Input type="number" step="any" {...form.register(`items.${currentStep}.ovenDriedWeightBeforeSoaking`)} /></div>
-                        <div className="space-y-2"><Label>Weight After Soaking (kg)</Label><Input type="number" step="any" {...form.register(`items.${currentStep}.weightAfterSoaking`)} /></div>
+                        <div className="space-y-2"><Label>Oven Dried Weight Before Soaking (kg)</Label><Input type="text" inputMode="decimal" {...form.register(`items.${currentStep}.ovenDriedWeightBeforeSoaking`)} /></div>
+                        <div className="space-y-2"><Label>Weight After Soaking (kg)</Label><Input type="text" inputMode="decimal" {...form.register(`items.${currentStep}.weightAfterSoaking`)} /></div>
                       </div>
                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2"><Label>Weight of Water (kg)</Label><Input type="number" step="any" {...form.register(`items.${currentStep}.weightOfWater`)} /></div>
-                        <div className="space-y-2"><Label>Calculated Water Absorption (%)</Label><Input type="number" step="any" {...form.register(`items.${currentStep}.calculatedWaterAbsorption`)} /></div>
+                        <div className="space-y-2"><Label>Weight of Water (kg)</Label><Input type="text" inputMode="decimal" {...form.register(`items.${currentStep}.weightOfWater`)} /></div>
+                        <div className="space-y-2"><Label>Calculated Water Absorption (%)</Label><Input type="text" inputMode="decimal" {...form.register(`items.${currentStep}.calculatedWaterAbsorption`)} /></div>
                       </div>
                     </div>
-                </>
+                </div>
             )}
           </form>
         </ScrollArea>

@@ -91,7 +91,7 @@ export function EditProjectDialog({ project, onOpenChange, onProjectUpdated }: E
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="flex-grow pr-6 -mr-6">
-          <form id="edit-project-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form id="edit-project-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 p-1">
             {currentStep === 1 && (
                  <div className="space-y-4 p-4 border rounded-lg">
                     <h4 className="font-semibold text-lg mb-2">Project Identifiers</h4>
