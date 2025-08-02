@@ -90,7 +90,7 @@ export function EditProjectDialog({ project, onOpenChange, onProjectUpdated }: E
             Update the details for project: {project.project}.
           </DialogDescription>
         </DialogHeader>
-        <div className="flex-grow overflow-y-auto pr-6 -mr-6">
+        <ScrollArea className="flex-grow pr-6 -mr-6">
           <form id="edit-project-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             {currentStep === 1 && (
                  <div className="space-y-4 p-4 border rounded-lg">
@@ -144,7 +144,7 @@ export function EditProjectDialog({ project, onOpenChange, onProjectUpdated }: E
                 </div>
              )}
           </form>
-        </div>
+        </ScrollArea>
         <DialogFooter className="pt-4 justify-between">
             <div>
                  <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>Cancel</Button>
