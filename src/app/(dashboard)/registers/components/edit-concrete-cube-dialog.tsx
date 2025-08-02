@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ConcreteCubeSet } from "@/types/concrete-cube";
+import { ConcreteCube } from "@/types/concrete-cube";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const cubeSchema = z.object({
@@ -29,7 +29,7 @@ const cubeSchema = z.object({
   class: z.string().optional(),
   ageDays: z.coerce.number(),
   areaOfUse: z.string().optional(),
-  sampleIds: z.array(z.string()),
+  sampleId: z.string(),
   dimensions: z.object({
     length: z.coerce.number(),
     width: z.coerce.number(),
@@ -52,65 +52,65 @@ const cubeSchema = z.object({
 });
 
 type EditConcreteCubeDialogProps = {
-  cubeSet: ConcreteCubeSet;
+  item: ConcreteCube;
   onOpenChange: (open: boolean) => void;
-  onCubeUpdated: (cube: ConcreteCubeSet) => void;
+  onItemUpdated: (item: ConcreteCube) => void;
 };
 
-export function EditConcreteCubeDialog({ cubeSet, onOpenChange, onCubeUpdated }: EditConcreteCubeDialogProps) {
+export function EditConcreteCubeDialog({ item, onOpenChange, onItemUpdated }: EditConcreteCubeDialogProps) {
   const form = useForm<z.infer<typeof cubeSchema>>({
     resolver: zodResolver(cubeSchema),
     defaultValues: {
-      ...cubeSet,
-      ageDays: cubeSet.ageDays || 0,
+      ...item,
+      ageDays: item.ageDays || 0,
       dimensions: {
-        length: cubeSet.dimensions?.length || 0,
-        width: cubeSet.dimensions?.width || 0,
-        height: cubeSet.dimensions?.height || 0,
+        length: item.dimensions?.length || 0,
+        width: item.dimensions?.width || 0,
+        height: item.dimensions?.height || 0,
       },
-      weightKg: cubeSet.weightKg || 0,
-      loadKN: cubeSet.loadKN || 0,
+      weightKg: item.weightKg || 0,
+      loadKN: item.loadKN || 0,
     },
   });
 
   useEffect(() => {
     form.reset({
-       ...cubeSet,
-      ageDays: cubeSet.ageDays || 0,
+       ...item,
+      ageDays: item.ageDays || 0,
       dimensions: {
-        length: cubeSet.dimensions?.length || 0,
-        width: cubeSet.dimensions?.width || 0,
-        height: cubeSet.dimensions?.height || 0,
+        length: item.dimensions?.length || 0,
+        width: item.dimensions?.width || 0,
+        height: item.dimensions?.height || 0,
       },
-      weightKg: cubeSet.weightKg || 0,
-      loadKN: cubeSet.loadKN || 0,
+      weightKg: item.weightKg || 0,
+      loadKN: item.loadKN || 0,
     });
-  }, [cubeSet, form]);
+  }, [item, form]);
 
   const onSubmit = (values: z.infer<typeof cubeSchema>) => {
-    onCubeUpdated({ ...cubeSet, ...values });
+    onItemUpdated({ ...item, ...values });
   };
 
   return (
     <Dialog open={true} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl max-h-[90vh] flex flex-col">
         <DialogHeader>
-          <DialogTitle>Edit Concrete Cube Test Set</DialogTitle>
+          <DialogTitle>Edit Concrete Cube Test</DialogTitle>
           <DialogDescription>
-            Update the test details for this set of {cubeSet.sampleIds.length} samples. Click save when you're done.
+            Update the test details for Sample ID: {item.sampleId}. Click save when you're done.
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="flex-grow pr-6 -mr-6">
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form id="edit-cube-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             {/* Read-only section */}
             <div className="space-y-4 p-4 border rounded-lg bg-muted/50">
               <h4 className="font-semibold text-lg mb-2">Initial Information</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
-                <div><Label>Client:</Label><p>{cubeSet.client}</p></div>
-                <div><Label>Project:</Label><p>{cubeSet.project}</p></div>
-                <div><Label>Sample IDs:</Label><p className="font-mono">{cubeSet.sampleIds.join(', ')}</p></div>
-                <div><Label>Date Received:</Label><p>{cubeSet.dateReceived}</p></div>
-                <div><Label>Casting Date:</Label><p>{cubeSet.castingDate}</p></div>
+                <div><Label>Client:</Label><p>{item.client}</p></div>
+                <div><Label>Project:</Label><p>{item.project}</p></div>
+                <div><Label>Sample ID:</Label><p className="font-mono">{item.sampleId}</p></div>
+                <div><Label>Date Received:</Label><p>{item.dateReceived}</p></div>
+                <div><Label>Casting Date:</Label><p>{item.castingDate}</p></div>
                 <div><Label>Testing Date:</Label><p>{form.watch("testingDate")}</p></div>
               </div>
             </div>
@@ -193,7 +193,7 @@ export function EditConcreteCubeDialog({ cubeSet, onOpenChange, onCubeUpdated }:
             
             <DialogFooter className="pt-4">
               <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>Cancel</Button>
-              <Button type="submit">Save Changes</Button>
+              <Button type="submit" form="edit-cube-form">Save Changes</Button>
             </DialogFooter>
           </form>
         </ScrollArea>
@@ -201,5 +201,3 @@ export function EditConcreteCubeDialog({ cubeSet, onOpenChange, onCubeUpdated }:
     </Dialog>
   );
 }
-
-    

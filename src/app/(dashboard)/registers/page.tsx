@@ -15,22 +15,22 @@ import { getProjects, updateProject, deleteProject } from '@/services/projects';
 import { getColumns as getProjectColumns } from './components/project-columns';
 import { ConcreteCubesTable } from './components/concrete-cubes-table';
 import { getColumns as getConcreteCubesColumns } from './components/concrete-cubes-columns';
-import { ConcreteCubeSet } from '@/types/concrete-cube';
-import { getConcreteCubeSets, updateConcreteCubeSet } from '@/services/concrete-cubes';
-import { BlockAndBrickSet } from '@/types/block-and-brick';
-import { getBlocksAndBricksSets, updateBlockAndBrickSet } from '@/services/blocks-and-bricks';
+import { ConcreteCube, ConcreteCubeSet } from '@/types/concrete-cube';
+import { getConcreteCubes, updateConcreteCube } from '@/services/concrete-cubes';
+import { BlockAndBrick, BlockAndBrickSet } from '@/types/block-and-brick';
+import { getBlocksAndBricks, updateBlockAndBrick } from '@/services/blocks-and-bricks';
 import { getColumns as getBlocksAndBricksColumns } from './components/blocks-and-bricks-columns';
 import { BlocksAndBricksTable } from './components/blocks-and-bricks-table';
-import { PaverSet } from '@/types/paver';
-import { getPaverSets, updatePaverSet, deletePaverSet } from '@/services/pavers';
+import { Paver, PaverSet } from '@/types/paver';
+import { getPavers, updatePaver, deletePaverSet } from '@/services/pavers';
 import { getColumns as getPaverColumns } from './components/paver-columns';
 import { PaversTable } from './components/pavers-table';
-import { CylinderSet } from '@/types/cylinder';
-import { getCylinderSets, updateCylinderSet } from '@/services/cylinders';
+import { Cylinder, CylinderSet } from '@/types/cylinder';
+import { getCylinders, updateCylinder } from '@/services/cylinders';
 import { getColumns as getCylinderColumns } from './components/cylinder-columns';
 import { CylindersTable } from './components/cylinders-table';
-import { WaterAbsorptionSet } from '@/types/water-absorption';
-import { getWaterAbsorptionSets, updateWaterAbsorptionSet } from '@/services/water-absorptions';
+import { WaterAbsorption, WaterAbsorptionSet } from '@/types/water-absorption';
+import { getWaterAbsorptions, updateWaterAbsorption } from '@/services/water-absorptions';
 import { getColumns as getWaterAbsorptionColumns } from './components/water-absorption-columns';
 import { WaterAbsorptionTable } from './components/water-absorption-table';
 import { Input } from '@/components/ui/input';
@@ -49,15 +49,14 @@ import { TestWaterAbsorptionsDialog } from './components/test-water-absorptions-
 import { EditProjectDialog } from './components/edit-project-dialog';
 import { CreateProjectDialog } from './components/create-project-dialog';
 
-
 export default function RegistersPage() {
   const [receipts, setReceipts] = useState<Receipt[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
-  const [concreteCubes, setConcreteCubes] = useState<ConcreteCubeSet[]>([]);
-  const [blocksAndBricks, setBlocksAndBricks] = useState<BlockAndBrickSet[]>([]);
-  const [pavers, setPavers] = useState<PaverSet[]>([]);
-  const [cylinders, setCylinders] = useState<CylinderSet[]>([]);
-  const [waterAbsorptions, setWaterAbsorptions] = useState<WaterAbsorptionSet[]>([]);
+  const [concreteCubes, setConcreteCubes] = useState<ConcreteCube[]>([]);
+  const [blocksAndBricks, setBlocksAndBricks] = useState<BlockAndBrick[]>([]);
+  const [pavers, setPavers] = useState<Paver[]>([]);
+  const [cylinders, setCylinders] = useState<Cylinder[]>([]);
+  const [waterAbsorptions, setWaterAbsorptions] = useState<WaterAbsorption[]>([]);
   
   const [isReceiptsLoading, setIsReceiptsLoading] = useState(true);
   const [isProjectsLoading, setIsProjectsLoading] = useState(true);
@@ -69,433 +68,145 @@ export default function RegistersPage() {
   
   const [projectFilter, setProjectFilter] = useState('');
   const [editingProject, setEditingProject] = useState<Project | null>(null);
-  const [editingConcreteCube, setEditingConcreteCube] = useState<ConcreteCubeSet | null>(null);
-  const [editingBlockAndBrick, setEditingBlockAndBrick] = useState<BlockAndBrickSet | null>(null);
-  const [editingPaver, setEditingPaver] = useState<PaverSet | null>(null);
-  const [editingCylinder, setEditingCylinder] = useState<CylinderSet | null>(null);
-  const [editingWaterAbsorption, setEditingWaterAbsorption] = useState<WaterAbsorptionSet | null>(null);
+  const [editingConcreteCube, setEditingConcreteCube] = useState<ConcreteCube | null>(null);
+  const [editingBlockAndBrick, setEditingBlockAndBrick] = useState<BlockAndBrick | null>(null);
+  const [editingPaver, setEditingPaver] = useState<Paver | null>(null);
+  const [editingCylinder, setEditingCylinder] = useState<Cylinder | null>(null);
+  const [editingWaterAbsorption, setEditingWaterAbsorption] = useState<WaterAbsorption | null>(null);
   
   const [isTestCubesDialogOpen, setIsTestCubesDialogOpen] = useState(false);
-  const [selectedCubes, setSelectedCubes] = useState<ConcreteCubeSet[]>([]);
+  const [selectedCubes, setSelectedCubes] = useState<ConcreteCube[]>([]);
 
   const [isTestBlocksAndBricksDialogOpen, setIsTestBlocksAndBricksDialogOpen] = useState(false);
-  const [selectedBlocksAndBricks, setSelectedBlocksAndBricks] = useState<BlockAndBrickSet[]>([]);
+  const [selectedBlocksAndBricks, setSelectedBlocksAndBricks] = useState<BlockAndBrick[]>([]);
 
   const [isTestPaversDialogOpen, setIsTestPaversDialogOpen] = useState(false);
-  const [selectedPavers, setSelectedPavers] = useState<PaverSet[]>([]);
+  const [selectedPavers, setSelectedPavers] = useState<Paver[]>([]);
 
   const [isTestCylindersDialogOpen, setIsTestCylindersDialogOpen] = useState(false);
-  const [selectedCylinders, setSelectedCylinders] = useState<CylinderSet[]>([]);
+  const [selectedCylinders, setSelectedCylinders] = useState<Cylinder[]>([]);
 
   const [isTestWaterAbsorptionsDialogOpen, setIsTestWaterAbsorptionsDialogOpen] = useState(false);
-  const [selectedWaterAbsorptions, setSelectedWaterAbsorptions] = useState<WaterAbsorptionSet[]>([]);
+  const [selectedWaterAbsorptions, setSelectedWaterAbsorptions] = useState<WaterAbsorption[]>([]);
 
   const { toast } = useToast();
 
-  const fetchReceipts = useCallback(async () => {
-    setIsReceiptsLoading(true);
+  const fetchAndSetData = useCallback(async (fetcher: () => Promise<any>, setter: (data: any) => void, loaderSetter: (loading: boolean) => void, entityName: string) => {
+    loaderSetter(true);
     try {
-      const fetchedReceipts = await getReceipts();
-      setReceipts(fetchedReceipts);
+      const data = await fetcher();
+      setter(data);
     } catch (error) {
-      console.error("Failed to fetch receipts:", error);
+      console.error(`Failed to fetch ${entityName}:`, error);
       toast({
         variant: "destructive",
-        title: "Error fetching receipts",
-        description: "Could not retrieve receipts from the database.",
+        title: `Error fetching ${entityName}`,
+        description: `Could not retrieve ${entityName} from the database.`,
       });
     } finally {
-      setIsReceiptsLoading(false);
+      loaderSetter(false);
     }
   }, [toast]);
-  
-  const fetchProjects = useCallback(async () => {
-    setIsProjectsLoading(true);
-    try {
-      const fetchedProjects = await getProjects();
-      setProjects(fetchedProjects);
-    } catch (error) {
-      console.error("Failed to fetch projects:", error);
-      toast({
-        variant: "destructive",
-        title: "Error fetching projects",
-        description: "Could not retrieve projects from the database.",
-      });
-    } finally {
-      setIsProjectsLoading(false);
-    }
-  }, [toast]);
-
-  const fetchConcreteCubes = useCallback(async () => {
-    setIsConcreteCubesLoading(true);
-    try {
-        const fetchedData = await getConcreteCubeSets();
-        setConcreteCubes(fetchedData);
-    } catch (error) {
-        console.error("Failed to fetch concrete cubes:", error);
-        toast({
-            variant: "destructive",
-            title: "Error fetching concrete cubes",
-            description: "Could not retrieve concrete cube data.",
-        });
-    } finally {
-        setIsConcreteCubesLoading(false);
-    }
-  }, [toast]);
-
-  const fetchBlocksAndBricks = useCallback(async () => {
-    setIsBlocksAndBricksLoading(true);
-    try {
-        const fetchedData = await getBlocksAndBricksSets();
-        setBlocksAndBricks(fetchedData);
-    } catch (error) {
-        console.error("Failed to fetch blocks and bricks:", error);
-        toast({
-            variant: "destructive",
-            title: "Error fetching blocks and bricks",
-            description: "Could not retrieve blocks and bricks data.",
-        });
-    } finally {
-        setIsBlocksAndBricksLoading(false);
-    }
-  }, [toast]);
-
-  const fetchPavers = useCallback(async () => {
-    setIsPaversLoading(true);
-    try {
-        const fetchedData = await getPaverSets();
-        setPavers(fetchedData);
-    } catch (error) {
-        console.error("Failed to fetch pavers:", error);
-        toast({
-            variant: "destructive",
-            title: "Error fetching pavers",
-            description: "Could not retrieve paver data.",
-        });
-    } finally {
-        setIsPaversLoading(false);
-    }
-  }, [toast]);
-
-  const fetchCylinders = useCallback(async () => {
-    setIsCylindersLoading(true);
-    try {
-        const fetchedData = await getCylinderSets();
-        setCylinders(fetchedData);
-    } catch (error) {
-        console.error("Failed to fetch cylinders:", error);
-        toast({
-            variant: "destructive",
-            title: "Error fetching cylinders",
-            description: "Could not retrieve cylinder data.",
-        });
-    } finally {
-        setIsCylindersLoading(false);
-    }
-  }, [toast]);
-
-  const fetchWaterAbsorptions = useCallback(async () => {
-    setIsWaterAbsorptionsLoading(true);
-    try {
-        const fetchedData = await getWaterAbsorptionSets();
-        setWaterAbsorptions(fetchedData);
-    } catch (error) {
-        console.error("Failed to fetch water absorptions:", error);
-        toast({
-            variant: "destructive",
-            title: "Error fetching water absorptions",
-            description: "Could not retrieve water absorption data.",
-        });
-    } finally {
-        setIsWaterAbsorptionsLoading(false);
-    }
-    }, [toast]);
 
   useEffect(() => {
-    fetchReceipts();
-    fetchProjects();
-    fetchConcreteCubes();
-    fetchBlocksAndBricks();
-    fetchPavers();
-    fetchCylinders();
-    fetchWaterAbsorptions();
-  }, [fetchReceipts, fetchProjects, fetchConcreteCubes, fetchBlocksAndBricks, fetchPavers, fetchCylinders, fetchWaterAbsorptions]);
+    fetchAndSetData(getReceipts, setReceipts, setIsReceiptsLoading, 'receipts');
+    fetchAndSetData(getProjects, setProjects, setIsProjectsLoading, 'projects');
+    fetchAndSetData(getConcreteCubes, setConcreteCubes, setIsConcreteCubesLoading, 'concrete cubes');
+    fetchAndSetData(getBlocksAndBricks, setBlocksAndBricks, setIsBlocksAndBricksLoading, 'blocks and bricks');
+    fetchAndSetData(getPavers, setPavers, setIsPaversLoading, 'pavers');
+    fetchAndSetData(getCylinders, setCylinders, setIsCylindersLoading, 'cylinders');
+    fetchAndSetData(getWaterAbsorptions, setWaterAbsorptions, setIsWaterAbsorptionsLoading, 'water absorptions');
+  }, [fetchAndSetData]);
 
   const handleReceiptDeleted = useCallback(async (receiptId: string) => {
+    // This function logic can be expanded to delete related test entries if needed
     try {
       await deleteReceipt(receiptId);
-      toast({
-        title: "Receipt Deleted",
-        description: "The receipt has been successfully deleted.",
-      });
-      fetchReceipts(); // Refetch data to update the table
+      toast({ title: "Receipt Deleted" });
+      fetchAndSetData(getReceipts, setReceipts, setIsReceiptsLoading, 'receipts');
     } catch (error) {
-      console.error("Failed to delete receipt:", error);
-      toast({
-        variant: "destructive",
-        title: "Error deleting receipt",
-        description: "Could not delete the receipt.",
-      });
+      toast({ variant: "destructive", title: "Error deleting receipt" });
     }
-  }, [fetchReceipts, toast]);
+  }, [fetchAndSetData]);
 
   const handleProjectUpdated = async (project: Project) => {
     try {
       await updateProject(project);
-      toast({
-        title: "Project Updated",
-        description: `Project ${project.project} has been updated.`,
-      });
+      toast({ title: "Project Updated" });
       setEditingProject(null);
-      fetchProjects();
+      fetchAndSetData(getProjects, setProjects, setIsProjectsLoading, 'projects');
     } catch (error) {
-       console.error("Failed to update project:", error);
-       toast({
-         variant: "destructive",
-         title: "Error updating project",
-         description: "Could not save the updated project data.",
-       });
+       toast({ variant: "destructive", title: "Error updating project" });
     }
   };
 
   const handleProjectDeleted = async (projectId: string) => {
     try {
       await deleteProject(projectId);
-      toast({
-        title: "Project Deleted",
-        description: "The project has been successfully deleted.",
-      });
-      fetchProjects();
+      toast({ title: "Project Deleted" });
+      fetchAndSetData(getProjects, setProjects, setIsProjectsLoading, 'projects');
     } catch (error) {
-       console.error("Failed to delete project:", error);
-       toast({
-         variant: "destructive",
-         title: "Error deleting project",
-         description: "Could not delete the project.",
-       });
-    }
-  };
-
-  const handleConcreteCubeUpdated = async (cubeSet: ConcreteCubeSet) => {
-    try {
-      await updateConcreteCubeSet(cubeSet);
-      toast({
-        title: "Test Set Updated",
-        description: `Concrete Cube Test Set has been updated.`,
-      });
-      setEditingConcreteCube(null);
-      fetchConcreteCubes();
-    } catch (error) {
-       console.error("Failed to update concrete cube set:", error);
-       toast({
-         variant: "destructive",
-         title: "Error updating test set",
-         description: "Could not save the updated test data.",
-       });
+       toast({ variant: "destructive", title: "Error deleting project" });
     }
   };
   
-  const handleBatchCubesUpdate = async (updatedCubes: ConcreteCubeSet[]) => {
+  const handleBatchUpdate = async <T extends {id: string}>(items: T[], updater: (item: T) => Promise<void>, fetcher: () => Promise<any>, setter: (data: any) => void, loaderSetter: (loading: boolean) => void, entityName: string, dialogCloser: () => void) => {
     try {
-      await Promise.all(updatedCubes.map(cube => updateConcreteCubeSet(cube)));
-       toast({
-        title: "Batch Update Successful",
-        description: `${updatedCubes.length} concrete cube test sets have been updated.`,
-      });
-      fetchConcreteCubes();
-      setIsTestCubesDialogOpen(false);
-      setSelectedCubes([]);
-    } catch(error) {
-       console.error("Failed to batch update concrete cubes:", error);
-       toast({
-         variant: "destructive",
-         title: "Error during Batch Update",
-         description: "Could not save the updated test data for some items.",
-       });
-    }
-  }
-
-  const handleBlockAndBrickUpdated = async (item: BlockAndBrickSet) => {
-    try {
-      await updateBlockAndBrickSet(item);
-      toast({
-        title: "Test Set Updated",
-        description: `Block/Brick Test Set has been updated.`,
-      });
-      setEditingBlockAndBrick(null);
-      fetchBlocksAndBricks();
+        await Promise.all(items.map(item => updater(item)));
+        toast({
+            title: "Batch Update Successful",
+            description: `${items.length} ${entityName} records have been updated.`,
+        });
+        fetcher().then(setter);
+        dialogCloser();
     } catch (error) {
-       console.error("Failed to update block/brick set:", error);
-       toast({
-         variant: "destructive",
-         title: "Error updating test",
-         description: "Could not save the updated test data.",
-       });
+        console.error(`Failed to batch update ${entityName}:`, error);
+        toast({
+            variant: "destructive",
+            title: "Error during Batch Update",
+            description: `Could not save updated data for some ${entityName}.`,
+        });
     }
   };
 
-  const handleBatchBlocksAndBricksUpdate = async (updatedItems: BlockAndBrickSet[]) => {
+  const handlePaverSetDeleted = async (item: PaverSet) => {
     try {
-      await Promise.all(updatedItems.map(item => updateBlockAndBrickSet(item)));
-       toast({
-        title: "Batch Update Successful",
-        description: `${updatedItems.length} blocks/bricks test sets have been updated.`,
-      });
-      fetchBlocksAndBricks();
-      setIsTestBlocksAndBricksDialogOpen(false);
-      setSelectedBlocksAndBricks([]);
-    } catch(error) {
-       console.error("Failed to batch update blocks/bricks:", error);
-       toast({
-         variant: "destructive",
-         title: "Error during Batch Update",
-         description: "Could not save the updated test data for some items.",
-       });
-    }
-  }
-
-  const handlePaverUpdated = async (item: PaverSet) => {
-    try {
-      await updatePaverSet(item);
-      toast({
-        title: "Test Set Updated",
-        description: `Paver Test Set has been updated.`,
-      });
-      setEditingPaver(null);
-      fetchPavers();
+      await deletePaverSet(item.samples.map(s => s.id));
+      toast({ title: "Paver Test Set Deleted" });
+      fetchAndSetData(getPavers, setPavers, setIsPaversLoading, 'pavers');
     } catch (error) {
-       console.error("Failed to update paver set:", error);
-       toast({
-         variant: "destructive",
-         title: "Error updating test set",
-         description: "Could not save the updated test data.",
-       });
+      toast({ variant: "destructive", title: "Error Deleting Paver Set" });
     }
   };
 
-  const handlePaverDeleted = async (item: PaverSet) => {
-    try {
-      await deletePaverSet(item.docIds);
-      toast({
-        title: "Paver Test Set Deleted",
-        description: "The paver test set has been successfully deleted.",
-      });
-      fetchPavers();
-    } catch (error) {
-      console.error("Failed to delete paver:", error);
-      toast({
-        variant: "destructive",
-        title: "Error Deleting Paver Set",
-        description: "Could not delete the paver test set.",
-      });
-    }
+  const groupIntoSets = <T extends { [key: string]: any; id: string }>(samples: T[], keyFields: string[]): any[] => {
+    const sets = new Map<string, T[]>();
+    samples.forEach(sample => {
+      const key = keyFields.map(field => sample[field] ?? '').join('-');
+      if (!sets.has(key)) {
+        sets.set(key, []);
+      }
+      sets.get(key)!.push(sample);
+    });
+    
+    return Array.from(sets.entries()).map(([key, samples]) => {
+      const firstSample = samples[0];
+      const commonData: { [key: string]: any } = {};
+      keyFields.forEach(field => commonData[field] = firstSample[field]);
+
+      return {
+        id: key,
+        samples: samples,
+        ...commonData,
+      };
+    });
   };
 
-  const handleBatchPaversUpdate = async (updatedItems: PaverSet[]) => {
-    try {
-      await Promise.all(updatedItems.map(item => updatePaverSet(item)));
-       toast({
-        title: "Batch Update Successful",
-        description: `${updatedItems.length} paver test sets have been updated.`,
-      });
-      fetchPavers();
-      setIsTestPaversDialogOpen(false);
-      setSelectedPavers([]);
-    } catch(error) {
-       console.error("Failed to batch update pavers:", error);
-       toast({
-         variant: "destructive",
-         title: "Error during Batch Update",
-         description: "Could not save the updated test data for some items.",
-       });
-    }
-  }
-
-  const handleCylinderUpdated = async (item: CylinderSet) => {
-    try {
-      await updateCylinderSet(item);
-      toast({
-        title: "Test Set Updated",
-        description: `Cylinder Test Set has been updated.`,
-      });
-      setEditingCylinder(null);
-      fetchCylinders();
-    } catch (error) {
-       console.error("Failed to update cylinder set:", error);
-       toast({
-         variant: "destructive",
-         title: "Error updating test set",
-         description: "Could not save the updated test data.",
-       });
-    }
-  };
-
-  const handleBatchCylindersUpdate = async (updatedItems: CylinderSet[]) => {
-    try {
-      await Promise.all(updatedItems.map(item => updateCylinderSet(item)));
-       toast({
-        title: "Batch Update Successful",
-        description: `${updatedItems.length} cylinder test sets have been updated.`,
-      });
-      fetchCylinders();
-      setIsTestCylindersDialogOpen(false);
-      setSelectedCylinders([]);
-    } catch(error) {
-       console.error("Failed to batch update cylinders:", error);
-       toast({
-         variant: "destructive",
-         title: "Error during Batch Update",
-         description: "Could not save the updated test data for some items.",
-       });
-    }
-  }
-
-  const handleWaterAbsorptionUpdated = async (item: WaterAbsorptionSet) => {
-    try {
-      await updateWaterAbsorptionSet(item);
-      toast({
-        title: "Test Set Updated",
-        description: `Water Absorption Test Set has been updated.`,
-      });
-      setEditingWaterAbsorption(null);
-      fetchWaterAbsorptions();
-    } catch (error) {
-       console.error("Failed to update water absorption test set:", error);
-       toast({
-         variant: "destructive",
-         title: "Error updating test set",
-         description: "Could not save the updated test data.",
-       });
-    }
-  };
-
-   const handleBatchWaterAbsorptionsUpdate = async (updatedItems: WaterAbsorptionSet[]) => {
-    try {
-      await Promise.all(updatedItems.map(item => updateWaterAbsorptionSet(item)));
-       toast({
-        title: "Batch Update Successful",
-        description: `${updatedItems.length} water absorption test sets have been updated.`,
-      });
-      fetchWaterAbsorptions();
-      setIsTestWaterAbsorptionsDialogOpen(false);
-      setSelectedWaterAbsorptions([]);
-    } catch(error) {
-       console.error("Failed to batch update water absorptions:", error);
-       toast({
-         variant: "destructive",
-         title: "Error during Batch Update",
-         description: "Could not save the updated test data for some items.",
-       });
-    }
-  }
-
-  const receiptColumns = useMemo(() => getReceiptColumns({ onDelete: handleReceiptDeleted }), [handleReceiptDeleted]);
-  const projectColumns = useMemo(() => getProjectColumns({ onEdit: setEditingProject, onDelete: handleProjectDeleted }), [handleProjectDeleted]);
-  const concreteCubesColumns = useMemo(() => getConcreteCubesColumns({ onEdit: setEditingConcreteCube }), []);
-  const blocksAndBricksColumns = useMemo(() => getBlocksAndBricksColumns({ onEdit: setEditingBlockAndBrick }), []);
-  const paverColumns = useMemo(() => getPaverColumns({ onEdit: setEditingPaver, onDelete: handlePaverDeleted }), [handlePaverDeleted]);
-  const cylinderColumns = useMemo(() => getCylinderColumns({ onEdit: setEditingCylinder }), []);
-  const waterAbsorptionColumns = useMemo(() => getWaterAbsorptionColumns({ onEdit: setEditingWaterAbsorption }), []);
+  const concreteCubeSets = useMemo(() => groupIntoSets<ConcreteCube>(concreteCubes, ['client', 'project', 'dateReceived', 'castingDate', 'testingDate', 'class', 'areaOfUse']), [concreteCubes]);
+  const blocksAndBricksSets = useMemo(() => groupIntoSets<BlockAndBrick>(blocksAndBricks, ['client', 'project', 'dateReceived', 'castingDate', 'testingDate', 'areaOfUse', 'sampleType']), [blocksAndBricks]);
+  const paverSets = useMemo(() => groupIntoSets<Paver>(pavers, ['client', 'project', 'dateReceived', 'castingDate', 'testingDate', 'areaOfUse', 'paverType']), [pavers]);
+  const cylinderSets = useMemo(() => groupIntoSets<Cylinder>(cylinders, ['client', 'project', 'dateReceived', 'castingDate', 'testingDate', 'class', 'areaOfUse']), [cylinders]);
+  const waterAbsorptionSets = useMemo(() => groupIntoSets<WaterAbsorption>(waterAbsorptions, ['client', 'project', 'dateReceived', 'castingDate', 'testingDate', 'areaOfUse', 'sampleType']), [waterAbsorptions]);
 
   return (
     <>
@@ -518,230 +229,68 @@ export default function RegistersPage() {
             <TabsTrigger value="cylinders">Cylinders</TabsTrigger>
             <TabsTrigger value="water-absorption">Water Absorption</TabsTrigger>
           </TabsList>
+          
           <TabsContent value="sample-receipts">
-            <Card>
-              <CardHeader>
-                <CardTitle>Sample Receipt Log</CardTitle>
-                <CardDescription>A log of all sample receipts generated.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ReceiptsTable columns={receiptColumns} data={receipts} isLoading={isReceiptsLoading} />
-              </CardContent>
-            </Card>
+            <Card><CardHeader><CardTitle>Sample Receipt Log</CardTitle><CardDescription>A log of all sample receipts generated.</CardDescription></CardHeader><CardContent><ReceiptsTable columns={getReceiptColumns({ onDelete: handleReceiptDeleted })} data={receipts} isLoading={isReceiptsLoading} /></CardContent></Card>
           </TabsContent>
+
           <TabsContent value="projects">
             <Card>
-              <CardHeader>
-                <div className="flex justify-between items-center gap-4">
-                  <div>
-                      <CardTitle>Projects and Samples Register/Log Book</CardTitle>
-                      <CardDescription>A log of all projects and their associated details.</CardDescription>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Input 
-                        placeholder="Search all projects..."
-                        value={projectFilter}
-                        onChange={(event) => setProjectFilter(event.target.value)}
-                        className="w-64"
-                    />
-                    <CreateProjectDialog onProjectCreated={fetchProjects} />
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                  <ProjectsTable columns={projectColumns} data={projects} isLoading={isProjectsLoading} globalFilter={projectFilter} />
-              </CardContent>
+              <CardHeader><div className="flex justify-between items-center gap-4"><div><CardTitle>Projects and Samples Register/Log Book</CardTitle><CardDescription>A log of all projects and their associated details.</CardDescription></div><div className="flex items-center gap-2"><Input placeholder="Search all projects..." value={projectFilter} onChange={(event) => setProjectFilter(event.target.value)} className="w-64" /><CreateProjectDialog onProjectCreated={() => fetchAndSetData(getProjects, setProjects, setIsProjectsLoading, 'projects')} /></div></div></CardHeader>
+              <CardContent><ProjectsTable columns={getProjectColumns({ onEdit: setEditingProject, onDelete: handleProjectDeleted })} data={projects} isLoading={isProjectsLoading} globalFilter={projectFilter} /></CardContent>
             </Card>
           </TabsContent>
+
           <TabsContent value="concrete-cubes">
             <Card>
-              <CardHeader>
-                <div className="flex justify-between items-center">
-                    <div>
-                      <CardTitle>Concrete Cubes</CardTitle>
-                      <CardDescription>A register for all concrete cube tests.</CardDescription>
-                    </div>
-                    <Button 
-                      onClick={() => setIsTestCubesDialogOpen(true)} 
-                      disabled={selectedCubes.length === 0}
-                    >
-                       <TestTubeDiagonal className="mr-2 h-4 w-4" />
-                       Test ({selectedCubes.length})
-                    </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                  <ConcreteCubesTable columns={concreteCubesColumns} data={concreteCubes} isLoading={isConcreteCubesLoading} onSelectionChange={setSelectedCubes}/>
-              </CardContent>
+              <CardHeader><div className="flex justify-between items-center"><div><CardTitle>Concrete Cubes</CardTitle><CardDescription>A register for all concrete cube tests.</CardDescription></div><Button onClick={() => setIsTestCubesDialogOpen(true)} disabled={selectedCubes.length === 0}><TestTubeDiagonal className="mr-2 h-4 w-4" />Test ({selectedCubes.length})</Button></div></CardHeader>
+              <CardContent><ConcreteCubesTable columns={getConcreteCubesColumns({ onEdit: setEditingConcreteCube })} data={concreteCubeSets} isLoading={isConcreteCubesLoading} onSelectionChange={(rows) => setSelectedCubes(rows.flatMap(set => set.samples))} /></CardContent>
             </Card>
           </TabsContent>
+
           <TabsContent value="blocks-and-bricks">
             <Card>
-              <CardHeader>
-                <div className="flex justify-between items-center">
-                  <div>
-                    <CardTitle>Sample Register/Log for Bricks &amp; Blocks</CardTitle>
-                    <CardDescription>A register for all brick and block tests.</CardDescription>
-                  </div>
-                   <Button 
-                      onClick={() => setIsTestBlocksAndBricksDialogOpen(true)} 
-                      disabled={selectedBlocksAndBricks.length === 0}
-                    >
-                       <TestTubeDiagonal className="mr-2 h-4 w-4" />
-                       Test ({selectedBlocksAndBricks.length})
-                    </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                  <BlocksAndBricksTable columns={blocksAndBricksColumns} data={blocksAndBricks} isLoading={isBlocksAndBricksLoading} onSelectionChange={setSelectedBlocksAndBricks} />
-              </CardContent>
+              <CardHeader><div className="flex justify-between items-center"><div><CardTitle>Sample Register/Log for Bricks &amp; Blocks</CardTitle><CardDescription>A register for all brick and block tests.</CardDescription></div><Button onClick={() => setIsTestBlocksAndBricksDialogOpen(true)} disabled={selectedBlocksAndBricks.length === 0}><TestTubeDiagonal className="mr-2 h-4 w-4" />Test ({selectedBlocksAndBricks.length})</Button></div></CardHeader>
+              <CardContent><BlocksAndBricksTable columns={getBlocksAndBricksColumns({ onEdit: setEditingBlockAndBrick })} data={blocksAndBricksSets} isLoading={isBlocksAndBricksLoading} onSelectionChange={(rows) => setSelectedBlocksAndBricks(rows.flatMap(set => set.samples))} /></CardContent>
             </Card>
           </TabsContent>
+
           <TabsContent value="pavers">
             <Card>
-              <CardHeader>
-                <div className="flex justify-between items-center">
-                  <div>
-                    <CardTitle>Sample Register/Log for Pavers</CardTitle>
-                    <CardDescription>A register for all paver tests.</CardDescription>
-                  </div>
-                  <Button 
-                    onClick={() => setIsTestPaversDialogOpen(true)} 
-                    disabled={selectedPavers.length === 0}
-                  >
-                      <TestTubeDiagonal className="mr-2 h-4 w-4" />
-                      Test ({selectedPavers.length})
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                  <PaversTable columns={paverColumns} data={pavers} isLoading={isPaversLoading} onSelectionChange={setSelectedPavers} />
-              </CardContent>
+              <CardHeader><div className="flex justify-between items-center"><div><CardTitle>Sample Register/Log for Pavers</CardTitle><CardDescription>A register for all paver tests.</CardDescription></div><Button onClick={() => setIsTestPaversDialogOpen(true)} disabled={selectedPavers.length === 0}><TestTubeDiagonal className="mr-2 h-4 w-4" />Test ({selectedPavers.length})</Button></div></CardHeader>
+              <CardContent><PaversTable columns={getPaverColumns({ onEdit: setEditingPaver, onDelete: handlePaverSetDeleted })} data={paverSets} isLoading={isPaversLoading} onSelectionChange={(rows) => setSelectedPavers(rows.flatMap(set => set.samples))} /></CardContent>
             </Card>
           </TabsContent>
-          <TabsContent value="cylinders">
+
+           <TabsContent value="cylinders">
             <Card>
-              <CardHeader>
-                <div className="flex justify-between items-center">
-                    <div>
-                      <CardTitle>Sample Register/Log for Concrete Cylinders</CardTitle>
-                      <CardDescription>A register for all concrete cylinder tests.</CardDescription>
-                    </div>
-                     <Button 
-                        onClick={() => setIsTestCylindersDialogOpen(true)} 
-                        disabled={selectedCylinders.length === 0}
-                      >
-                         <TestTubeDiagonal className="mr-2 h-4 w-4" />
-                         Test ({selectedCylinders.length})
-                      </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                  <CylindersTable columns={cylinderColumns} data={cylinders} isLoading={isCylindersLoading} onSelectionChange={setSelectedCylinders} />
-              </CardContent>
+              <CardHeader><div className="flex justify-between items-center"><div><CardTitle>Sample Register/Log for Concrete Cylinders</CardTitle><CardDescription>A register for all concrete cylinder tests.</CardDescription></div><Button onClick={() => setIsTestCylindersDialogOpen(true)} disabled={selectedCylinders.length === 0}><TestTubeDiagonal className="mr-2 h-4 w-4" />Test ({selectedCylinders.length})</Button></div></CardHeader>
+              <CardContent><CylindersTable columns={getCylinderColumns({ onEdit: setEditingCylinder })} data={cylinderSets} isLoading={isCylindersLoading} onSelectionChange={(rows) => setSelectedCylinders(rows.flatMap(set => set.samples))} /></CardContent>
             </Card>
           </TabsContent>
+
           <TabsContent value="water-absorption">
-              <Card>
-                  <CardHeader>
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <CardTitle>Sample Register/Log for Bricks &amp; Blocks for Water</CardTitle>
-                        <CardDescription>A register for all water absorption tests on bricks and blocks.</CardDescription>
-                      </div>
-                      <Button 
-                          onClick={() => setIsTestWaterAbsorptionsDialogOpen(true)} 
-                          disabled={selectedWaterAbsorptions.length === 0}
-                        >
-                           <TestTubeDiagonal className="mr-2 h-4 w-4" />
-                           Test ({selectedWaterAbsorptions.length})
-                        </Button>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                      <WaterAbsorptionTable columns={waterAbsorptionColumns} data={waterAbsorptions} isLoading={isWaterAbsorptionsLoading} onSelectionChange={setSelectedWaterAbsorptions} />
-                  </CardContent>
-              </Card>
+            <Card>
+              <CardHeader><div className="flex justify-between items-center"><div><CardTitle>Sample Register/Log for Bricks &amp; Blocks for Water</CardTitle><CardDescription>A register for all water absorption tests on bricks and blocks.</CardDescription></div><Button onClick={() => setIsTestWaterAbsorptionsDialogOpen(true)} disabled={selectedWaterAbsorptions.length === 0}><TestTubeDiagonal className="mr-2 h-4 w-4" />Test ({selectedWaterAbsorptions.length})</Button></div></CardHeader>
+              <CardContent><WaterAbsorptionTable columns={getWaterAbsorptionColumns({ onEdit: setEditingWaterAbsorption })} data={waterAbsorptionSets} isLoading={isWaterAbsorptionsLoading} onSelectionChange={(rows) => setSelectedWaterAbsorptions(rows.flatMap(set => set.samples))} /></CardContent>
+            </Card>
           </TabsContent>
+
         </Tabs>
       </div>
-      {editingProject && (
-        <EditProjectDialog
-            project={editingProject}
-            onOpenChange={(open) => !open && setEditingProject(null)}
-            onProjectUpdated={handleProjectUpdated}
-        />
-      )}
-      {editingConcreteCube && (
-        <EditConcreteCubeDialog 
-          cubeSet={editingConcreteCube}
-          onOpenChange={(open) => !open && setEditingConcreteCube(null)}
-          onCubeUpdated={handleConcreteCubeUpdated}
-        />
-      )}
-      {isTestCubesDialogOpen && selectedCubes.length > 0 && (
-        <TestConcreteCubesDialog
-          cubes={selectedCubes}
-          onOpenChange={setIsTestCubesDialogOpen}
-          onBatchUpdate={handleBatchCubesUpdate}
-        />
-      )}
-      {editingBlockAndBrick && (
-        <EditBlockAndBrickDialog 
-          item={editingBlockAndBrick}
-          onOpenChange={(open) => !open && setEditingBlockAndBrick(null)}
-          onItemUpdated={handleBlockAndBrickUpdated}
-        />
-      )}
-      {isTestBlocksAndBricksDialogOpen && selectedBlocksAndBricks.length > 0 && (
-        <TestBlocksAndBricksDialog
-          items={selectedBlocksAndBricks}
-          onOpenChange={setIsTestBlocksAndBricksDialogOpen}
-          onBatchUpdate={handleBatchBlocksAndBricksUpdate}
-        />
-      )}
-      {editingPaver && (
-        <EditPaverDialog
-          item={editingPaver}
-          onOpenChange={(open) => !open && setEditingPaver(null)}
-          onItemUpdated={handlePaverUpdated}
-        />
-      )}
-      {isTestPaversDialogOpen && selectedPavers.length > 0 && (
-        <TestPaversDialog
-          items={selectedPavers}
-          onOpenChange={setIsTestPaversDialogOpen}
-          onBatchUpdate={handleBatchPaversUpdate}
-        />
-      )}
-      {editingCylinder && (
-        <EditCylinderDialog
-          item={editingCylinder}
-          onOpenChange={(open) => !open && setEditingCylinder(null)}
-          onItemUpdated={handleCylinderUpdated}
-        />
-      )}
-       {isTestCylindersDialogOpen && selectedCylinders.length > 0 && (
-        <TestCylindersDialog
-          items={selectedCylinders}
-          onOpenChange={setIsTestCylindersDialogOpen}
-          onBatchUpdate={handleBatchCylindersUpdate}
-        />
-      )}
-      {editingWaterAbsorption && (
-        <EditWaterAbsorptionDialog
-          item={editingWaterAbsorption}
-          onOpenChange={(open) => !open && setEditingWaterAbsorption(null)}
-          onItemUpdated={handleWaterAbsorptionUpdated}
-        />
-      )}
-       {isTestWaterAbsorptionsDialogOpen && selectedWaterAbsorptions.length > 0 && (
-        <TestWaterAbsorptionsDialog
-          items={selectedWaterAbsorptions}
-          onOpenChange={setIsTestWaterAbsorptionsDialogOpen}
-          onBatchUpdate={handleBatchWaterAbsorptionsUpdate}
-        />
-      )}
+      
+      {editingProject && <EditProjectDialog project={editingProject} onOpenChange={(open) => !open && setEditingProject(null)} onProjectUpdated={handleProjectUpdated} />}
+      {editingConcreteCube && <EditConcreteCubeDialog item={editingConcreteCube} onOpenChange={(open) => !open && setEditingConcreteCube(null)} onItemUpdated={(item) => handleBatchUpdate([item], updateConcreteCube, getConcreteCubes, setConcreteCubes, setIsConcreteCubesLoading, 'concrete cube', () => setEditingConcreteCube(null))} />}
+      {editingBlockAndBrick && <EditBlockAndBrickDialog item={editingBlockAndBrick} onOpenChange={(open) => !open && setEditingBlockAndBrick(null)} onItemUpdated={(item) => handleBatchUpdate([item], updateBlockAndBrick, getBlocksAndBricks, setBlocksAndBricks, setIsBlocksAndBricksLoading, 'block/brick', () => setEditingBlockAndBrick(null))} />}
+      {editingPaver && <EditPaverDialog item={editingPaver} onOpenChange={(open) => !open && setEditingPaver(null)} onItemUpdated={(item) => handleBatchUpdate([item], updatePaver, getPavers, setPavers, setIsPaversLoading, 'paver', () => setEditingPaver(null))} />}
+      {editingCylinder && <EditCylinderDialog item={editingCylinder} onOpenChange={(open) => !open && setEditingCylinder(null)} onItemUpdated={(item) => handleBatchUpdate([item], updateCylinder, getCylinders, setCylinders, setIsCylindersLoading, 'cylinder', () => setEditingCylinder(null))} />}
+      {editingWaterAbsorption && <EditWaterAbsorptionDialog item={editingWaterAbsorption} onOpenChange={(open) => !open && setEditingWaterAbsorption(null)} onItemUpdated={(item) => handleBatchUpdate([item], updateWaterAbsorption, getWaterAbsorptions, setWaterAbsorptions, setIsWaterAbsorptionsLoading, 'water absorption', () => setEditingWaterAbsorption(null))} />}
+      
+      {isTestCubesDialogOpen && selectedCubes.length > 0 && <TestConcreteCubesDialog items={selectedCubes} onOpenChange={setIsTestCubesDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateConcreteCube, getConcreteCubes, setConcreteCubes, setIsConcreteCubesLoading, 'concrete cube', () => setIsTestCubesDialogOpen(false))} />}
+      {isTestBlocksAndBricksDialogOpen && selectedBlocksAndBricks.length > 0 && <TestBlocksAndBricksDialog items={selectedBlocksAndBricks} onOpenChange={setIsTestBlocksAndBricksDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateBlockAndBrick, getBlocksAndBricks, setBlocksAndBricks, setIsBlocksAndBricksLoading, 'block/brick', () => setIsTestBlocksAndBricksDialogOpen(false))} />}
+      {isTestPaversDialogOpen && selectedPavers.length > 0 && <TestPaversDialog items={selectedPavers} onOpenChange={setIsTestPaversDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updatePaver, getPavers, setPavers, setIsPaversLoading, 'paver', () => setIsTestPaversDialogOpen(false))} />}
+      {isTestCylindersDialogOpen && selectedCylinders.length > 0 && <TestCylindersDialog items={selectedCylinders} onOpenChange={setIsTestCylindersDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateCylinder, getCylinders, setCylinders, setIsCylindersLoading, 'cylinder', () => setIsTestCylindersDialogOpen(false))} />}
+      {isTestWaterAbsorptionsDialogOpen && selectedWaterAbsorptions.length > 0 && <TestWaterAbsorptionsDialog items={selectedWaterAbsorptions} onOpenChange={setIsTestWaterAbsorptionsDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateWaterAbsorption, getWaterAbsorptions, setWaterAbsorptions, setIsWaterAbsorptionsLoading, 'water absorption', () => setIsTestWaterAbsorptionsDialogOpen(false))} />}
     </>
   );
 }

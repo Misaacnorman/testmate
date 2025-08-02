@@ -45,46 +45,13 @@ export async function getConcreteCubes(): Promise<ConcreteCube[]> {
     return snapshot.docs.map(doc => fromFirestore<ConcreteCube>(doc));
 }
 
-export async function getConcreteCubeSets(): Promise<ConcreteCubeSet[]> {
-    const samples = await getConcreteCubes();
-    const sets: { [key: string]: ConcreteCubeSet } = {};
-
-    samples.forEach(sample => {
-        const setKey = `${sample.sampleReceiptNumber}-${sample.castingDate}-${sample.testingDate}-${sample.areaOfUse}-${sample.class}`;
-
-        if (!sets[setKey]) {
-            sets[setKey] = {
-                ...sample,
-                id: setKey, 
-                sampleIds: [sample.sampleId],
-                docIds: [sample.id]
-            };
-        } else {
-            sets[setKey].sampleIds.push(sample.sampleId);
-            sets[setKey].docIds.push(sample.id);
-        }
-    });
-
-    return Object.values(sets);
-}
-
 export async function addConcreteCube(data: Omit<ConcreteCube, 'id'>): Promise<ConcreteCube> {
     const docRef = await addDoc(concreteCubesCollection, data);
     return { id: docRef.id, ...data } as ConcreteCube;
 }
 
-export async function updateConcreteCubeSet(itemSet: ConcreteCubeSet): Promise<void> {
-    const batch = writeBatch(db);
-    const { docIds, sampleIds, ...setData } = itemSet;
-
-    docIds.forEach(docId => {
-        const docRef = doc(db, 'concreteCubes', docId);
-        const dataToUpdate = { ...setData };
-        delete (dataToUpdate as any).id;
-        batch.update(docRef, dataToUpdate);
-    });
-    
-    await batch.commit();
+export async function updateConcreteCube(item: ConcreteCube): Promise<void> {
+    const docRef = doc(db, 'concreteCubes', item.id);
+    const { id, ...dataToUpdate } = item;
+    await updateDoc(docRef, dataToUpdate);
 }
-    
-

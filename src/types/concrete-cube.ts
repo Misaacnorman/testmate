@@ -30,3 +30,17 @@ export type ConcreteCube = {
     contact: string;
     sampleReceiptNumber: string;
 };
+
+// Represents a set of samples with common properties, for UI display
+export type ConcreteCubeSet = {
+    id: string; // Composite key for the set
+    samples: ConcreteCube[];
+    // Common properties for quick access
+    client: string;
+    project: string;
+    dateReceived: string;
+    castingDate: string;
+    testingDate: string;
+    class: string;
+    areaOfUse: string;
+};

@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ConcreteCube } from "@/types/concrete-cube";
+import { ConcreteCubeSet } from "@/types/concrete-cube";
 import styles from './data-table.module.css';
 
 interface DataTableProps<TData, TValue> {
@@ -32,7 +32,7 @@ interface DataTableProps<TData, TValue> {
   onSelectionChange: (selectedRows: TData[]) => void;
 }
 
-export function ConcreteCubesTable<TData extends ConcreteCube, TValue>({
+export function ConcreteCubesTable<TData extends ConcreteCubeSet, TValue>({
   columns,
   data,
   isLoading,
@@ -49,6 +49,7 @@ export function ConcreteCubesTable<TData extends ConcreteCube, TValue>({
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onRowSelectionChange: setRowSelection,
+    getRowId: (row) => row.id,
     state: {
       sorting,
       rowSelection,
@@ -129,7 +130,7 @@ export function ConcreteCubesTable<TData extends ConcreteCube, TValue>({
       </div>
       <div className="flex items-center justify-end space-x-2">
         <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
+          {Object.keys(rowSelection).length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
         <Button

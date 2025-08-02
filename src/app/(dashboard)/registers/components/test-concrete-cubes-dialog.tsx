@@ -1,7 +1,8 @@
+
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useState, useMemo } from "react";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
@@ -62,16 +63,16 @@ const formSchema = z.object({
 
 
 type TestConcreteCubesDialogProps = {
-  cubes: ConcreteCube[];
+  items: ConcreteCube[];
   onOpenChange: (open: boolean) => void;
-  onBatchUpdate: (cubes: ConcreteCube[]) => void;
+  onBatchUpdate: (items: ConcreteCube[]) => void;
 };
 
-export function TestConcreteCubesDialog({ cubes, onOpenChange, onBatchUpdate }: TestConcreteCubesDialogProps) {
+export function TestConcreteCubesDialog({ items, onOpenChange, onBatchUpdate }: TestConcreteCubesDialogProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [isConfirmingClose, setIsConfirmingClose] = useState(false);
 
-  const originalItems = useMemo(() => cubes, []);
+  const originalItems = useMemo(() => items, [items]);
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -79,16 +80,11 @@ export function TestConcreteCubesDialog({ cubes, onOpenChange, onBatchUpdate }: 
       cubes: originalItems,
     }
   });
-
-  const { fields } = useFieldArray({
-    control: form.control,
-    name: "cubes",
-  });
   
   const currentItem = originalItems[currentStep];
 
   const handleNext = () => {
-    if (currentStep < cubes.length - 1) {
+    if (currentStep < items.length - 1) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -123,7 +119,7 @@ export function TestConcreteCubesDialog({ cubes, onOpenChange, onBatchUpdate }: 
     }
   };
   
-  const progress = ((currentStep + 1) / cubes.length) * 100;
+  const progress = ((currentStep + 1) / items.length) * 100;
 
   return (
     <>
@@ -133,7 +129,7 @@ export function TestConcreteCubesDialog({ cubes, onOpenChange, onBatchUpdate }: 
             onInteractOutside={(e) => { e.preventDefault(); handleCloseAttempt(); }}
         >
           <DialogHeader>
-            <DialogTitle>Test Concrete Cubes ({currentStep + 1} of {cubes.length})</DialogTitle>
+            <DialogTitle>Test Concrete Cubes ({currentStep + 1} of {items.length})</DialogTitle>
             <DialogDescription>
               Enter the test results for the selected concrete cube samples.
             </DialogDescription>
@@ -222,7 +218,7 @@ export function TestConcreteCubesDialog({ cubes, onOpenChange, onBatchUpdate }: 
             </div>
             <div className="flex gap-2">
               <Button type="button" variant="outline" onClick={handleBack} disabled={currentStep === 0}>Back</Button>
-              {currentStep < cubes.length - 1 ? (
+              {currentStep < items.length - 1 ? (
                 <Button type="button" onClick={handleNext}>Next</Button>
               ) : (
                 <Button type="submit" form="test-cubes-form">Finish & Save All</Button>
