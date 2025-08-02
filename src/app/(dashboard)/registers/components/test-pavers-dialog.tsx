@@ -19,7 +19,6 @@ import { Label } from "@/components/ui/label";
 import { Paver } from "@/types/paver";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
-import { Textarea } from "@/components/ui/textarea";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import isEqual from 'lodash.isequal';
 
@@ -36,30 +35,6 @@ const paverSchema = z.object({
   weightKg: z.coerce.number().optional(),
   loadKN: z.coerce.number().optional(),
   modeOfFailure: z.string().optional(),
-  
-  // read-only fields for context
-  client: z.string(),
-  project: z.string(),
-  sampleId: z.string(),
-  castingDate: z.string(),
-  testingDate: z.string(),
-  ageDays: z.number(),
-  dateReceived: z.string(),
-  areaOfUse: z.string(),
-  paverType: z.string(),
-
-  // Set-specific
-  machineUsed: z.string().optional(),
-  recordedTemperature: z.string().optional(),
-  comment: z.string().optional(),
-  technician: z.string().optional(),
-  certificateNumber: z.string().optional(),
-  dateOfIssue: z.string().optional(),
-  issueIdSerialNo: z.string().optional(),
-  takenBy: z.string(),
-  date: z.string(),
-  contact: z.string(),
-  sampleReceiptNo: z.string(),
 });
 
 const formSchema = z.object({
@@ -74,15 +49,22 @@ type TestPaversDialogProps = {
 
 export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPaversDialogProps) {
   const [activePaverIndex, setActivePaverIndex] = useState(0);
-  const [currentSubStep, setCurrentSubStep] = useState(1);
   const [isConfirmingClose, setIsConfirmingClose] = useState(false);
   
-  const originalItems = useMemo(() => items, [items]);
+  const originalItems = useMemo(() => items.map(item => ({
+      id: item.id,
+      dimensions: item.dimensions,
+      paversPerSqMetre: item.paversPerSqMetre,
+      calculatedArea: item.calculatedArea,
+      weightKg: item.weightKg,
+      loadKN: item.loadKN,
+      modeOfFailure: item.modeOfFailure,
+  })), [items]);
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      pavers: originalItems,
+      pavers: items,
     }
   });
 
@@ -91,45 +73,30 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
     name: "pavers",
   });
   
-  const currentItem = originalItems[activePaverIndex];
-  const isFinalStep = activePaverIndex === items.length -1 && currentSubStep === 2;
+  const currentItem = items[activePaverIndex];
+  const isFinalStep = activePaverIndex === items.length - 1;
 
 
   const handleNext = () => {
-     if (currentSubStep === 1) {
-        setCurrentSubStep(2);
-     } else if (currentSubStep === 2 && activePaverIndex < items.length - 1) {
+     if (activePaverIndex < items.length - 1) {
         setActivePaverIndex(activePaverIndex + 1);
-        setCurrentSubStep(1);
      }
   }
 
   const handleBack = () => {
-    if (currentSubStep === 2) {
-        setCurrentSubStep(1);
-    } else if (currentSubStep === 1 && activePaverIndex > 0) {
+    if (activePaverIndex > 0) {
         setActivePaverIndex(activePaverIndex - 1);
-        setCurrentSubStep(2);
     }
   }
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    const finalSetData = data.pavers[0];
-    const itemsToUpdate = data.pavers.map(item => ({
-        ...item,
-        machineUsed: finalSetData.machineUsed,
-        recordedTemperature: finalSetData.recordedTemperature,
-        comment: finalSetData.comment,
-        technician: finalSetData.technician,
-        certificateNumber: finalSetData.certificateNumber,
-        dateOfIssue: finalSetData.dateOfIssue,
-        issueIdSerialNo: finalSetData.issueIdSerialNo,
+     const itemsToUpdate = items.map((originalItem, index) => ({
+      ...originalItem,
+      ...data.pavers[index],
     }));
-    
+
     const changedItems = itemsToUpdate.filter((updatedItem, index) => {
-      const originalItem = originalItems[index];
-      const checkOriginal = {...originalItem, ...finalSetData};
-      return !isEqual(checkOriginal, updatedItem);
+      return !isEqual(items[index], updatedItem);
     });
 
     if (changedItems.length > 0) {
@@ -150,7 +117,7 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
     }
   };
   
-  const progress = (activePaverIndex / items.length) * 100 + (currentSubStep / 2) * (100 / items.length);
+  const progress = (activePaverIndex / (items.length - 1)) * 100;
 
   return (
     <>
@@ -162,7 +129,7 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
           <DialogHeader>
             <DialogTitle>Test Pavers ({activePaverIndex + 1} of {items.length})</DialogTitle>
             <DialogDescription>
-              Enter the test results for the selected samples. Use the sub-steps for each paver.
+              Enter the test results for the selected samples.
             </DialogDescription>
             <Progress value={progress} className="mt-2" />
           </DialogHeader>
@@ -179,10 +146,7 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
                 </div>
               </div>
               
-               <p className="text-sm text-center font-medium text-muted-foreground">Sub-step {currentSubStep} of 2 for Sample {activePaverIndex + 1}</p>
-
-              {currentSubStep === 1 && (
-                 <div className="space-y-4 p-4 border rounded-lg">
+                <div className="space-y-4 p-4 border rounded-lg">
                     <h4 className="font-semibold text-lg mb-2">Test Results</h4>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div className="space-y-2"><Label>Length (mm)</Label><Input type="number" step="any" {...form.register(`pavers.${activePaverIndex}.dimensions.length`)} /></div>
@@ -199,21 +163,6 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
                        <div className="space-y-2"><Label>Mode of Failure</Label><Input {...form.register(`pavers.${activePaverIndex}.modeOfFailure`)} /></div>
                     </div>
                   </div>
-              )}
-              {currentSubStep === 2 && (
-                 <div className="space-y-4 p-4 border rounded-lg">
-                    <h4 className="font-semibold text-lg mb-2">Issuance & Set Details</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2"><Label>Machine Used</Label><Input {...form.register('pavers.0.machineUsed')} /></div>
-                      <div className="space-y-2"><Label>Recorded Temp. (°C)</Label><Input {...form.register('pavers.0.recordedTemperature')} /></div>
-                      <div className="space-y-2 md:col-span-2"><Label>Comment</Label><Textarea {...form.register('pavers.0.comment')} /></div>
-                      <div className="space-y-2"><Label>Technician</Label><Input {...form.register('pavers.0.technician')} /></div>
-                      <div className="space-y-2"><Label>Certificate Number</Label><Input {...form.register('pavers.0.certificateNumber')} /></div>
-                      <div className="space-y-2"><Label>Date of Issue</Label><Input type="date" {...form.register('pavers.0.dateOfIssue')} placeholder="YYYY-MM-DD"/></div>
-                      <div className="space-y-2"><Label>Issue ID/Serial No.</Label><Input {...form.register('pavers.0.issueIdSerialNo')} /></div>
-                    </div>
-                  </div>
-              )}
             </form>
           </ScrollArea>
           <DialogFooter className="pt-4 justify-between">
@@ -222,11 +171,11 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
             </div>
             
             <div className="flex gap-2">
-              <Button type="button" variant="outline" onClick={handleBack} disabled={activePaverIndex === 0 && currentSubStep === 1}>Back</Button>
-              {!isFinalStep ? (
-                <Button type="button" onClick={handleNext}>Next</Button>
-              ) : (
+              <Button type="button" variant="outline" onClick={handleBack} disabled={activePaverIndex === 0}>Back</Button>
+              {isFinalStep ? (
                 <Button type="submit" form="test-pavers-form">Finish & Save All</Button>
+              ) : (
+                <Button type="button" onClick={handleNext}>Next</Button>
               )}
             </div>
           </DialogFooter>

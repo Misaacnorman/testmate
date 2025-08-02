@@ -35,28 +35,6 @@ const itemSchema = z.object({
   weightAfterSoaking: z.coerce.number().optional(),
   weightOfWater: z.coerce.number().optional(),
   calculatedWaterAbsorption: z.coerce.number().optional(),
-  
-  // Read-only
-  client: z.string(),
-  project: z.string(),
-  sampleId: z.string(),
-  sampleType: z.string(),
-  dateReceived: z.string(),
-  castingDate: z.string(),
-  testingDate: z.string(),
-  ageDays: z.number(),
-  areaOfUse: z.string(),
-  
-  // Set-specific
-  certificateNumber: z.string().optional(),
-  comment: z.string().optional(),
-  technician: z.string().optional(),
-  dateOfIssue: z.string().optional(),
-  issueIdSerialNo: z.string(),
-  takenBy: z.string(),
-  date: z.string(),
-  contact: z.string(),
-  sampleReceiptNo: z.string(),
 });
 
 const formSchema = z.object({
@@ -74,12 +52,19 @@ export function TestWaterAbsorptionsDialog({ items, onOpenChange, onBatchUpdate 
   const [currentStep, setCurrentStep] = useState(0);
   const [isConfirmingClose, setIsConfirmingClose] = useState(false);
 
-  const originalItems = useMemo(() => items, [items]);
+  const originalItems = useMemo(() => items.map(item => ({
+      id: item.id,
+      dimensions: item.dimensions,
+      ovenDriedWeightBeforeSoaking: item.ovenDriedWeightBeforeSoaking,
+      weightAfterSoaking: item.weightAfterSoaking,
+      weightOfWater: item.weightOfWater,
+      calculatedWaterAbsorption: item.calculatedWaterAbsorption,
+  })), [items]);
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      items: originalItems,
+      items: items,
     }
   });
 
@@ -88,11 +73,11 @@ export function TestWaterAbsorptionsDialog({ items, onOpenChange, onBatchUpdate 
     name: "items",
   });
   
-  const currentItem = originalItems[currentStep];
-  const isFinalStep = currentStep === items.length;
+  const currentItem = items[currentStep];
+  const isFinalStep = currentStep === items.length - 1;
 
   const handleNext = () => {
-    if (currentStep < items.length) {
+    if (currentStep < items.length - 1) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -104,20 +89,15 @@ export function TestWaterAbsorptionsDialog({ items, onOpenChange, onBatchUpdate 
   };
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    const finalSetData = data.items[0];
-     const itemsToUpdate = data.items.map(item => ({
-        ...item,
-        certificateNumber: finalSetData.certificateNumber,
-        comment: finalSetData.comment,
-        technician: finalSetData.technician,
-        dateOfIssue: finalSetData.dateOfIssue,
+    const itemsToUpdate = items.map((originalItem, index) => ({
+      ...originalItem,
+      ...data.items[index],
     }));
 
     const changedItems = itemsToUpdate.filter((updatedItem, index) => {
-      const originalItem = originalItems[index];
-      const checkOriginal = {...originalItem, ...finalSetData};
-      return !isEqual(checkOriginal, updatedItem);
+      return !isEqual(items[index], updatedItem);
     });
+
 
     if (changedItems.length > 0) {
       onBatchUpdate(changedItems as WaterAbsorption[]);
@@ -137,7 +117,7 @@ export function TestWaterAbsorptionsDialog({ items, onOpenChange, onBatchUpdate 
     }
   };
 
-  const progress = (currentStep / items.length) * 100;
+  const progress = (currentStep / (items.length - 1)) * 100;
 
   return (
     <>
@@ -148,16 +128,16 @@ export function TestWaterAbsorptionsDialog({ items, onOpenChange, onBatchUpdate 
         >
         <DialogHeader>
           <DialogTitle>
-             {isFinalStep ? "Final Details for Set" : `Test Water Absorption (${currentStep + 1} of ${items.length})`}
+             Test Water Absorption ({currentStep + 1} of {items.length})
           </DialogTitle>
           <DialogDescription>
-            {isFinalStep ? "Enter the information common to all samples in this set." : "Enter the test results for the selected samples."}
+            Enter the test results for the selected samples.
           </DialogDescription>
-           <Progress value={isFinalStep ? 100 : progress} className="mt-2" />
+           <Progress value={progress} className="mt-2" />
         </DialogHeader>
         <ScrollArea className="flex-grow pr-6 -mr-6">
           <form id="test-wa-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            {!isFinalStep && currentItem ? (
+            {currentItem && (
                 <>
                     <div className="space-y-4 p-4 border rounded-lg bg-muted/50">
                       <h4 className="font-semibold text-lg mb-2">Sample Information</h4>
@@ -186,18 +166,6 @@ export function TestWaterAbsorptionsDialog({ items, onOpenChange, onBatchUpdate 
                       </div>
                     </div>
                 </>
-            ) : (
-                <div className="space-y-4 p-2">
-                    <Separator/>
-                      <div className="space-y-2"><Label>Comment</Label><Input {...form.register('items.0.comment')} /></div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                         <div className="space-y-2"><Label>Technician</Label><Input {...form.register('items.0.technician')} /></div>
-                         <div className="space-y-2"><Label>Date of Issue</Label><Input type="date" {...form.register('items.0.dateOfIssue')} placeholder="YYYY-MM-DD"/></div>
-                      </div>
-                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                         <div className="space-y-2"><Label>Certificate Number</Label><Input {...form.register('items.0.certificateNumber')} /></div>
-                      </div>
-                </div>
             )}
           </form>
         </ScrollArea>
@@ -207,10 +175,10 @@ export function TestWaterAbsorptionsDialog({ items, onOpenChange, onBatchUpdate 
           </div>
           <div className="flex gap-2">
              <Button type="button" variant="outline" onClick={handleBack} disabled={currentStep === 0}>Back</Button>
-            {currentStep < items.length ? (
-              <Button type="button" onClick={handleNext}>Next</Button>
-            ) : (
+            {isFinalStep ? (
               <Button type="submit" form="test-wa-form">Finish & Save All</Button>
+            ) : (
+              <Button type="button" onClick={handleNext}>Next</Button>
             )}
           </div>
         </DialogFooter>

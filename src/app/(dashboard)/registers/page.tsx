@@ -34,7 +34,7 @@ import { getColumns as getWaterAbsorptionColumns } from './components/water-abso
 import { WaterAbsorptionTable } from './components/water-absorption-table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { TestTubeDiagonal } from 'lucide-react';
+import { TestTubeDiagonal, FileSignature } from 'lucide-react';
 import { TestConcreteCubesDialog } from './components/test-concrete-cubes-dialog';
 import { TestBlocksAndBricksDialog } from './components/test-blocks-and-bricks-dialog';
 import { TestPaversDialog } from './components/test-pavers-dialog';
@@ -43,6 +43,12 @@ import { TestWaterAbsorptionsDialog } from './components/test-water-absorptions-
 import { EditProjectDialog } from './components/edit-project-dialog';
 import { CreateProjectDialog } from './components/create-project-dialog';
 import { getColumns as getReceiptColumns } from './components/receipt-columns';
+import { IssuanceConcreteCubesDialog } from './components/issuance-concrete-cubes-dialog';
+import { IssuanceBlocksAndBricksDialog } from './components/issuance-blocks-and-bricks-dialog';
+import { IssuancePaversDialog } from './components/issuance-pavers-dialog';
+import { IssuanceCylindersDialog } from './components/issuance-cylinders-dialog';
+import { IssuanceWaterAbsorptionsDialog } from './components/issuance-water-absorptions-dialog';
+
 
 export default function RegistersPage() {
   const [receipts, setReceipts] = useState<Receipt[]>([]);
@@ -65,19 +71,24 @@ export default function RegistersPage() {
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   
   const [isTestCubesDialogOpen, setIsTestCubesDialogOpen] = useState(false);
-  const [selectedCubes, setSelectedCubes] = useState<ConcreteCube[]>([]);
+  const [isIssuanceCubesDialogOpen, setIsIssuanceCubesDialogOpen] = useState(false);
+  const [selectedCubeSets, setSelectedCubeSets] = useState<ConcreteCubeSet[]>([]);
 
   const [isTestBlocksAndBricksDialogOpen, setIsTestBlocksAndBricksDialogOpen] = useState(false);
-  const [selectedBlocksAndBricks, setSelectedBlocksAndBricks] = useState<BlockAndBrick[]>([]);
+  const [isIssuanceBlocksAndBricksDialogOpen, setIsIssuanceBlocksAndBricksDialogOpen] = useState(false);
+  const [selectedBlocksAndBricksSets, setSelectedBlocksAndBricksSets] = useState<BlockAndBrickSet[]>([]);
   
   const [isTestPaversDialogOpen, setIsTestPaversDialogOpen] = useState(false);
-  const [selectedPavers, setSelectedPavers] = useState<Paver[]>([]);
+  const [isIssuancePaversDialogOpen, setIsIssuancePaversDialogOpen] = useState(false);
+  const [selectedPaverSets, setSelectedPaverSets] = useState<PaverSet[]>([]);
 
   const [isTestCylindersDialogOpen, setIsTestCylindersDialogOpen] = useState(false);
-  const [selectedCylinders, setSelectedCylinders] = useState<Cylinder[]>([]);
+  const [isIssuanceCylindersDialogOpen, setIsIssuanceCylindersDialogOpen] = useState(false);
+  const [selectedCylinderSets, setSelectedCylinderSets] = useState<CylinderSet[]>([]);
 
   const [isTestWaterAbsorptionsDialogOpen, setIsTestWaterAbsorptionsDialogOpen] = useState(false);
-  const [selectedWaterAbsorptions, setSelectedWaterAbsorptions] = useState<WaterAbsorption[]>([]);
+  const [isIssuanceWaterAbsorptionsDialogOpen, setIsIssuanceWaterAbsorptionsDialogOpen] = useState(false);
+  const [selectedWaterAbsorptionSets, setSelectedWaterAbsorptionSets] = useState<WaterAbsorptionSet[]>([]);
 
   const { toast } = useToast();
 
@@ -254,36 +265,155 @@ export default function RegistersPage() {
 
           <TabsContent value="concrete-cubes">
             <Card>
-              <CardHeader><div className="flex justify-between items-center"><div><CardTitle>Concrete Cubes</CardTitle><CardDescription>A register for all concrete cube tests.</CardDescription></div></div></CardHeader>
-              <CardContent><ConcreteCubesTable columns={getConcreteCubesColumns({ onEdit: (samples) => { setSelectedCubes(samples); setIsTestCubesDialogOpen(true); } })} data={concreteCubeSets} isLoading={isConcreteCubesLoading} onSelectionChange={(rows) => setSelectedCubes(rows.flatMap(set => set.samples))} /></CardContent>
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <CardTitle>Concrete Cubes</CardTitle>
+                    <CardDescription>A register for all concrete cube tests.</CardDescription>
+                  </div>
+                  <div className="flex items-center gap-2">
+                      <Button onClick={() => setIsTestCubesDialogOpen(true)} disabled={selectedCubeSets.length === 0}>
+                          <TestTubeDiagonal className="mr-2 h-4 w-4" />
+                          Test
+                      </Button>
+                      <Button onClick={() => setIsIssuanceCubesDialogOpen(true)} disabled={selectedCubeSets.length === 0} variant="outline">
+                          <FileSignature className="mr-2 h-4 w-4" />
+                          Issuance
+                      </Button>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                  <ConcreteCubesTable 
+                      columns={getConcreteCubesColumns({ onEdit: (samples) => { setIsTestCubesDialogOpen(true); setSelectedCubeSets([{id: 'edit', samples, client:'', project:'', dateReceived:'', castingDate:'', testingDate:'', class:'', areaOfUse:'' }])}})} 
+                      data={concreteCubeSets} 
+                      isLoading={isConcreteCubesLoading} 
+                      onSelectionChange={(rows) => setSelectedCubeSets(rows)} />
+              </CardContent>
             </Card>
           </TabsContent>
 
           <TabsContent value="blocks-and-bricks">
             <Card>
-              <CardHeader><div className="flex justify-between items-center"><div><CardTitle>Sample Register/Log for Bricks &amp; Blocks</CardTitle><CardDescription>A register for all brick and block tests.</CardDescription></div></div></CardHeader>
-              <CardContent><BlocksAndBricksTable columns={getBlocksAndBricksColumns({ onEdit: (samples) => { setSelectedBlocksAndBricks(samples); setIsTestBlocksAndBricksDialogOpen(true); } })} data={blocksAndBricksSets} isLoading={isBlocksAndBricksLoading} onSelectionChange={(rows) => setSelectedBlocksAndBricks(rows.flatMap(set => set.samples))} /></CardContent>
+                <CardHeader>
+                    <div className="flex justify-between items-center">
+                    <div>
+                        <CardTitle>Sample Register/Log for Bricks &amp; Blocks</CardTitle>
+                        <CardDescription>A register for all brick and block tests.</CardDescription>
+                    </div>
+                     <div className="flex items-center gap-2">
+                        <Button onClick={() => setIsTestBlocksAndBricksDialogOpen(true)} disabled={selectedBlocksAndBricksSets.length === 0}>
+                            <TestTubeDiagonal className="mr-2 h-4 w-4" />
+                            Test
+                        </Button>
+                        <Button onClick={() => setIsIssuanceBlocksAndBricksDialogOpen(true)} disabled={selectedBlocksAndBricksSets.length === 0} variant="outline">
+                            <FileSignature className="mr-2 h-4 w-4" />
+                            Issuance
+                        </Button>
+                    </div>
+                    </div>
+                </CardHeader>
+                <CardContent>
+                    <BlocksAndBricksTable 
+                        columns={getBlocksAndBricksColumns({ onEdit: (samples) => {setIsTestBlocksAndBricksDialogOpen(true); setSelectedBlocksAndBricksSets([{id: 'edit', samples, client:'', project:'', dateReceived:'', castingDate:'', testingDate:'', sampleType:'', areaOfUse:'' }])} })} 
+                        data={blocksAndBricksSets} 
+                        isLoading={isBlocksAndBricksLoading} 
+                        onSelectionChange={(rows) => setSelectedBlocksAndBricksSets(rows)} 
+                    />
+                </CardContent>
             </Card>
           </TabsContent>
 
           <TabsContent value="pavers">
             <Card>
-              <CardHeader><div className="flex justify-between items-center"><div><CardTitle>Sample Register/Log for Pavers</CardTitle><CardDescription>A register for all paver tests.</CardDescription></div></div></CardHeader>
-              <CardContent><PaversTable columns={getPaverColumns({ onEdit: (samples) => { setSelectedPavers(samples); setIsTestPaversDialogOpen(true); }, onDelete: handlePaverSetDeleted })} data={paverSets} isLoading={isPaversLoading} onSelectionChange={(rows) => setSelectedPavers(rows.flatMap(set => set.samples))} /></CardContent>
+                <CardHeader>
+                    <div className="flex justify-between items-center">
+                    <div>
+                        <CardTitle>Sample Register/Log for Pavers</CardTitle>
+                        <CardDescription>A register for all paver tests.</CardDescription>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Button onClick={() => setIsTestPaversDialogOpen(true)} disabled={selectedPaverSets.length === 0}>
+                            <TestTubeDiagonal className="mr-2 h-4 w-4" />
+                            Test
+                        </Button>
+                        <Button onClick={() => setIsIssuancePaversDialogOpen(true)} disabled={selectedPaverSets.length === 0} variant="outline">
+                            <FileSignature className="mr-2 h-4 w-4" />
+                            Issuance
+                        </Button>
+                    </div>
+                    </div>
+                </CardHeader>
+                <CardContent>
+                    <PaversTable 
+                        columns={getPaverColumns({ onEdit: (samples) => {setIsTestPaversDialogOpen(true); setSelectedPaverSets([{id: 'edit', samples, client:'', project:'', dateReceived:'', castingDate:'', testingDate:'', areaOfUse:'', paverType:'' }])}, onDelete: handlePaverSetDeleted })} 
+                        data={paverSets} 
+                        isLoading={isPaversLoading} 
+                        onSelectionChange={(rows) => setSelectedPaverSets(rows)} 
+                    />
+                </CardContent>
             </Card>
           </TabsContent>
 
            <TabsContent value="cylinders">
             <Card>
-              <CardHeader><div className="flex justify-between items-center"><div><CardTitle>Sample Register/Log for Concrete Cylinders</CardTitle><CardDescription>A register for all concrete cylinder tests.</CardDescription></div></div></CardHeader>
-              <CardContent><CylindersTable columns={getCylinderColumns({ onEdit: (samples) => { setSelectedCylinders(samples); setIsTestCylindersDialogOpen(true); } })} data={cylinderSets} isLoading={isCylindersLoading} onSelectionChange={(rows) => setSelectedCylinders(rows.flatMap(set => set.samples))} /></CardContent>
+                <CardHeader>
+                    <div className="flex justify-between items-center">
+                    <div>
+                        <CardTitle>Sample Register/Log for Concrete Cylinders</CardTitle>
+                        <CardDescription>A register for all concrete cylinder tests.</CardDescription>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Button onClick={() => setIsTestCylindersDialogOpen(true)} disabled={selectedCylinderSets.length === 0}>
+                            <TestTubeDiagonal className="mr-2 h-4 w-4" />
+                            Test
+                        </Button>
+                        <Button onClick={() => setIsIssuanceCylindersDialogOpen(true)} disabled={selectedCylinderSets.length === 0} variant="outline">
+                            <FileSignature className="mr-2 h-4 w-4" />
+                            Issuance
+                        </Button>
+                    </div>
+                    </div>
+                </CardHeader>
+                <CardContent>
+                    <CylindersTable 
+                        columns={getCylinderColumns({ onEdit: (samples) => { setIsTestCylindersDialogOpen(true); setSelectedCylinderSets([{id: 'edit', samples, client:'', project:'', dateReceived:'', castingDate:'', testingDate:'', class:'', areaOfUse:'' }])} })} 
+                        data={cylinderSets} 
+                        isLoading={isCylindersLoading} 
+                        onSelectionChange={(rows) => setSelectedCylinderSets(rows)} 
+                    />
+                </CardContent>
             </Card>
           </TabsContent>
 
           <TabsContent value="water-absorption">
             <Card>
-              <CardHeader><div className="flex justify-between items-center"><div><CardTitle>Sample Register/Log for Bricks &amp; Blocks for Water</CardTitle><CardDescription>A register for all water absorption tests on bricks and blocks.</CardDescription></div></div></CardHeader>
-              <CardContent><WaterAbsorptionTable columns={getWaterAbsorptionColumns({ onEdit: (samples) => { setSelectedWaterAbsorptions(samples); setIsTestWaterAbsorptionsDialogOpen(true); } })} data={waterAbsorptionSets} isLoading={isWaterAbsorptionsLoading} onSelectionChange={(rows) => setSelectedWaterAbsorptions(rows.flatMap(set => set.samples))} /></CardContent>
+                <CardHeader>
+                    <div className="flex justify-between items-center">
+                    <div>
+                        <CardTitle>Sample Register/Log for Bricks &amp; Blocks for Water</CardTitle>
+                        <CardDescription>A register for all water absorption tests on bricks and blocks.</CardDescription>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Button onClick={() => setIsTestWaterAbsorptionsDialogOpen(true)} disabled={selectedWaterAbsorptionSets.length === 0}>
+                            <TestTubeDiagonal className="mr-2 h-4 w-4" />
+                            Test
+                        </Button>
+                        <Button onClick={() => setIsIssuanceWaterAbsorptionsDialogOpen(true)} disabled={selectedWaterAbsorptionSets.length === 0} variant="outline">
+                            <FileSignature className="mr-2 h-4 w-4" />
+                            Issuance
+                        </Button>
+                    </div>
+                    </div>
+                </CardHeader>
+                <CardContent>
+                    <WaterAbsorptionTable 
+                        columns={getWaterAbsorptionColumns({ onEdit: (samples) => { setIsTestWaterAbsorptionsDialogOpen(true); setSelectedWaterAbsorptionSets([{id: 'edit', samples, client:'', project:'', dateReceived:'', castingDate:'', testingDate:'', areaOfUse:'', sampleType:'' }])} })} 
+                        data={waterAbsorptionSets} 
+                        isLoading={isWaterAbsorptionsLoading} 
+                        onSelectionChange={(rows) => setSelectedWaterAbsorptionSets(rows)} 
+                    />
+                </CardContent>
             </Card>
           </TabsContent>
 
@@ -292,11 +422,20 @@ export default function RegistersPage() {
       
       {editingProject && <EditProjectDialog project={editingProject} onOpenChange={(open) => !open && setEditingProject(null)} onProjectUpdated={handleProjectUpdated} />}
       
-      {isTestCubesDialogOpen && selectedCubes.length > 0 && <TestConcreteCubesDialog items={selectedCubes} onOpenChange={setIsTestCubesDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateConcreteCube, getConcreteCubes, setConcreteCubes, setIsConcreteCubesLoading, 'concrete cube', () => setIsTestCubesDialogOpen(false))} />}
-      {isTestBlocksAndBricksDialogOpen && selectedBlocksAndBricks.length > 0 && <TestBlocksAndBricksDialog items={selectedBlocksAndBricks} onOpenChange={setIsTestBlocksAndBricksDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateBlockAndBrick, getBlocksAndBricks, setBlocksAndBricks, setIsBlocksAndBricksLoading, 'block/brick', () => setIsTestBlocksAndBricksDialogOpen(false))} />}
-      {isTestPaversDialogOpen && selectedPavers.length > 0 && <TestPaversDialog items={selectedPavers} onOpenChange={setIsTestPaversDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updatePaver, getPavers, setPavers, setIsPaversLoading, 'paver', () => setIsTestPaversDialogOpen(false))} />}
-      {isTestCylindersDialogOpen && selectedCylinders.length > 0 && <TestCylindersDialog items={selectedCylinders} onOpenChange={setIsTestCylindersDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateCylinder, getCylinders, setCylinders, setIsCylindersLoading, 'cylinder', () => setIsTestCylindersDialogOpen(false))} />}
-      {isTestWaterAbsorptionsDialogOpen && selectedWaterAbsorptions.length > 0 && <TestWaterAbsorptionsDialog items={selectedWaterAbsorptions} onOpenChange={setIsTestWaterAbsorptionsDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateWaterAbsorption, getWaterAbsorptions, setWaterAbsorptions, setIsWaterAbsorptionsLoading, 'water absorption', () => setIsTestWaterAbsorptionsDialogOpen(false))} />}
+      {isTestCubesDialogOpen && selectedCubeSets.length > 0 && <TestConcreteCubesDialog items={selectedCubeSets.flatMap(s => s.samples)} onOpenChange={setIsTestCubesDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateConcreteCube, getConcreteCubes, setConcreteCubes, setIsConcreteCubesLoading, 'concrete cube', () => setIsTestCubesDialogOpen(false))} />}
+      {isIssuanceCubesDialogOpen && selectedCubeSets.length > 0 && <IssuanceConcreteCubesDialog items={selectedCubeSets.flatMap(s => s.samples)} onOpenChange={setIsIssuanceCubesDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateConcreteCube, getConcreteCubes, setConcreteCubes, setIsConcreteCubesLoading, 'concrete cube', () => setIsIssuanceCubesDialogOpen(false))} />}
+
+      {isTestBlocksAndBricksDialogOpen && selectedBlocksAndBricksSets.length > 0 && <TestBlocksAndBricksDialog items={selectedBlocksAndBricksSets.flatMap(s => s.samples)} onOpenChange={setIsTestBlocksAndBricksDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateBlockAndBrick, getBlocksAndBricks, setBlocksAndBricks, setIsBlocksAndBricksLoading, 'block/brick', () => setIsTestBlocksAndBricksDialogOpen(false))} />}
+      {isIssuanceBlocksAndBricksDialogOpen && selectedBlocksAndBricksSets.length > 0 && <IssuanceBlocksAndBricksDialog items={selectedBlocksAndBricksSets.flatMap(s => s.samples)} onOpenChange={setIsIssuanceBlocksAndBricksDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateBlockAndBrick, getBlocksAndBricks, setBlocksAndBricks, setIsBlocksAndBricksLoading, 'block/brick', () => setIsIssuanceBlocksAndBricksDialogOpen(false))} />}
+
+      {isTestPaversDialogOpen && selectedPaverSets.length > 0 && <TestPaversDialog items={selectedPaverSets.flatMap(s => s.samples)} onOpenChange={setIsTestPaversDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updatePaver, getPavers, setPavers, setIsPaversLoading, 'paver', () => setIsTestPaversDialogOpen(false))} />}
+      {isIssuancePaversDialogOpen && selectedPaverSets.length > 0 && <IssuancePaversDialog items={selectedPaverSets.flatMap(s => s.samples)} onOpenChange={setIsIssuancePaversDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updatePaver, getPavers, setPavers, setIsPaversLoading, 'paver', () => setIsIssuancePaversDialogOpen(false))} />}
+
+      {isTestCylindersDialogOpen && selectedCylinderSets.length > 0 && <TestCylindersDialog items={selectedCylinderSets.flatMap(s => s.samples)} onOpenChange={setIsTestCylindersDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateCylinder, getCylinders, setCylinders, setIsCylindersLoading, 'cylinder', () => setIsTestCylindersDialogOpen(false))} />}
+      {isIssuanceCylindersDialogOpen && selectedCylinderSets.length > 0 && <IssuanceCylindersDialog items={selectedCylinderSets.flatMap(s => s.samples)} onOpenChange={setIsIssuanceCylindersDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateCylinder, getCylinders, setCylinders, setIsCylindersLoading, 'cylinder', () => setIsIssuanceCylindersDialogOpen(false))} />}
+      
+      {isTestWaterAbsorptionsDialogOpen && selectedWaterAbsorptionSets.length > 0 && <TestWaterAbsorptionsDialog items={selectedWaterAbsorptionSets.flatMap(s => s.samples)} onOpenChange={setIsTestWaterAbsorptionsDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateWaterAbsorption, getWaterAbsorptions, setWaterAbsorptions, setIsWaterAbsorptionsLoading, 'water absorption', () => setIsTestWaterAbsorptionsDialogOpen(false))} />}
+      {isIssuanceWaterAbsorptionsDialogOpen && selectedWaterAbsorptionSets.length > 0 && <IssuanceWaterAbsorptionsDialog items={selectedWaterAbsorptionSets.flatMap(s => s.samples)} onOpenChange={setIsIssuanceWaterAbsorptionsDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateWaterAbsorption, getWaterAbsorptions, setWaterAbsorptions, setIsWaterAbsorptionsLoading, 'water absorption', () => setIsIssuanceWaterAbsorptionsDialogOpen(false))} />}
     </>
   );
 }
