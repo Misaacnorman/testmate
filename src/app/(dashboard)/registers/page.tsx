@@ -373,9 +373,9 @@ export default function RegistersPage() {
     }
   };
 
-  const handlePaverDeleted = async (paverSetId: string) => {
+  const handlePaverDeleted = async (item: PaverSet) => {
     try {
-      await deletePaverSet(paverSetId);
+      await deletePaverSet(item.docIds);
       toast({
         title: "Paver Test Set Deleted",
         description: "The paver test set has been successfully deleted.",

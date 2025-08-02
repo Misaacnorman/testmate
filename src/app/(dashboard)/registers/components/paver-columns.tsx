@@ -1,6 +1,7 @@
+
 "use client"
 
-import { Paver } from "@/types/paver";
+import { PaverSet } from "@/types/paver";
 import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
@@ -27,11 +28,11 @@ const SortableHeader = ({ title, column }: { title: string, column: any }) => (
 );
 
 type PaverColumnsProps = {
-  onEdit: (item: Paver) => void;
-  onDelete: (id: string) => void;
+  onEdit: (item: PaverSet) => void;
+  onDelete: (item: PaverSet) => void;
 };
 
-export const getColumns = ({ onEdit, onDelete }: PaverColumnsProps): ColumnDef<Paver>[] => [
+export const getColumns = ({ onEdit, onDelete }: PaverColumnsProps): ColumnDef<PaverSet>[] => [
    {
     id: "select",
     header: ({ table }) => (
@@ -93,9 +94,15 @@ export const getColumns = ({ onEdit, onDelete }: PaverColumnsProps): ColumnDef<P
     cell: ({ row }) => <div className="min-w-[150px]">{row.getValue("areaOfUse")}</div>,
   },
   {
-    accessorKey: "sampleId",
-    header: () => <CenteredHeader title="Sample ID" />,
-    cell: ({ row }) => <div className="text-center">{row.getValue("sampleId")}</div>,
+    accessorKey: "sampleIds",
+    header: () => <CenteredHeader title="Sample IDs" />,
+    cell: ({ row }) => (
+        <div className="flex flex-col items-center">
+            {row.original.sampleIds.map((id) => (
+                <div key={id} className="py-1">{id}</div>
+            ))}
+        </div>
+    ),
   },
   {
     accessorKey: "paverType",
@@ -219,7 +226,7 @@ export const getColumns = ({ onEdit, onDelete }: PaverColumnsProps): ColumnDef<P
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem onClick={() => onEdit(item)}>
-                Edit
+                Edit Set
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <AlertDialogTrigger asChild>
@@ -227,7 +234,7 @@ export const getColumns = ({ onEdit, onDelete }: PaverColumnsProps): ColumnDef<P
                   className="text-destructive focus:text-destructive focus:bg-destructive/10"
                   onSelect={(e) => e.preventDefault()}
                 >
-                  Delete
+                  Delete Set
                 </DropdownMenuItem>
               </AlertDialogTrigger>
             </DropdownMenuContent>
@@ -236,13 +243,13 @@ export const getColumns = ({ onEdit, onDelete }: PaverColumnsProps): ColumnDef<P
               <AlertDialogHeader>
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete this test record.
+                  This action cannot be undone. This will permanently delete this test set and all ({item.sampleIds.length}) of its samples.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={() => onDelete(item.id)} className="bg-destructive hover:bg-destructive/90">
-                  Delete
+                <AlertDialogAction onClick={() => onDelete(item)} className="bg-destructive hover:bg-destructive/90">
+                  Delete Set
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

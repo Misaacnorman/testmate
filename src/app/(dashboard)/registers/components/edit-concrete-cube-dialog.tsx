@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ConcreteCube } from "@/types/concrete-cube";
+import { ConcreteCubeSet } from "@/types/concrete-cube";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const cubeSchema = z.object({
@@ -29,7 +29,7 @@ const cubeSchema = z.object({
   class: z.string().optional(),
   ageDays: z.coerce.number(),
   areaOfUse: z.string().optional(),
-  sampleId: z.string(),
+  sampleIds: z.array(z.string()),
   dimensions: z.object({
     length: z.coerce.number(),
     width: z.coerce.number(),
@@ -52,52 +52,52 @@ const cubeSchema = z.object({
 });
 
 type EditConcreteCubeDialogProps = {
-  cube: ConcreteCube;
+  cubeSet: ConcreteCubeSet;
   onOpenChange: (open: boolean) => void;
-  onCubeUpdated: (cube: ConcreteCube) => void;
+  onCubeUpdated: (cube: ConcreteCubeSet) => void;
 };
 
-export function EditConcreteCubeDialog({ cube, onOpenChange, onCubeUpdated }: EditConcreteCubeDialogProps) {
+export function EditConcreteCubeDialog({ cubeSet, onOpenChange, onCubeUpdated }: EditConcreteCubeDialogProps) {
   const form = useForm<z.infer<typeof cubeSchema>>({
     resolver: zodResolver(cubeSchema),
     defaultValues: {
-      ...cube,
-      ageDays: cube.ageDays || 0,
+      ...cubeSet,
+      ageDays: cubeSet.ageDays || 0,
       dimensions: {
-        length: cube.dimensions?.length || 0,
-        width: cube.dimensions?.width || 0,
-        height: cube.dimensions?.height || 0,
+        length: cubeSet.dimensions?.length || 0,
+        width: cubeSet.dimensions?.width || 0,
+        height: cubeSet.dimensions?.height || 0,
       },
-      weightKg: cube.weightKg || 0,
-      loadKN: cube.loadKN || 0,
+      weightKg: cubeSet.weightKg || 0,
+      loadKN: cubeSet.loadKN || 0,
     },
   });
 
   useEffect(() => {
     form.reset({
-       ...cube,
-      ageDays: cube.ageDays || 0,
+       ...cubeSet,
+      ageDays: cubeSet.ageDays || 0,
       dimensions: {
-        length: cube.dimensions?.length || 0,
-        width: cube.dimensions?.width || 0,
-        height: cube.dimensions?.height || 0,
+        length: cubeSet.dimensions?.length || 0,
+        width: cubeSet.dimensions?.width || 0,
+        height: cubeSet.dimensions?.height || 0,
       },
-      weightKg: cube.weightKg || 0,
-      loadKN: cube.loadKN || 0,
+      weightKg: cubeSet.weightKg || 0,
+      loadKN: cubeSet.loadKN || 0,
     });
-  }, [cube, form]);
+  }, [cubeSet, form]);
 
   const onSubmit = (values: z.infer<typeof cubeSchema>) => {
-    onCubeUpdated({ id: cube.id, ...values });
+    onCubeUpdated({ ...cubeSet, ...values });
   };
 
   return (
     <Dialog open={true} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl max-h-[90vh] flex flex-col">
         <DialogHeader>
-          <DialogTitle>Edit Concrete Cube Test</DialogTitle>
+          <DialogTitle>Edit Concrete Cube Test Set</DialogTitle>
           <DialogDescription>
-            Update the test details for Sample ID: {cube.sampleId}. Click save when you're done.
+            Update the test details for this set of {cubeSet.sampleIds.length} samples. Click save when you're done.
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="flex-grow pr-6 -mr-6">
@@ -106,11 +106,11 @@ export function EditConcreteCubeDialog({ cube, onOpenChange, onCubeUpdated }: Ed
             <div className="space-y-4 p-4 border rounded-lg bg-muted/50">
               <h4 className="font-semibold text-lg mb-2">Initial Information</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
-                <div><Label>Client:</Label><p>{cube.client}</p></div>
-                <div><Label>Project:</Label><p>{cube.project}</p></div>
-                <div><Label>Sample ID:</Label><p className="font-mono">{cube.sampleId}</p></div>
-                <div><Label>Date Received:</Label><p>{cube.dateReceived}</p></div>
-                <div><Label>Casting Date:</Label><p>{cube.castingDate}</p></div>
+                <div><Label>Client:</Label><p>{cubeSet.client}</p></div>
+                <div><Label>Project:</Label><p>{cubeSet.project}</p></div>
+                <div><Label>Sample IDs:</Label><p className="font-mono">{cubeSet.sampleIds.join(', ')}</p></div>
+                <div><Label>Date Received:</Label><p>{cubeSet.dateReceived}</p></div>
+                <div><Label>Casting Date:</Label><p>{cubeSet.castingDate}</p></div>
                 <div><Label>Testing Date:</Label><p>{form.watch("testingDate")}</p></div>
               </div>
             </div>

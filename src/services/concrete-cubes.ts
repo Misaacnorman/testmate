@@ -2,8 +2,8 @@
 'use server';
 
 import { db } from '@/lib/firebase';
-import { ConcreteCube } from '@/types/concrete-cube';
-import { collection, getDocs, addDoc, doc, updateDoc, DocumentData } from 'firebase/firestore';
+import { ConcreteCube, ConcreteCubeSet } from '@/types/concrete-cube';
+import { collection, getDocs, addDoc, doc, updateDoc, DocumentData, writeBatch } from 'firebase/firestore';
 import { Timestamp } from 'firebase/firestore';
 import { format } from 'date-fns';
 
@@ -45,15 +45,46 @@ export async function getConcreteCubes(): Promise<ConcreteCube[]> {
     return snapshot.docs.map(doc => fromFirestore<ConcreteCube>(doc));
 }
 
+export async function getConcreteCubeSets(): Promise<ConcreteCubeSet[]> {
+    const samples = await getConcreteCubes();
+    const sets: { [key: string]: ConcreteCubeSet } = {};
+
+    samples.forEach(sample => {
+        const setKey = `${sample.sampleReceiptNumber}-${sample.castingDate}-${sample.testingDate}-${sample.areaOfUse}-${sample.class}`;
+
+        if (!sets[setKey]) {
+            sets[setKey] = {
+                ...sample,
+                id: setKey, 
+                sampleIds: [sample.sampleId],
+                docIds: [sample.id]
+            };
+        } else {
+            sets[setKey].sampleIds.push(sample.sampleId);
+            sets[setKey].docIds.push(sample.id);
+        }
+    });
+
+    return Object.values(sets);
+}
+
 export async function addConcreteCube(data: Omit<ConcreteCube, 'id'>): Promise<ConcreteCube> {
     const docRef = await addDoc(concreteCubesCollection, data);
     return { id: docRef.id, ...data } as ConcreteCube;
 }
 
-export async function updateConcreteCube(cube: ConcreteCube): Promise<void> {
-    const cubeDoc = doc(db, 'concreteCubes', cube.id);
-    const { id, ...cubeData } = cube;
-    await updateDoc(cubeDoc, cubeData);
-}
+export async function updateConcreteCubeSet(itemSet: ConcreteCubeSet): Promise<void> {
+    const batch = writeBatch(db);
+    const { docIds, sampleIds, ...setData } = itemSet;
 
+    docIds.forEach(docId => {
+        const docRef = doc(db, 'concreteCubes', docId);
+        const dataToUpdate = { ...setData };
+        delete (dataToUpdate as any).id;
+        batch.update(docRef, dataToUpdate);
+    });
     
+    await batch.commit();
+}
+    
+
