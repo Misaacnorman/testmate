@@ -1,7 +1,7 @@
 
 "use client"
 
-import { PaverSet } from "@/types/paver";
+import { PaverSet, Paver } from "@/types/paver";
 import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
@@ -58,48 +58,48 @@ export const getColumns = ({ onEdit, onDelete }: PaverColumnsProps): ColumnDef<P
   {
     accessorKey: "dateReceived",
     header: ({ column }) => <SortableHeader title="Date Received" column={column} />,
-    cell: ({ row }) => <div>{row.getValue("dateReceived")}</div>,
+    cell: ({ row }) => <div>{row.original.dateReceived}</div>,
     enableSorting: true,
   },
    {
     accessorKey: "client",
     header: ({ column }) => <SortableHeader title="Client" column={column} />,
-    cell: ({ row }) => <div className="min-w-[200px]">{row.getValue("client")}</div>,
+    cell: ({ row }) => <div className="min-w-[200px]">{row.original.client}</div>,
     enableSorting: true,
   },
   {
     accessorKey: "project",
     header: ({ column }) => <SortableHeader title="Project" column={column} />,
-    cell: ({ row }) => <div className="min-w-[200px]">{row.getValue("project")}</div>,
+    cell: ({ row }) => <div className="min-w-[200px]">{row.original.project}</div>,
     enableSorting: true,
   },
   {
     accessorKey: "castingDate",
     header: () => <CenteredHeader title="Casting" subtitle="Date" />,
-    cell: ({ row }) => <div>{row.getValue("castingDate")}</div>,
+    cell: ({ row }) => <div>{row.original.castingDate}</div>,
   },
   {
     accessorKey: "testingDate",
     header: () => <CenteredHeader title="Testing" subtitle="Date" />,
-    cell: ({ row }) => <div>{row.getValue("testingDate")}</div>,
+    cell: ({ row }) => <div>{row.original.testingDate}</div>,
   },
   {
     accessorKey: "ageDays",
     header: () => <CenteredHeader title="Age" subtitle="(Days)" />,
-    cell: ({ row }) => <div className="text-center">{row.getValue("ageDays")}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples[0].ageDays}</div>,
   },
   {
     accessorKey: "areaOfUse",
     header: () => <CenteredHeader title="Area of Use" />,
-    cell: ({ row }) => <div className="min-w-[150px]">{row.getValue("areaOfUse")}</div>,
+    cell: ({ row }) => <div className="min-w-[150px]">{row.original.areaOfUse}</div>,
   },
   {
-    accessorKey: "sampleIds",
+    id: "sampleIds",
     header: () => <CenteredHeader title="Sample IDs" />,
     cell: ({ row }) => (
         <div className="flex flex-col items-center">
-            {row.original.sampleIds.map((id) => (
-                <div key={id} className="py-1">{id}</div>
+            {row.original.samples.map((s) => (
+                <div key={s.id} className="py-1">{s.sampleId}</div>
             ))}
         </div>
     ),
@@ -107,108 +107,108 @@ export const getColumns = ({ onEdit, onDelete }: PaverColumnsProps): ColumnDef<P
   {
     accessorKey: "paverType",
     header: () => <CenteredHeader title="Paver Type" />,
-    cell: ({ row }) => <div>{row.getValue("paverType")}</div>,
+    cell: ({ row }) => <div>{row.original.paverType}</div>,
   },
   {
     id: "dimensions",
     header: () => <CenteredHeader title="Dimensions (mm)" />,
     columns: [
       {
-        accessorKey: "dimensions.length",
+        id: "length",
         header: () => <CenteredHeader title="Length" />,
-        cell: ({ row }) => <div className="text-center">{row.original.dimensions.length}</div>,
+        cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.dimensions?.length || '-'}</div>)}</div>,
       },
       {
-        accessorKey: "dimensions.width",
+        id: "width",
         header: () => <CenteredHeader title="Width" />,
-        cell: ({ row }) => <div className="text-center">{row.original.dimensions.width}</div>,
+        cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.dimensions?.width || '-'}</div>)}</div>,
       },
       {
-        accessorKey: "dimensions.height",
+        id: "height",
         header: () => <CenteredHeader title="Height" />,
-        cell: ({ row }) => <div className="text-center">{row.original.dimensions.height}</div>,
+        cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.dimensions?.height || '-'}</div>)}</div>,
       },
     ],
   },
   {
-    accessorKey: "paversPerSqMetre",
+    id: "paversPerSqMetre",
     header: () => <CenteredHeader title="Pavers per" subtitle="Square Metre" />,
-    cell: ({ row }) => <div className="text-center">{row.getValue("paversPerSqMetre")}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.paversPerSqMetre || '-'}</div>)}</div>,
   },
     {
-    accessorKey: "calculatedArea",
+    id: "calculatedArea",
     header: () => <CenteredHeader title="Calculated" subtitle="Area (mm²)" />,
-    cell: ({ row }) => <div className="text-center">{row.getValue("calculatedArea")}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.calculatedArea || '-'}</div>)}</div>,
   },
   {
-    accessorKey: "weightKg",
+    id: "weightKg",
     header: () => <CenteredHeader title="Weight" subtitle="(kg)" />,
-    cell: ({ row }) => <div className="text-center">{row.getValue("weightKg")}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.weightKg || '-'}</div>)}</div>,
   },
   {
     accessorKey: "machineUsed",
     header: () => <CenteredHeader title="Machine Used" />,
-    cell: ({ row }) => <div>{row.getValue("machineUsed")}</div>,
+    cell: ({ row }) => <div>{row.original.machineUsed}</div>,
   },
   {
-    accessorKey: "loadKN",
+    id: "loadKN",
     header: () => <CenteredHeader title="Load" subtitle="(kN)" />,
-    cell: ({ row }) => <div className="text-center">{row.getValue("loadKN")}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.loadKN || '-'}</div>)}</div>,
   },
   {
     accessorKey: "modeOfFailure",
     header: () => <CenteredHeader title="Mode of Failure" />,
-    cell: ({ row }) => <div>{row.getValue("modeOfFailure")}</div>,
+    cell: ({ row }) => <div>{row.original.modeOfFailure}</div>,
   },
   {
     accessorKey: "recordedTemperature",
     header: () => <CenteredHeader title="Recorded Temperature" subtitle="at the Facility (°C)" />,
-    cell: ({ row }) => <div className="text-center">{row.getValue("recordedTemperature")}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.recordedTemperature}</div>,
   },
   {
     accessorKey: "certificateNumber",
     header: () => <CenteredHeader title="Certificate Number" />,
-    cell: ({ row }) => <div>{row.getValue("certificateNumber")}</div>,
+    cell: ({ row }) => <div>{row.original.certificateNumber}</div>,
   },
   {
     accessorKey: "comment",
     header: () => <CenteredHeader title="Comment" />,
-    cell: ({ row }) => <div>{row.getValue("comment")}</div>,
+    cell: ({ row }) => <div>{row.original.comment}</div>,
   },
   {
     accessorKey: "technician",
     header: () => <CenteredHeader title="Technician" subtitle="(Name &amp; Signature)" />,
-    cell: ({ row }) => <div>{row.getValue("technician")}</div>,
+    cell: ({ row }) => <div>{row.original.technician}</div>,
   },
   {
     accessorKey: "dateOfIssue",
     header: () => <CenteredHeader title="Date of Issue" />,
-    cell: ({ row }) => <div>{row.getValue("dateOfIssue")}</div>,
+    cell: ({ row }) => <div>{row.original.dateOfIssue}</div>,
   },
   {
     accessorKey: "issueIdSerialNo",
     header: () => <CenteredHeader title="Issue ID/ Serial No." />,
-    cell: ({ row }) => <div>{row.getValue("issueIdSerialNo")}</div>,
+    cell: ({ row }) => <div>{row.original.issueIdSerialNo}</div>,
   },
   {
     accessorKey: "takenBy",
     header: () => <CenteredHeader title="Taken by" />,
-    cell: ({ row }) => <div>{row.getValue("takenBy")}</div>,
+    cell: ({ row }) => <div>{row.original.takenBy}</div>,
   },
   {
     accessorKey: "date",
     header: () => <CenteredHeader title="Date" />,
-    cell: ({ row }) => <div>{row.getValue("date")}</div>,
+    cell: ({ row }) => <div>{row.original.date}</div>,
   },
   {
     accessorKey: "contact",
     header: () => <CenteredHeader title="Contact" />,
-    cell: ({ row }) => <div>{row.getValue("contact")}</div>,
+    cell: ({ row }) => <div>{row.original.contact}</div>,
   },
   {
     accessorKey: "sampleReceiptNo",
     header: () => <CenteredHeader title="Sample Receipt No" />,
-    cell: ({ row }) => <div>{row.getValue("sampleReceiptNo")}</div>,
+    cell: ({ row }) => <div>{row.original.sampleReceiptNo}</div>,
   },
   {
     id: "actions",
@@ -243,7 +243,7 @@ export const getColumns = ({ onEdit, onDelete }: PaverColumnsProps): ColumnDef<P
               <AlertDialogHeader>
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete this test set and all ({item.sampleIds.length}) of its samples.
+                  This action cannot be undone. This will permanently delete this test set and all ({item.samples.length}) of its samples.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>

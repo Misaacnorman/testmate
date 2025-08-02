@@ -1,7 +1,7 @@
 
 "use client"
 
-import { WaterAbsorption } from "@/types/water-absorption";
+import { WaterAbsorption, WaterAbsorptionSet } from "@/types/water-absorption";
 import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
@@ -30,7 +30,7 @@ type WaterAbsorptionColumnsProps = {
   onEdit: (item: WaterAbsorption) => void;
 };
 
-export const getColumns = ({ onEdit }: WaterAbsorptionColumnsProps): ColumnDef<WaterAbsorption>[] => [
+export const getColumns = ({ onEdit }: WaterAbsorptionColumnsProps): ColumnDef<WaterAbsorptionSet>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -56,141 +56,141 @@ export const getColumns = ({ onEdit }: WaterAbsorptionColumnsProps): ColumnDef<W
   {
     accessorKey: "dateReceived",
     header: ({ column }) => <SortableHeader title="Date Received" column={column} />,
-    cell: ({ row }) => <div>{row.getValue("dateReceived")}</div>,
+    cell: ({ row }) => <div>{row.original.dateReceived}</div>,
     enableSorting: true,
   },
    {
     accessorKey: "client",
     header: ({ column }) => <SortableHeader title="Client" column={column} />,
-    cell: ({ row }) => <div className="min-w-[200px]">{row.getValue("client")}</div>,
+    cell: ({ row }) => <div className="min-w-[200px]">{row.original.client}</div>,
     enableSorting: true,
   },
   {
     accessorKey: "project",
     header: ({ column }) => <SortableHeader title="Project" column={column} />,
-    cell: ({ row }) => <div className="min-w-[200px]">{row.getValue("project")}</div>,
+    cell: ({ row }) => <div className="min-w-[200px]">{row.original.project}</div>,
     enableSorting: true,
   },
   {
     accessorKey: "castingDate",
     header: () => <CenteredHeader title="Casting" subtitle="Date" />,
-    cell: ({ row }) => <div>{row.getValue("castingDate")}</div>,
+    cell: ({ row }) => <div>{row.original.castingDate}</div>,
   },
   {
     accessorKey: "testingDate",
     header: () => <CenteredHeader title="Testing" subtitle="Date" />,
-    cell: ({ row }) => <div>{row.getValue("testingDate")}</div>,
+    cell: ({ row }) => <div>{row.original.testingDate}</div>,
   },
   {
     accessorKey: "ageDays",
     header: () => <CenteredHeader title="Age" subtitle="(Days)" />,
-    cell: ({ row }) => <div className="text-center">{row.getValue("ageDays")}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples[0].ageDays}</div>,
   },
   {
     accessorKey: "areaOfUse",
     header: () => <CenteredHeader title="Area of Use" />,
-    cell: ({ row }) => <div className="min-w-[150px]">{row.getValue("areaOfUse")}</div>,
+    cell: ({ row }) => <div className="min-w-[150px]">{row.original.areaOfUse}</div>,
   },
   {
-    accessorKey: "sampleId",
+    id: "sampleId",
     header: () => <CenteredHeader title="Sample ID" />,
-    cell: ({ row }) => <div className="text-center">{row.getValue("sampleId")}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.sampleId}</div>)}</div>,
   },
   {
     accessorKey: "sampleType",
     header: () => <CenteredHeader title="Sample Type" />,
-    cell: ({ row }) => <div>{row.getValue("sampleType")}</div>,
+    cell: ({ row }) => <div>{row.original.sampleType}</div>,
   },
   {
     id: "dimensions",
     header: () => <CenteredHeader title="Dimensions (mm)" />,
     columns: [
       {
-        accessorKey: "dimensions.length",
+        id: "length",
         header: () => <CenteredHeader title="Length" />,
-        cell: ({ row }) => <div className="text-center">{row.original.dimensions.length}</div>,
+        cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.dimensions?.length || '-'}</div>)}</div>,
       },
       {
-        accessorKey: "dimensions.width",
+        id: "width",
         header: () => <CenteredHeader title="Width" />,
-        cell: ({ row }) => <div className="text-center">{row.original.dimensions.width}</div>,
+        cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.dimensions?.width || '-'}</div>)}</div>,
       },
       {
-        accessorKey: "dimensions.height",
+        id: "height",
         header: () => <CenteredHeader title="Height" />,
-        cell: ({ row }) => <div className="text-center">{row.original.dimensions.height}</div>,
+        cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.dimensions?.height || '-'}</div>)}</div>,
       },
     ],
   },
   {
-    accessorKey: "ovenDriedWeightBeforeSoaking",
+    id: "ovenDriedWeightBeforeSoaking",
     header: () => <CenteredHeader title="Oven Dried Weight" subtitle="Before soaking (kg)" />,
-    cell: ({ row }) => <div className="text-center">{row.getValue("ovenDriedWeightBeforeSoaking")}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.ovenDriedWeightBeforeSoaking || '-'}</div>)}</div>,
   },
   {
-    accessorKey: "weightAfterSoaking",
+    id: "weightAfterSoaking",
     header: () => <CenteredHeader title="Weight After" subtitle="soaking (kg)" />,
-    cell: ({ row }) => <div className="text-center">{row.getValue("weightAfterSoaking")}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.weightAfterSoaking || '-'}</div>)}</div>,
   },
   {
-    accessorKey: "weightOfWater",
+    id: "weightOfWater",
     header: () => <CenteredHeader title="Weight of Water" subtitle="(kg)" />,
-    cell: ({ row }) => <div className="text-center">{row.getValue("weightOfWater")}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.weightOfWater || '-'}</div>)}</div>,
   },
   {
-    accessorKey: "calculatedWaterAbsorption",
+    id: "calculatedWaterAbsorption",
     header: () => <CenteredHeader title="Calculated Water" subtitle="Absorption (%)" />,
-    cell: ({ row }) => <div className="text-center">{row.getValue("calculatedWaterAbsorption")}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.calculatedWaterAbsorption || '-'}</div>)}</div>,
   },
   {
     accessorKey: "certificateNumber",
     header: () => <CenteredHeader title="Certificate Number" />,
-    cell: ({ row }) => <div>{row.getValue("certificateNumber")}</div>,
+    cell: ({ row }) => <div>{row.original.samples[0].certificateNumber}</div>,
   },
   {
     accessorKey: "comment",
     header: () => <CenteredHeader title="Comment" />,
-    cell: ({ row }) => <div>{row.getValue("comment")}</div>,
+    cell: ({ row }) => <div>{row.original.samples[0].comment}</div>,
   },
   {
     accessorKey: "technician",
     header: () => <CenteredHeader title="Technician" subtitle="(Name &amp; Signature)" />,
-    cell: ({ row }) => <div>{row.getValue("technician")}</div>,
+    cell: ({ row }) => <div>{row.original.samples[0].technician}</div>,
   },
   {
     accessorKey: "dateOfIssue",
     header: () => <CenteredHeader title="Date of Issue" />,
-    cell: ({ row }) => <div>{row.getValue("dateOfIssue")}</div>,
+    cell: ({ row }) => <div>{row.original.samples[0].dateOfIssue}</div>,
   },
   {
     accessorKey: "issueIdSerialNo",
     header: () => <CenteredHeader title="Issue ID/ Serial No." />,
-    cell: ({ row }) => <div>{row.getValue("issueIdSerialNo")}</div>,
+    cell: ({ row }) => <div>{row.original.samples[0].issueIdSerialNo}</div>,
   },
   {
     accessorKey: "takenBy",
     header: () => <CenteredHeader title="Taken by" />,
-    cell: ({ row }) => <div>{row.getValue("takenBy")}</div>,
+    cell: ({ row }) => <div>{row.original.samples[0].takenBy}</div>,
   },
   {
     accessorKey: "date",
     header: () => <CenteredHeader title="Date" />,
-    cell: ({ row }) => <div>{row.getValue("date")}</div>,
+    cell: ({ row }) => <div>{row.original.samples[0].date}</div>,
   },
   {
     accessorKey: "contact",
     header: () => <CenteredHeader title="Contact" />,
-    cell: ({ row }) => <div>{row.getValue("contact")}</div>,
+    cell: ({ row }) => <div>{row.original.samples[0].contact}</div>,
   },
   {
     accessorKey: "sampleReceiptNo",
     header: () => <CenteredHeader title="Sample Receipt No" />,
-    cell: ({ row }) => <div>{row.getValue("sampleReceiptNo")}</div>,
+    cell: ({ row }) => <div>{row.original.samples[0].sampleReceiptNo}</div>,
   },
   {
     id: "actions",
     cell: ({ row }) => {
-      const item = row.original
+      const { samples } = row.original;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -201,9 +201,11 @@ export const getColumns = ({ onEdit }: WaterAbsorptionColumnsProps): ColumnDef<W
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => onEdit(item)}>
-              Edit
-            </DropdownMenuItem>
+            {samples.map((sample) => (
+              <DropdownMenuItem key={sample.id} onClick={() => onEdit(sample)}>
+                Edit Sample {sample.sampleId}
+              </DropdownMenuItem>
+            ))}
           </DropdownMenuContent>
         </DropdownMenu>
       )

@@ -1,7 +1,7 @@
 
 "use client"
 
-import { BlockAndBrickSet } from "@/types/block-and-brick";
+import { BlockAndBrick, BlockAndBrickSet } from "@/types/block-and-brick";
 import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
@@ -27,7 +27,7 @@ const SortableHeader = ({ title, column }: { title: string, column: any }) => (
 );
 
 type BlocksAndBricksColumnsProps = {
-  onEdit: (item: BlockAndBrickSet) => void;
+  onEdit: (item: BlockAndBrick) => void;
 };
 
 export const getColumns = ({ onEdit }: BlocksAndBricksColumnsProps): ColumnDef<BlockAndBrickSet>[] => [
@@ -56,48 +56,48 @@ export const getColumns = ({ onEdit }: BlocksAndBricksColumnsProps): ColumnDef<B
   {
     accessorKey: "dateReceived",
     header: ({ column }) => <SortableHeader title="Date Received" column={column} />,
-    cell: ({ row }) => <div>{row.getValue("dateReceived")}</div>,
+    cell: ({ row }) => <div>{row.original.dateReceived}</div>,
     enableSorting: true,
   },
    {
     accessorKey: "client",
     header: ({ column }) => <SortableHeader title="Client" column={column} />,
-    cell: ({ row }) => <div className="min-w-[200px]">{row.getValue("client")}</div>,
+    cell: ({ row }) => <div className="min-w-[200px]">{row.original.client}</div>,
     enableSorting: true,
   },
   {
     accessorKey: "project",
     header: ({ column }) => <SortableHeader title="Project" column={column} />,
-    cell: ({ row }) => <div className="min-w-[200px]">{row.getValue("project")}</div>,
+    cell: ({ row }) => <div className="min-w-[200px]">{row.original.project}</div>,
     enableSorting: true,
   },
   {
     accessorKey: "castingDate",
     header: () => <CenteredHeader title="Casting" subtitle="Date" />,
-    cell: ({ row }) => <div>{row.getValue("castingDate")}</div>,
+    cell: ({ row }) => <div>{row.original.castingDate}</div>,
   },
   {
     accessorKey: "testingDate",
     header: () => <CenteredHeader title="Testing" subtitle="Date" />,
-    cell: ({ row }) => <div>{row.getValue("testingDate")}</div>,
+    cell: ({ row }) => <div>{row.original.testingDate}</div>,
   },
   {
     accessorKey: "ageDays",
     header: () => <CenteredHeader title="Age" subtitle="(Days)" />,
-    cell: ({ row }) => <div className="text-center">{row.getValue("ageDays")}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples[0].ageDays}</div>,
   },
   {
     accessorKey: "areaOfUse",
     header: () => <CenteredHeader title="Area of Use" />,
-    cell: ({ row }) => <div className="min-w-[150px]">{row.getValue("areaOfUse")}</div>,
+    cell: ({ row }) => <div className="min-w-[150px]">{row.original.areaOfUse}</div>,
   },
   {
-    accessorKey: "sampleIds",
+    id: "sampleIds",
     header: () => <CenteredHeader title="Sample IDs" />,
     cell: ({ row }) => (
         <div className="flex flex-col items-center">
-            {row.original.sampleIds.map((id) => (
-                <div key={id} className="py-1">{id}</div>
+            {row.original.samples.map((s) => (
+                <div key={s.id} className="py-1">{s.sampleId}</div>
             ))}
         </div>
     ),
@@ -105,26 +105,26 @@ export const getColumns = ({ onEdit }: BlocksAndBricksColumnsProps): ColumnDef<B
   {
     accessorKey: "sampleType",
     header: () => <CenteredHeader title="Sample Type" />,
-    cell: ({ row }) => <div>{row.getValue("sampleType")}</div>,
+    cell: ({ row }) => <div>{row.original.sampleType}</div>,
   },
   {
     id: "dimensions",
     header: () => <CenteredHeader title="Dimensions (mm)" />,
     columns: [
       {
-        accessorKey: "dimensions.length",
+        id: 'length',
         header: () => <CenteredHeader title="Length" />,
-        cell: ({ row }) => <div className="text-center">{row.original.dimensions.length}</div>,
+        cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.dimensions?.length || '-'}</div>)}</div>,
       },
       {
-        accessorKey: "dimensions.width",
+        id: 'width',
         header: () => <CenteredHeader title="Width" />,
-        cell: ({ row }) => <div className="text-center">{row.original.dimensions.width}</div>,
+        cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.dimensions?.width || '-'}</div>)}</div>,
       },
       {
-        accessorKey: "dimensions.height",
+        id: 'height',
         header: () => <CenteredHeader title="Height" />,
-        cell: ({ row }) => <div className="text-center">{row.original.dimensions.height}</div>,
+        cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.dimensions?.height || '-'}</div>)}</div>,
       },
     ],
   },
@@ -136,105 +136,105 @@ export const getColumns = ({ onEdit }: BlocksAndBricksColumnsProps): ColumnDef<B
             id: 'holeA',
             header: () => <CenteredHeader title="Hole a" />,
             columns: [
-                { accessorKey: 'dimensionsOfHoles.holeA.no', header: () => <CenteredHeader title="No." />, cell: ({row}) => <div className="text-center">{row.original.dimensionsOfHoles.holeA.no}</div> },
-                { accessorKey: 'dimensionsOfHoles.holeA.l', header: () => <CenteredHeader title="L" subtitle="(mm)" />, cell: ({row}) => <div className="text-center">{row.original.dimensionsOfHoles.holeA.l}</div> },
-                { accessorKey: 'dimensionsOfHoles.holeA.w', header: () => <CenteredHeader title="W" subtitle="(mm)" />, cell: ({row}) => <div className="text-center">{row.original.dimensionsOfHoles.holeA.w}</div> },
+                { id: 'holeAno', header: () => <CenteredHeader title="No." />, cell: ({row}) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.dimensionsOfHoles?.holeA?.no || '-'}</div>)}</div> },
+                { id: 'holeAl', header: () => <CenteredHeader title="L" subtitle="(mm)" />, cell: ({row}) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.dimensionsOfHoles?.holeA?.l || '-'}</div>)}</div> },
+                { id: 'holeAw', header: () => <CenteredHeader title="W" subtitle="(mm)" />, cell: ({row}) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.dimensionsOfHoles?.holeA?.w || '-'}</div>)}</div> },
             ]
         },
         {
             id: 'holeB',
             header: () => <CenteredHeader title="Hole b" />,
             columns: [
-                { accessorKey: 'dimensionsOfHoles.holeB.no', header: () => <CenteredHeader title="No." />, cell: ({row}) => <div className="text-center">{row.original.dimensionsOfHoles.holeB.no}</div> },
-                { accessorKey: 'dimensionsOfHoles.holeB.l', header: () => <CenteredHeader title="L" subtitle="(mm)" />, cell: ({row}) => <div className="text-center">{row.original.dimensionsOfHoles.holeB.l}</div> },
-                { accessorKey: 'dimensionsOfHoles.holeB.w', header: () => <CenteredHeader title="W" subtitle="(mm)" />, cell: ({row}) => <div className="text-center">{row.original.dimensionsOfHoles.holeB.w}</div> },
+                { id: 'holeBno', header: () => <CenteredHeader title="No." />, cell: ({row}) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.dimensionsOfHoles?.holeB?.no || '-'}</div>)}</div> },
+                { id: 'holeBl', header: () => <CenteredHeader title="L" subtitle="(mm)" />, cell: ({row}) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.dimensionsOfHoles?.holeB?.l || '-'}</div>)}</div> },
+                { id: 'holeBw', header: () => <CenteredHeader title="W" subtitle="(mm)" />, cell: ({row}) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.dimensionsOfHoles?.holeB?.w || '-'}</div>)}</div> },
             ]
         },
         {
             id: 'notch',
             header: () => <CenteredHeader title="Notch" />,
             columns: [
-                { accessorKey: 'dimensionsOfHoles.notch.no', header: () => <CenteredHeader title="No." />, cell: ({row}) => <div className="text-center">{row.original.dimensionsOfHoles.notch.no}</div> },
-                { accessorKey: 'dimensionsOfHoles.notch.l', header: () => <CenteredHeader title="L" subtitle="(mm)" />, cell: ({row}) => <div className="text-center">{row.original.dimensionsOfHoles.notch.l}</div> },
-                { accessorKey: 'dimensionsOfHoles.notch.w', header: () => <CenteredHeader title="W" subtitle="(mm)" />, cell: ({row}) => <div className="text-center">{row.original.dimensionsOfHoles.notch.w}</div> },
+                { id: 'notchno', header: () => <CenteredHeader title="No." />, cell: ({row}) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.dimensionsOfHoles?.notch?.no || '-'}</div>)}</div> },
+                { id: 'notchl', header: () => <CenteredHeader title="L" subtitle="(mm)" />, cell: ({row}) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.dimensionsOfHoles?.notch?.l || '-'}</div>)}</div> },
+                { id: 'notchw', header: () => <CenteredHeader title="W" subtitle="(mm)" />, cell: ({row}) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.dimensionsOfHoles?.notch?.w || '-'}</div>)}</div> },
             ]
         }
     ]
   },
   {
-    accessorKey: "weightKg",
+    id: "weightKg",
     header: () => <CenteredHeader title="Weight" subtitle="(kg)" />,
-    cell: ({ row }) => <div className="text-center">{row.getValue("weightKg")}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.weightKg || '-'}</div>)}</div>,
   },
   {
-    accessorKey: "machineUsed",
+    id: "machineUsed",
     header: () => <CenteredHeader title="Machine Used" />,
-    cell: ({ row }) => <div>{row.getValue("machineUsed")}</div>,
+    cell: ({ row }) => <div>{row.original.samples[0].machineUsed}</div>,
   },
   {
-    accessorKey: "loadKN",
+    id: "loadKN",
     header: () => <CenteredHeader title="Load" subtitle="(kN)" />,
-    cell: ({ row }) => <div className="text-center">{row.getValue("loadKN")}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.loadKN || '-'}</div>)}</div>,
   },
   {
-    accessorKey: "modeOfFailure",
+    id: "modeOfFailure",
     header: () => <CenteredHeader title="Mode of Failure" />,
-    cell: ({ row }) => <div>{row.getValue("modeOfFailure")}</div>,
+    cell: ({ row }) => <div>{row.original.samples[0].modeOfFailure}</div>,
   },
   {
-    accessorKey: "recordedTemperature",
+    id: "recordedTemperature",
     header: () => <CenteredHeader title="Recorded Temperature" subtitle="at the Facility (°C)" />,
-    cell: ({ row }) => <div className="text-center">{row.getValue("recordedTemperature")}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples[0].recordedTemperature}</div>,
   },
   {
-    accessorKey: "certificateNumber",
+    id: "certificateNumber",
     header: () => <CenteredHeader title="Certificate Number" />,
-    cell: ({ row }) => <div>{row.getValue("certificateNumber")}</div>,
+    cell: ({ row }) => <div>{row.original.samples[0].certificateNumber}</div>,
   },
   {
-    accessorKey: "comment",
+    id: "comment",
     header: () => <CenteredHeader title="Comment" />,
-    cell: ({ row }) => <div>{row.getValue("comment")}</div>,
+    cell: ({ row }) => <div>{row.original.samples[0].comment}</div>,
   },
   {
-    accessorKey: "technician",
+    id: "technician",
     header: () => <CenteredHeader title="Technician" />,
-    cell: ({ row }) => <div>{row.getValue("technician")}</div>,
+    cell: ({ row }) => <div>{row.original.samples[0].technician}</div>,
   },
   {
-    accessorKey: "dateOfIssue",
+    id: "dateOfIssue",
     header: () => <CenteredHeader title="Date of Issue" />,
-    cell: ({ row }) => <div>{row.getValue("dateOfIssue")}</div>,
+    cell: ({ row }) => <div>{row.original.samples[0].dateOfIssue}</div>,
   },
   {
-    accessorKey: "issueIdSerialNo",
+    id: "issueIdSerialNo",
     header: () => <CenteredHeader title="Issue ID/ Serial No." />,
-    cell: ({ row }) => <div>{row.getValue("issueIdSerialNo")}</div>,
+    cell: ({ row }) => <div>{row.original.samples[0].issueIdSerialNo}</div>,
   },
   {
-    accessorKey: "takenBy",
+    id: "takenBy",
     header: () => <CenteredHeader title="Taken by" />,
-    cell: ({ row }) => <div>{row.getValue("takenBy")}</div>,
+    cell: ({ row }) => <div>{row.original.samples[0].takenBy}</div>,
   },
   {
-    accessorKey: "date",
+    id: "date",
     header: () => <CenteredHeader title="Date" />,
-    cell: ({ row }) => <div>{row.getValue("date")}</div>,
+    cell: ({ row }) => <div>{row.original.samples[0].date}</div>,
   },
   {
-    accessorKey: "contact",
+    id: "contact",
     header: () => <CenteredHeader title="Contact" />,
-    cell: ({ row }) => <div>{row.getValue("contact")}</div>,
+    cell: ({ row }) => <div>{row.original.samples[0].contact}</div>,
   },
   {
-    accessorKey: "sampleReceiptNo",
+    id: "sampleReceiptNo",
     header: () => <CenteredHeader title="Sample Receipt No" />,
-    cell: ({ row }) => <div>{row.getValue("sampleReceiptNo")}</div>,
+    cell: ({ row }) => <div>{row.original.samples[0].sampleReceiptNo}</div>,
   },
   {
     id: "actions",
     cell: ({ row }) => {
-      const item = row.original
+      const { samples } = row.original
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -245,9 +245,11 @@ export const getColumns = ({ onEdit }: BlocksAndBricksColumnsProps): ColumnDef<B
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => onEdit(item)}>
-              Edit Set
-            </DropdownMenuItem>
+            {samples.map((sample) => (
+                 <DropdownMenuItem key={sample.id} onClick={() => onEdit(sample)}>
+                    Edit Sample {sample.sampleId}
+                 </DropdownMenuItem>
+            ))}
           </DropdownMenuContent>
         </DropdownMenu>
       )
