@@ -154,8 +154,8 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
         sampleReceiptNo: receiptId,
         contact: formData.clientContact,
         technician: '',
-        takenBy: '',
-        date: '',
+        takenBy: formData.deliveredBy,
+        date: formattedReceiptDate,
     };
     
     for (const [category, categoryData] of Object.entries(categories)) {
