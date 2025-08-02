@@ -46,53 +46,15 @@ export async function getPavers(): Promise<Paver[]> {
     return snapshot.docs.map(doc => fromFirestore<Paver>(doc));
 }
 
-export async function getPaverSets(): Promise<PaverSet[]> {
-    const samples = await getPavers();
-    const sets: { [key: string]: PaverSet } = {};
-
-    samples.forEach(sample => {
-        const setKey = `${sample.sampleReceiptNo}-${sample.castingDate}-${sample.testingDate}-${sample.areaOfUse}-${sample.paverType}`;
-
-        if (!sets[setKey]) {
-            sets[setKey] = {
-                ...sample,
-                id: setKey, 
-                sampleIds: [sample.sampleId],
-                docIds: [sample.id]
-            };
-        } else {
-            sets[setKey].sampleIds.push(sample.sampleId);
-            sets[setKey].docIds.push(sample.id);
-        }
-    });
-
-    return Object.values(sets);
-}
-
-
 export async function addPaver(data: Omit<Paver, 'id'>): Promise<Paver> {
     const docRef = await addDoc(paversCollection, data);
     return { id: docRef.id, ...data } as Paver;
 }
 
-export async function updatePaverSet(itemSet: PaverSet): Promise<void> {
-    const batch = writeBatch(db);
-    const { docIds, sampleIds, ...setData } = itemSet;
-
-    docIds.forEach(docId => {
-        const docRef = doc(db, 'pavers', docId);
-        const dataToUpdate = { ...setData };
-        delete (dataToUpdate as any).id;
-        batch.update(docRef, dataToUpdate);
-    });
-    
-    await batch.commit();
-}
-
-
-export async function deletePaver(paverId: string): Promise<void> {
-    const paverDoc = doc(db, 'pavers', paverId);
-    await deleteDoc(paverDoc);
+export async function updatePaver(item: Paver): Promise<void> {
+    const docRef = doc(db, 'pavers', item.id);
+    const { id, ...dataToUpdate } = item;
+    await updateDoc(docRef, dataToUpdate);
 }
 
 export async function deletePaverSet(docIds: string[]): Promise<void> {
@@ -103,3 +65,4 @@ export async function deletePaverSet(docIds: string[]): Promise<void> {
     });
     await batch.commit();
 }
+
