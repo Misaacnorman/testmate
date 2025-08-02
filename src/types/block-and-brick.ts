@@ -1,6 +1,6 @@
 
 export type BlockAndBrick = {
-    id: string;
+    id: string; // Firestore document ID
     dateReceived: string;
     client: string;
     project: string;
@@ -46,4 +46,11 @@ export type BlockAndBrick = {
     date: string;
     contact: string;
     sampleReceiptNo: string;
+};
+
+// Represents a set of samples with common properties, for UI display
+export type BlockAndBrickSet = Omit<BlockAndBrick, 'id' | 'sampleId'> & {
+    id: string; // Composite key for the set
+    sampleIds: string[];
+    docIds: string[]; // Firestore document IDs for each sample in the set
 };

@@ -1,7 +1,7 @@
 
 "use client"
 
-import { BlockAndBrick } from "@/types/block-and-brick";
+import { BlockAndBrickSet } from "@/types/block-and-brick";
 import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
@@ -27,10 +27,10 @@ const SortableHeader = ({ title, column }: { title: string, column: any }) => (
 );
 
 type BlocksAndBricksColumnsProps = {
-  onEdit: (item: BlockAndBrick) => void;
+  onEdit: (item: BlockAndBrickSet) => void;
 };
 
-export const getColumns = ({ onEdit }: BlocksAndBricksColumnsProps): ColumnDef<BlockAndBrick>[] => [
+export const getColumns = ({ onEdit }: BlocksAndBricksColumnsProps): ColumnDef<BlockAndBrickSet>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -92,9 +92,15 @@ export const getColumns = ({ onEdit }: BlocksAndBricksColumnsProps): ColumnDef<B
     cell: ({ row }) => <div className="min-w-[150px]">{row.getValue("areaOfUse")}</div>,
   },
   {
-    accessorKey: "sampleId",
-    header: () => <CenteredHeader title="Sample ID" />,
-    cell: ({ row }) => <div className="text-center">{row.getValue("sampleId")}</div>,
+    accessorKey: "sampleIds",
+    header: () => <CenteredHeader title="Sample IDs" />,
+    cell: ({ row }) => (
+        <div className="flex flex-col items-center">
+            {row.original.sampleIds.map((id) => (
+                <div key={id} className="py-1">{id}</div>
+            ))}
+        </div>
+    ),
   },
   {
     accessorKey: "sampleType",
@@ -240,7 +246,7 @@ export const getColumns = ({ onEdit }: BlocksAndBricksColumnsProps): ColumnDef<B
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem onClick={() => onEdit(item)}>
-              Edit
+              Edit Set
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

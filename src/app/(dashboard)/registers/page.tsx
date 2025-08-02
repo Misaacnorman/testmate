@@ -15,22 +15,22 @@ import { getProjects, updateProject, deleteProject } from '@/services/projects';
 import { getColumns as getProjectColumns } from './components/project-columns';
 import { ConcreteCubesTable } from './components/concrete-cubes-table';
 import { getColumns as getConcreteCubesColumns } from './components/concrete-cubes-columns';
-import { ConcreteCube } from '@/types/concrete-cube';
-import { getConcreteCubes, updateConcreteCube } from '@/services/concrete-cubes';
-import { BlockAndBrick } from '@/types/block-and-brick';
-import { getBlocksAndBricks, updateBlockAndBrick } from '@/services/blocks-and-bricks';
+import { ConcreteCubeSet } from '@/types/concrete-cube';
+import { getConcreteCubeSets, updateConcreteCubeSet } from '@/services/concrete-cubes';
+import { BlockAndBrickSet } from '@/types/block-and-brick';
+import { getBlocksAndBricksSets, updateBlockAndBrickSet } from '@/services/blocks-and-bricks';
 import { getColumns as getBlocksAndBricksColumns } from './components/blocks-and-bricks-columns';
 import { BlocksAndBricksTable } from './components/blocks-and-bricks-table';
-import { Paver } from '@/types/paver';
-import { getPavers, updatePaver, deletePaver } from '@/services/pavers';
+import { PaverSet } from '@/types/paver';
+import { getPaverSets, updatePaverSet, deletePaverSet } from '@/services/pavers';
 import { getColumns as getPaverColumns } from './components/paver-columns';
 import { PaversTable } from './components/pavers-table';
-import { Cylinder } from '@/types/cylinder';
-import { getCylinders, updateCylinder } from '@/services/cylinders';
+import { CylinderSet } from '@/types/cylinder';
+import { getCylinderSets, updateCylinderSet } from '@/services/cylinders';
 import { getColumns as getCylinderColumns } from './components/cylinder-columns';
 import { CylindersTable } from './components/cylinders-table';
-import { WaterAbsorption } from '@/types/water-absorption';
-import { getWaterAbsorptions, updateWaterAbsorption } from '@/services/water-absorptions';
+import { WaterAbsorptionSet } from '@/types/water-absorption';
+import { getWaterAbsorptionSets, updateWaterAbsorptionSet } from '@/services/water-absorptions';
 import { getColumns as getWaterAbsorptionColumns } from './components/water-absorption-columns';
 import { WaterAbsorptionTable } from './components/water-absorption-table';
 import { Input } from '@/components/ui/input';
@@ -53,11 +53,11 @@ import { CreateProjectDialog } from './components/create-project-dialog';
 export default function RegistersPage() {
   const [receipts, setReceipts] = useState<Receipt[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
-  const [concreteCubes, setConcreteCubes] = useState<ConcreteCube[]>([]);
-  const [blocksAndBricks, setBlocksAndBricks] = useState<BlockAndBrick[]>([]);
-  const [pavers, setPavers] = useState<Paver[]>([]);
-  const [cylinders, setCylinders] = useState<Cylinder[]>([]);
-  const [waterAbsorptions, setWaterAbsorptions] = useState<WaterAbsorption[]>([]);
+  const [concreteCubes, setConcreteCubes] = useState<ConcreteCubeSet[]>([]);
+  const [blocksAndBricks, setBlocksAndBricks] = useState<BlockAndBrickSet[]>([]);
+  const [pavers, setPavers] = useState<PaverSet[]>([]);
+  const [cylinders, setCylinders] = useState<CylinderSet[]>([]);
+  const [waterAbsorptions, setWaterAbsorptions] = useState<WaterAbsorptionSet[]>([]);
   
   const [isReceiptsLoading, setIsReceiptsLoading] = useState(true);
   const [isProjectsLoading, setIsProjectsLoading] = useState(true);
@@ -69,26 +69,26 @@ export default function RegistersPage() {
   
   const [projectFilter, setProjectFilter] = useState('');
   const [editingProject, setEditingProject] = useState<Project | null>(null);
-  const [editingConcreteCube, setEditingConcreteCube] = useState<ConcreteCube | null>(null);
-  const [editingBlockAndBrick, setEditingBlockAndBrick] = useState<BlockAndBrick | null>(null);
-  const [editingPaver, setEditingPaver] = useState<Paver | null>(null);
-  const [editingCylinder, setEditingCylinder] = useState<Cylinder | null>(null);
-  const [editingWaterAbsorption, setEditingWaterAbsorption] = useState<WaterAbsorption | null>(null);
+  const [editingConcreteCube, setEditingConcreteCube] = useState<ConcreteCubeSet | null>(null);
+  const [editingBlockAndBrick, setEditingBlockAndBrick] = useState<BlockAndBrickSet | null>(null);
+  const [editingPaver, setEditingPaver] = useState<PaverSet | null>(null);
+  const [editingCylinder, setEditingCylinder] = useState<CylinderSet | null>(null);
+  const [editingWaterAbsorption, setEditingWaterAbsorption] = useState<WaterAbsorptionSet | null>(null);
   
   const [isTestCubesDialogOpen, setIsTestCubesDialogOpen] = useState(false);
-  const [selectedCubes, setSelectedCubes] = useState<ConcreteCube[]>([]);
+  const [selectedCubes, setSelectedCubes] = useState<ConcreteCubeSet[]>([]);
 
   const [isTestBlocksAndBricksDialogOpen, setIsTestBlocksAndBricksDialogOpen] = useState(false);
-  const [selectedBlocksAndBricks, setSelectedBlocksAndBricks] = useState<BlockAndBrick[]>([]);
+  const [selectedBlocksAndBricks, setSelectedBlocksAndBricks] = useState<BlockAndBrickSet[]>([]);
 
   const [isTestPaversDialogOpen, setIsTestPaversDialogOpen] = useState(false);
-  const [selectedPavers, setSelectedPavers] = useState<Paver[]>([]);
+  const [selectedPavers, setSelectedPavers] = useState<PaverSet[]>([]);
 
   const [isTestCylindersDialogOpen, setIsTestCylindersDialogOpen] = useState(false);
-  const [selectedCylinders, setSelectedCylinders] = useState<Cylinder[]>([]);
+  const [selectedCylinders, setSelectedCylinders] = useState<CylinderSet[]>([]);
 
   const [isTestWaterAbsorptionsDialogOpen, setIsTestWaterAbsorptionsDialogOpen] = useState(false);
-  const [selectedWaterAbsorptions, setSelectedWaterAbsorptions] = useState<WaterAbsorption[]>([]);
+  const [selectedWaterAbsorptions, setSelectedWaterAbsorptions] = useState<WaterAbsorptionSet[]>([]);
 
   const { toast } = useToast();
 
@@ -129,7 +129,7 @@ export default function RegistersPage() {
   const fetchConcreteCubes = useCallback(async () => {
     setIsConcreteCubesLoading(true);
     try {
-        const fetchedData = await getConcreteCubes();
+        const fetchedData = await getConcreteCubeSets();
         setConcreteCubes(fetchedData);
     } catch (error) {
         console.error("Failed to fetch concrete cubes:", error);
@@ -146,7 +146,7 @@ export default function RegistersPage() {
   const fetchBlocksAndBricks = useCallback(async () => {
     setIsBlocksAndBricksLoading(true);
     try {
-        const fetchedData = await getBlocksAndBricks();
+        const fetchedData = await getBlocksAndBricksSets();
         setBlocksAndBricks(fetchedData);
     } catch (error) {
         console.error("Failed to fetch blocks and bricks:", error);
@@ -163,7 +163,7 @@ export default function RegistersPage() {
   const fetchPavers = useCallback(async () => {
     setIsPaversLoading(true);
     try {
-        const fetchedData = await getPavers();
+        const fetchedData = await getPaverSets();
         setPavers(fetchedData);
     } catch (error) {
         console.error("Failed to fetch pavers:", error);
@@ -180,7 +180,7 @@ export default function RegistersPage() {
   const fetchCylinders = useCallback(async () => {
     setIsCylindersLoading(true);
     try {
-        const fetchedData = await getCylinders();
+        const fetchedData = await getCylinderSets();
         setCylinders(fetchedData);
     } catch (error) {
         console.error("Failed to fetch cylinders:", error);
@@ -197,7 +197,7 @@ export default function RegistersPage() {
   const fetchWaterAbsorptions = useCallback(async () => {
     setIsWaterAbsorptionsLoading(true);
     try {
-        const fetchedData = await getWaterAbsorptions();
+        const fetchedData = await getWaterAbsorptionSets();
         setWaterAbsorptions(fetchedData);
     } catch (error) {
         console.error("Failed to fetch water absorptions:", error);
@@ -276,31 +276,31 @@ export default function RegistersPage() {
     }
   };
 
-  const handleConcreteCubeUpdated = async (cube: ConcreteCube) => {
+  const handleConcreteCubeUpdated = async (cubeSet: ConcreteCubeSet) => {
     try {
-      await updateConcreteCube(cube);
+      await updateConcreteCubeSet(cubeSet);
       toast({
-        title: "Test Updated",
-        description: `Concrete Cube Test for sample ${cube.sampleId} has been updated.`,
+        title: "Test Set Updated",
+        description: `Concrete Cube Test Set has been updated.`,
       });
       setEditingConcreteCube(null);
       fetchConcreteCubes();
     } catch (error) {
-       console.error("Failed to update concrete cube:", error);
+       console.error("Failed to update concrete cube set:", error);
        toast({
          variant: "destructive",
-         title: "Error updating test",
+         title: "Error updating test set",
          description: "Could not save the updated test data.",
        });
     }
   };
   
-  const handleBatchCubesUpdate = async (updatedCubes: ConcreteCube[]) => {
+  const handleBatchCubesUpdate = async (updatedCubes: ConcreteCubeSet[]) => {
     try {
-      await Promise.all(updatedCubes.map(cube => updateConcreteCube(cube)));
+      await Promise.all(updatedCubes.map(cube => updateConcreteCubeSet(cube)));
        toast({
         title: "Batch Update Successful",
-        description: `${updatedCubes.length} concrete cube tests have been updated.`,
+        description: `${updatedCubes.length} concrete cube test sets have been updated.`,
       });
       fetchConcreteCubes();
       setIsTestCubesDialogOpen(false);
@@ -315,17 +315,17 @@ export default function RegistersPage() {
     }
   }
 
-  const handleBlockAndBrickUpdated = async (item: BlockAndBrick) => {
+  const handleBlockAndBrickUpdated = async (item: BlockAndBrickSet) => {
     try {
-      await updateBlockAndBrick(item);
+      await updateBlockAndBrickSet(item);
       toast({
-        title: "Test Updated",
-        description: `Block/Brick Test for sample ${item.sampleId} has been updated.`,
+        title: "Test Set Updated",
+        description: `Block/Brick Test Set has been updated.`,
       });
       setEditingBlockAndBrick(null);
       fetchBlocksAndBricks();
     } catch (error) {
-       console.error("Failed to update block/brick:", error);
+       console.error("Failed to update block/brick set:", error);
        toast({
          variant: "destructive",
          title: "Error updating test",
@@ -334,12 +334,12 @@ export default function RegistersPage() {
     }
   };
 
-  const handleBatchBlocksAndBricksUpdate = async (updatedItems: BlockAndBrick[]) => {
+  const handleBatchBlocksAndBricksUpdate = async (updatedItems: BlockAndBrickSet[]) => {
     try {
-      await Promise.all(updatedItems.map(item => updateBlockAndBrick(item)));
+      await Promise.all(updatedItems.map(item => updateBlockAndBrickSet(item)));
        toast({
         title: "Batch Update Successful",
-        description: `${updatedItems.length} blocks/bricks tests have been updated.`,
+        description: `${updatedItems.length} blocks/bricks test sets have been updated.`,
       });
       fetchBlocksAndBricks();
       setIsTestBlocksAndBricksDialogOpen(false);
@@ -354,49 +354,49 @@ export default function RegistersPage() {
     }
   }
 
-  const handlePaverUpdated = async (item: Paver) => {
+  const handlePaverUpdated = async (item: PaverSet) => {
     try {
-      await updatePaver(item);
+      await updatePaverSet(item);
       toast({
-        title: "Test Updated",
-        description: `Paver Test for sample ${item.sampleId} has been updated.`,
+        title: "Test Set Updated",
+        description: `Paver Test Set has been updated.`,
       });
       setEditingPaver(null);
       fetchPavers();
     } catch (error) {
-       console.error("Failed to update paver:", error);
+       console.error("Failed to update paver set:", error);
        toast({
          variant: "destructive",
-         title: "Error updating test",
+         title: "Error updating test set",
          description: "Could not save the updated test data.",
        });
     }
   };
 
-  const handlePaverDeleted = async (paverId: string) => {
+  const handlePaverDeleted = async (paverSetId: string) => {
     try {
-      await deletePaver(paverId);
+      await deletePaverSet(paverSetId);
       toast({
-        title: "Paver Test Deleted",
-        description: "The paver test record has been successfully deleted.",
+        title: "Paver Test Set Deleted",
+        description: "The paver test set has been successfully deleted.",
       });
       fetchPavers();
     } catch (error) {
       console.error("Failed to delete paver:", error);
       toast({
         variant: "destructive",
-        title: "Error Deleting Paver",
-        description: "Could not delete the paver test record.",
+        title: "Error Deleting Paver Set",
+        description: "Could not delete the paver test set.",
       });
     }
   };
 
-  const handleBatchPaversUpdate = async (updatedItems: Paver[]) => {
+  const handleBatchPaversUpdate = async (updatedItems: PaverSet[]) => {
     try {
-      await Promise.all(updatedItems.map(item => updatePaver(item)));
+      await Promise.all(updatedItems.map(item => updatePaverSet(item)));
        toast({
         title: "Batch Update Successful",
-        description: `${updatedItems.length} paver tests have been updated.`,
+        description: `${updatedItems.length} paver test sets have been updated.`,
       });
       fetchPavers();
       setIsTestPaversDialogOpen(false);
@@ -411,31 +411,31 @@ export default function RegistersPage() {
     }
   }
 
-  const handleCylinderUpdated = async (item: Cylinder) => {
+  const handleCylinderUpdated = async (item: CylinderSet) => {
     try {
-      await updateCylinder(item);
+      await updateCylinderSet(item);
       toast({
-        title: "Test Updated",
-        description: `Cylinder Test for sample ${item.sampleId} has been updated.`,
+        title: "Test Set Updated",
+        description: `Cylinder Test Set has been updated.`,
       });
       setEditingCylinder(null);
       fetchCylinders();
     } catch (error) {
-       console.error("Failed to update cylinder:", error);
+       console.error("Failed to update cylinder set:", error);
        toast({
          variant: "destructive",
-         title: "Error updating test",
+         title: "Error updating test set",
          description: "Could not save the updated test data.",
        });
     }
   };
 
-  const handleBatchCylindersUpdate = async (updatedItems: Cylinder[]) => {
+  const handleBatchCylindersUpdate = async (updatedItems: CylinderSet[]) => {
     try {
-      await Promise.all(updatedItems.map(item => updateCylinder(item)));
+      await Promise.all(updatedItems.map(item => updateCylinderSet(item)));
        toast({
         title: "Batch Update Successful",
-        description: `${updatedItems.length} cylinder tests have been updated.`,
+        description: `${updatedItems.length} cylinder test sets have been updated.`,
       });
       fetchCylinders();
       setIsTestCylindersDialogOpen(false);
@@ -450,31 +450,31 @@ export default function RegistersPage() {
     }
   }
 
-  const handleWaterAbsorptionUpdated = async (item: WaterAbsorption) => {
+  const handleWaterAbsorptionUpdated = async (item: WaterAbsorptionSet) => {
     try {
-      await updateWaterAbsorption(item);
+      await updateWaterAbsorptionSet(item);
       toast({
-        title: "Test Updated",
-        description: `Water Absorption Test for sample ${item.sampleId} has been updated.`,
+        title: "Test Set Updated",
+        description: `Water Absorption Test Set has been updated.`,
       });
       setEditingWaterAbsorption(null);
       fetchWaterAbsorptions();
     } catch (error) {
-       console.error("Failed to update water absorption test:", error);
+       console.error("Failed to update water absorption test set:", error);
        toast({
          variant: "destructive",
-         title: "Error updating test",
+         title: "Error updating test set",
          description: "Could not save the updated test data.",
        });
     }
   };
 
-   const handleBatchWaterAbsorptionsUpdate = async (updatedItems: WaterAbsorption[]) => {
+   const handleBatchWaterAbsorptionsUpdate = async (updatedItems: WaterAbsorptionSet[]) => {
     try {
-      await Promise.all(updatedItems.map(item => updateWaterAbsorption(item)));
+      await Promise.all(updatedItems.map(item => updateWaterAbsorptionSet(item)));
        toast({
         title: "Batch Update Successful",
-        description: `${updatedItems.length} water absorption tests have been updated.`,
+        description: `${updatedItems.length} water absorption test sets have been updated.`,
       });
       fetchWaterAbsorptions();
       setIsTestWaterAbsorptionsDialogOpen(false);
@@ -674,7 +674,7 @@ export default function RegistersPage() {
       )}
       {editingConcreteCube && (
         <EditConcreteCubeDialog 
-          cube={editingConcreteCube}
+          cubeSet={editingConcreteCube}
           onOpenChange={(open) => !open && setEditingConcreteCube(null)}
           onCubeUpdated={handleConcreteCubeUpdated}
         />

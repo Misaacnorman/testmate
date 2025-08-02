@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { BlockAndBrick } from "@/types/block-and-brick";
+import { BlockAndBrickSet } from "@/types/block-and-brick";
 import styles from './data-table.module.css';
 
 interface DataTableProps<TData, TValue> {
@@ -32,7 +32,7 @@ interface DataTableProps<TData, TValue> {
   onSelectionChange: (selectedRows: TData[]) => void;
 }
 
-export function BlocksAndBricksTable<TData extends BlockAndBrick, TValue>({
+export function BlocksAndBricksTable<TData extends BlockAndBrickSet, TValue>({
   columns,
   data,
   isLoading,
