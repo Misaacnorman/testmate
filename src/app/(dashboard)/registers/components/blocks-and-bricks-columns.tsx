@@ -84,7 +84,7 @@ export const getColumns = ({ onEdit }: BlocksAndBricksColumnsProps): ColumnDef<B
   {
     accessorKey: "ageDays",
     header: () => <CenteredHeader title="Age" subtitle="(Days)" />,
-    cell: ({ row }) => <div className="text-center">{row.original.samples[0].ageDays}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.ageDays || '-'}</div>)}</div>,
   },
   {
     accessorKey: "areaOfUse",
@@ -169,7 +169,7 @@ export const getColumns = ({ onEdit }: BlocksAndBricksColumnsProps): ColumnDef<B
   {
     id: "machineUsed",
     header: () => <CenteredHeader title="Machine Used" />,
-    cell: ({ row }) => <div>{row.original.samples[0].machineUsed}</div>,
+    cell: ({ row }) => <div>{row.original.samples.map(s => <div key={s.id}>{s.machineUsed || '-'}</div>)}</div>,
   },
   {
     id: "loadKN",
@@ -179,12 +179,12 @@ export const getColumns = ({ onEdit }: BlocksAndBricksColumnsProps): ColumnDef<B
   {
     id: "modeOfFailure",
     header: () => <CenteredHeader title="Mode of Failure" />,
-    cell: ({ row }) => <div>{row.original.samples[0].modeOfFailure}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.modeOfFailure || '-'}</div>)}</div>,
   },
   {
     id: "recordedTemperature",
     header: () => <CenteredHeader title="Recorded Temperature" subtitle="at the Facility (°C)" />,
-    cell: ({ row }) => <div className="text-center">{row.original.samples[0].recordedTemperature}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.recordedTemperature || '-'}</div>)}</div>,
   },
   {
     id: "certificateNumber",
@@ -256,3 +256,5 @@ export const getColumns = ({ onEdit }: BlocksAndBricksColumnsProps): ColumnDef<B
     },
   },
 ];
+
+    

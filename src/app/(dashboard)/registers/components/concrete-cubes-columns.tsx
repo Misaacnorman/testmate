@@ -89,7 +89,7 @@ export const getColumns = ({ onEdit }: ConcreteCubesColumnsProps): ColumnDef<Con
     cell: ({ row }) => <div className="min-w-[150px]">{row.original.areaOfUse}</div>,
   },
   {
-    accessorKey: "samples",
+    id: 'sampleId',
     header: () => <CenteredHeader title="Sample ID" />,
     cell: ({ row }) => (
         <div className="flex flex-col items-center">
@@ -98,6 +98,16 @@ export const getColumns = ({ onEdit }: ConcreteCubesColumnsProps): ColumnDef<Con
             ))}
         </div>
     ),
+  },
+  {
+    id: 'ageDays',
+    header: () => <CenteredHeader title="Age" subtitle="(Days)" />,
+    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.ageDays || '-'}</div>)}</div>,
+  },
+  {
+    id: "modeOfFailure",
+    header: () => <CenteredHeader title="Mode of Failure" />,
+    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.modeOfFailure || '-'}</div>)}</div>,
   },
   {
     id: "actions",
@@ -124,3 +134,5 @@ export const getColumns = ({ onEdit }: ConcreteCubesColumnsProps): ColumnDef<Con
     },
   },
 ];
+
+    

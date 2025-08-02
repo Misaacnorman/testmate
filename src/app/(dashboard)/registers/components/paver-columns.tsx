@@ -86,7 +86,7 @@ export const getColumns = ({ onEdit, onDelete }: PaverColumnsProps): ColumnDef<P
   {
     accessorKey: "ageDays",
     header: () => <CenteredHeader title="Age" subtitle="(Days)" />,
-    cell: ({ row }) => <div className="text-center">{row.original.samples[0].ageDays}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.ageDays || '-'}</div>)}</div>,
   },
   {
     accessorKey: "areaOfUse",
@@ -146,9 +146,9 @@ export const getColumns = ({ onEdit, onDelete }: PaverColumnsProps): ColumnDef<P
     cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.weightKg || '-'}</div>)}</div>,
   },
   {
-    accessorKey: "machineUsed",
+    id: "machineUsed",
     header: () => <CenteredHeader title="Machine Used" />,
-    cell: ({ row }) => <div>{row.original.machineUsed}</div>,
+    cell: ({ row }) => <div>{row.original.samples.map(s => <div key={s.id}>{s.machineUsed || '-'}</div>)}</div>,
   },
   {
     id: "loadKN",
@@ -156,59 +156,59 @@ export const getColumns = ({ onEdit, onDelete }: PaverColumnsProps): ColumnDef<P
     cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.loadKN || '-'}</div>)}</div>,
   },
   {
-    accessorKey: "modeOfFailure",
+    id: "modeOfFailure",
     header: () => <CenteredHeader title="Mode of Failure" />,
-    cell: ({ row }) => <div>{row.original.modeOfFailure}</div>,
+    cell: ({ row }) => <div>{row.original.samples.map(s => <div key={s.id}>{s.modeOfFailure || '-'}</div>)}</div>,
   },
   {
-    accessorKey: "recordedTemperature",
+    id: "recordedTemperature",
     header: () => <CenteredHeader title="Recorded Temperature" subtitle="at the Facility (°C)" />,
-    cell: ({ row }) => <div className="text-center">{row.original.recordedTemperature}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.recordedTemperature || '-'}</div>)}</div>,
   },
   {
-    accessorKey: "certificateNumber",
+    id: "certificateNumber",
     header: () => <CenteredHeader title="Certificate Number" />,
-    cell: ({ row }) => <div>{row.original.certificateNumber}</div>,
+    cell: ({ row }) => <div>{row.original.samples.map(s => <div key={s.id}>{s.certificateNumber || '-'}</div>)}</div>,
   },
   {
-    accessorKey: "comment",
+    id: "comment",
     header: () => <CenteredHeader title="Comment" />,
-    cell: ({ row }) => <div>{row.original.comment}</div>,
+    cell: ({ row }) => <div>{row.original.samples.map(s => <div key={s.id}>{s.comment || '-'}</div>)}</div>,
   },
   {
-    accessorKey: "technician",
+    id: "technician",
     header: () => <CenteredHeader title="Technician" subtitle="(Name &amp; Signature)" />,
-    cell: ({ row }) => <div>{row.original.technician}</div>,
+    cell: ({ row }) => <div>{row.original.samples.map(s => <div key={s.id}>{s.technician || '-'}</div>)}</div>,
   },
   {
-    accessorKey: "dateOfIssue",
+    id: "dateOfIssue",
     header: () => <CenteredHeader title="Date of Issue" />,
-    cell: ({ row }) => <div>{row.original.dateOfIssue}</div>,
+    cell: ({ row }) => <div>{row.original.samples.map(s => <div key={s.id}>{s.dateOfIssue || '-'}</div>)}</div>,
   },
   {
-    accessorKey: "issueIdSerialNo",
+    id: "issueIdSerialNo",
     header: () => <CenteredHeader title="Issue ID/ Serial No." />,
-    cell: ({ row }) => <div>{row.original.issueIdSerialNo}</div>,
+    cell: ({ row }) => <div>{row.original.samples.map(s => <div key={s.id}>{s.issueIdSerialNo || '-'}</div>)}</div>,
   },
   {
-    accessorKey: "takenBy",
+    id: "takenBy",
     header: () => <CenteredHeader title="Taken by" />,
-    cell: ({ row }) => <div>{row.original.takenBy}</div>,
+    cell: ({ row }) => <div>{row.original.samples.map(s => <div key={s.id}>{s.takenBy || '-'}</div>)}</div>,
   },
   {
-    accessorKey: "date",
+    id: "date",
     header: () => <CenteredHeader title="Date" />,
-    cell: ({ row }) => <div>{row.original.date}</div>,
+    cell: ({ row }) => <div>{row.original.samples.map(s => <div key={s.id}>{s.date || '-'}</div>)}</div>,
   },
   {
-    accessorKey: "contact",
+    id: "contact",
     header: () => <CenteredHeader title="Contact" />,
-    cell: ({ row }) => <div>{row.original.contact}</div>,
+    cell: ({ row }) => <div>{row.original.samples.map(s => <div key={s.id}>{s.contact || '-'}</div>)}</div>,
   },
   {
-    accessorKey: "sampleReceiptNo",
+    id: "sampleReceiptNo",
     header: () => <CenteredHeader title="Sample Receipt No" />,
-    cell: ({ row }) => <div>{row.original.sampleReceiptNo}</div>,
+    cell: ({ row }) => <div>{row.original.samples.map(s => <div key={s.id}>{s.sampleReceiptNo || '-'}</div>)}</div>,
   },
   {
     id: "actions",
@@ -258,3 +258,5 @@ export const getColumns = ({ onEdit, onDelete }: PaverColumnsProps): ColumnDef<P
     },
   },
 ];
+
+    
