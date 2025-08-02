@@ -84,7 +84,7 @@ export const getColumns = ({ onEdit }: WaterAbsorptionColumnsProps): ColumnDef<W
   {
     accessorKey: "ageDays",
     header: () => <CenteredHeader title="Age" subtitle="(Days)" />,
-    cell: ({ row }) => <div className="text-center">{row.original.samples[0].ageDays}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples[0]?.ageDays || '-'}</div>,
   },
   {
     accessorKey: "areaOfUse",

@@ -135,6 +135,7 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
           </DialogHeader>
           <ScrollArea className="flex-grow pr-6 -mr-6">
             <form id="test-pavers-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+             <div className="p-1">
               <div className="space-y-4 p-4 border rounded-lg bg-muted/50">
                 <h4 className="font-semibold text-lg mb-2">Sample Information</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
@@ -146,23 +147,24 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
                 </div>
               </div>
               
-                <div className="space-y-4 p-4 border rounded-lg">
+                <div className="space-y-4 p-4 border rounded-lg mt-4">
                     <h4 className="font-semibold text-lg mb-2">Test Results</h4>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="space-y-2"><Label>Length (mm)</Label><Input type="number" step="any" {...form.register(`pavers.${activePaverIndex}.dimensions.length`)} /></div>
-                      <div className="space-y-2"><Label>Width (mm)</Label><Input type="number" step="any" {...form.register(`pavers.${activePaverIndex}.dimensions.width`)} /></div>
-                      <div className="space-y-2"><Label>Height (mm)</Label><Input type="number" step="any" {...form.register(`pavers.${activePaverIndex}.dimensions.height`)} /></div>
+                      <div className="space-y-2"><Label>Length (mm)</Label><Input type="text" inputMode="decimal" {...form.register(`pavers.${activePaverIndex}.dimensions.length`)} /></div>
+                      <div className="space-y-2"><Label>Width (mm)</Label><Input type="text" inputMode="decimal" {...form.register(`pavers.${activePaverIndex}.dimensions.width`)} /></div>
+                      <div className="space-y-2"><Label>Height (mm)</Label><Input type="text" inputMode="decimal" {...form.register(`pavers.${activePaverIndex}.dimensions.height`)} /></div>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="space-y-2"><Label>Weight (kg)</Label><Input type="number" step="any" {...form.register(`pavers.${activePaverIndex}.weightKg`)} /></div>
-                      <div className="space-y-2"><Label>Load (kN)</Label><Input type="number" step="any" {...form.register(`pavers.${activePaverIndex}.loadKN`)} /></div>
-                      <div className="space-y-2"><Label>Calculated Area (mm²)</Label><Input type="number" step="any" {...form.register(`pavers.${activePaverIndex}.calculatedArea`)} /></div>
+                      <div className="space-y-2"><Label>Weight (kg)</Label><Input type="text" inputMode="decimal" {...form.register(`pavers.${activePaverIndex}.weightKg`)} /></div>
+                      <div className="space-y-2"><Label>Load (kN)</Label><Input type="text" inputMode="decimal" {...form.register(`pavers.${activePaverIndex}.loadKN`)} /></div>
+                      <div className="space-y-2"><Label>Calculated Area (mm²)</Label><Input type="text" inputMode="decimal" {...form.register(`pavers.${activePaverIndex}.calculatedArea`)} /></div>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="space-y-2"><Label>Pavers per m²</Label><Input type="number" {...form.register(`pavers.${activePaverIndex}.paversPerSqMetre`)} /></div>
+                      <div className="space-y-2"><Label>Pavers per m²</Label><Input type="text" inputMode="numeric" {...form.register(`pavers.${activePaverIndex}.paversPerSqMetre`)} /></div>
                        <div className="space-y-2"><Label>Mode of Failure</Label><Input {...form.register(`pavers.${activePaverIndex}.modeOfFailure`)} /></div>
                     </div>
                   </div>
+              </div>
             </form>
           </ScrollArea>
           <DialogFooter className="pt-4 justify-between">

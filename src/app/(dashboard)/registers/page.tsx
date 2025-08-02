@@ -24,7 +24,7 @@ import { Paver, PaverSet } from '@/types/paver';
 import { getPavers, updatePaver, deletePaverSet } from '@/services/pavers';
 import { getColumns as getPaverColumns } from './components/paver-columns';
 import { PaversTable } from './components/pavers-table';
-import { Cylinder } from '@/types/cylinder';
+import { Cylinder, CylinderSet } from '@/types/cylinder';
 import { getCylinders, updateCylinder } from '@/services/cylinders';
 import { getColumns as getCylinderColumns } from './components/cylinder-columns';
 import { CylindersTable } from './components/cylinders-table';
@@ -230,6 +230,20 @@ export default function RegistersPage() {
     return groupIntoSets<WaterAbsorption>(waterAbsorptions, ['client', 'project', 'dateReceived', 'castingDate', 'testingDate', 'areaOfUse', 'sampleType']);
   }, [waterAbsorptions]);
 
+  const areAllTestsFilled = (samples: any[]) => {
+    return samples.every(s => 
+      s.dimensions &&
+      s.weightKg != null &&
+      s.loadKN != null &&
+      s.modeOfFailure
+    );
+  };
+  
+  const issuanceDisabled = (sets: {samples: any[]}[]) => {
+    if (sets.length === 0) return true;
+    return !sets.every(set => areAllTestsFilled(set.samples));
+  }
+
   return (
     <>
       <div className="flex-1 space-y-4 p-4 sm:p-6 md:p-8">
@@ -276,7 +290,7 @@ export default function RegistersPage() {
                           <TestTubeDiagonal className="mr-2 h-4 w-4" />
                           Test
                       </Button>
-                      <Button onClick={() => setIsIssuanceCubesDialogOpen(true)} disabled={selectedCubeSets.length === 0} variant="outline">
+                      <Button onClick={() => setIsIssuanceCubesDialogOpen(true)} disabled={issuanceDisabled(selectedCubeSets)} variant="outline">
                           <FileSignature className="mr-2 h-4 w-4" />
                           Issuance
                       </Button>
@@ -306,7 +320,7 @@ export default function RegistersPage() {
                             <TestTubeDiagonal className="mr-2 h-4 w-4" />
                             Test
                         </Button>
-                        <Button onClick={() => setIsIssuanceBlocksAndBricksDialogOpen(true)} disabled={selectedBlocksAndBricksSets.length === 0} variant="outline">
+                        <Button onClick={() => setIsIssuanceBlocksAndBricksDialogOpen(true)} disabled={issuanceDisabled(selectedBlocksAndBricksSets)} variant="outline">
                             <FileSignature className="mr-2 h-4 w-4" />
                             Issuance
                         </Button>
@@ -337,7 +351,7 @@ export default function RegistersPage() {
                             <TestTubeDiagonal className="mr-2 h-4 w-4" />
                             Test
                         </Button>
-                        <Button onClick={() => setIsIssuancePaversDialogOpen(true)} disabled={selectedPaverSets.length === 0} variant="outline">
+                        <Button onClick={() => setIsIssuancePaversDialogOpen(true)} disabled={issuanceDisabled(selectedPaverSets)} variant="outline">
                             <FileSignature className="mr-2 h-4 w-4" />
                             Issuance
                         </Button>
@@ -368,7 +382,7 @@ export default function RegistersPage() {
                             <TestTubeDiagonal className="mr-2 h-4 w-4" />
                             Test
                         </Button>
-                        <Button onClick={() => setIsIssuanceCylindersDialogOpen(true)} disabled={selectedCylinderSets.length === 0} variant="outline">
+                        <Button onClick={() => setIsIssuanceCylindersDialogOpen(true)} disabled={issuanceDisabled(selectedCylinderSets)} variant="outline">
                             <FileSignature className="mr-2 h-4 w-4" />
                             Issuance
                         </Button>

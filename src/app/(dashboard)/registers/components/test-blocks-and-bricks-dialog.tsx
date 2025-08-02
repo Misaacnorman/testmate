@@ -134,7 +134,7 @@ export function TestBlocksAndBricksDialog({ items, onOpenChange, onBatchUpdate }
         <ScrollArea className="flex-grow pr-6 -mr-6">
           <form id="test-b-and-b-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             {currentItem ? (
-                <>
+                <div className="p-1">
                 <div className="space-y-4 p-4 border rounded-lg bg-muted/50">
                     <h4 className="font-semibold text-lg mb-2">Sample Information</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
@@ -147,41 +147,41 @@ export function TestBlocksAndBricksDialog({ items, onOpenChange, onBatchUpdate }
                     </div>
                 </div>
                 
-                <div className="space-y-4">
+                <div className="space-y-4 mt-4">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="space-y-2"><Label>Length (mm)</Label><Input {...form.register(`items.${currentStep}.dimensions.length`)} /></div>
-                    <div className="space-y-2"><Label>Width (mm)</Label><Input {...form.register(`items.${currentStep}.dimensions.width`)} /></div>
-                    <div className="space-y-2"><Label>Height (mm)</Label><Input {...form.register(`items.${currentStep}.dimensions.height`)} /></div>
+                    <div className="space-y-2"><Label>Length (mm)</Label><Input type="text" inputMode="decimal" {...form.register(`items.${currentStep}.dimensions.length`)} /></div>
+                    <div className="space-y-2"><Label>Width (mm)</Label><Input type="text" inputMode="decimal" {...form.register(`items.${currentStep}.dimensions.width`)} /></div>
+                    <div className="space-y-2"><Label>Height (mm)</Label><Input type="text" inputMode="decimal" {...form.register(`items.${currentStep}.dimensions.height`)} /></div>
                   </div>
 
                   <Separator />
                   <Label className="font-semibold">Dimensions of Holes &amp; No. (for Hollow Blocks)</Label>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-2 p-2 border rounded-md">
                      <Label className="md:col-span-3 font-medium">Hole A</Label>
-                     <div className="space-y-2"><Label>No.</Label><Input {...form.register(`items.${currentStep}.dimensionsOfHoles.holeA.no`)} /></div>
-                     <div className="space-y-2"><Label>L (mm)</Label><Input {...form.register(`items.${currentStep}.dimensionsOfHoles.holeA.l`)} /></div>
-                     <div className="space-y-2"><Label>W (mm)</Label><Input {...form.register(`items.${currentStep}.dimensionsOfHoles.holeA.w`)} /></div>
+                     <div className="space-y-2"><Label>No.</Label><Input type="text" inputMode="numeric" {...form.register(`items.${currentStep}.dimensionsOfHoles.holeA.no`)} /></div>
+                     <div className="space-y-2"><Label>L (mm)</Label><Input type="text" inputMode="decimal" {...form.register(`items.${currentStep}.dimensionsOfHoles.holeA.l`)} /></div>
+                     <div className="space-y-2"><Label>W (mm)</Label><Input type="text" inputMode="decimal" {...form.register(`items.${currentStep}.dimensionsOfHoles.holeA.w`)} /></div>
                      
                      <Label className="md:col-span-3 font-medium">Hole B</Label>
-                     <div className="space-y-2"><Label>No.</Label><Input {...form.register(`items.${currentStep}.dimensionsOfHoles.holeB.no`)} /></div>
-                     <div className="space-y-2"><Label>L (mm)</Label><Input {...form.register(`items.${currentStep}.dimensionsOfHoles.holeB.l`)} /></div>
-                     <div className="space-y-2"><Label>W (mm)</Label><Input {...form.register(`items.${currentStep}.dimensionsOfHoles.holeB.w`)} /></div>
+                     <div className="space-y-2"><Label>No.</Label><Input type="text" inputMode="numeric" {...form.register(`items.${currentStep}.dimensionsOfHoles.holeB.no`)} /></div>
+                     <div className="space-y-2"><Label>L (mm)</Label><Input type="text" inputMode="decimal" {...form.register(`items.${currentStep}.dimensionsOfHoles.holeB.l`)} /></div>
+                     <div className="space-y-2"><Label>W (mm)</Label><Input type="text" inputMode="decimal" {...form.register(`items.${currentStep}.dimensionsOfHoles.holeB.w`)} /></div>
 
                      <Label className="md:col-span-3 font-medium">Notch</Label>
-                     <div className="space-y-2"><Label>No.</Label><Input {...form.register(`items.${currentStep}.dimensionsOfHoles.notch.no`)} /></div>
-                     <div className="space-y-2"><Label>L (mm)</Label><Input {...form.register(`items.${currentStep}.dimensionsOfHoles.notch.l`)} /></div>
-                     <div className="space-y-2"><Label>W (mm)</Label><Input {...form.register(`items.${currentStep}.dimensionsOfHoles.notch.w`)} /></div>
+                     <div className="space-y-2"><Label>No.</Label><Input type="text" inputMode="numeric" {...form.register(`items.${currentStep}.dimensionsOfHoles.notch.no`)} /></div>
+                     <div className="space-y-2"><Label>L (mm)</Label><Input type="text" inputMode="decimal" {...form.register(`items.${currentStep}.dimensionsOfHoles.notch.l`)} /></div>
+                     <div className="space-y-2"><Label>W (mm)</Label><Input type="text" inputMode="decimal" {...form.register(`items.${currentStep}.dimensionsOfHoles.notch.w`)} /></div>
                   </div>
                   <Separator />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                     <div className="space-y-2"><Label>Weight (kg)</Label><Input type="number" step="any" {...form.register(`items.${currentStep}.weightKg`)} /></div>
-                     <div className="space-y-2"><Label>Load (kN)</Label><Input type="number" step="any" {...form.register(`items.${currentStep}.loadKN`)} /></div>
+                     <div className="space-y-2"><Label>Weight (kg)</Label><Input type="text" inputMode="decimal" {...form.register(`items.${currentStep}.weightKg`)} /></div>
+                     <div className="space-y-2"><Label>Load (kN)</Label><Input type="text" inputMode="decimal" {...form.register(`items.${currentStep}.loadKN`)} /></div>
                   </div>
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                      <div className="space-y-2"><Label>Mode of Failure</Label><Input {...form.register(`items.${currentStep}.modeOfFailure`)} /></div>
                   </div>
                 </div>
-                </>
+                </div>
             ) : null}
           </form>
         </ScrollArea>

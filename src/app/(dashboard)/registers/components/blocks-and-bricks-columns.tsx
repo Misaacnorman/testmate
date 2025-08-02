@@ -84,7 +84,7 @@ export const getColumns = ({ onEdit }: BlocksAndBricksColumnsProps): ColumnDef<B
   {
     accessorKey: "ageDays",
     header: () => <CenteredHeader title="Age" subtitle="(Days)" />,
-    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.ageDays || '-'}</div>)}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples[0]?.ageDays || '-'}</div>,
   },
   {
     accessorKey: "areaOfUse",

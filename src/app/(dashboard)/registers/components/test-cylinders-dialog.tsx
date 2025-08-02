@@ -129,7 +129,7 @@ export function TestCylindersDialog({ items, onOpenChange, onBatchUpdate }: Test
         <ScrollArea className="flex-grow pr-6 -mr-6">
           <form id="test-cylinders-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             {currentItem && (
-                <>
+                <div className="p-1">
                 <div className="space-y-4 p-4 border rounded-lg bg-muted/50">
                   <h4 className="font-semibold text-lg mb-2">Sample Information</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
@@ -142,26 +142,26 @@ export function TestCylindersDialog({ items, onOpenChange, onBatchUpdate }: Test
                   </div>
                 </div>
                 
-                <div className="space-y-4">
+                <div className="space-y-4 mt-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label>Diameter (mm)</Label>
-                      <Input {...form.register(`items.${currentStep}.dimensions.diameter`)} />
+                      <Input type="text" inputMode="decimal" {...form.register(`items.${currentStep}.dimensions.diameter`)} />
                     </div>
                     <div className="space-y-2">
                       <Label>Height (mm)</Label>
-                      <Input {...form.register(`items.${currentStep}.dimensions.height`)} />
+                      <Input type="text" inputMode="decimal" {...form.register(`items.${currentStep}.dimensions.height`)} />
                     </div>
                   </div>
                   <Separator />
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                      <div className="space-y-2">
                         <Label>Weight (kg)</Label>
-                        <Input type="number" step="any" {...form.register(`items.${currentStep}.weightKg`)} />
+                        <Input type="text" inputMode="decimal" {...form.register(`items.${currentStep}.weightKg`)} />
                      </div>
                      <div className="space-y-2">
                         <Label>Load (kN)</Label>
-                        <Input type="number" step="any" {...form.register(`items.${currentStep}.loadKN`)} />
+                        <Input type="text" inputMode="decimal" {...form.register(`items.${currentStep}.loadKN`)} />
                      </div>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -171,7 +171,7 @@ export function TestCylindersDialog({ items, onOpenChange, onBatchUpdate }: Test
                      </div>
                   </div>
                 </div>
-                </>
+                </div>
             )}
           </form>
         </ScrollArea>

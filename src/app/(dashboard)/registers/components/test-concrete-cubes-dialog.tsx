@@ -133,7 +133,7 @@ export function TestConcreteCubesDialog({ items, onOpenChange, onBatchUpdate }: 
           <ScrollArea className="flex-grow pr-6 -mr-6">
             <form id="test-cubes-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             {currentItem && (
-             <>
+             <div className="p-1">
                 <div className="space-y-4 p-4 border rounded-lg bg-muted/50">
                     <h4 className="font-semibold text-lg mb-2">Sample Information</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
@@ -146,30 +146,30 @@ export function TestConcreteCubesDialog({ items, onOpenChange, onBatchUpdate }: 
                     </div>
                 </div>
                 
-                <div className="space-y-4">
+                <div className="space-y-4 mt-4">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="space-y-2">
                         <Label htmlFor={`cubes.${currentStep}.dimensions.length`}>Length (mm)</Label>
-                        <Input id={`cubes.${currentStep}.dimensions.length`} {...form.register(`cubes.${currentStep}.dimensions.length`)} />
+                        <Input type="text" inputMode="decimal" id={`cubes.${currentStep}.dimensions.length`} {...form.register(`cubes.${currentStep}.dimensions.length`)} />
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor={`cubes.${currentStep}.dimensions.width`}>Width (mm)</Label>
-                        <Input id={`cubes.${currentStep}.dimensions.width`} {...form.register(`cubes.${currentStep}.dimensions.width`)} />
+                        <Input type="text" inputMode="decimal" id={`cubes.${currentStep}.dimensions.width`} {...form.register(`cubes.${currentStep}.dimensions.width`)} />
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor={`cubes.${currentStep}.dimensions.height`}>Height (mm)</Label>
-                        <Input id={`cubes.${currentStep}.dimensions.height`} {...form.register(`cubes.${currentStep}.dimensions.height`)} />
+                        <Input type="text" inputMode="decimal" id={`cubes.${currentStep}.dimensions.height`} {...form.register(`cubes.${currentStep}.dimensions.height`)} />
                     </div>
                     </div>
                     <Separator />
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                         <Label htmlFor={`cubes.${currentStep}.weightKg`}>Weight (kg)</Label>
-                        <Input id={`cubes.${currentStep}.weightKg`} type="number" step="any" {...form.register(`cubes.${currentStep}.weightKg`)} />
+                        <Input type="text" inputMode="decimal" id={`cubes.${currentStep}.weightKg`} {...form.register(`cubes.${currentStep}.weightKg`)} />
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor={`cubes.${currentStep}.loadKN`}>Load (kN)</Label>
-                        <Input id={`cubes.${currentStep}.loadKN`} type="number" step="any" {...form.register(`cubes.${currentStep}.loadKN`)} />
+                        <Input type="text" inputMode="decimal" id={`cubes.${currentStep}.loadKN`} {...form.register(`cubes.${currentStep}.loadKN`)} />
                     </div>
                     </div>
                      <div className="space-y-2">
@@ -177,7 +177,7 @@ export function TestConcreteCubesDialog({ items, onOpenChange, onBatchUpdate }: 
                         <Input id={`cubes.${currentStep}.modeOfFailure`} {...form.register(`cubes.${currentStep}.modeOfFailure`)} />
                     </div>
                 </div>
-             </>
+             </div>
             )}
             </form>
           </ScrollArea>
