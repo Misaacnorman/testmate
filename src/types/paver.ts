@@ -32,3 +32,11 @@ export type Paver = {
     contact: string;
     sampleReceiptNo: string;
 };
+
+
+// Represents a set of samples with common properties, for UI display
+export type PaverSet = Omit<Paver, 'id' | 'sampleId'> & {
+    id: string; // Composite key for the set
+    sampleIds: string[];
+    docIds: string[]; // Firestore document IDs for each sample in the set
+};

@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Paver } from "@/types/paver";
+import { PaverSet } from "@/types/paver";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -28,7 +28,6 @@ const itemSchema = z.object({
   testingDate: z.string().optional(),
   ageDays: z.coerce.number().optional(),
   areaOfUse: z.string().optional(),
-  sampleId: z.string().optional(),
   paverType: z.string().optional(),
   dimensions: z.object({
     length: z.coerce.number().optional(),
@@ -51,12 +50,14 @@ const itemSchema = z.object({
   date: z.string().optional(),
   contact: z.string().optional(),
   sampleReceiptNo: z.string().optional(),
+  sampleIds: z.array(z.string()),
+  docIds: z.array(z.string()),
 });
 
 type EditPaverDialogProps = {
-  item: Paver;
+  item: PaverSet;
   onOpenChange: (open: boolean) => void;
-  onItemUpdated: (item: Paver) => void;
+  onItemUpdated: (item: PaverSet) => void;
 };
 
 export function EditPaverDialog({ item, onOpenChange, onItemUpdated }: EditPaverDialogProps) {
@@ -72,7 +73,7 @@ export function EditPaverDialog({ item, onOpenChange, onItemUpdated }: EditPaver
   }, [item, form]);
 
   const onSubmit = (values: z.infer<typeof itemSchema>) => {
-    onItemUpdated({ id: item.id, ...values } as Paver);
+    onItemUpdated({ ...item, ...values });
   };
 
   const handleNext = () => setCurrentStep(prev => prev < 2 ? prev + 1 : prev);
@@ -82,9 +83,9 @@ export function EditPaverDialog({ item, onOpenChange, onItemUpdated }: EditPaver
     <Dialog open={true} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl max-h-[90vh] flex flex-col">
         <DialogHeader>
-          <DialogTitle>Edit Paver Test (Step {currentStep} of 2)</DialogTitle>
+          <DialogTitle>Edit Paver Test Set (Step {currentStep} of 2)</DialogTitle>
           <DialogDescription>
-            Update the test details for Sample ID: {item.sampleId}.
+            Update the test details for this set of {item.sampleIds.length} samples.
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="flex-grow pr-6 -mr-6">
@@ -94,7 +95,7 @@ export function EditPaverDialog({ item, onOpenChange, onItemUpdated }: EditPaver
                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
                     <div><Label>Client:</Label><p>{item.client}</p></div>
                     <div><Label>Project:</Label><p>{item.project}</p></div>
-                    <div><Label>Sample ID:</Label><p className="font-mono">{item.sampleId}</p></div>
+                    <div><Label>Sample IDs:</Label><p className="font-mono">{item.sampleIds.join(', ')}</p></div>
                     <div><Label>Date Received:</Label><p>{item.dateReceived}</p></div>
                     <div><Label>Casting Date:</Label><p>{item.castingDate}</p></div>
                     <div><Label>Testing Date:</Label><p>{item.testingDate}</p></div>
