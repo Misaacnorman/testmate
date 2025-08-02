@@ -27,7 +27,7 @@ const SortableHeader = ({ title, column }: { title: string, column: any }) => (
 );
 
 type ConcreteCubesColumnsProps = {
-  onEdit: (cube: ConcreteCube) => void;
+  onEdit: (cubes: ConcreteCube[]) => void;
 };
 
 export const getColumns = ({ onEdit }: ConcreteCubesColumnsProps): ColumnDef<ConcreteCubeSet>[] => [
@@ -104,10 +104,20 @@ export const getColumns = ({ onEdit }: ConcreteCubesColumnsProps): ColumnDef<Con
     header: () => <CenteredHeader title="Age" subtitle="(Days)" />,
     cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.ageDays || '-'}</div>)}</div>,
   },
-  {
+    {
     id: "modeOfFailure",
     header: () => <CenteredHeader title="Mode of Failure" />,
     cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.modeOfFailure || '-'}</div>)}</div>,
+  },
+  {
+    id: 'technician',
+    header: () => <CenteredHeader title="Technician" />,
+    cell: ({ row }) => <div>{row.original.samples[0].technician || '-'}</div>,
+  },
+   {
+    id: 'certificateNumber',
+    header: () => <CenteredHeader title="Certificate No." />,
+    cell: ({ row }) => <div>{row.original.samples[0].certificateNumber || '-'}</div>,
   },
   {
     id: "actions",
@@ -123,16 +133,12 @@ export const getColumns = ({ onEdit }: ConcreteCubesColumnsProps): ColumnDef<Con
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            {samples.map((sample) => (
-                 <DropdownMenuItem key={sample.id} onClick={() => onEdit(sample)}>
-                    Edit Sample {sample.sampleId}
-                 </DropdownMenuItem>
-            ))}
+             <DropdownMenuItem onClick={() => onEdit(samples)}>
+                Edit Set ({samples.length} Samples)
+             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
     },
   },
 ];
-
-    

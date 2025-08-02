@@ -27,7 +27,7 @@ const SortableHeader = ({ title, column }: { title: string, column: any }) => (
 );
 
 type CylinderColumnsProps = {
-  onEdit: (item: Cylinder) => void;
+  onEdit: (items: Cylinder[]) => void;
 };
 
 export const getColumns = ({ onEdit }: CylinderColumnsProps): ColumnDef<CylinderSet>[] => [
@@ -131,7 +131,7 @@ export const getColumns = ({ onEdit }: CylinderColumnsProps): ColumnDef<Cylinder
   {
     id: "machineUsed",
     header: () => <CenteredHeader title="Machine Used" />,
-    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.machineUsed || '-'}</div>)}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples[0].machineUsed || '-'}</div>,
   },
   {
     id: "loadKN",
@@ -146,52 +146,52 @@ export const getColumns = ({ onEdit }: CylinderColumnsProps): ColumnDef<Cylinder
   {
     id: "recordedTemperature",
     header: () => <CenteredHeader title="Recorded Temperature" subtitle="at the Facility (°C)" />,
-    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.recordedTemperature || '-'}</div>)}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples[0].recordedTemperature || '-'}</div>,
   },
   {
     id: "certificateNumber",
     header: () => <CenteredHeader title="Certificate Number" />,
-    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.certificateNumber || '-'}</div>)}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples[0].certificateNumber || '-'}</div>,
   },
   {
     id: "comment",
     header: () => <CenteredHeader title="Comment" />,
-    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.comment || '-'}</div>)}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples[0].comment || '-'}</div>,
   },
   {
     id: "technician",
     header: () => <CenteredHeader title="Technician" subtitle="(Name &amp; Signature)" />,
-    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.technician || '-'}</div>)}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples[0].technician || '-'}</div>,
   },
   {
     id: "dateOfIssue",
     header: () => <CenteredHeader title="Date of Issue" />,
-    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.dateOfIssue || '-'}</div>)}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples[0].dateOfIssue || '-'}</div>,
   },
   {
     id: "issueIdSerialNo",
     header: () => <CenteredHeader title="Issue ID/ Serial No." />,
-    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.issueIdSerialNo || '-'}</div>)}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples[0].issueIdSerialNo || '-'}</div>,
   },
   {
     id: "takenBy",
     header: () => <CenteredHeader title="Taken by" />,
-    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.takenBy || '-'}</div>)}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples[0].takenBy || '-'}</div>,
   },
   {
     id: "date",
     header: () => <CenteredHeader title="Date" />,
-    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.date || '-'}</div>)}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples[0].date || '-'}</div>,
   },
   {
     id: "contact",
     header: () => <CenteredHeader title="Contact" />,
-    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.contact || '-'}</div>)}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples[0].contact || '-'}</div>,
   },
   {
     id: "sampleReceiptNo",
     header: () => <CenteredHeader title="Sample Receipt No" />,
-    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.sampleReceiptNo || '-'}</div>)}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples[0].sampleReceiptNo || '-'}</div>,
   },
   {
     id: "actions",
@@ -207,16 +207,12 @@ export const getColumns = ({ onEdit }: CylinderColumnsProps): ColumnDef<Cylinder
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            {item.samples.map(sample => (
-              <DropdownMenuItem key={sample.id} onClick={() => onEdit(sample)}>
-                Edit Sample {sample.sampleId}
-              </DropdownMenuItem>
-            ))}
+            <DropdownMenuItem onClick={() => onEdit(item.samples)}>
+                Edit Set ({item.samples.length} samples)
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
     },
   },
 ];
-
-    

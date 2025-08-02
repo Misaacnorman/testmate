@@ -27,7 +27,7 @@ const SortableHeader = ({ title, column }: { title: string, column: any }) => (
 );
 
 type BlocksAndBricksColumnsProps = {
-  onEdit: (item: BlockAndBrick) => void;
+  onEdit: (items: BlockAndBrick[]) => void;
 };
 
 export const getColumns = ({ onEdit }: BlocksAndBricksColumnsProps): ColumnDef<BlockAndBrickSet>[] => [
@@ -169,7 +169,7 @@ export const getColumns = ({ onEdit }: BlocksAndBricksColumnsProps): ColumnDef<B
   {
     id: "machineUsed",
     header: () => <CenteredHeader title="Machine Used" />,
-    cell: ({ row }) => <div>{row.original.samples.map(s => <div key={s.id}>{s.machineUsed || '-'}</div>)}</div>,
+    cell: ({ row }) => <div>{row.original.samples[0].machineUsed || '-'}</div>,
   },
   {
     id: "loadKN",
@@ -184,7 +184,7 @@ export const getColumns = ({ onEdit }: BlocksAndBricksColumnsProps): ColumnDef<B
   {
     id: "recordedTemperature",
     header: () => <CenteredHeader title="Recorded Temperature" subtitle="at the Facility (°C)" />,
-    cell: ({ row }) => <div className="text-center">{row.original.samples.map(s => <div key={s.id}>{s.recordedTemperature || '-'}</div>)}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.samples[0].recordedTemperature || '-'}</div>,
   },
   {
     id: "certificateNumber",
@@ -245,16 +245,12 @@ export const getColumns = ({ onEdit }: BlocksAndBricksColumnsProps): ColumnDef<B
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            {samples.map((sample) => (
-                 <DropdownMenuItem key={sample.id} onClick={() => onEdit(sample)}>
-                    Edit Sample {sample.sampleId}
-                 </DropdownMenuItem>
-            ))}
+            <DropdownMenuItem onClick={() => onEdit(samples)}>
+                Edit Set ({samples.length} samples)
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
     },
   },
 ];
-
-    

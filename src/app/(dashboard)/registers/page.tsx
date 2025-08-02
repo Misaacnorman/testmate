@@ -24,18 +24,17 @@ import { Paver, PaverSet } from '@/types/paver';
 import { getPavers, updatePaver, deletePaverSet } from '@/services/pavers';
 import { getColumns as getPaverColumns } from './components/paver-columns';
 import { PaversTable } from './components/pavers-table';
-import { Cylinder } from '@/types/cylinder';
+import { Cylinder, CylinderSet } from '@/types/cylinder';
 import { getCylinders, updateCylinder } from '@/services/cylinders';
 import { getColumns as getCylinderColumns } from './components/cylinder-columns';
 import { CylindersTable } from './components/cylinders-table';
-import { WaterAbsorption } from '@/types/water-absorption';
+import { WaterAbsorption, WaterAbsorptionSet } from '@/types/water-absorption';
 import { getWaterAbsorptions, updateWaterAbsorption } from '@/services/water-absorptions';
 import { getColumns as getWaterAbsorptionColumns } from './components/water-absorption-columns';
 import { WaterAbsorptionTable } from './components/water-absorption-table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { TestTubeDiagonal } from 'lucide-react';
-import { EditConcreteCubeDialog } from './components/edit-concrete-cube-dialog';
 import { TestConcreteCubesDialog } from './components/test-concrete-cubes-dialog';
 import { TestBlocksAndBricksDialog } from './components/test-blocks-and-bricks-dialog';
 import { TestPaversDialog } from './components/test-pavers-dialog';
@@ -67,7 +66,6 @@ export default function RegistersPage() {
   
   const [isTestCubesDialogOpen, setIsTestCubesDialogOpen] = useState(false);
   const [selectedCubes, setSelectedCubes] = useState<ConcreteCube[]>([]);
-  const [editingConcreteCube, setEditingConcreteCube] = useState<ConcreteCube | null>(null);
 
   const [isTestBlocksAndBricksDialogOpen, setIsTestBlocksAndBricksDialogOpen] = useState(false);
   const [selectedBlocksAndBricks, setSelectedBlocksAndBricks] = useState<BlockAndBrick[]>([]);
@@ -165,7 +163,7 @@ export default function RegistersPage() {
 
   const handlePaverSetDeleted = async (item: PaverSet) => {
     try {
-      await deletePaverSet(item.docIds);
+      await deletePaverSet(item.samples.map(s => s.id));
       toast({ title: "Paver Test Set Deleted" });
       fetchAndSetData(getPavers, setPavers, setIsPaversLoading, 'pavers');
     } catch (error) {
@@ -210,15 +208,14 @@ export default function RegistersPage() {
   }, [blocksAndBricks]);
   
   const paverSets: PaverSet[] = useMemo(() => {
-    const grouped = groupIntoSets<Paver>(pavers, ['client', 'project', 'dateReceived', 'castingDate', 'testingDate', 'areaOfUse', 'paverType']);
-    return grouped.map(g => ({ ...g, sampleIds: g.samples.map(s => s.sampleId), docIds: g.samples.map(s => s.id) }));
+    return groupIntoSets<Paver>(pavers, ['client', 'project', 'dateReceived', 'castingDate', 'testingDate', 'areaOfUse', 'paverType']);
   }, [pavers]);
 
-  const cylinderSets = useMemo(() => {
+  const cylinderSets: CylinderSet[] = useMemo(() => {
     return groupIntoSets<Cylinder>(cylinders, ['client', 'project', 'dateReceived', 'castingDate', 'testingDate', 'class', 'areaOfUse']);
   }, [cylinders]);
 
-  const waterAbsorptionSets = useMemo(() => {
+  const waterAbsorptionSets: WaterAbsorptionSet[] = useMemo(() => {
     return groupIntoSets<WaterAbsorption>(waterAbsorptions, ['client', 'project', 'dateReceived', 'castingDate', 'testingDate', 'areaOfUse', 'sampleType']);
   }, [waterAbsorptions]);
 
@@ -258,35 +255,35 @@ export default function RegistersPage() {
           <TabsContent value="concrete-cubes">
             <Card>
               <CardHeader><div className="flex justify-between items-center"><div><CardTitle>Concrete Cubes</CardTitle><CardDescription>A register for all concrete cube tests.</CardDescription></div><Button onClick={() => setIsTestCubesDialogOpen(true)} disabled={selectedCubes.length === 0}><TestTubeDiagonal className="mr-2 h-4 w-4" />Test ({selectedCubes.length})</Button></div></CardHeader>
-              <CardContent><ConcreteCubesTable columns={getConcreteCubesColumns({ onEdit: (sample) => { setSelectedCubes([sample]); setIsTestCubesDialogOpen(true); } })} data={concreteCubeSets} isLoading={isConcreteCubesLoading} onSelectionChange={(rows) => setSelectedCubes(rows.flatMap(set => set.samples))} /></CardContent>
+              <CardContent><ConcreteCubesTable columns={getConcreteCubesColumns({ onEdit: (samples) => { setSelectedCubes(samples); setIsTestCubesDialogOpen(true); } })} data={concreteCubeSets} isLoading={isConcreteCubesLoading} onSelectionChange={(rows) => setSelectedCubes(rows.flatMap(set => set.samples))} /></CardContent>
             </Card>
           </TabsContent>
 
           <TabsContent value="blocks-and-bricks">
             <Card>
               <CardHeader><div className="flex justify-between items-center"><div><CardTitle>Sample Register/Log for Bricks &amp; Blocks</CardTitle><CardDescription>A register for all brick and block tests.</CardDescription></div><Button onClick={() => setIsTestBlocksAndBricksDialogOpen(true)} disabled={selectedBlocksAndBricks.length === 0}><TestTubeDiagonal className="mr-2 h-4 w-4" />Test ({selectedBlocksAndBricks.length})</Button></div></CardHeader>
-              <CardContent><BlocksAndBricksTable columns={getBlocksAndBricksColumns({ onEdit: (sample) => { setSelectedBlocksAndBricks([sample]); setIsTestBlocksAndBricksDialogOpen(true); } })} data={blocksAndBricksSets} isLoading={isBlocksAndBricksLoading} onSelectionChange={(rows) => setSelectedBlocksAndBricks(rows.flatMap(set => set.samples))} /></CardContent>
+              <CardContent><BlocksAndBricksTable columns={getBlocksAndBricksColumns({ onEdit: (samples) => { setSelectedBlocksAndBricks(samples); setIsTestBlocksAndBricksDialogOpen(true); } })} data={blocksAndBricksSets} isLoading={isBlocksAndBricksLoading} onSelectionChange={(rows) => setSelectedBlocksAndBricks(rows.flatMap(set => set.samples))} /></CardContent>
             </Card>
           </TabsContent>
 
           <TabsContent value="pavers">
             <Card>
               <CardHeader><div className="flex justify-between items-center"><div><CardTitle>Sample Register/Log for Pavers</CardTitle><CardDescription>A register for all paver tests.</CardDescription></div><Button onClick={() => setIsTestPaversDialogOpen(true)} disabled={selectedPavers.length === 0}><TestTubeDiagonal className="mr-2 h-4 w-4" />Test ({selectedPavers.length})</Button></div></CardHeader>
-              <CardContent><PaversTable columns={getPaverColumns({ onEdit: (set) => { setSelectedPavers(set.samples); setIsTestPaversDialogOpen(true); }, onDelete: handlePaverSetDeleted })} data={paverSets} isLoading={isPaversLoading} onSelectionChange={(rows) => setSelectedPavers(rows.flatMap(set => set.samples))} /></CardContent>
+              <CardContent><PaversTable columns={getPaverColumns({ onEdit: (samples) => { setSelectedPavers(samples); setIsTestPaversDialogOpen(true); }, onDelete: handlePaverSetDeleted })} data={paverSets} isLoading={isPaversLoading} onSelectionChange={(rows) => setSelectedPavers(rows.flatMap(set => set.samples))} /></CardContent>
             </Card>
           </TabsContent>
 
            <TabsContent value="cylinders">
             <Card>
               <CardHeader><div className="flex justify-between items-center"><div><CardTitle>Sample Register/Log for Concrete Cylinders</CardTitle><CardDescription>A register for all concrete cylinder tests.</CardDescription></div><Button onClick={() => setIsTestCylindersDialogOpen(true)} disabled={selectedCylinders.length === 0}><TestTubeDiagonal className="mr-2 h-4 w-4" />Test ({selectedCylinders.length})</Button></div></CardHeader>
-              <CardContent><CylindersTable columns={getCylinderColumns({ onEdit: (sample) => { setSelectedCylinders([sample]); setIsTestCylindersDialogOpen(true); } })} data={cylinderSets} isLoading={isCylindersLoading} onSelectionChange={(rows) => setSelectedCylinders(rows.flatMap(set => set.samples))} /></CardContent>
+              <CardContent><CylindersTable columns={getCylinderColumns({ onEdit: (samples) => { setSelectedCylinders(samples); setIsTestCylindersDialogOpen(true); } })} data={cylinderSets} isLoading={isCylindersLoading} onSelectionChange={(rows) => setSelectedCylinders(rows.flatMap(set => set.samples))} /></CardContent>
             </Card>
           </TabsContent>
 
           <TabsContent value="water-absorption">
             <Card>
               <CardHeader><div className="flex justify-between items-center"><div><CardTitle>Sample Register/Log for Bricks &amp; Blocks for Water</CardTitle><CardDescription>A register for all water absorption tests on bricks and blocks.</CardDescription></div><Button onClick={() => setIsTestWaterAbsorptionsDialogOpen(true)} disabled={selectedWaterAbsorptions.length === 0}><TestTubeDiagonal className="mr-2 h-4 w-4" />Test ({selectedWaterAbsorptions.length})</Button></div></CardHeader>
-              <CardContent><WaterAbsorptionTable columns={getWaterAbsorptionColumns({ onEdit: (sample) => { setSelectedWaterAbsorptions([sample]); setIsTestWaterAbsorptionsDialogOpen(true); } })} data={waterAbsorptionSets} isLoading={isWaterAbsorptionsLoading} onSelectionChange={(rows) => setSelectedWaterAbsorptions(rows.flatMap(set => set.samples))} /></CardContent>
+              <CardContent><WaterAbsorptionTable columns={getWaterAbsorptionColumns({ onEdit: (samples) => { setSelectedWaterAbsorptions(samples); setIsTestWaterAbsorptionsDialogOpen(true); } })} data={waterAbsorptionSets} isLoading={isWaterAbsorptionsLoading} onSelectionChange={(rows) => setSelectedWaterAbsorptions(rows.flatMap(set => set.samples))} /></CardContent>
             </Card>
           </TabsContent>
 
@@ -294,7 +291,6 @@ export default function RegistersPage() {
       </div>
       
       {editingProject && <EditProjectDialog project={editingProject} onOpenChange={(open) => !open && setEditingProject(null)} onProjectUpdated={handleProjectUpdated} />}
-      {editingConcreteCube && <EditConcreteCubeDialog item={editingConcreteCube} onOpenChange={(open) => !open && setEditingConcreteCube(null)} onItemUpdated={(item) => handleBatchUpdate([item], updateConcreteCube, getConcreteCubes, setConcreteCubes, setIsConcreteCubesLoading, 'concrete cube', () => setEditingConcreteCube(null))} />}
       
       {isTestCubesDialogOpen && selectedCubes.length > 0 && <TestConcreteCubesDialog items={selectedCubes} onOpenChange={setIsTestCubesDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateConcreteCube, getConcreteCubes, setConcreteCubes, setIsConcreteCubesLoading, 'concrete cube', () => setIsTestCubesDialogOpen(false))} />}
       {isTestBlocksAndBricksDialogOpen && selectedBlocksAndBricks.length > 0 && <TestBlocksAndBricksDialog items={selectedBlocksAndBricks} onOpenChange={setIsTestBlocksAndBricksDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateBlockAndBrick, getBlocksAndBricks, setBlocksAndBricks, setIsBlocksAndBricksLoading, 'block/brick', () => setIsTestBlocksAndBricksDialogOpen(false))} />}

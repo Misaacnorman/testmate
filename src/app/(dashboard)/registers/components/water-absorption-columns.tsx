@@ -27,7 +27,7 @@ const SortableHeader = ({ title, column }: { title: string, column: any }) => (
 );
 
 type WaterAbsorptionColumnsProps = {
-  onEdit: (item: WaterAbsorption) => void;
+  onEdit: (items: WaterAbsorption[]) => void;
 };
 
 export const getColumns = ({ onEdit }: WaterAbsorptionColumnsProps): ColumnDef<WaterAbsorptionSet>[] => [
@@ -201,11 +201,9 @@ export const getColumns = ({ onEdit }: WaterAbsorptionColumnsProps): ColumnDef<W
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            {samples.map((sample) => (
-              <DropdownMenuItem key={sample.id} onClick={() => onEdit(sample)}>
-                Edit Sample {sample.sampleId}
-              </DropdownMenuItem>
-            ))}
+            <DropdownMenuItem onClick={() => onEdit(samples)}>
+              Edit Set ({samples.length} samples)
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
