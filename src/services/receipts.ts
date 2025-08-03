@@ -157,11 +157,14 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
         takenBy: formData.deliveredBy,
         date: formattedReceiptDate,
     };
+    
+    const projectAddedForReceipt = new Set<string>();
 
-    const nonSpecialCategories = Object.entries(categories).filter(([category]) => !specialData[category]);
 
     // Handle special categories first
-    for (const [category, testDetails] of Object.entries(specialData)) {
+    for (const [category, catDetails] of Object.entries(specialData)) {
+      const tests = catDetails as Record<string, any>;
+      for (const [testId, testDetails] of Object.entries(tests)) {
         for (const set of testDetails.sets) {
             const formattedCastingDate = set.castingDate ? safeFormat(set.castingDate, "yyyy-MM-dd") : '';
             const formattedTestingDate = set.testingDate ? safeFormat(set.testingDate, "yyyy-MM-dd") : '';
@@ -179,30 +182,39 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
                 if (category.toLowerCase() === 'concrete cubes') {
                     await addConcreteCube({ ...commonSetData, class: set.class || '', dimensions: { length: 0, width: 0, height: 0 }, weightKg: 0, machineUsed: '', loadKN: 0, modeOfFailure: '', recordedTemperature: '', certificateNumber: '', comment: '', dateOfIssue: '', issueIdSerialNo: '', sampleReceiptNumber: receiptId });
                 } else if (category.toLowerCase() === 'bricks' || category.toLowerCase() === 'blocks') {
-                    if (testDetails.materialTest?.toLowerCase().includes('water absorption')) {
+                     const isWaterAbsorption = categories[category]?.tests[testId]?.materialTest.toLowerCase().includes('water absorption');
+                     if (isWaterAbsorption) {
                         await addWaterAbsorption({ ...commonSetData, sampleType: category, dimensions: { length: 0, width: 0, height: 0 }, ovenDriedWeightBeforeSoaking: 0, weightAfterSoaking: 0, weightOfWater: 0, calculatedWaterAbsorption: 0, certificateNumber: '', comment: '', dateOfIssue: '', issueIdSerialNo: '' });
                     } else {
                         await addBlockAndBrick({ ...commonSetData, sampleType: category, dimensions: { length: 0, width: 0, height: 0 }, dimensionsOfHoles: { holeA: { no: 0, l: 0, w: 0 }, holeB: { no: 0, l: 0, w: 0 }, notch: { no: 0, l: 0, w: 0 } }, weightKg: 0, machineUsed: '', loadKN: 0, modeOfFailure: '', recordedTemperature: '', certificateNumber: '', comment: '', dateOfIssue: '', issueIdSerialNo: '' });
                     }
                 } else if (category.toLowerCase() === 'pavers') {
-                    await addPaver({ ...commonSetData, paverType: '', dimensions: { length: 0, width: 0, height: 0 }, paversPerSqMetre: 0, calculatedArea: 0, weightKg: 0, machineUsed: '', loadKN: 0, modeOfFailure: '', recordedTemperature: '', certificateNumber: '', comment: '', dateOfIssue: '', issueIdSerialNo: '' });
+                    await addPaver({ ...commonSetData, paverType: testDetails.materialTest || '', dimensions: { length: 0, width: 0, height: 0 }, paversPerSqMetre: 0, calculatedArea: 0, weightKg: 0, machineUsed: '', loadKN: 0, modeOfFailure: '', recordedTemperature: '', certificateNumber: '', comment: '', dateOfIssue: '', issueIdSerialNo: '' });
                 } else if (category.toLowerCase() === 'cylinder') {
                     await addCylinder({ ...commonSetData, class: set.class || '', dimensions: { diameter: 0, height: 0 }, weightKg: 0, machineUsed: '', loadKN: 0, modeOfFailure: '', recordedTemperature: '', certificateNumber: '', comment: '', dateOfIssue: '', issueIdSerialNo: '' });
                 }
             }
         }
+      }
     }
-
-    // Handle non-special categories by creating a single project entry
-    if (nonSpecialCategories.length > 0) {
-        const labTestDetails = nonSpecialCategories.map(([category, catData]) => `${category} (${catData.quantity})`).join(', ');
-        const remarks = nonSpecialCategories.map(([_, catData]) => catData.notes).filter(Boolean).join('; ');
+    
+    // Create a single project log for all non-special categories in the receipt
+    const nonSpecialCategories = Object.entries(categories).filter(([category]) => !specialData[category]);
+    if (nonSpecialCategories.length > 0 && !projectAddedForReceipt.has(receiptId)) {
+       const labTestDetails = nonSpecialCategories
+         .map(([category, catData]) => `${category} (${catData.quantity})`)
+         .join(', ');
+       const remarks = nonSpecialCategories
+         .map(([_, catData]) => catData.notes)
+         .filter(Boolean)
+         .join('; ');
 
         await addProject({
             date: formattedReceiptDate,
             projectId: { big: '', small: `S-${receiptId}` },
             client: formData.clientName,
             project: formData.projectTitle,
+            sampleReceiptNo: receiptId,
             engineerInCharge: '',
             fieldWork: {
                 details: 'N/A', technician: '', startDate: '', endDate: '', remarks: ''
@@ -221,7 +233,9 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
                 acknowledgement: '', issuedBy: '', deliveredTo: '', contact: '', dateTime: ''
             }
         });
+        projectAddedForReceipt.add(receiptId);
     }
+
 
     return newReceipt;
 }

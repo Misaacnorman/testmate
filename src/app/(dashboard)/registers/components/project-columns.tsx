@@ -54,6 +54,11 @@ export const getColumns = ({ onEdit, onDelete }: ProjectColumnsProps): ColumnDef
         }
     ]
   },
+   {
+    accessorKey: "sampleReceiptNo",
+    header: () => <CenteredHeader title="Sample Receipt" subtitle="Number" />,
+    cell: ({ row }) => <div className="min-w-[120px] text-center">{row.original.sampleReceiptNo}</div>,
+  },
   {
     accessorKey: "client",
     header: ({ column }) => <SortableHeader title="CLIENT" column={column} />,

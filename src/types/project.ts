@@ -8,6 +8,7 @@ export type Project = {
     };
     client: string;
     project: string;
+    sampleReceiptNo: string;
     engineerInCharge: string;
     fieldWork: {
         details: string;
