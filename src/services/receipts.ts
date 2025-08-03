@@ -157,142 +157,70 @@ export async function processAndSaveReceipt(receiptData: Omit<Receipt, 'id'>): P
         takenBy: formData.deliveredBy,
         date: formattedReceiptDate,
     };
-    
-    for (const [category, categoryData] of Object.entries(categories)) {
-        
-        const isSpecialCategory = Object.keys(specialData).includes(category);
-        
-        if (isSpecialCategory) {
-            for (const [testId, testDetails] of Object.entries(specialData[category])) {
-                for (const [setIndex, set] of testDetails.sets.entries()) {
-                     const formattedCastingDate = set.castingDate ? safeFormat(set.castingDate, "yyyy-MM-dd") : '';
-                     const formattedTestingDate = set.testingDate ? safeFormat(set.testingDate, "yyyy-MM-dd") : '';
 
-                    for (const sampleId of set.serials) {
-                        const commonSetData = {
-                            ...baseData,
-                            castingDate: formattedCastingDate,
-                            testingDate: formattedTestingDate,
-                            ageDays: set.age || 0,
-                            areaOfUse: set.areaOfUse || '',
-                            sampleId,
-                        };
+    const nonSpecialCategories = Object.entries(categories).filter(([category]) => !specialData[category]);
 
-                        if (category.toLowerCase() === 'concrete cubes') {
-                            await addConcreteCube({
-                                ...commonSetData,
-                                class: set.class || '',
-                                dimensions: { length: 0, width: 0, height: 0 },
-                                weightKg: 0,
-                                machineUsed: '',
-                                loadKN: 0,
-                                modeOfFailure: '',
-                                recordedTemperature: '',
-                                certificateNumber: '',
-                                comment: '',
-                                dateOfIssue: '',
-                                issueIdSerialNo: '',
-                                sampleReceiptNumber: receiptId
-                            });
-                        } else if (category.toLowerCase() === 'bricks' || category.toLowerCase() === 'blocks') {
-                             if (testDetails.materialTest.toLowerCase().includes('water absorption')) {
-                                await addWaterAbsorption({
-                                    ...commonSetData,
-                                    sampleType: category,
-                                    dimensions: { length: 0, width: 0, height: 0 },
-                                    ovenDriedWeightBeforeSoaking: 0,
-                                    weightAfterSoaking: 0,
-                                    weightOfWater: 0,
-                                    calculatedWaterAbsorption: 0,
-                                    certificateNumber: '',
-                                    comment: '',
-                                    dateOfIssue: '',
-                                    issueIdSerialNo: '',
-                                });
-                            } else {
-                                await addBlockAndBrick({
-                                     ...commonSetData,
-                                     sampleType: category,
-                                     dimensions: { length: 0, width: 0, height: 0 },
-                                     dimensionsOfHoles: { holeA: { no: 0, l: 0, w: 0 }, holeB: { no: 0, l: 0, w: 0 }, notch: { no: 0, l: 0, w: 0 } },
-                                     weightKg: 0,
-                                     machineUsed: '',
-                                     loadKN: 0,
-                                     modeOfFailure: '',
-                                     recordedTemperature: '',
-                                     certificateNumber: '',
-                                     comment: '',
-                                     dateOfIssue: '',
-                                     issueIdSerialNo: '',
-                                 });
-                            }
-                        } else if (category.toLowerCase() === 'pavers') {
-                             await addPaver({
-                                ...commonSetData,
-                                paverType: '',
-                                dimensions: { length: 0, width: 0, height: 0 },
-                                paversPerSqMetre: 0,
-                                calculatedArea: 0,
-                                weightKg: 0,
-                                machineUsed: '',
-                                loadKN: 0,
-                                modeOfFailure: '',
-                                recordedTemperature: '',
-                                certificateNumber: '',
-                                comment: '',
-                                dateOfIssue: '',
-                                issueIdSerialNo: '',
-                             });
-                        } else if (category.toLowerCase() === 'cylinder') {
-                            await addCylinder({
-                                ...commonSetData,
-                                class: set.class || '',
-                                dimensions: { diameter: 0, height: 0 },
-                                weightKg: 0,
-                                machineUsed: '',
-                                loadKN: 0,
-                                modeOfFailure: '',
-                                recordedTemperature: '',
-                                certificateNumber: '',
-                                comment: '',
-                                dateOfIssue: '',
-                                issueIdSerialNo: '',
-                            });
-                        }
+    // Handle special categories first
+    for (const [category, testDetails] of Object.entries(specialData)) {
+        for (const set of testDetails.sets) {
+            const formattedCastingDate = set.castingDate ? safeFormat(set.castingDate, "yyyy-MM-dd") : '';
+            const formattedTestingDate = set.testingDate ? safeFormat(set.testingDate, "yyyy-MM-dd") : '';
+
+            for (const sampleId of set.serials) {
+                const commonSetData = {
+                    ...baseData,
+                    castingDate: formattedCastingDate,
+                    testingDate: formattedTestingDate,
+                    ageDays: set.age || 0,
+                    areaOfUse: set.areaOfUse || '',
+                    sampleId,
+                };
+
+                if (category.toLowerCase() === 'concrete cubes') {
+                    await addConcreteCube({ ...commonSetData, class: set.class || '', dimensions: { length: 0, width: 0, height: 0 }, weightKg: 0, machineUsed: '', loadKN: 0, modeOfFailure: '', recordedTemperature: '', certificateNumber: '', comment: '', dateOfIssue: '', issueIdSerialNo: '', sampleReceiptNumber: receiptId });
+                } else if (category.toLowerCase() === 'bricks' || category.toLowerCase() === 'blocks') {
+                    if (testDetails.materialTest?.toLowerCase().includes('water absorption')) {
+                        await addWaterAbsorption({ ...commonSetData, sampleType: category, dimensions: { length: 0, width: 0, height: 0 }, ovenDriedWeightBeforeSoaking: 0, weightAfterSoaking: 0, weightOfWater: 0, calculatedWaterAbsorption: 0, certificateNumber: '', comment: '', dateOfIssue: '', issueIdSerialNo: '' });
+                    } else {
+                        await addBlockAndBrick({ ...commonSetData, sampleType: category, dimensions: { length: 0, width: 0, height: 0 }, dimensionsOfHoles: { holeA: { no: 0, l: 0, w: 0 }, holeB: { no: 0, l: 0, w: 0 }, notch: { no: 0, l: 0, w: 0 } }, weightKg: 0, machineUsed: '', loadKN: 0, modeOfFailure: '', recordedTemperature: '', certificateNumber: '', comment: '', dateOfIssue: '', issueIdSerialNo: '' });
                     }
+                } else if (category.toLowerCase() === 'pavers') {
+                    await addPaver({ ...commonSetData, paverType: '', dimensions: { length: 0, width: 0, height: 0 }, paversPerSqMetre: 0, calculatedArea: 0, weightKg: 0, machineUsed: '', loadKN: 0, modeOfFailure: '', recordedTemperature: '', certificateNumber: '', comment: '', dateOfIssue: '', issueIdSerialNo: '' });
+                } else if (category.toLowerCase() === 'cylinder') {
+                    await addCylinder({ ...commonSetData, class: set.class || '', dimensions: { diameter: 0, height: 0 }, weightKg: 0, machineUsed: '', loadKN: 0, modeOfFailure: '', recordedTemperature: '', certificateNumber: '', comment: '', dateOfIssue: '', issueIdSerialNo: '' });
                 }
             }
-        } else {
-            const testsList = Object.values(categoryData.tests)
-                .map(t => `- ${t.materialTest} (Qty: ${t.quantity})`)
-                .join('\n');
-            
-            const labTestDetails = `**${category}**\n${testsList}`;
-            
-            await addProject({
-                date: formattedReceiptDate,
-                projectId: { big: '', small: `S-${receiptId}` },
-                client: formData.clientName,
-                project: formData.projectTitle,
-                engineerInCharge: '',
-                fieldWork: {
-                    details: 'N/A', technician: '', startDate: '', endDate: '', remarks: ''
-                },
-                labWork: {
-                    details: labTestDetails,
-                    technician: '',
-                    startDate: formattedReceiptDate,
-                    agreedDeliveryDate: '',
-                    signatureAgreed: '',
-                    actualDeliveryDate: '',
-                    signatureActual: '',
-                    remarks: categoryData.notes || '',
-                },
-                dispatch: {
-                    acknowledgement: '', issuedBy: '', deliveredTo: '', contact: '', dateTime: ''
-                }
-            });
         }
+    }
+
+    // Handle non-special categories by creating a single project entry
+    if (nonSpecialCategories.length > 0) {
+        const labTestDetails = nonSpecialCategories.map(([category, catData]) => `${category} (${catData.quantity})`).join(', ');
+        const remarks = nonSpecialCategories.map(([_, catData]) => catData.notes).filter(Boolean).join('; ');
+
+        await addProject({
+            date: formattedReceiptDate,
+            projectId: { big: '', small: `S-${receiptId}` },
+            client: formData.clientName,
+            project: formData.projectTitle,
+            engineerInCharge: '',
+            fieldWork: {
+                details: 'N/A', technician: '', startDate: '', endDate: '', remarks: ''
+            },
+            labWork: {
+                details: labTestDetails,
+                technician: '',
+                startDate: formattedReceiptDate,
+                agreedDeliveryDate: '',
+                signatureAgreed: '',
+                actualDeliveryDate: '',
+                signatureActual: '',
+                remarks: remarks,
+            },
+            dispatch: {
+                acknowledgement: '', issuedBy: '', deliveredTo: '', contact: '', dateTime: ''
+            }
+        });
     }
 
     return newReceipt;
