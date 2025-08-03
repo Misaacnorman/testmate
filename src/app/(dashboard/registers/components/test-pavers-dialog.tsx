@@ -34,6 +34,7 @@ const paverSchema = z.object({
   weightKg: z.coerce.number().optional(),
   loadKN: z.coerce.number().optional(),
   modeOfFailure: z.string().optional(),
+  machineUsed: z.string().optional(),
 });
 
 const formSchema = z.object({
@@ -58,6 +59,7 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
       weightKg: item.weightKg,
       loadKN: item.loadKN,
       modeOfFailure: item.modeOfFailure,
+      machineUsed: item.machineUsed,
   })), [items]);
   
   const form = useForm<z.infer<typeof formSchema>>({
@@ -104,6 +106,7 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
             weightKg: updatedItem.weightKg,
             loadKN: updatedItem.loadKN,
             modeOfFailure: updatedItem.modeOfFailure,
+            machineUsed: updatedItem.machineUsed,
         };
         return !isEqual(originalItemSubset, updatedItemSubset);
     });
@@ -124,6 +127,7 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
         weightKg: p.weightKg,
         loadKN: p.loadKN,
         modeOfFailure: p.modeOfFailure,
+        machineUsed: p.machineUsed,
     }));
     const hasUnsavedChanges = !isEqual(originalItems, currentFormValues);
     
@@ -179,6 +183,7 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div className="space-y-2"><Label>Pavers per m²</Label><Input type="text" inputMode="numeric" {...form.register(`pavers.${activePaverIndex}.paversPerSqMetre`)} /></div>
                        <div className="space-y-2"><Label>Mode of Failure</Label><Input {...form.register(`pavers.${activePaverIndex}.modeOfFailure`)} /></div>
+                       <div className="space-y-2"><Label>Machine Used</Label><Input {...form.register(`pavers.${activePaverIndex}.machineUsed`)} /></div>
                     </div>
                   </div>
               </div>

@@ -33,6 +33,7 @@ const cubeSchema = z.object({
   weightKg: z.coerce.number().optional(),
   loadKN: z.coerce.number().optional(),
   modeOfFailure: z.string().optional(),
+  machineUsed: z.string().optional(),
 });
 
 const formSchema = z.object({
@@ -56,6 +57,7 @@ export function TestConcreteCubesDialog({ items, onOpenChange, onBatchUpdate }: 
       weightKg: item.weightKg,
       loadKN: item.loadKN,
       modeOfFailure: item.modeOfFailure,
+      machineUsed: item.machineUsed,
   })), [items]);
   
   const form = useForm<z.infer<typeof formSchema>>({
@@ -67,6 +69,7 @@ export function TestConcreteCubesDialog({ items, onOpenChange, onBatchUpdate }: 
   
   const { trigger, getValues } = form;
   const currentItem = items[currentStep];
+  const isFinalStep = currentStep === items.length - 1;
 
   const handleNext = async () => {
     const result = await trigger(`cubes.${currentStep}`);
@@ -95,6 +98,7 @@ export function TestConcreteCubesDialog({ items, onOpenChange, onBatchUpdate }: 
         weightKg: updatedItem.weightKg,
         loadKN: updatedItem.loadKN,
         modeOfFailure: updatedItem.modeOfFailure,
+        machineUsed: updatedItem.machineUsed,
       };
       return !isEqual(originalItemSubset, updatedItemSubset);
     });
@@ -112,7 +116,8 @@ export function TestConcreteCubesDialog({ items, onOpenChange, onBatchUpdate }: 
         dimensions: c.dimensions,
         weightKg: c.weightKg,
         loadKN: c.loadKN,
-        modeOfFailure: c.modeOfFailure
+        modeOfFailure: c.modeOfFailure,
+        machineUsed: c.machineUsed,
     }));
     const hasUnsavedChanges = !isEqual(originalItems, currentFormValues);
     
@@ -124,8 +129,6 @@ export function TestConcreteCubesDialog({ items, onOpenChange, onBatchUpdate }: 
   };
   
   const progress = (currentStep / (items.length -1)) * 100;
-  
-  const isFinalStep = currentStep === items.length - 1;
 
   return (
     <>
@@ -185,9 +188,15 @@ export function TestConcreteCubesDialog({ items, onOpenChange, onBatchUpdate }: 
                         <Input type="text" inputMode="decimal" id={`cubes.${currentStep}.loadKN`} {...form.register(`cubes.${currentStep}.loadKN`)} />
                     </div>
                     </div>
-                     <div className="space-y-2">
-                        <Label htmlFor={`cubes.${currentStep}.modeOfFailure`}>Mode of Failure</Label>
-                        <Input id={`cubes.${currentStep}.modeOfFailure`} {...form.register(`cubes.${currentStep}.modeOfFailure`)} />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label htmlFor={`cubes.${currentStep}.modeOfFailure`}>Mode of Failure</Label>
+                            <Input id={`cubes.${currentStep}.modeOfFailure`} {...form.register(`cubes.${currentStep}.modeOfFailure`)} />
+                        </div>
+                         <div className="space-y-2">
+                            <Label htmlFor={`cubes.${currentStep}.machineUsed`}>Machine Used</Label>
+                            <Input id={`cubes.${currentStep}.machineUsed`} {...form.register(`cubes.${currentStep}.machineUsed`)} />
+                        </div>
                     </div>
                 </div>
              </div>

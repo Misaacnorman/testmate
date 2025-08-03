@@ -37,6 +37,7 @@ const itemSchema = z.object({
   weightKg: z.coerce.number().optional(),
   loadKN: z.coerce.number().optional(),
   modeOfFailure: z.string().optional(),
+  machineUsed: z.string().optional(),
 });
 
 const formSchema = z.object({
@@ -60,6 +61,7 @@ export function TestBlocksAndBricksDialog({ items, onOpenChange, onBatchUpdate }
       weightKg: item.weightKg,
       loadKN: item.loadKN,
       modeOfFailure: item.modeOfFailure,
+      machineUsed: item.machineUsed,
   })), [items]);
   
   const form = useForm<z.infer<typeof formSchema>>({
@@ -99,6 +101,7 @@ export function TestBlocksAndBricksDialog({ items, onOpenChange, onBatchUpdate }
             weightKg: updatedItem.weightKg,
             loadKN: updatedItem.loadKN,
             modeOfFailure: updatedItem.modeOfFailure,
+            machineUsed: updatedItem.machineUsed,
         };
         return !isEqual(originalItemSubset, updatedItemSubset);
     });
@@ -118,6 +121,7 @@ export function TestBlocksAndBricksDialog({ items, onOpenChange, onBatchUpdate }
         weightKg: item.weightKg,
         loadKN: item.loadKN,
         modeOfFailure: item.modeOfFailure,
+        machineUsed: item.machineUsed,
     }));
     const hasUnsavedChanges = !isEqual(originalItems, currentFormValues);
     
@@ -194,6 +198,7 @@ export function TestBlocksAndBricksDialog({ items, onOpenChange, onBatchUpdate }
                   </div>
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                      <div className="space-y-2"><Label>Mode of Failure</Label><Input {...form.register(`items.${currentStep}.modeOfFailure`)} /></div>
+                     <div className="space-y-2"><Label>Machine Used</Label><Input {...form.register(`items.${currentStep}.machineUsed`)} /></div>
                   </div>
                 </div>
                 </div>

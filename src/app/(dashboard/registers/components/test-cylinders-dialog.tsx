@@ -32,6 +32,7 @@ const itemSchema = z.object({
   weightKg: z.coerce.number().optional(),
   loadKN: z.coerce.number().optional(),
   modeOfFailure: z.string().optional(),
+  machineUsed: z.string().optional(),
 });
 
 const formSchema = z.object({
@@ -55,6 +56,7 @@ export function TestCylindersDialog({ items, onOpenChange, onBatchUpdate }: Test
       weightKg: item.weightKg,
       loadKN: item.loadKN,
       modeOfFailure: item.modeOfFailure,
+      machineUsed: item.machineUsed,
   })), [items]);
   
   const form = useForm<z.infer<typeof formSchema>>({
@@ -93,6 +95,7 @@ export function TestCylindersDialog({ items, onOpenChange, onBatchUpdate }: Test
             weightKg: updatedItem.weightKg,
             loadKN: updatedItem.loadKN,
             modeOfFailure: updatedItem.modeOfFailure,
+            machineUsed: updatedItem.machineUsed,
         };
         return !isEqual(originalItemSubset, updatedItemSubset);
     });
@@ -111,6 +114,7 @@ export function TestCylindersDialog({ items, onOpenChange, onBatchUpdate }: Test
         weightKg: item.weightKg,
         loadKN: item.loadKN,
         modeOfFailure: item.modeOfFailure,
+        machineUsed: item.machineUsed,
     }));
     const hasUnsavedChanges = !isEqual(originalItems, currentFormValues);
     
@@ -181,6 +185,10 @@ export function TestCylindersDialog({ items, onOpenChange, onBatchUpdate }: Test
                      <div className="space-y-2">
                         <Label>Mode of Failure</Label>
                         <Input {...form.register(`items.${currentStep}.modeOfFailure`)} />
+                     </div>
+                      <div className="space-y-2">
+                        <Label>Machine Used</Label>
+                        <Input {...form.register(`items.${currentStep}.machineUsed`)} />
                      </div>
                   </div>
                 </div>
