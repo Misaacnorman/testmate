@@ -17,7 +17,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Paver } from "@/types/paver";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import isEqual from 'lodash.isequal';
@@ -96,7 +95,17 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
     }));
 
     const changedItems = itemsToUpdate.filter((updatedItem, index) => {
-      return !isEqual(items[index], updatedItem);
+        const originalItemSubset = originalItems[index];
+        const updatedItemSubset = {
+            id: updatedItem.id,
+            dimensions: updatedItem.dimensions,
+            paversPerSqMetre: updatedItem.paversPerSqMetre,
+            calculatedArea: updatedItem.calculatedArea,
+            weightKg: updatedItem.weightKg,
+            loadKN: updatedItem.loadKN,
+            modeOfFailure: updatedItem.modeOfFailure,
+        };
+        return !isEqual(originalItemSubset, updatedItemSubset);
     });
 
     if (changedItems.length > 0) {
@@ -107,7 +116,15 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
   };
 
   const handleCloseAttempt = () => {
-    const currentFormValues = form.getValues().pavers;
+    const currentFormValues = form.getValues().pavers.map(p => ({
+        id: p.id,
+        dimensions: p.dimensions,
+        paversPerSqMetre: p.paversPerSqMetre,
+        calculatedArea: p.calculatedArea,
+        weightKg: p.weightKg,
+        loadKN: p.loadKN,
+        modeOfFailure: p.modeOfFailure,
+    }));
     const hasUnsavedChanges = !isEqual(originalItems, currentFormValues);
     
     if (hasUnsavedChanges) {
@@ -133,7 +150,7 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
             </DialogDescription>
             <Progress value={progress} className="mt-2" />
           </DialogHeader>
-          <ScrollArea className="flex-grow pr-6 -mr-6">
+          <div className="flex-grow overflow-y-auto pr-6 -mr-6">
             <form id="test-pavers-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
              <div className="p-1">
               <div className="space-y-4 p-4 border rounded-lg bg-muted/50">
@@ -166,19 +183,18 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
                   </div>
               </div>
             </form>
-          </ScrollArea>
-          <DialogFooter className="pt-4 justify-between">
-            <div>
+          </div>
+          <DialogFooter className="pt-4 border-t">
+            <div className="w-full flex justify-between">
               <Button type="button" variant="ghost" onClick={handleCloseAttempt}>Cancel</Button>
-            </div>
-            
-            <div className="flex gap-2">
-              <Button type="button" variant="outline" onClick={handleBack} disabled={activePaverIndex === 0}>Back</Button>
-              {isFinalStep ? (
-                <Button type="submit" form="test-pavers-form">Finish & Save All</Button>
-              ) : (
-                <Button type="button" onClick={handleNext}>Next</Button>
-              )}
+              <div className="flex gap-2">
+                <Button type="button" variant="outline" onClick={handleBack} disabled={activePaverIndex === 0}>Back</Button>
+                {isFinalStep ? (
+                  <Button type="submit" form="test-pavers-form">Finish & Save All</Button>
+                ) : (
+                  <Button type="button" onClick={handleNext}>Next</Button>
+                )}
+              </div>
             </div>
           </DialogFooter>
         </DialogContent>

@@ -17,7 +17,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BlockAndBrick } from "@/types/block-and-brick";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
@@ -92,7 +91,16 @@ export function TestBlocksAndBricksDialog({ items, onOpenChange, onBatchUpdate }
     }));
 
     const changedItems = itemsToUpdate.filter((updatedItem, index) => {
-      return !isEqual(items[index], updatedItem);
+        const originalItemSubset = originalItems[index];
+        const updatedItemSubset = {
+            id: updatedItem.id,
+            dimensions: updatedItem.dimensions,
+            dimensionsOfHoles: updatedItem.dimensionsOfHoles,
+            weightKg: updatedItem.weightKg,
+            loadKN: updatedItem.loadKN,
+            modeOfFailure: updatedItem.modeOfFailure,
+        };
+        return !isEqual(originalItemSubset, updatedItemSubset);
     });
 
     if (changedItems.length > 0) {
@@ -103,7 +111,14 @@ export function TestBlocksAndBricksDialog({ items, onOpenChange, onBatchUpdate }
   };
 
   const handleCloseAttempt = () => {
-    const currentFormValues = form.getValues().items;
+    const currentFormValues = form.getValues().items.map(item => ({
+        id: item.id,
+        dimensions: item.dimensions,
+        dimensionsOfHoles: item.dimensionsOfHoles,
+        weightKg: item.weightKg,
+        loadKN: item.loadKN,
+        modeOfFailure: item.modeOfFailure,
+    }));
     const hasUnsavedChanges = !isEqual(originalItems, currentFormValues);
     
     if (hasUnsavedChanges) {
@@ -131,7 +146,7 @@ export function TestBlocksAndBricksDialog({ items, onOpenChange, onBatchUpdate }
           </DialogDescription>
            <Progress value={progress} className="mt-2" />
         </DialogHeader>
-        <ScrollArea className="flex-grow pr-6 -mr-6">
+        <div className="flex-grow overflow-y-auto pr-6 -mr-6">
           <form id="test-b-and-b-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             {currentItem ? (
                 <div className="p-1">
@@ -184,18 +199,18 @@ export function TestBlocksAndBricksDialog({ items, onOpenChange, onBatchUpdate }
                 </div>
             ) : null}
           </form>
-        </ScrollArea>
-        <DialogFooter className="pt-4 justify-between">
-          <div>
+        </div>
+        <DialogFooter className="pt-4 border-t">
+          <div className="w-full flex justify-between">
             <Button type="button" variant="ghost" onClick={handleCloseAttempt}>Cancel</Button>
-          </div>
-          <div className="flex gap-2">
-             <Button type="button" variant="outline" onClick={handleBack} disabled={currentStep === 0}>Back</Button>
-            {isFinalStep ? (
-              <Button type="submit" form="test-b-and-b-form">Finish & Save All</Button>
-            ) : (
-              <Button type="button" onClick={handleNext}>Next</Button>
-            )}
+            <div className="flex gap-2">
+              <Button type="button" variant="outline" onClick={handleBack} disabled={currentStep === 0}>Back</Button>
+              {isFinalStep ? (
+                <Button type="submit" form="test-b-and-b-form">Finish & Save All</Button>
+              ) : (
+                <Button type="button" onClick={handleNext}>Next</Button>
+              )}
+            </div>
           </div>
         </DialogFooter>
       </DialogContent>

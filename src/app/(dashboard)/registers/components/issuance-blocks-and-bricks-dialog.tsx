@@ -17,7 +17,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BlockAndBrick } from "@/types/block-and-brick";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import isEqual from 'lodash.isequal';
 
@@ -79,7 +78,19 @@ export function IssuanceBlocksAndBricksDialog({ items, onOpenChange, onBatchUpda
     }));
 
     const changedItems = itemsToUpdate.filter((updatedItem, index) => {
-      return !isEqual(originalItems[index], updatedItem);
+      const originalIssuance = {
+        machineUsed: originalItems[index].machineUsed,
+        recordedTemperature: originalItems[index].recordedTemperature,
+        certificateNumber: originalItems[index].certificateNumber,
+        comment: originalItems[index].comment,
+        technician: originalItems[index].technician,
+        dateOfIssue: originalItems[index].dateOfIssue,
+        issueIdSerialNo: originalItems[index].issueIdSerialNo,
+        takenBy: originalItems[index].takenBy,
+        date: originalItems[index].date,
+        contact: originalItems[index].contact,
+      };
+      return !isEqual(originalIssuance, issuance);
     });
 
     if (changedItems.length > 0) {
@@ -129,7 +140,7 @@ export function IssuanceBlocksAndBricksDialog({ items, onOpenChange, onBatchUpda
                 Enter the information common to all {items.length} selected samples in this set.
             </DialogDescription>
           </DialogHeader>
-          <ScrollArea className="flex-grow pr-6 -mr-6">
+          <div className="flex-grow overflow-y-auto pr-6 -mr-6">
             <form id="issuance-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 <div className="space-y-4 p-4 border rounded-lg bg-muted/50 text-sm">
                     <p><strong>Client:</strong> {firstItem.client}</p>
@@ -152,8 +163,8 @@ export function IssuanceBlocksAndBricksDialog({ items, onOpenChange, onBatchUpda
                     </div>
                 </div>
             </form>
-          </ScrollArea>
-          <DialogFooter className="pt-4 justify-between">
+          </div>
+          <DialogFooter className="pt-4 justify-between border-t">
             <div>
               <Button type="button" variant="ghost" onClick={handleCloseAttempt}>Cancel</Button>
             </div>

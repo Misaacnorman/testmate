@@ -17,7 +17,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ConcreteCube } from "@/types/concrete-cube";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
@@ -89,7 +88,15 @@ export function TestConcreteCubesDialog({ items, onOpenChange, onBatchUpdate }: 
     }));
 
     const changedItems = itemsToUpdate.filter((updatedItem, index) => {
-      return !isEqual(items[index], updatedItem);
+      const originalItemSubset = originalItems[index];
+      const updatedItemSubset = {
+        id: updatedItem.id,
+        dimensions: updatedItem.dimensions,
+        weightKg: updatedItem.weightKg,
+        loadKN: updatedItem.loadKN,
+        modeOfFailure: updatedItem.modeOfFailure,
+      };
+      return !isEqual(originalItemSubset, updatedItemSubset);
     });
 
     if (changedItems.length > 0) {
@@ -100,7 +107,13 @@ export function TestConcreteCubesDialog({ items, onOpenChange, onBatchUpdate }: 
   };
 
   const handleCloseAttempt = () => {
-    const currentFormValues = getValues().cubes;
+    const currentFormValues = getValues().cubes.map(c => ({
+        id: c.id,
+        dimensions: c.dimensions,
+        weightKg: c.weightKg,
+        loadKN: c.loadKN,
+        modeOfFailure: c.modeOfFailure
+    }));
     const hasUnsavedChanges = !isEqual(originalItems, currentFormValues);
     
     if (hasUnsavedChanges) {
@@ -130,7 +143,7 @@ export function TestConcreteCubesDialog({ items, onOpenChange, onBatchUpdate }: 
             </DialogDescription>
             <Progress value={progress} className="mt-2" />
           </DialogHeader>
-          <ScrollArea className="flex-grow pr-6 -mr-6">
+          <div className="flex-grow overflow-y-auto pr-6 -mr-6">
             <form id="test-cubes-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             {currentItem && (
              <div className="p-1">
@@ -180,18 +193,18 @@ export function TestConcreteCubesDialog({ items, onOpenChange, onBatchUpdate }: 
              </div>
             )}
             </form>
-          </ScrollArea>
-          <DialogFooter className="pt-4 justify-between">
-            <div>
+          </div>
+          <DialogFooter className="pt-4 border-t">
+            <div className="flex justify-between w-full">
               <Button type="button" variant="ghost" onClick={handleCloseAttempt}>Cancel</Button>
-            </div>
-            <div className="flex gap-2">
-              <Button type="button" variant="outline" onClick={handleBack} disabled={currentStep === 0}>Back</Button>
-              {isFinalStep ? (
-                <Button type="submit" form="test-cubes-form">Finish & Save All</Button>
-              ) : (
-                <Button type="button" onClick={handleNext}>Next</Button>
-              )}
+              <div className="flex gap-2">
+                <Button type="button" variant="outline" onClick={handleBack} disabled={currentStep === 0}>Back</Button>
+                {isFinalStep ? (
+                  <Button type="submit" form="test-cubes-form">Finish & Save All</Button>
+                ) : (
+                  <Button type="button" onClick={handleNext}>Next</Button>
+                )}
+              </div>
             </div>
           </DialogFooter>
         </DialogContent>
