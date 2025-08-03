@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ColumnDef,
   flexRender,
@@ -51,12 +51,7 @@ export function ConcreteCubesTable<TData extends ConcreteCubeSet, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-    onRowSelectionChange: (updater) => {
-      const newRowSelection = typeof updater === 'function' ? updater(rowSelection) : updater;
-      setRowSelection(newRowSelection);
-      const selectedRows = table.getFilteredSelectedRowModel().rows.map(row => row.original);
-      onSelectionChange(selectedRows);
-    },
+    onRowSelectionChange: setRowSelection,
     getRowId: (row) => row.id,
     state: {
       sorting,
@@ -64,6 +59,11 @@ export function ConcreteCubesTable<TData extends ConcreteCubeSet, TValue>({
     },
     enableRowSelection: true,
   });
+
+  useEffect(() => {
+    const selectedRows = table.getFilteredSelectedRowModel().rows.map(row => row.original);
+    onSelectionChange(selectedRows);
+  }, [rowSelection, table, onSelectionChange]);
 
   if (isLoading) {
     return (
