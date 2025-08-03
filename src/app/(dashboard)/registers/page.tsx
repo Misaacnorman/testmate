@@ -34,7 +34,7 @@ import { getColumns as getWaterAbsorptionColumns } from './components/water-abso
 import { WaterAbsorptionTable } from './components/water-absorption-table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { FileSignature } from 'lucide-react';
+import { FileSignature, TestTubeDiagonal } from 'lucide-react';
 import { TestConcreteCubesDialog } from './components/test-concrete-cubes-dialog';
 import { TestBlocksAndBricksDialog } from './components/test-blocks-and-bricks-dialog';
 import { TestPaversDialog } from './components/test-pavers-dialog';
@@ -251,30 +251,25 @@ export default function RegistersPage() {
     return !sets.every(set => areAllTestsFilled(set.samples));
   }
 
-  const handleCubeSelectionChange = useCallback(
-    (selectedRows: ConcreteCubeSet[]) => setSelectedCubeSets(selectedRows),
-    []
-  );
+  const handleCubeSelectionChange = useCallback((selectedRows: ConcreteCubeSet[]) => {
+    setSelectedCubeSets(selectedRows);
+  }, []);
 
-  const handleBlocksAndBricksSelectionChange = useCallback(
-    (selectedRows: BlockAndBrickSet[]) => setSelectedBlocksAndBricksSets(selectedRows),
-    []
-  );
+  const handleBlocksAndBricksSelectionChange = useCallback((selectedRows: BlockAndBrickSet[]) => {
+    setSelectedBlocksAndBricksSets(selectedRows);
+  }, []);
 
-  const handlePaverSelectionChange = useCallback(
-    (selectedRows: PaverSet[]) => setSelectedPaverSets(selectedRows),
-    []
-  );
+  const handlePaverSelectionChange = useCallback((selectedRows: PaverSet[]) => {
+    setSelectedPaverSets(selectedRows);
+  }, []);
   
-  const handleCylinderSelectionChange = useCallback(
-    (selectedRows: CylinderSet[]) => setSelectedCylinderSets(selectedRows),
-    []
-  );
+  const handleCylinderSelectionChange = useCallback((selectedRows: CylinderSet[]) => {
+    setSelectedCylinderSets(selectedRows);
+  }, []);
 
-  const handleWaterAbsorptionSelectionChange = useCallback(
-    (selectedRows: WaterAbsorptionSet[]) => setSelectedWaterAbsorptionSets(selectedRows),
-    []
-  );
+  const handleWaterAbsorptionSelectionChange = useCallback((selectedRows: WaterAbsorptionSet[]) => {
+    setSelectedWaterAbsorptionSets(selectedRows);
+  }, []);
 
   return (
     <>
@@ -318,6 +313,10 @@ export default function RegistersPage() {
                     <CardDescription>A register for all concrete cube tests.</CardDescription>
                   </div>
                   <div className="flex items-center gap-2">
+                      <Button onClick={() => setIsTestCubesDialogOpen(true)} disabled={selectedCubeSets.length === 0}>
+                          <TestTubeDiagonal className="mr-2 h-4 w-4" />
+                          Test
+                      </Button>
                       <Button onClick={() => setIsIssuanceCubesDialogOpen(true)} disabled={issuanceDisabled(selectedCubeSets)} variant="outline">
                           <FileSignature className="mr-2 h-4 w-4" />
                           Issuance
@@ -347,6 +346,10 @@ export default function RegistersPage() {
                         <CardDescription>A register for all brick and block tests.</CardDescription>
                     </div>
                      <div className="flex items-center gap-2">
+                        <Button onClick={() => setIsTestBlocksAndBricksDialogOpen(true)} disabled={selectedBlocksAndBricksSets.length === 0}>
+                            <TestTubeDiagonal className="mr-2 h-4 w-4" />
+                            Test
+                        </Button>
                         <Button onClick={() => setIsIssuanceBlocksAndBricksDialogOpen(true)} disabled={issuanceDisabled(selectedBlocksAndBricksSets)} variant="outline">
                             <FileSignature className="mr-2 h-4 w-4" />
                             Issuance
@@ -376,6 +379,10 @@ export default function RegistersPage() {
                         <CardDescription>A register for all paver tests.</CardDescription>
                     </div>
                     <div className="flex items-center gap-2">
+                        <Button onClick={() => setIsTestPaversDialogOpen(true)} disabled={selectedPaverSets.length === 0}>
+                            <TestTubeDiagonal className="mr-2 h-4 w-4" />
+                            Test
+                        </Button>
                         <Button onClick={() => setIsIssuancePaversDialogOpen(true)} disabled={issuanceDisabled(selectedPaverSets)} variant="outline">
                             <FileSignature className="mr-2 h-4 w-4" />
                             Issuance
@@ -405,6 +412,10 @@ export default function RegistersPage() {
                         <CardDescription>A register for all concrete cylinder tests.</CardDescription>
                     </div>
                     <div className="flex items-center gap-2">
+                        <Button onClick={() => setIsTestCylindersDialogOpen(true)} disabled={selectedCylinderSets.length === 0}>
+                            <TestTubeDiagonal className="mr-2 h-4 w-4" />
+                            Test
+                        </Button>
                         <Button onClick={() => setIsIssuanceCylindersDialogOpen(true)} disabled={issuanceDisabled(selectedCylinderSets)} variant="outline">
                             <FileSignature className="mr-2 h-4 w-4" />
                             Issuance
@@ -434,6 +445,10 @@ export default function RegistersPage() {
                         <CardDescription>A register for all water absorption tests on bricks and blocks.</CardDescription>
                     </div>
                     <div className="flex items-center gap-2">
+                         <Button onClick={() => setIsTestWaterAbsorptionsDialogOpen(true)} disabled={selectedWaterAbsorptionSets.length === 0}>
+                            <TestTubeDiagonal className="mr-2 h-4 w-4" />
+                            Test
+                        </Button>
                         <Button onClick={() => setIsIssuanceWaterAbsorptionsDialogOpen(true)} disabled={issuanceDisabled(selectedWaterAbsorptionSets)} variant="outline">
                             <FileSignature className="mr-2 h-4 w-4" />
                             Issuance
