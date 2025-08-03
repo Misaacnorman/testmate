@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   ColumnDef,
   flexRender,
@@ -29,6 +29,8 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   isLoading: boolean;
+  rowSelection: RowSelectionState;
+  setRowSelection: React.Dispatch<React.SetStateAction<RowSelectionState>>;
   onSelectionChange: (selectedRows: TData[]) => void;
 }
 
@@ -36,10 +38,11 @@ export function BlocksAndBricksTable<TData extends BlockAndBrickSet, TValue>({
   columns,
   data,
   isLoading,
+  rowSelection,
+  setRowSelection,
   onSelectionChange,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
   const table = useReactTable({
     data,
@@ -48,12 +51,13 @@ export function BlocksAndBricksTable<TData extends BlockAndBrickSet, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-     onRowSelectionChange: (updater) => {
-      const newRowSelection = typeof updater === 'function' ? updater(rowSelection) : updater;
-      const selectedRows = table.getFilteredSelectedRowModel().rows.map(row => row.original);
-      onSelectionChange(selectedRows);
-      setRowSelection(newRowSelection);
+    onRowSelectionChange: (updater) => {
+        const newRowSelection = typeof updater === 'function' ? updater(rowSelection) : updater;
+        setRowSelection(newRowSelection);
+        const selectedRows = table.getFilteredSelectedRowModel().rows.map(row => row.original);
+        onSelectionChange(selectedRows);
     },
+    getRowId: (row) => row.id,
     state: {
       sorting,
       rowSelection,
@@ -130,7 +134,7 @@ export function BlocksAndBricksTable<TData extends BlockAndBrickSet, TValue>({
       </div>
        <div className="flex items-center justify-end space-x-2">
         <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
+          {Object.keys(rowSelection).length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
         <Button

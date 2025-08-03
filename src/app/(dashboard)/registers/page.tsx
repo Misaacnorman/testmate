@@ -48,6 +48,7 @@ import { IssuanceBlocksAndBricksDialog } from './components/issuance-blocks-and-
 import { IssuancePaversDialog } from './components/issuance-pavers-dialog';
 import { IssuanceCylindersDialog } from './components/issuance-cylinders-dialog';
 import { IssuanceWaterAbsorptionsDialog } from './components/issuance-water-absorptions-dialog';
+import { RowSelectionState } from '@tanstack/react-table';
 
 
 export default function RegistersPage() {
@@ -73,22 +74,27 @@ export default function RegistersPage() {
   const [isTestCubesDialogOpen, setIsTestCubesDialogOpen] = useState(false);
   const [isIssuanceCubesDialogOpen, setIsIssuanceCubesDialogOpen] = useState(false);
   const [selectedCubeSets, setSelectedCubeSets] = useState<ConcreteCubeSet[]>([]);
+  const [cubeRowSelection, setCubeRowSelection] = useState<RowSelectionState>({});
 
   const [isTestBlocksAndBricksDialogOpen, setIsTestBlocksAndBricksDialogOpen] = useState(false);
   const [isIssuanceBlocksAndBricksDialogOpen, setIsIssuanceBlocksAndBricksDialogOpen] = useState(false);
   const [selectedBlocksAndBricksSets, setSelectedBlocksAndBricksSets] = useState<BlockAndBrickSet[]>([]);
-  
+  const [blocksAndBricksRowSelection, setBlocksAndBricksRowSelection] = useState<RowSelectionState>({});
+
   const [isTestPaversDialogOpen, setIsTestPaversDialogOpen] = useState(false);
   const [isIssuancePaversDialogOpen, setIsIssuancePaversDialogOpen] = useState(false);
   const [selectedPaverSets, setSelectedPaverSets] = useState<PaverSet[]>([]);
+  const [paverRowSelection, setPaverRowSelection] = useState<RowSelectionState>({});
 
   const [isTestCylindersDialogOpen, setIsTestCylindersDialogOpen] = useState(false);
   const [isIssuanceCylindersDialogOpen, setIsIssuanceCylindersDialogOpen] = useState(false);
   const [selectedCylinderSets, setSelectedCylinderSets] = useState<CylinderSet[]>([]);
+  const [cylinderRowSelection, setCylinderRowSelection] = useState<RowSelectionState>({});
 
   const [isTestWaterAbsorptionsDialogOpen, setIsTestWaterAbsorptionsDialogOpen] = useState(false);
   const [isIssuanceWaterAbsorptionsDialogOpen, setIsIssuanceWaterAbsorptionsDialogOpen] = useState(false);
   const [selectedWaterAbsorptionSets, setSelectedWaterAbsorptionSets] = useState<WaterAbsorptionSet[]>([]);
+  const [waterAbsorptionRowSelection, setWaterAbsorptionRowSelection] = useState<RowSelectionState>({});
 
   const { toast } = useToast();
 
@@ -150,7 +156,7 @@ export default function RegistersPage() {
     }
   };
   
-  const handleBatchUpdate = async <T extends {id: string}>(items: T[], updater: (item: T) => Promise<void>, fetcher: () => Promise<any>, setter: (data: any) => void, loaderSetter: (loading: boolean) => void, entityName: string, dialogCloser: () => void) => {
+  const handleBatchUpdate = async <T extends {id: string}>(items: T[], updater: (item: T) => Promise<void>, fetcher: () => Promise<any>, setter: (data: any) => void, loaderSetter: (loading: boolean) => void, entityName: string, dialogCloser: () => void, rowSelectionReset: () => void) => {
     try {
         await Promise.all(items.map(item => updater(item)));
         toast({
@@ -158,6 +164,7 @@ export default function RegistersPage() {
             description: `${items.length} ${entityName}(s) have been updated.`,
         });
         dialogCloser();
+        rowSelectionReset();
         fetcher().then(data => {
             setter(data);
             loaderSetter(false);
@@ -302,6 +309,8 @@ export default function RegistersPage() {
                       columns={getConcreteCubesColumns({ onEdit: (samples) => { setIsTestCubesDialogOpen(true); setSelectedCubeSets([{id: 'edit', samples, client:'', project:'', dateReceived:'', castingDate:'', testingDate:'', class:'', areaOfUse:'' }])}})} 
                       data={concreteCubeSets} 
                       isLoading={isConcreteCubesLoading} 
+                      rowSelection={cubeRowSelection}
+                      setRowSelection={setCubeRowSelection}
                       onSelectionChange={(rows) => setSelectedCubeSets(rows)} />
               </CardContent>
             </Card>
@@ -331,7 +340,9 @@ export default function RegistersPage() {
                     <BlocksAndBricksTable 
                         columns={getBlocksAndBricksColumns({ onEdit: (samples) => {setIsTestBlocksAndBricksDialogOpen(true); setSelectedBlocksAndBricksSets([{id: 'edit', samples, client:'', project:'', dateReceived:'', castingDate:'', testingDate:'', sampleType:'', areaOfUse:'' }])} })} 
                         data={blocksAndBricksSets} 
-                        isLoading={isBlocksAndBricksLoading} 
+                        isLoading={isBlocksAndBricksLoading}
+                        rowSelection={blocksAndBricksRowSelection}
+                        setRowSelection={setBlocksAndBricksRowSelection} 
                         onSelectionChange={(rows) => setSelectedBlocksAndBricksSets(rows)} 
                     />
                 </CardContent>
@@ -363,6 +374,8 @@ export default function RegistersPage() {
                         columns={getPaverColumns({ onEdit: (samples) => {setIsTestPaversDialogOpen(true); setSelectedPaverSets([{id: 'edit', samples, client:'', project:'', dateReceived:'', castingDate:'', testingDate:'', areaOfUse:'', paverType:'' }])}, onDelete: handlePaverSetDeleted })} 
                         data={paverSets} 
                         isLoading={isPaversLoading} 
+                        rowSelection={paverRowSelection}
+                        setRowSelection={setPaverRowSelection}
                         onSelectionChange={(rows) => setSelectedPaverSets(rows)} 
                     />
                 </CardContent>
@@ -393,7 +406,9 @@ export default function RegistersPage() {
                     <CylindersTable 
                         columns={getCylinderColumns({ onEdit: (samples) => { setIsTestCylindersDialogOpen(true); setSelectedCylinderSets([{id: 'edit', samples, client:'', project:'', dateReceived:'', castingDate:'', testingDate:'', class:'', areaOfUse:'' }])} })} 
                         data={cylinderSets} 
-                        isLoading={isCylindersLoading} 
+                        isLoading={isCylindersLoading}
+                        rowSelection={cylinderRowSelection}
+                        setRowSelection={setCylinderRowSelection} 
                         onSelectionChange={(rows) => setSelectedCylinderSets(rows)} 
                     />
                 </CardContent>
@@ -413,7 +428,7 @@ export default function RegistersPage() {
                             <TestTubeDiagonal className="mr-2 h-4 w-4" />
                             Test
                         </Button>
-                        <Button onClick={() => setIsIssuanceWaterAbsorptionsDialogOpen(true)} disabled={selectedWaterAbsorptionSets.length === 0} variant="outline">
+                        <Button onClick={() => setIsIssuanceWaterAbsorptionsDialogOpen(true)} disabled={issuanceDisabled(selectedWaterAbsorptionSets)} variant="outline">
                             <FileSignature className="mr-2 h-4 w-4" />
                             Issuance
                         </Button>
@@ -424,7 +439,9 @@ export default function RegistersPage() {
                     <WaterAbsorptionTable 
                         columns={getWaterAbsorptionColumns({ onEdit: (samples) => { setIsTestWaterAbsorptionsDialogOpen(true); setSelectedWaterAbsorptionSets([{id: 'edit', samples, client:'', project:'', dateReceived:'', castingDate:'', testingDate:'', areaOfUse:'', sampleType:'' }])} })} 
                         data={waterAbsorptionSets} 
-                        isLoading={isWaterAbsorptionsLoading} 
+                        isLoading={isWaterAbsorptionsLoading}
+                        rowSelection={waterAbsorptionRowSelection}
+                        setRowSelection={setWaterAbsorptionRowSelection} 
                         onSelectionChange={(rows) => setSelectedWaterAbsorptionSets(rows)} 
                     />
                 </CardContent>
@@ -436,20 +453,20 @@ export default function RegistersPage() {
       
       {editingProject && <EditProjectDialog project={editingProject} onOpenChange={(open) => !open && setEditingProject(null)} onProjectUpdated={handleProjectUpdated} />}
       
-      {isTestCubesDialogOpen && selectedCubeSets.length > 0 && <TestConcreteCubesDialog items={selectedCubeSets.flatMap(s => s.samples)} onOpenChange={setIsTestCubesDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateConcreteCube, getConcreteCubes, setConcreteCubes, setIsConcreteCubesLoading, 'concrete cube', () => setIsTestCubesDialogOpen(false))} />}
-      {isIssuanceCubesDialogOpen && selectedCubeSets.length > 0 && <IssuanceConcreteCubesDialog items={selectedCubeSets.flatMap(s => s.samples)} onOpenChange={setIsIssuanceCubesDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateConcreteCube, getConcreteCubes, setConcreteCubes, setIsConcreteCubesLoading, 'concrete cube', () => setIsIssuanceCubesDialogOpen(false))} />}
+      {isTestCubesDialogOpen && selectedCubeSets.length > 0 && <TestConcreteCubesDialog items={selectedCubeSets.flatMap(s => s.samples)} onOpenChange={setIsTestCubesDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateConcreteCube, getConcreteCubes, setConcreteCubes, setIsConcreteCubesLoading, 'concrete cube', () => setIsTestCubesDialogOpen(false), () => setCubeRowSelection({}))} />}
+      {isIssuanceCubesDialogOpen && selectedCubeSets.length > 0 && <IssuanceConcreteCubesDialog items={selectedCubeSets.flatMap(s => s.samples)} onOpenChange={setIsIssuanceCubesDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateConcreteCube, getConcreteCubes, setConcreteCubes, setIsConcreteCubesLoading, 'concrete cube', () => setIsIssuanceCubesDialogOpen(false), () => setCubeRowSelection({}))} />}
 
-      {isTestBlocksAndBricksDialogOpen && selectedBlocksAndBricksSets.length > 0 && <TestBlocksAndBricksDialog items={selectedBlocksAndBricksSets.flatMap(s => s.samples)} onOpenChange={setIsTestBlocksAndBricksDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateBlockAndBrick, getBlocksAndBricks, setBlocksAndBricks, setIsBlocksAndBricksLoading, 'block/brick', () => setIsTestBlocksAndBricksDialogOpen(false))} />}
-      {isIssuanceBlocksAndBricksDialogOpen && selectedBlocksAndBricksSets.length > 0 && <IssuanceBlocksAndBricksDialog items={selectedBlocksAndBricksSets.flatMap(s => s.samples)} onOpenChange={setIsIssuanceBlocksAndBricksDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateBlockAndBrick, getBlocksAndBricks, setBlocksAndBricks, setIsBlocksAndBricksLoading, 'block/brick', () => setIsIssuanceBlocksAndBricksDialogOpen(false))} />}
+      {isTestBlocksAndBricksDialogOpen && selectedBlocksAndBricksSets.length > 0 && <TestBlocksAndBricksDialog items={selectedBlocksAndBricksSets.flatMap(s => s.samples)} onOpenChange={setIsTestBlocksAndBricksDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateBlockAndBrick, getBlocksAndBricks, setBlocksAndBricks, setIsBlocksAndBricksLoading, 'block/brick', () => setIsTestBlocksAndBricksDialogOpen(false), () => setBlocksAndBricksRowSelection({}))} />}
+      {isIssuanceBlocksAndBricksDialogOpen && selectedBlocksAndBricksSets.length > 0 && <IssuanceBlocksAndBricksDialog items={selectedBlocksAndBricksSets.flatMap(s => s.samples)} onOpenChange={setIsIssuanceBlocksAndBricksDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateBlockAndBrick, getBlocksAndBricks, setBlocksAndBricks, setIsBlocksAndBricksLoading, 'block/brick', () => setIsIssuanceBlocksAndBricksDialogOpen(false), () => setBlocksAndBricksRowSelection({}))} />}
 
-      {isTestPaversDialogOpen && selectedPaverSets.length > 0 && <TestPaversDialog items={selectedPaverSets.flatMap(s => s.samples)} onOpenChange={setIsTestPaversDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updatePaver, getPavers, setPavers, setIsPaversLoading, 'paver', () => setIsTestPaversDialogOpen(false))} />}
-      {isIssuancePaversDialogOpen && selectedPaverSets.length > 0 && <IssuancePaversDialog items={selectedPaverSets.flatMap(s => s.samples)} onOpenChange={setIsIssuancePaversDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updatePaver, getPavers, setPavers, setIsPaversLoading, 'paver', () => setIsIssuancePaversDialogOpen(false))} />}
+      {isTestPaversDialogOpen && selectedPaverSets.length > 0 && <TestPaversDialog items={selectedPaverSets.flatMap(s => s.samples)} onOpenChange={setIsTestPaversDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updatePaver, getPavers, setPavers, setIsPaversLoading, 'paver', () => setIsTestPaversDialogOpen(false), () => setPaverRowSelection({}))} />}
+      {isIssuancePaversDialogOpen && selectedPaverSets.length > 0 && <IssuancePaversDialog items={selectedPaverSets.flatMap(s => s.samples)} onOpenChange={setIsIssuancePaversDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updatePaver, getPavers, setPavers, setIsPaversLoading, 'paver', () => setIsIssuancePaversDialogOpen(false), () => setPaverRowSelection({}))} />}
 
-      {isTestCylindersDialogOpen && selectedCylinderSets.length > 0 && <TestCylindersDialog items={selectedCylinderSets.flatMap(s => s.samples)} onOpenChange={setIsTestCylindersDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateCylinder, getCylinders, setCylinders, setIsCylindersLoading, 'cylinder', () => setIsTestCylindersDialogOpen(false))} />}
-      {isIssuanceCylindersDialogOpen && selectedCylinderSets.length > 0 && <IssuanceCylindersDialog items={selectedCylinderSets.flatMap(s => s.samples)} onOpenChange={setIsIssuanceCylindersDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateCylinder, getCylinders, setCylinders, setIsCylindersLoading, 'cylinder', () => setIsIssuanceCylindersDialogOpen(false))} />}
+      {isTestCylindersDialogOpen && selectedCylinderSets.length > 0 && <TestCylindersDialog items={selectedCylinderSets.flatMap(s => s.samples)} onOpenChange={setIsTestCylindersDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateCylinder, getCylinders, setCylinders, setIsCylindersLoading, 'cylinder', () => setIsTestCylindersDialogOpen(false), () => setCylinderRowSelection({}))} />}
+      {isIssuanceCylindersDialogOpen && selectedCylinderSets.length > 0 && <IssuanceCylindersDialog items={selectedCylinderSets.flatMap(s => s.samples)} onOpenChange={setIsIssuanceCylindersDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateCylinder, getCylinders, setCylinders, setIsCylindersLoading, 'cylinder', () => setIsIssuanceCylindersDialogOpen(false), () => setCylinderRowSelection({}))} />}
       
-      {isTestWaterAbsorptionsDialogOpen && selectedWaterAbsorptionSets.length > 0 && <TestWaterAbsorptionsDialog items={selectedWaterAbsorptionSets.flatMap(s => s.samples)} onOpenChange={setIsTestWaterAbsorptionsDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateWaterAbsorption, getWaterAbsorptions, setWaterAbsorptions, setIsWaterAbsorptionsLoading, 'water absorption', () => setIsTestWaterAbsorptionsDialogOpen(false))} />}
-      {isIssuanceWaterAbsorptionsDialogOpen && selectedWaterAbsorptionSets.length > 0 && <IssuanceWaterAbsorptionsDialog items={selectedWaterAbsorptionSets.flatMap(s => s.samples)} onOpenChange={setIsIssuanceWaterAbsorptionsDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateWaterAbsorption, getWaterAbsorptions, setWaterAbsorptions, setIsWaterAbsorptionsLoading, 'water absorption', () => setIsIssuanceWaterAbsorptionsDialogOpen(false))} />}
+      {isTestWaterAbsorptionsDialogOpen && selectedWaterAbsorptionSets.length > 0 && <TestWaterAbsorptionsDialog items={selectedWaterAbsorptionSets.flatMap(s => s.samples)} onOpenChange={setIsTestWaterAbsorptionsDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateWaterAbsorption, getWaterAbsorptions, setWaterAbsorptions, setIsWaterAbsorptionsLoading, 'water absorption', () => setIsTestWaterAbsorptionsDialogOpen(false), () => setWaterAbsorptionRowSelection({}))} />}
+      {isIssuanceWaterAbsorptionsDialogOpen && selectedWaterAbsorptionSets.length > 0 && <IssuanceWaterAbsorptionsDialog items={selectedWaterAbsorptionSets.flatMap(s => s.samples)} onOpenChange={setIsIssuanceWaterAbsorptionsDialogOpen} onBatchUpdate={(items) => handleBatchUpdate(items, updateWaterAbsorption, getWaterAbsorptions, setWaterAbsorptions, setIsWaterAbsorptionsLoading, 'water absorption', () => setIsIssuanceWaterAbsorptionsDialogOpen(false), () => setWaterAbsorptionRowSelection({}))} />}
     </>
   );
 }

@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   ColumnDef,
   flexRender,
@@ -29,6 +29,8 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   isLoading: boolean;
+  rowSelection: RowSelectionState;
+  setRowSelection: React.Dispatch<React.SetStateAction<RowSelectionState>>;
   onSelectionChange: (selectedRows: TData[]) => void;
 }
 
@@ -36,10 +38,11 @@ export function ConcreteCubesTable<TData extends ConcreteCubeSet, TValue>({
   columns,
   data,
   isLoading,
+  rowSelection,
+  setRowSelection,
   onSelectionChange,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
   const table = useReactTable({
     data,
@@ -50,9 +53,9 @@ export function ConcreteCubesTable<TData extends ConcreteCubeSet, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onRowSelectionChange: (updater) => {
       const newRowSelection = typeof updater === 'function' ? updater(rowSelection) : updater;
+      setRowSelection(newRowSelection);
       const selectedRows = table.getFilteredSelectedRowModel().rows.map(row => row.original);
       onSelectionChange(selectedRows);
-      setRowSelection(newRowSelection);
     },
     getRowId: (row) => row.id,
     state: {
