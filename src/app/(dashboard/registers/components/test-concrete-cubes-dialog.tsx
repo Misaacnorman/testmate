@@ -128,7 +128,7 @@ export function TestConcreteCubesDialog({ items, onOpenChange, onBatchUpdate }: 
     }
   };
   
-  const progress = (currentStep / (items.length -1)) * 100;
+  const progress = ((currentStep + 1) / items.length) * 100;
 
   return (
     <>

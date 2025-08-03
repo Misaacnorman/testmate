@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo } from "react";
@@ -68,11 +67,6 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
       pavers: items,
     }
   });
-
-  const { fields } = useFieldArray({
-    control: form.control,
-    name: "pavers",
-  });
   
   const currentItem = items[activePaverIndex];
   const isFinalStep = activePaverIndex === items.length - 1;
@@ -138,7 +132,7 @@ export function TestPaversDialog({ items, onOpenChange, onBatchUpdate }: TestPav
     }
   };
   
-  const progress = (activePaverIndex / (items.length - 1)) * 100;
+  const progress = ((activePaverIndex + 1) / items.length) * 100;
 
   return (
     <>

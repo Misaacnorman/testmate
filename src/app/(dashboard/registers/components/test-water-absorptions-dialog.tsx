@@ -66,11 +66,6 @@ export function TestWaterAbsorptionsDialog({ items, onOpenChange, onBatchUpdate 
       items: items,
     }
   });
-
-  const { fields } = useFieldArray({
-    control: form.control,
-    name: "items",
-  });
   
   const currentItem = items[currentStep];
   const isFinalStep = currentStep === items.length - 1;
@@ -132,7 +127,7 @@ export function TestWaterAbsorptionsDialog({ items, onOpenChange, onBatchUpdate 
     }
   };
 
-  const progress = (currentStep / (items.length - 1)) * 100;
+  const progress = ((currentStep + 1) / items.length) * 100;
 
   return (
     <>
