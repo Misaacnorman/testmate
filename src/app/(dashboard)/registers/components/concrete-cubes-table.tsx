@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   ColumnDef,
   flexRender,
@@ -51,7 +51,14 @@ export function ConcreteCubesTable<TData extends ConcreteCubeSet, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-    onRowSelectionChange: setRowSelection,
+    onRowSelectionChange: (updater) => {
+        const newSelection = typeof updater === 'function' ? updater(rowSelection) : updater;
+        setRowSelection(newSelection);
+        // This is a workaround to get the latest selected rows from the table instance
+        // after the state has been updated.
+        const selectedRows = table.getFilteredSelectedRowModel().rows.map(row => row.original);
+        onSelectionChange(selectedRows);
+    },
     getRowId: (row) => row.id,
     state: {
       sorting,
@@ -59,11 +66,6 @@ export function ConcreteCubesTable<TData extends ConcreteCubeSet, TValue>({
     },
     enableRowSelection: true,
   });
-
-  useEffect(() => {
-    const selectedRows = table.getFilteredSelectedRowModel().rows.map(row => row.original);
-    onSelectionChange(selectedRows);
-  }, [rowSelection, table, onSelectionChange]);
 
   if (isLoading) {
     return (

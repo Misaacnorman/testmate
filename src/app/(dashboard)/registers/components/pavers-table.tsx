@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   ColumnDef,
   flexRender,
@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Paver, PaverSet } from "@/types/paver";
+import { PaverSet } from "@/types/paver";
 import styles from './data-table.module.css';
 
 interface DataTableProps<TData, TValue> {
@@ -51,7 +51,12 @@ export function PaversTable<TData extends PaverSet, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-    onRowSelectionChange: setRowSelection,
+    onRowSelectionChange: (updater) => {
+      const newSelection = typeof updater === 'function' ? updater(rowSelection) : updater;
+      setRowSelection(newSelection);
+      const selectedRows = table.getFilteredSelectedRowModel().rows.map(row => row.original);
+      onSelectionChange(selectedRows);
+    },
     getRowId: (row) => row.id,
     state: {
       sorting,
@@ -59,12 +64,6 @@ export function PaversTable<TData extends PaverSet, TValue>({
     },
     enableRowSelection: true,
   });
-
-  useEffect(() => {
-    const selectedRows = table.getFilteredSelectedRowModel().rows.map(row => row.original);
-    onSelectionChange(selectedRows);
-  }, [rowSelection, table, onSelectionChange]);
-
 
   if (isLoading) {
     return (

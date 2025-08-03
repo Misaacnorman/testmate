@@ -34,7 +34,7 @@ import { getColumns as getWaterAbsorptionColumns } from './components/water-abso
 import { WaterAbsorptionTable } from './components/water-absorption-table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { TestTubeDiagonal, FileSignature } from 'lucide-react';
+import { FileSignature } from 'lucide-react';
 import { TestConcreteCubesDialog } from './components/test-concrete-cubes-dialog';
 import { TestBlocksAndBricksDialog } from './components/test-blocks-and-bricks-dialog';
 import { TestPaversDialog } from './components/test-pavers-dialog';
@@ -251,6 +251,31 @@ export default function RegistersPage() {
     return !sets.every(set => areAllTestsFilled(set.samples));
   }
 
+  const handleCubeSelectionChange = useCallback(
+    (selectedRows: ConcreteCubeSet[]) => setSelectedCubeSets(selectedRows),
+    []
+  );
+
+  const handleBlocksAndBricksSelectionChange = useCallback(
+    (selectedRows: BlockAndBrickSet[]) => setSelectedBlocksAndBricksSets(selectedRows),
+    []
+  );
+
+  const handlePaverSelectionChange = useCallback(
+    (selectedRows: PaverSet[]) => setSelectedPaverSets(selectedRows),
+    []
+  );
+  
+  const handleCylinderSelectionChange = useCallback(
+    (selectedRows: CylinderSet[]) => setSelectedCylinderSets(selectedRows),
+    []
+  );
+
+  const handleWaterAbsorptionSelectionChange = useCallback(
+    (selectedRows: WaterAbsorptionSet[]) => setSelectedWaterAbsorptionSets(selectedRows),
+    []
+  );
+
   return (
     <>
       <div className="flex-1 space-y-4 p-4 sm:p-6 md:p-8">
@@ -293,10 +318,6 @@ export default function RegistersPage() {
                     <CardDescription>A register for all concrete cube tests.</CardDescription>
                   </div>
                   <div className="flex items-center gap-2">
-                      <Button onClick={() => setIsTestCubesDialogOpen(true)} disabled={selectedCubeSets.length === 0}>
-                          <TestTubeDiagonal className="mr-2 h-4 w-4" />
-                          Test
-                      </Button>
                       <Button onClick={() => setIsIssuanceCubesDialogOpen(true)} disabled={issuanceDisabled(selectedCubeSets)} variant="outline">
                           <FileSignature className="mr-2 h-4 w-4" />
                           Issuance
@@ -311,7 +332,8 @@ export default function RegistersPage() {
                       isLoading={isConcreteCubesLoading} 
                       rowSelection={cubeRowSelection}
                       setRowSelection={setCubeRowSelection}
-                      onSelectionChange={(rows) => setSelectedCubeSets(rows)} />
+                      onSelectionChange={handleCubeSelectionChange}
+                  />
               </CardContent>
             </Card>
           </TabsContent>
@@ -325,10 +347,6 @@ export default function RegistersPage() {
                         <CardDescription>A register for all brick and block tests.</CardDescription>
                     </div>
                      <div className="flex items-center gap-2">
-                        <Button onClick={() => setIsTestBlocksAndBricksDialogOpen(true)} disabled={selectedBlocksAndBricksSets.length === 0}>
-                            <TestTubeDiagonal className="mr-2 h-4 w-4" />
-                            Test
-                        </Button>
                         <Button onClick={() => setIsIssuanceBlocksAndBricksDialogOpen(true)} disabled={issuanceDisabled(selectedBlocksAndBricksSets)} variant="outline">
                             <FileSignature className="mr-2 h-4 w-4" />
                             Issuance
@@ -343,7 +361,7 @@ export default function RegistersPage() {
                         isLoading={isBlocksAndBricksLoading}
                         rowSelection={blocksAndBricksRowSelection}
                         setRowSelection={setBlocksAndBricksRowSelection} 
-                        onSelectionChange={(rows) => setSelectedBlocksAndBricksSets(rows)} 
+                        onSelectionChange={handleBlocksAndBricksSelectionChange} 
                     />
                 </CardContent>
             </Card>
@@ -358,10 +376,6 @@ export default function RegistersPage() {
                         <CardDescription>A register for all paver tests.</CardDescription>
                     </div>
                     <div className="flex items-center gap-2">
-                        <Button onClick={() => setIsTestPaversDialogOpen(true)} disabled={selectedPaverSets.length === 0}>
-                            <TestTubeDiagonal className="mr-2 h-4 w-4" />
-                            Test
-                        </Button>
                         <Button onClick={() => setIsIssuancePaversDialogOpen(true)} disabled={issuanceDisabled(selectedPaverSets)} variant="outline">
                             <FileSignature className="mr-2 h-4 w-4" />
                             Issuance
@@ -376,7 +390,7 @@ export default function RegistersPage() {
                         isLoading={isPaversLoading} 
                         rowSelection={paverRowSelection}
                         setRowSelection={setPaverRowSelection}
-                        onSelectionChange={(rows) => setSelectedPaverSets(rows)} 
+                        onSelectionChange={handlePaverSelectionChange}
                     />
                 </CardContent>
             </Card>
@@ -391,10 +405,6 @@ export default function RegistersPage() {
                         <CardDescription>A register for all concrete cylinder tests.</CardDescription>
                     </div>
                     <div className="flex items-center gap-2">
-                        <Button onClick={() => setIsTestCylindersDialogOpen(true)} disabled={selectedCylinderSets.length === 0}>
-                            <TestTubeDiagonal className="mr-2 h-4 w-4" />
-                            Test
-                        </Button>
                         <Button onClick={() => setIsIssuanceCylindersDialogOpen(true)} disabled={issuanceDisabled(selectedCylinderSets)} variant="outline">
                             <FileSignature className="mr-2 h-4 w-4" />
                             Issuance
@@ -409,7 +419,7 @@ export default function RegistersPage() {
                         isLoading={isCylindersLoading}
                         rowSelection={cylinderRowSelection}
                         setRowSelection={setCylinderRowSelection} 
-                        onSelectionChange={(rows) => setSelectedCylinderSets(rows)} 
+                        onSelectionChange={handleCylinderSelectionChange}
                     />
                 </CardContent>
             </Card>
@@ -424,10 +434,6 @@ export default function RegistersPage() {
                         <CardDescription>A register for all water absorption tests on bricks and blocks.</CardDescription>
                     </div>
                     <div className="flex items-center gap-2">
-                        <Button onClick={() => setIsTestWaterAbsorptionsDialogOpen(true)} disabled={selectedWaterAbsorptionSets.length === 0}>
-                            <TestTubeDiagonal className="mr-2 h-4 w-4" />
-                            Test
-                        </Button>
                         <Button onClick={() => setIsIssuanceWaterAbsorptionsDialogOpen(true)} disabled={issuanceDisabled(selectedWaterAbsorptionSets)} variant="outline">
                             <FileSignature className="mr-2 h-4 w-4" />
                             Issuance
@@ -442,7 +448,7 @@ export default function RegistersPage() {
                         isLoading={isWaterAbsorptionsLoading}
                         rowSelection={waterAbsorptionRowSelection}
                         setRowSelection={setWaterAbsorptionRowSelection} 
-                        onSelectionChange={(rows) => setSelectedWaterAbsorptionSets(rows)} 
+                        onSelectionChange={handleWaterAbsorptionSelectionChange} 
                     />
                 </CardContent>
             </Card>
