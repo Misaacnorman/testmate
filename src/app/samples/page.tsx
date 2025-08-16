@@ -3,6 +3,7 @@ import {
   ListFilter,
   MoreHorizontal,
   PlusCircle,
+  FlaskConical,
 } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
