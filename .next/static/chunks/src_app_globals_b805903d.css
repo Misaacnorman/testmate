@@ -574,6 +574,18 @@ body {
   margin-top: 2rem;
 }
 
+.mb-2 {
+  margin-bottom: .5rem;
+}
+
+.mb-8 {
+  margin-bottom: 2rem;
+}
+
+.mr-3 {
+  margin-right: .75rem;
+}
+
 .block {
   display: block;
 }
@@ -1177,6 +1189,10 @@ body {
   border-radius: calc(var(--radius)  - 4px);
 }
 
+.rounded-xl {
+  border-radius: .75rem;
+}
+
 .border {
   border-width: 1px;
 }
@@ -1558,6 +1574,11 @@ body {
 .text-xs {
   font-size: .75rem;
   line-height: 1rem;
+}
+
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
 }
 
 .font-bold {

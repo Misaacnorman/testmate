@@ -2,20 +2,30 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { PlusCircle } from 'lucide-react';
 import { useState } from 'react';
 
 export default function SamplesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <div className="flex-1 flex items-center justify-center">
-        <Button
-          size="lg"
-          className="h-24 px-12 text-2xl font-semibold shadow-md transition-shadow duration-200 hover:shadow-lg"
-          onClick={() => setIsModalOpen(true)}
-        >
-          Receive Sample
-        </Button>
+    <div className="flex-1 flex flex-col items-center justify-center text-center">
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold tracking-tight mb-2">
+          Register Sample
+        </h1>
+        <p className="text-lg text-muted-foreground">
+          Start the sample registration process by clicking the button below.
+        </p>
+      </div>
+      <Button
+        size="lg"
+        className="h-20 px-10 text-xl font-semibold shadow-lg rounded-xl"
+        onClick={() => setIsModalOpen(true)}
+      >
+        <PlusCircle className="mr-3 h-6 w-6" />
+        Receive Sample
+      </Button>
     </div>
   );
 }
