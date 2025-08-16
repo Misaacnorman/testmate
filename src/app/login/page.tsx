@@ -7,8 +7,8 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { Beaker, BrainCircuit, FileText, Bot } from 'lucide-react';
 import { Loader2 } from 'lucide-react';
-import Image from 'next/image';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -149,20 +149,45 @@ export default function LoginPage() {
             </Card>
         </div>
       </div>
-      <div className="hidden bg-muted lg:flex items-center justify-center p-8">
-        <div className="relative w-full h-full max-w-4xl max-h-[600px] rounded-2xl overflow-hidden shadow-2xl">
-             <Image
-                src="https://placehold.co/1200x800/87CEEB/F0F0F0?text=TestMate"
-                alt="Lab technicians working"
-                data-ai-hint="lab technicians working"
-                layout="fill"
-                objectFit="cover"
-                className="transition-transform duration-500 hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-            <div className="absolute bottom-0 left-0 p-8 text-white">
-                <h2 className="text-4xl font-bold">Precision Meets Intelligence</h2>
-                <p className="text-xl mt-2 max-w-xl">Streamline your lab operations with TestMate, the AI-powered LIMS designed for accuracy and efficiency.</p>
+       <div className="hidden bg-muted lg:flex items-center justify-center p-12">
+        <div className="w-full max-w-md space-y-8">
+            <div className="text-center">
+                 <Bot className="mx-auto h-16 w-16 text-primary" />
+                <h1 className="mt-4 text-4xl font-bold tracking-tighter text-foreground">
+                    TestMate
+                </h1>
+                <p className="mt-2 text-xl text-muted-foreground">
+                    The AI-Powered Laboratory Information System
+                </p>
+            </div>
+            <div className="space-y-6">
+                <div className="flex items-start gap-4">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20 text-primary">
+                        <BrainCircuit className="h-6 w-6" />
+                    </div>
+                    <div>
+                        <h3 className="text-lg font-semibold">Intelligent Analysis</h3>
+                        <p className="text-muted-foreground">Leverage AI for anomaly detection and automated report generation, turning data into decisions.</p>
+                    </div>
+                </div>
+                <div className="flex items-start gap-4">
+                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20 text-primary">
+                        <Beaker className="h-6 w-6" />
+                    </div>
+                    <div>
+                        <h3 className="text-lg font-semibold">Seamless Tracking</h3>
+                        <p className="text-muted-foreground">Monitor samples in real-time, from accession to analysis, with a complete, immutable audit trail.</p>
+                    </div>
+                </div>
+                 <div className="flex items-start gap-4">
+                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20 text-primary">
+                        <FileText className="h-6 w-6" />
+                    </div>
+                    <div>
+                        <h3 className="text-lg font-semibold">Effortless Reporting</h3>
+                        <p className="text-muted-foreground">Generate comprehensive, compliant reports with the click of a button, freeing up your valuable time.</p>
+                    </div>
+                </div>
             </div>
         </div>
       </div>
