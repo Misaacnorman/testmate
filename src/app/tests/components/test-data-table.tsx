@@ -28,8 +28,8 @@ interface TestDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   loading: boolean;
-  rowSelection: RowSelectionState,
-  setRowSelection: React.Dispatch<React.SetStateAction<RowSelectionState>>
+  rowSelection: RowSelectionState;
+  setRowSelection: React.Dispatch<React.SetStateAction<RowSelectionState>>;
 }
 
 export function TestDataTable<TData, TValue>({
@@ -40,7 +40,7 @@ export function TestDataTable<TData, TValue>({
   setRowSelection,
 }: TestDataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  
+
   const table = useReactTable({
     data,
     columns,
@@ -53,84 +53,103 @@ export function TestDataTable<TData, TValue>({
       sorting,
       rowSelection,
     },
+    initialState: {
+        pagination: {
+            pageSize: 20,
+        }
+    }
   });
 
   return (
-    <div>
-        <div className="rounded-md border">
+    <div className="h-full flex flex-col">
+      <div className="flex-grow rounded-md border overflow-auto">
         <Table>
-            <TableHeader>
+          <TableHeader className="sticky top-0 bg-blue-600 text-white">
             {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
+              <TableRow key={headerGroup.id} className="hover:bg-blue-700">
                 {headerGroup.headers.map((header) => {
-                    return (
-                    <TableHead key={header.id}>
-                        {header.isPlaceholder
+                  return (
+                    <TableHead key={header.id} className="text-white font-bold">
+                      {header.isPlaceholder
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
                             header.getContext()
-                            )}
+                          )}
                     </TableHead>
-                    );
+                  );
                 })}
-                </TableRow>
+              </TableRow>
             ))}
-            </TableHeader>
-            <TableBody>
+          </TableHeader>
+          <TableBody>
             {loading ? (
-                Array.from({ length: 10 }).map((_, i) => (
-                    <TableRow key={i}>
-                        {columns.map((column, j) => (
-                            <TableCell key={j}><Skeleton className="h-6 w-full" /></TableCell>
-                        ))}
-                    </TableRow>
-                ))
-            ) : table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && 'selected'}
-                >
-                    {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              Array.from({ length: 10 }).map((_, i) => (
+                <TableRow key={i}>
+                  {columns.map((column, j) => (
+                    <TableCell key={j}>
+                      <Skeleton className="h-6 w-full" />
                     </TableCell>
-                    ))}
+                  ))}
                 </TableRow>
-                ))
+              ))
+            ) : table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && 'selected'}
+                  className="[&_td]:py-1"
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
             ) : (
-                <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
-                    No tests found.
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No tests found. Create one or import from a file.
                 </TableCell>
-                </TableRow>
+              </TableRow>
             )}
-            </TableBody>
+          </TableBody>
         </Table>
+      </div>
+      <div className="flex items-center justify-between space-x-2 p-4 border-t">
+        <div className="flex-1 text-sm text-muted-foreground">
+          {table.getFilteredSelectedRowModel().rows.length} of{' '}
+          {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
-        <div className="flex items-center justify-end space-x-2 py-4">
-            <div className="flex-1 text-sm text-muted-foreground">
-                {table.getFilteredSelectedRowModel().rows.length} of{' '}
-                {table.getFilteredRowModel().rows.length} row(s) selected.
-            </div>
+        <div className="flex items-center space-x-2">
+            <span className="text-sm">
+                Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+            </span>
             <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
+                variant="outline"
+                size="sm"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
             >
-            Previous
+                Previous
             </Button>
             <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
+                variant="outline"
+                size="sm"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
             >
-            Next
+                Next
             </Button>
         </div>
+      </div>
     </div>
   );
 }

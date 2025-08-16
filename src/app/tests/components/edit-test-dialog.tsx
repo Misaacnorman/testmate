@@ -30,14 +30,19 @@ import type { Test } from '@/lib/types';
 const testSchema = z.object({
   id: z.string().min(1, 'Test Code is required.'),
   name: z.string().min(1, 'Test Name is required.'),
-  material: z.string().min(1, 'Material is required.'),
+  material: z.string().min(1, 'Material Category is required.'),
   method: z.string().min(1, 'Method is required.'),
-  turnAroundTime: z.string().min(1, 'Turnaround Time is required.'),
+  turnAroundTime: z.string().min(1, 'Lead Time is required.'),
   price: z.preprocess(
-    (a) => parseFloat(z.string().parse(a)),
+    (a) => parseFloat(String(a)),
     z.number().positive('Price must be a positive number.')
   ),
   isAccredited: z.boolean(),
+  unit: z.string().min(1, 'Unit is required.'),
+  priceUGX: z.preprocess(
+    (a) => parseFloat(String(a)),
+    z.number().positive('Price (UGX) must be a positive number.')
+  ),
 });
 
 type TestFormValues = z.infer<typeof testSchema>;
@@ -80,7 +85,7 @@ export function EditTestDialog({ open, onOpenChange, test, onSubmit, processing 
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Test Name</FormLabel>
+                  <FormLabel>Material Test</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -93,7 +98,7 @@ export function EditTestDialog({ open, onOpenChange, test, onSubmit, processing 
               name="material"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Material</FormLabel>
+                  <FormLabel>Material Category</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -106,7 +111,20 @@ export function EditTestDialog({ open, onOpenChange, test, onSubmit, processing 
               name="method"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Method</FormLabel>
+                  <FormLabel>Test Method(s)</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+             <FormField
+              control={form.control}
+              name="unit"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Unit</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -119,9 +137,22 @@ export function EditTestDialog({ open, onOpenChange, test, onSubmit, processing 
               name="turnAroundTime"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Turnaround Time</FormLabel>
+                  <FormLabel>Lead Time (Days)</FormLabel>
                   <FormControl>
                     <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+             <FormField
+              control={form.control}
+              name="priceUGX"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Amount (UGX)</FormLabel>
+                  <FormControl>
+                    <Input type="number" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -132,7 +163,7 @@ export function EditTestDialog({ open, onOpenChange, test, onSubmit, processing 
               name="price"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Price</FormLabel>
+                  <FormLabel>Amount (USD)</FormLabel>
                   <FormControl>
                     <Input type="number" {...field} />
                   </FormControl>

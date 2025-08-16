@@ -26,31 +26,25 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import type { Test } from '@/lib/types';
-
-// Mock AI function
-const suggestTestCode = async (material: string, method: string): Promise<string> => {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            const materialCode = material.substring(0, 2).toUpperCase();
-            const methodCode = method.substring(0, 2).toUpperCase();
-            const randomNum = Math.floor(100 + Math.random() * 900);
-            resolve(`${materialCode}${methodCode}-${randomNum}`);
-        }, 500);
-    });
-};
+import { suggestTestCode } from '@/ai/flows/suggest-test-code-flow';
 
 
 const testSchema = z.object({
   id: z.string().min(1, 'Test Code is required.'),
   name: z.string().min(1, 'Test Name is required.'),
-  material: z.string().min(1, 'Material is required.'),
+  material: z.string().min(1, 'Material Category is required.'),
   method: z.string().min(1, 'Method is required.'),
-  turnAroundTime: z.string().min(1, 'Turnaround Time is required.'),
+  turnAroundTime: z.string().min(1, 'Lead Time is required.'),
   price: z.preprocess(
     (a) => parseFloat(z.string().parse(a)),
     z.number().positive('Price must be a positive number.')
   ),
   isAccredited: z.boolean(),
+  unit: z.string().min(1, 'Unit is required.'),
+  priceUGX: z.preprocess(
+    (a) => parseFloat(z.string().parse(a)),
+    z.number().positive('Price (UGX) must be a positive number.')
+  ),
 });
 
 type TestFormValues = z.infer<typeof testSchema>;
@@ -58,7 +52,7 @@ type TestFormValues = z.infer<typeof testSchema>;
 interface CreateTestDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (data: Omit<Test, 'id'>) => void;
+  onSubmit: (data: Test) => void;
   processing: boolean;
 }
 
@@ -73,6 +67,8 @@ export function CreateTestDialog({ open, onOpenChange, onSubmit, processing }: C
       turnAroundTime: '',
       price: 0,
       isAccredited: false,
+      unit: '',
+      priceUGX: 0,
     },
   });
 
@@ -82,16 +78,20 @@ export function CreateTestDialog({ open, onOpenChange, onSubmit, processing }: C
     setSuggesting(true);
     const material = form.getValues('material');
     const method = form.getValues('method');
-    if (material && method) {
-      const code = await suggestTestCode(material, method);
-      form.setValue('id', code);
+    try {
+        if (material && method) {
+            const code = await suggestTestCode({material, method});
+            form.setValue('id', code);
+        }
+    } catch (error) {
+        console.error("Failed to suggest test code", error);
+    } finally {
+        setSuggesting(false);
     }
-    setSuggesting(false);
   };
   
   const handleSubmit = (data: TestFormValues) => {
-    const { id, ...rest } = data; // id is handled by parent, so we omit it
-    onSubmit({ ...rest, id: data.id });
+    onSubmit(data);
   };
   
 
@@ -137,7 +137,7 @@ export function CreateTestDialog({ open, onOpenChange, onSubmit, processing }: C
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Test Name</FormLabel>
+                  <FormLabel>Material Test</FormLabel>
                   <FormControl>
                     <Input placeholder="e.g., Complete Blood Count" {...field} />
                   </FormControl>
@@ -150,7 +150,7 @@ export function CreateTestDialog({ open, onOpenChange, onSubmit, processing }: C
               name="material"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Material</FormLabel>
+                  <FormLabel>Material Category</FormLabel>
                   <FormControl>
                     <Input placeholder="e.g., Blood" {...field} />
                   </FormControl>
@@ -163,9 +163,22 @@ export function CreateTestDialog({ open, onOpenChange, onSubmit, processing }: C
               name="method"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Method</FormLabel>
+                  <FormLabel>Test Method(s)</FormLabel>
                   <FormControl>
                     <Input placeholder="e.g., Automated Hematology" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+             <FormField
+              control={form.control}
+              name="unit"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Unit</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g., mg/dL" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -176,9 +189,22 @@ export function CreateTestDialog({ open, onOpenChange, onSubmit, processing }: C
               name="turnAroundTime"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Turnaround Time</FormLabel>
+                  <FormLabel>Lead Time (Days)</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., 24 hours" {...field} />
+                    <Input placeholder="e.g., 2" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+             <FormField
+              control={form.control}
+              name="priceUGX"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Amount (UGX)</FormLabel>
+                  <FormControl>
+                    <Input type="number" placeholder="e.g., 185000" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -189,7 +215,7 @@ export function CreateTestDialog({ open, onOpenChange, onSubmit, processing }: C
               name="price"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Price</FormLabel>
+                  <FormLabel>Amount (USD)</FormLabel>
                   <FormControl>
                     <Input type="number" placeholder="e.g., 50.00" {...field} />
                   </FormControl>

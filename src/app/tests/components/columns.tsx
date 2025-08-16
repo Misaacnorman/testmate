@@ -16,13 +16,20 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import type { Test } from '@/lib/types';
+import { Input } from '@/components/ui/input';
+import { Switch } from '@/components/ui/switch';
 
 interface ColumnsProps {
   onEdit: (test: Test) => void;
   onDelete: (id: string) => void;
+  onFieldUpdate: (id: string, field: keyof Test, value: any) => void;
 }
 
-export const columns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<Test>[] => [
+export const columns = ({
+  onEdit,
+  onDelete,
+  onFieldUpdate,
+}: ColumnsProps): ColumnDef<Test>[] => [
   {
     id: 'select',
     header: ({ table }) => (
@@ -46,57 +53,143 @@ export const columns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<Test>[] =
     enableHiding: false,
   },
   {
+    accessorKey: 'material',
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+      >
+        Material Category
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'id',
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+      >
+        Test Code
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+    cell: ({ row }) => <div className="font-medium">{row.getValue('id')}</div>,
+  },
+  {
     accessorKey: 'name',
-    header: ({ column }) => {
-      return (
+    header: 'Material Test',
+  },
+  {
+    accessorKey: 'method',
+    header: 'Test Method(s)',
+  },
+  {
+    accessorKey: 'isAccredited',
+    header: ({ column }) => (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Name
+          Accreditation Status
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
+      ),
+    cell: ({ row }) => {
+      const test = row.original;
+      return (
+        <Switch
+          checked={test.isAccredited}
+          onCheckedChange={(value) => onFieldUpdate(test.id, 'isAccredited', value)}
+          aria-label="Accreditation status"
+        />
       );
     },
-    cell: ({ row }) => <div className="font-medium">{row.getValue('name')}</div>,
   },
   {
-    accessorKey: 'material',
-    header: 'Material',
+    accessorKey: 'unit',
+    header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Unit
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+    cell: ({ row }) => {
+        const test = row.original;
+        return (
+            <Input
+            value={test.unit}
+            onChange={(e) => onFieldUpdate(test.id, 'unit', e.target.value)}
+            className="w-24 border-none bg-transparent focus:bg-white focus:ring-1"
+            />
+        );
+    }
   },
   {
-    accessorKey: 'method',
-    header: 'Method',
-  },
-  {
-    accessorKey: 'turnAroundTime',
-    header: 'Turnaround Time',
+    accessorKey: 'priceUGX',
+    header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Amount (UGX)
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+    cell: ({ row }) => {
+        const test = row.original;
+        const formatted = new Intl.NumberFormat('en-US').format(test.priceUGX);
+        return <div className="text-right font-mono">{formatted}</div>;
+    }
   },
   {
     accessorKey: 'price',
-    header: () => <div className="text-right">Price</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue('price'));
-      const formatted = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-      }).format(amount);
-      return <div className="text-right font-mono">{formatted}</div>;
-    },
+    header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Amount (USD)
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+      cell: ({ row }) => {
+        const test = row.original;
+        return (
+            <Input
+            type="number"
+            value={test.price}
+            onChange={(e) => onFieldUpdate(test.id, 'price', parseFloat(e.target.value) || 0)}
+            className="w-24 border-none bg-transparent text-right font-mono focus:bg-white focus:ring-1"
+            />
+        );
+    }
   },
   {
-    accessorKey: 'isAccredited',
-    header: 'Accreditation',
-    cell: ({ row }) => {
-      const isAccredited: boolean = row.getValue('isAccredited');
-      return (
-        <Badge variant={isAccredited ? 'default' : 'secondary'}
-            className={isAccredited ? 'bg-green-500/80' : ''}
+    accessorKey: 'turnAroundTime',
+    header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          {isAccredited ? 'Accredited' : 'Not Accredited'}
-        </Badge>
-      );
-    },
+          Lead Time (Days)
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+    cell: ({ row }) => {
+        const test = row.original;
+        return (
+            <Input
+            value={test.turnAroundTime}
+            onChange={(e) => onFieldUpdate(test.id, 'turnAroundTime', e.target.value)}
+            className="w-32 border-none bg-transparent focus:bg-white focus:ring-1"
+            />
+        );
+    }
   },
   {
     id: 'actions',
@@ -113,7 +206,7 @@ export const columns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<Test>[] =
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem onClick={() => onEdit(test)}>
-              Edit
+              Edit Full Record
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem

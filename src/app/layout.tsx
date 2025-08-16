@@ -1,11 +1,9 @@
+
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import {
-  Tooltip,
-  TooltipContent,
   TooltipProvider,
-  TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { SidebarNav } from '@/components/layout/sidebar-nav';
 import { Header } from '@/components/layout/header';
@@ -37,14 +35,14 @@ export default function RootLayout({
       <body className="font-body antialiased">
         <TooltipProvider>
           <div className="flex min-h-screen w-full flex-col bg-muted/40">
-            <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
+            <aside className="fixed inset-y-0 left-0 z-20 hidden w-14 flex-col border-r bg-background sm:flex">
               <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
                 <SidebarNav />
               </nav>
             </aside>
-            <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+            <div className="flex flex-col sm:pl-14">
               <Header />
-              <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+              <main className="flex-1 flex flex-col p-4 sm:px-6 sm:py-0 md:gap-8 bg-background">
                 {children}
               </main>
             </div>

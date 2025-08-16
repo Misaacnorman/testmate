@@ -2,7 +2,7 @@
 'use client';
 
 import * as React from 'react';
-import { PlusCircle, Download, Upload, Trash2 } from 'lucide-react';
+import { PlusCircle } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -11,41 +11,48 @@ import { TestDataTable } from './components/test-data-table';
 import { columns } from './components/columns';
 import { CreateTestDialog } from './components/create-test-dialog';
 import { EditTestDialog } from './components/edit-test-dialog';
-import { ImportPreviewDialog, ParsedData } from './components/import-preview-dialog';
+import {
+  ImportPreviewDialog,
+  ParsedData,
+} from './components/import-preview-dialog';
 import type { Test } from '@/lib/types';
-
-// Mock data for tests
-const initialTests: Test[] = [
-    { id: 'T001', name: 'Complete Blood Count', material: 'Blood', method: 'Automated Hematology', turnAroundTime: '24 hours', price: 50.00, isAccredited: true },
-    { id: 'T002', name: 'Urinalysis', material: 'Urine', method: 'Microscopy', turnAroundTime: '48 hours', price: 35.00, isAccredited: true },
-    { id: 'T003', name: 'Glucose Tolerance Test', material: 'Blood', method: 'Spectrophotometry', turnAroundTime: '72 hours', price: 75.00, isAccredited: false },
-    { id: 'T004', name: 'Thyroid Panel', material: 'Blood', method: 'Immunoassay', turnAroundTime: '48 hours', price: 120.00, isAccredited: true },
-    { id: 'T005', name: 'Stool Culture', material: 'Stool', method: 'Culture', turnAroundTime: '96 hours', price: 60.00, isAccredited: false },
-];
-
+import { processImportedFile } from '@/ai/flows/process-import-flow';
 
 export default function TestsPage() {
   const { toast } = useToast();
-  const [tests, setTests] = React.useState<Test[]>(initialTests);
-  const [filteredData, setFilteredData] = React.useState<Test[]>(initialTests);
-  const [loading, setLoading] = React.useState(false);
+  const [tests, setTests] = React.useState<Test[]>([]);
+  const [filteredData, setFilteredData] = React.useState<Test[]>([]);
+  const [loading, setLoading] = React.useState(true);
   const [processing, setProcessing] = React.useState(false);
   const [isCreateDialogOpen, setCreateDialogOpen] = React.useState(false);
   const [isEditDialogOpen, setEditDialogOpen] = React.useState(false);
   const [isImportPreviewOpen, setImportPreviewOpen] = React.useState(false);
   const [selectedTest, setSelectedTest] = React.useState<Test | null>(null);
   const [rowSelection, setRowSelection] = React.useState({});
-  const [importData, setImportData] = React.useState<ParsedData>({ headers: [], rows: [] });
+  const [importData, setImportData] = React.useState<ParsedData>({
+    headers: [],
+    rows: [],
+  });
+  
+  React.useEffect(() => {
+    // In a real app, you'd fetch data here.
+    // For now, we just set loading to false.
+    setLoading(false);
+  }, []);
 
 
-  const handleCreateTest = (newTest: Omit<Test, 'id'>) => {
+  const handleFieldUpdate = (id: string, field: keyof Test, value: any) => {
+    setTests(currentTests => currentTests.map(t => t.id === id ? {...t, [field]: value} : t));
+    // Here you would also add a call to your backend to save the change
+  };
+
+
+  const handleCreateTest = (newTest: Omit<Test, 'id'> & { id: string }) => {
     setProcessing(true);
     // Simulate API call
     setTimeout(() => {
-      const createdTest: Test = { id: `T${String(tests.length + 1).padStart(3, '0')}`, ...newTest };
-      const updatedTests = [...tests, createdTest];
+      const updatedTests = [...tests, newTest];
       setTests(updatedTests);
-      setFilteredData(updatedTests);
       setProcessing(false);
       setCreateDialogOpen(false);
       toast({
@@ -63,7 +70,6 @@ export default function TestsPage() {
         test.id === updatedTest.id ? updatedTest : test
       );
       setTests(updatedTests);
-      setFilteredData(updatedTests);
       setProcessing(false);
       setEditDialogOpen(false);
       setSelectedTest(null);
@@ -73,12 +79,11 @@ export default function TestsPage() {
       });
     }, 1000);
   };
-  
+
   const openEditDialog = (test: Test) => {
     setSelectedTest(test);
     setEditDialogOpen(true);
   };
-
 
   const handleDeleteTest = (testId: string) => {
     setProcessing(true);
@@ -86,7 +91,6 @@ export default function TestsPage() {
     setTimeout(() => {
       const updatedTests = tests.filter((test) => test.id !== testId);
       setTests(updatedTests);
-      setFilteredData(updatedTests);
       setProcessing(false);
       toast({
         title: 'Success',
@@ -97,18 +101,21 @@ export default function TestsPage() {
 
   const handleDeleteSelected = () => {
     setProcessing(true);
-    const selectedIds = Object.keys(rowSelection).map(key => filteredData[parseInt(key)].id);
+    const selectedIds = Object.keys(rowSelection).map(
+      (key) => filteredData[parseInt(key)].id
+    );
     // Simulate API call
     setTimeout(() => {
-        const updatedTests = tests.filter(test => !selectedIds.includes(test.id));
-        setTests(updatedTests);
-        setFilteredData(updatedTests);
-        setRowSelection({});
-        setProcessing(false);
-        toast({
-            title: 'Success',
-            description: `${selectedIds.length} tests deleted successfully.`,
-        });
+      const updatedTests = tests.filter(
+        (test) => !selectedIds.includes(test.id)
+      );
+      setTests(updatedTests);
+      setRowSelection({});
+      setProcessing(false);
+      toast({
+        title: 'Success',
+        description: `${selectedIds.length} tests deleted successfully.`,
+      });
     }, 1000);
   };
 
@@ -116,41 +123,65 @@ export default function TestsPage() {
     setImportData(data);
     setImportPreviewOpen(true);
   };
-  
-  const confirmImport = () => {
-    setProcessing(true);
-    // Simulate API call to save imported data
-    setTimeout(() => {
-        const newTests: Test[] = importData.rows.map((row, index) => ({
-            id: `T${String(tests.length + index + 1).padStart(3, '0')}`,
-            name: row[importData.headers.indexOf('name')] as string,
-            material: row[importData.headers.indexOf('material')] as string,
-            method: row[importData.headers.indexOf('method')] as string,
-            turnAroundTime: row[importData.headers.indexOf('turnAroundTime')] as string,
-            price: parseFloat(row[importData.headers.indexOf('price')] as string),
-            isAccredited: row[importData.headers.indexOf('isAccredited')] === 'true'
-        }));
 
-        const updatedTests = [...tests, ...newTests];
-        setTests(updatedTests);
-        setFilteredData(updatedTests);
-        setProcessing(false);
-        setImportPreviewOpen(false);
-        toast({
-            title: "Success",
-            description: "Data imported successfully."
-        });
-    }, 1000);
+  const confirmImport = async () => {
+    setProcessing(true);
+    try {
+      const importedTests = await processImportedFile(importData);
+      
+      const newTests: Test[] = importedTests.map((testData) => ({
+        id: testData.testCode,
+        name: testData.materialTest,
+        material: testData.materialCategory,
+        method: testData.testMethods,
+        turnAroundTime: testData.leadTimeDays,
+        price: testData.amountUSD,
+        priceUGX: testData.amountUGX,
+        unit: testData.unit,
+        isAccredited: testData.accreditationStatus === 'Accredited',
+      }));
+
+      const updatedTests = [...tests, ...newTests];
+      setTests(updatedTests);
+      setImportPreviewOpen(false);
+      toast({
+        title: 'Success',
+        description: `${newTests.length} tests imported successfully.`,
+      });
+    } catch (error) {
+      console.error('Import failed:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Import Failed',
+        description:
+          'There was an error processing the file. Please check the console for details.',
+      });
+    } finally {
+      setProcessing(false);
+    }
   };
 
-  const tableColumns = columns({ onEdit: openEditDialog, onDelete: handleDeleteTest });
+  const tableColumns = columns({
+    onEdit: openEditDialog,
+    onDelete: handleDeleteTest,
+    onFieldUpdate: handleFieldUpdate,
+  });
+
+  React.useEffect(() => {
+    // When the main `tests` array changes, we update the `filteredData` as well.
+    // This ensures that filters are re-applied when data changes.
+    // A more sophisticated implementation might preserve filters.
+    setFilteredData(tests);
+  }, [tests]);
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
+    <div className="flex h-full flex-col">
+      <div className="flex items-center justify-between p-4 border-b">
         <div>
-            <h1 className="text-2xl font-bold tracking-tight">Tests</h1>
-            <p className="text-muted-foreground">Manage the catalog of available tests.</p>
+          <h1 className="text-2xl font-bold tracking-tight">Tests</h1>
+          <p className="text-muted-foreground">
+            Manage the catalog of available tests.
+          </p>
         </div>
         <Button onClick={() => setCreateDialogOpen(true)}>
           <PlusCircle className="mr-2 h-4 w-4" />
@@ -158,22 +189,26 @@ export default function TestsPage() {
         </Button>
       </div>
 
-      <TestActions
-        data={tests}
-        onFilter={setFilteredData}
-        onImport={handleImport}
-        onDeleteSelected={handleDeleteSelected}
-        processing={processing}
-        selectionCount={Object.keys(rowSelection).length}
-      />
+      <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b">
+        <TestActions
+            data={tests}
+            onFilter={setFilteredData}
+            onImport={handleImport}
+            onDeleteSelected={handleDeleteSelected}
+            processing={processing}
+            selectionCount={Object.keys(rowSelection).length}
+        />
+      </div>
       
-      <TestDataTable
-        columns={tableColumns}
-        data={filteredData}
-        loading={loading}
-        rowSelection={rowSelection}
-        setRowSelection={setRowSelection}
-      />
+      <div className="flex-1 overflow-auto">
+        <TestDataTable
+            columns={tableColumns}
+            data={filteredData}
+            loading={loading}
+            rowSelection={rowSelection}
+            setRowSelection={setRowSelection}
+        />
+      </div>
 
       <CreateTestDialog
         open={isCreateDialogOpen}
@@ -199,7 +234,6 @@ export default function TestsPage() {
         onConfirm={confirmImport}
         processing={processing}
       />
-
     </div>
   );
 }
