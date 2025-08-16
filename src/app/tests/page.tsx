@@ -3,7 +3,6 @@
 
 import * as React from 'react';
 import { PlusCircle } from 'lucide-react';
-
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { TestActions } from './components/test-actions';
@@ -17,6 +16,7 @@ import {
 } from './components/import-preview-dialog';
 import type { Test } from '@/lib/types';
 import { processImportedFile } from '@/ai/flows/process-import-flow';
+import { getTests, saveTests } from '../data/page';
 
 export default function TestsPage() {
   const { toast } = useToast();
@@ -35,49 +35,49 @@ export default function TestsPage() {
   });
   
   React.useEffect(() => {
-    // In a real app, you'd fetch data here.
-    // For now, we just set loading to false.
-    setLoading(false);
+    const loadTests = async () => {
+        setLoading(true);
+        const data = await getTests();
+        setTests(data);
+        setLoading(false);
+    }
+    loadTests();
   }, []);
 
+  const persistTests = async (updatedTests: Test[]) => {
+    setProcessing(true);
+    await saveTests(updatedTests);
+    setTests(updatedTests);
+    setProcessing(false);
+  }
 
   const handleFieldUpdate = (id: string, field: keyof Test, value: any) => {
-    setTests(currentTests => currentTests.map(t => t.id === id ? {...t, [field]: value} : t));
-    // Here you would also add a call to your backend to save the change
+    const updatedTests = tests.map(t => t.id === id ? {...t, [field]: value} : t);
+    persistTests(updatedTests);
   };
 
 
-  const handleCreateTest = (newTest: Omit<Test, 'id'> & { id: string }) => {
-    setProcessing(true);
-    // Simulate API call
-    setTimeout(() => {
-      const updatedTests = [...tests, newTest];
-      setTests(updatedTests);
-      setProcessing(false);
-      setCreateDialogOpen(false);
-      toast({
-        title: 'Success',
-        description: 'Test created successfully.',
-      });
-    }, 1000);
+  const handleCreateTest = async (newTest: Omit<Test, 'id'> & { id: string }) => {
+    const updatedTests = [...tests, newTest];
+    await persistTests(updatedTests);
+    setCreateDialogOpen(false);
+    toast({
+      title: 'Success',
+      description: 'Test created successfully.',
+    });
   };
 
-  const handleEditTest = (updatedTest: Test) => {
-    setProcessing(true);
-    // Simulate API call
-    setTimeout(() => {
-      const updatedTests = tests.map((test) =>
-        test.id === updatedTest.id ? updatedTest : test
-      );
-      setTests(updatedTests);
-      setProcessing(false);
-      setEditDialogOpen(false);
-      setSelectedTest(null);
-      toast({
-        title: 'Success',
-        description: 'Test updated successfully.',
-      });
-    }, 1000);
+  const handleEditTest = async (updatedTest: Test) => {
+    const updatedTests = tests.map((test) =>
+      test.id === updatedTest.id ? updatedTest : test
+    );
+    await persistTests(updatedTests);
+    setEditDialogOpen(false);
+    setSelectedTest(null);
+    toast({
+      title: 'Success',
+      description: 'Test updated successfully.',
+    });
   };
 
   const openEditDialog = (test: Test) => {
@@ -85,38 +85,28 @@ export default function TestsPage() {
     setEditDialogOpen(true);
   };
 
-  const handleDeleteTest = (testId: string) => {
-    setProcessing(true);
-    // Simulate API call
-    setTimeout(() => {
-      const updatedTests = tests.filter((test) => test.id !== testId);
-      setTests(updatedTests);
-      setProcessing(false);
-      toast({
-        title: 'Success',
-        description: 'Test deleted successfully.',
-      });
-    }, 1000);
+  const handleDeleteTest = async (testId: string) => {
+    const updatedTests = tests.filter((test) => test.id !== testId);
+    await persistTests(updatedTests);
+    toast({
+      title: 'Success',
+      description: 'Test deleted successfully.',
+    });
   };
 
-  const handleDeleteSelected = () => {
-    setProcessing(true);
+  const handleDeleteSelected = async () => {
     const selectedIds = Object.keys(rowSelection).map(
       (key) => filteredData[parseInt(key)].id
     );
-    // Simulate API call
-    setTimeout(() => {
-      const updatedTests = tests.filter(
-        (test) => !selectedIds.includes(test.id)
-      );
-      setTests(updatedTests);
-      setRowSelection({});
-      setProcessing(false);
-      toast({
-        title: 'Success',
-        description: `${selectedIds.length} tests deleted successfully.`,
-      });
-    }, 1000);
+    const updatedTests = tests.filter(
+      (test) => !selectedIds.includes(test.id)
+    );
+    await persistTests(updatedTests);
+    setRowSelection({});
+    toast({
+      title: 'Success',
+      description: `${selectedIds.length} tests deleted successfully.`,
+    });
   };
 
   const handleImport = (data: ParsedData) => {
@@ -142,7 +132,8 @@ export default function TestsPage() {
       }));
 
       const updatedTests = [...tests, ...newTests];
-      setTests(updatedTests);
+      await persistTests(updatedTests);
+      
       setImportPreviewOpen(false);
       toast({
         title: 'Success',
@@ -168,9 +159,6 @@ export default function TestsPage() {
   });
 
   React.useEffect(() => {
-    // When the main `tests` array changes, we update the `filteredData` as well.
-    // This ensures that filters are re-applied when data changes.
-    // A more sophisticated implementation might preserve filters.
     setFilteredData(tests);
   }, [tests]);
 
