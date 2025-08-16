@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -36,6 +37,9 @@ import {
 } from '@/components/ui/chart';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 import type { ChartConfig } from '@/components/ui/chart';
+import { useAuth } from '@/hooks/use-auth';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 const chartData = [
   { status: 'Pending', count: 186, fill: 'var(--color-pending)' },
@@ -74,6 +78,25 @@ const equipment = [
 ];
 
 export default function Dashboard() {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [user, loading, router]);
+
+  if (loading || !user) {
+    return (
+        <div className="flex items-center justify-center h-full">
+            <div className="text-center">
+                <p className="text-lg text-muted-foreground">Loading...</p>
+            </div>
+        </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

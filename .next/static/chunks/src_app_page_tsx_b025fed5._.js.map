@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file:///home/user/studio/src/app/page.tsx"],"sourcesContent":["\n'use client';\nimport { useAuth } from '@/hooks/use-auth';\nimport { redirect } from 'next/navigation';\nimport { useEffect } from 'react';\n\nexport default function Home() {\n  const { user, loading } = useAuth();\n  \n  useEffect(() => {\n    if (!loading) {\n      if (user) {\n        redirect('/dashboard');\n      } else {\n        redirect('/login');\n      }\n    }\n  }, [user, loading]);\n\n  // Render a loading state while checking auth status\n  return (\n    <div className=\"flex h-screen items-center justify-center\">\n      <p>Loading...</p>\n    </div>\n  );\n}\n"],"names":[],"mappings":";;;;AAEA;AACA;AACA;;;AAHA;;;;AAKe,SAAS;;IACtB,MAAM,EAAE,IAAI,EAAE,OAAO,EAAE,GAAG,CAAA,GAAA,+HAAA,CAAA,UAAO,AAAD;IAEhC,CAAA,GAAA,6JAAA,CAAA,YAAS,AAAD;0BAAE;YACR,IAAI,CAAC,SAAS;gBACZ,IAAI,MAAM;oBACR,CAAA,GAAA,qIAAA,CAAA,WAAQ,AAAD,EAAE;gBACX,OAAO;oBACL,CAAA,GAAA,qIAAA,CAAA,WAAQ,AAAD,EAAE;gBACX;YACF;QACF;yBAAG;QAAC;QAAM;KAAQ;IAElB,oDAAoD;IACpD,qBACE,6LAAC;QAAI,WAAU;kBACb,cAAA,6LAAC;sBAAE;;;;;;;;;;;AAGT;GAnBwB;;QACI,+HAAA,CAAA,UAAO;;;KADX","debugId":null}}]
+}
