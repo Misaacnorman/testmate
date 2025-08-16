@@ -218,7 +218,9 @@ export default function TestsPage() {
           const mappedKey = headerMap[header];
           if (mappedKey) {
             let value: any = row[index];
-             if (mappedKey === 'price' || mappedKey === 'priceUGX') {
+             if (mappedKey === 'id') {
+              value = String(value).replace(/\//g, '-');
+            } else if (mappedKey === 'price' || mappedKey === 'priceUGX') {
               value = parseFloat(value) || 0;
             } else if (mappedKey === 'isAccredited') {
               value = String(value).toLowerCase() === 'accredited' || String(value).toLowerCase() === 'true';

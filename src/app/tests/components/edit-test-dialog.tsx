@@ -28,7 +28,7 @@ import { Switch } from '@/components/ui/switch';
 import type { Test } from '@/lib/types';
 
 const testSchema = z.object({
-  id: z.string().min(1, 'Test Code is required.'),
+  id: z.string().min(1, 'Test Code is required.'), // ID is not editable here, so no validation needed for slashes
   name: z.string().min(1, 'Test Name is required.'),
   material: z.string().min(1, 'Material Category is required.'),
   method: z.string().min(1, 'Method is required.'),

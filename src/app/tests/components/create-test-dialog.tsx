@@ -29,7 +29,9 @@ import type { Test } from '@/lib/types';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 const testSchema = z.object({
-  id: z.string().min(1, 'Test Code is required.'),
+  id: z.string().min(1, 'Test Code is required.').refine(s => !s.includes('/'), {
+    message: "Test Code cannot contain forward slashes ('/')."
+  }),
   name: z.string().min(1, 'Test Name is required.'),
   material: z.string().min(1, 'Material Category is required.'),
   method: z.string().min(1, 'Method is required.'),
