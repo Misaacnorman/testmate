@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -7,6 +8,7 @@ import {
   FileText,
   SlidersHorizontal,
   TestTube,
+  Beaker,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -26,6 +28,7 @@ interface SidebarNavProps {
 const navItems = [
   { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { href: '/samples', icon: FlaskConical, label: 'Sample Tracking', badge: '6' },
+  { href: '/tests', icon: Beaker, label: 'Tests' },
   { href: '/instruments', icon: SlidersHorizontal, label: 'Instruments' },
   { href: '/reports', icon: FileText, label: 'Report Generation' },
   { href: '/audit-trail', icon: History, label: 'Audit Trail' },

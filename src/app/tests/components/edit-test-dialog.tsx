@@ -1,0 +1,171 @@
+
+'use client';
+
+import * as React from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Loader2 } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import type { Test } from '@/lib/types';
+
+const testSchema = z.object({
+  id: z.string().min(1, 'Test Code is required.'),
+  name: z.string().min(1, 'Test Name is required.'),
+  material: z.string().min(1, 'Material is required.'),
+  method: z.string().min(1, 'Method is required.'),
+  turnAroundTime: z.string().min(1, 'Turnaround Time is required.'),
+  price: z.preprocess(
+    (a) => parseFloat(z.string().parse(a)),
+    z.number().positive('Price must be a positive number.')
+  ),
+  isAccredited: z.boolean(),
+});
+
+type TestFormValues = z.infer<typeof testSchema>;
+
+interface EditTestDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  test: Test;
+  onSubmit: (data: Test) => void;
+  processing: boolean;
+}
+
+export function EditTestDialog({ open, onOpenChange, test, onSubmit, processing }: EditTestDialogProps) {
+  const form = useForm<TestFormValues>({
+    resolver: zodResolver(testSchema),
+    defaultValues: test,
+  });
+
+  React.useEffect(() => {
+    form.reset(test);
+  }, [test, form]);
+
+  const handleSubmit = (data: TestFormValues) => {
+    onSubmit(data);
+  };
+  
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Edit Test</DialogTitle>
+          <DialogDescription>
+            Update the details for the test code: {test.id}
+          </DialogDescription>
+        </DialogHeader>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Test Name</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="material"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Material</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="method"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Method</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="turnAroundTime"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Turnaround Time</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Price</FormLabel>
+                  <FormControl>
+                    <Input type="number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="isAccredited"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                  <div className="space-y-0.5">
+                    <FormLabel>Accredited Test</FormLabel>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <DialogFooter>
+              <Button type="submit" disabled={processing}>
+                {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Save Changes
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
+  );
+}

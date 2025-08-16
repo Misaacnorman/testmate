@@ -1,3 +1,4 @@
+
 export type Sample = {
   id: string;
   status: 'Pending' | 'In Progress' | 'Completed' | 'Requires Review';
@@ -24,4 +25,14 @@ export type AuditLog = {
   user: string;
   action: string;
   details: string;
+};
+
+export type Test = {
+    id: string;
+    name: string;
+    material: string;
+    method: string;
+    turnAroundTime: string;
+    price: number;
+    isAccredited: boolean;
 };

@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -78,11 +79,11 @@ export function Header() {
                 <BreadcrumbItem>
                   {isLast ? (
                     <BreadcrumbPage className="capitalize">
-                      {segment}
+                      {segment.replace('-', ' ')}
                     </BreadcrumbPage>
                   ) : (
                     <BreadcrumbLink asChild>
-                      <Link href={href} className="capitalize">{segment}</Link>
+                      <Link href={href} className="capitalize">{segment.replace('-', ' ')}</Link>
                     </BreadcrumbLink>
                   )}
                 </BreadcrumbItem>
