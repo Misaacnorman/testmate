@@ -186,8 +186,8 @@ export function ReceiveSampleDialog({
   }, [open, toast, resetAllState]);
 
   const uniqueMaterialCategories = useMemo(() => {
-    const categories = allTests.map((test) => test.material);
-    return [...new Set(categories)];
+    const categories = allTests.map((test) => test.material.toLowerCase().trim());
+    return [...new Set(categories)].map(cat => allTests.find(t => t.material.toLowerCase().trim() === cat)!.material);
   }, [allTests]);
 
   const handleNext = async () => {
@@ -1040,8 +1040,8 @@ export function ReceiveSampleDialog({
                 </div>
               ) : (
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {uniqueMaterialCategories.map((category) => (
-                    <div key={category} className="flex items-center space-x-2">
+                  {uniqueMaterialCategories.map((category, index) => (
+                    <div key={`${category}-${index}`} className="flex items-center space-x-2">
                       <Checkbox
                         id={category}
                         checked={!!selectedCategories[category]}
@@ -1424,5 +1424,7 @@ export function ReceiveSampleDialog({
     </Dialog>
   );
 }
+
+    
 
     
