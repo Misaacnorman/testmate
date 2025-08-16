@@ -30,6 +30,8 @@ const prompt = ai.definePrompt({
   The format should be: [First 2 letters of material][First 2 letters of method]-[3 random digits].
   For example, for Material "Blood" and Method "Hematology", a possible code is "BLHE-123".
   
+  IMPORTANT: The generated code must NOT contain any forward slashes ('/').
+
   Material: {{{material}}}
   Method: {{{method}}}
   
