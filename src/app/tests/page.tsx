@@ -15,7 +15,6 @@ import {
   ParsedData,
 } from './components/import-preview-dialog';
 import type { Test } from '@/lib/types';
-import { processImportedFile } from '@/ai/flows/process-import-flow';
 import { getTests, saveTests } from '../data/page';
 import { doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
@@ -198,19 +197,38 @@ export default function TestsPage() {
   const confirmImport = async () => {
     setProcessing(true);
     try {
-      const importedTests = await processImportedFile(importData);
-      
-      const newTests: Test[] = importedTests.map((testData) => ({
-        id: testData.testCode,
-        name: testData.materialTest,
-        material: testData.materialCategory,
-        method: testData.testMethods,
-        turnAroundTime: testData.leadTimeDays,
-        price: testData.amountUSD,
-        priceUGX: testData.amountUGX,
-        unit: testData.unit,
-        isAccredited: testData.accreditationStatus === 'Accredited',
-      }));
+      // Manual mapping of imported data
+      const headerMap: { [key: string]: keyof Test } = {
+        'material category': 'material',
+        'test code': 'id',
+        'material test': 'name',
+        'test method(s)': 'method',
+        'accreditation status': 'isAccredited',
+        'unit': 'unit',
+        'amount (ugx)': 'priceUGX',
+        'amount (usd)': 'price',
+        'lead time (days)': 'turnAroundTime',
+      };
+
+      const lowercasedHeaders = importData.headers.map(h => h.toLowerCase());
+
+      const newTests: Test[] = importData.rows.map(row => {
+        const test: Partial<Test> = {};
+        lowercasedHeaders.forEach((header, index) => {
+          const mappedKey = headerMap[header];
+          if (mappedKey) {
+            let value: any = row[index];
+             if (mappedKey === 'price' || mappedKey === 'priceUGX') {
+              value = parseFloat(value) || 0;
+            } else if (mappedKey === 'isAccredited') {
+              value = String(value).toLowerCase() === 'accredited' || String(value).toLowerCase() === 'true';
+            }
+            (test as any)[mappedKey] = value;
+          }
+        });
+        return test as Test;
+      }).filter(t => t.id); // Ensure there is an ID
+
 
       const updatedTests = [...tests, ...newTests];
       await saveTests(updatedTests); // Persist all tests

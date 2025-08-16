@@ -5,7 +5,7 @@ import * as React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Loader2, Wand2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -26,7 +26,6 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import type { Test } from '@/lib/types';
-import { suggestTestCode } from '@/ai/flows/suggest-test-code-flow';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 const testSchema = z.object({
@@ -77,24 +76,6 @@ export function CreateTestDialog({
     },
   });
 
-  const [suggesting, setSuggesting] = React.useState(false);
-
-  const handleSuggestCode = async () => {
-    setSuggesting(true);
-    const material = form.getValues('material');
-    const method = form.getValues('method');
-    try {
-      if (material && method) {
-        const code = await suggestTestCode({ material, method });
-        form.setValue('id', code);
-      }
-    } catch (error) {
-      console.error('Failed to suggest test code', error);
-    } finally {
-      setSuggesting(false);
-    }
-  };
-
   const handleSubmit = (data: TestFormValues) => {
     onSubmit(data);
   };
@@ -119,35 +100,19 @@ export function CreateTestDialog({
             <ScrollArea className="h-[60vh] p-1">
               <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-6">
-                  <div className="flex items-end gap-2">
-                    <FormField
-                      control={form.control}
-                      name="id"
-                      render={({ field }) => (
-                        <FormItem className="flex-grow">
-                          <FormLabel>Test Code</FormLabel>
-                          <FormControl>
-                            <Input placeholder="e.g., BLHE-101" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="icon"
-                      onClick={handleSuggestCode}
-                      disabled={suggesting}
-                    >
-                      {suggesting ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                      ) : (
-                        <Wand2 className="h-4 w-4" />
-                      )}
-                      <span className="sr-only">Suggest Code</span>
-                    </Button>
-                  </div>
+                  <FormField
+                    control={form.control}
+                    name="id"
+                    render={({ field }) => (
+                      <FormItem className="flex-grow">
+                        <FormLabel>Test Code</FormLabel>
+                        <FormControl>
+                          <Input placeholder="e.g., BLHE-101" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
                   <FormField
                     control={form.control}
