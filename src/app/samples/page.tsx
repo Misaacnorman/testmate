@@ -10,7 +10,7 @@ export default function SamplesPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center text-center">
+    <div className="flex-1 flex flex-col items-center justify-center text-center h-full">
       <div className="mb-8">
         <h1 className="text-4xl font-bold tracking-tight mb-2">
           Register Sample

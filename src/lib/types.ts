@@ -1,11 +1,11 @@
 
 export type Test = {
   id: string;
-  name: string;
-  material: string;
-  method: string;
-  turnAroundTime: string; // This can represent "Lead Time (Days)"
-  price: number; // This can represent "Amount (USD)"
+  name: string; // was materialTest
+  material: string; // was materialCategory
+  method: string; // was testMethods
+  turnAroundTime: string;
+  price: number;
   isAccredited: boolean;
   unit: string;
   priceUGX: number;
