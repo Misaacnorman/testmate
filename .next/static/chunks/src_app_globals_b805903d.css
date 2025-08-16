@@ -530,6 +530,11 @@ body {
   margin-bottom: .25rem;
 }
 
+.my-4 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
 .-ml-4 {
   margin-left: -1rem;
 }
@@ -757,6 +762,10 @@ body {
 
 .min-h-svh {
   min-height: 100svh;
+}
+
+.min-h-\[300px\] {
+  min-height: 300px;
 }
 
 .w-0 {
@@ -2743,6 +2752,10 @@ body {
 
   .sm\:max-w-3xl {
     max-width: 48rem;
+  }
+
+  .sm\:max-w-2xl {
+    max-width: 42rem;
   }
 
   .sm\:grid-cols-2 {

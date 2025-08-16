@@ -3,10 +3,11 @@
 
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { ReceiveSampleDialog } from "./components/receive-sample-dialog";
 
 export default function SamplesPage() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center text-center">
@@ -21,11 +22,12 @@ export default function SamplesPage() {
       <Button
         size="lg"
         className="h-20 px-10 text-xl font-semibold shadow-lg rounded-xl"
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => setIsDialogOpen(true)}
       >
         <PlusCircle className="mr-3 h-6 w-6" />
         Receive Sample
       </Button>
+      <ReceiveSampleDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
     </div>
   );
 }
