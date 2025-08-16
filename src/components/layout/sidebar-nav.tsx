@@ -4,6 +4,7 @@
 import {
   LayoutDashboard,
   Beaker,
+  FlaskConical,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -23,6 +24,7 @@ interface SidebarNavProps {
 
 const navItems = [
   { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+  { href: '/samples', icon: FlaskConical, label: 'Samples'},
   { href: '/tests', icon: Beaker, label: 'Tests' },
 ];
 
