@@ -2,12 +2,7 @@
 'use client';
 
 import {
-  FlaskConical,
-  History,
   LayoutDashboard,
-  FileText,
-  SlidersHorizontal,
-  TestTube,
   Beaker,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -20,6 +15,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
+import { TestTube } from 'lucide-react';
 
 interface SidebarNavProps {
   isMobile?: boolean;
@@ -27,11 +23,7 @@ interface SidebarNavProps {
 
 const navItems = [
   { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-  { href: '/samples', icon: FlaskConical, label: 'Sample Tracking', badge: '6' },
   { href: '/tests', icon: Beaker, label: 'Tests' },
-  { href: '/instruments', icon: SlidersHorizontal, label: 'Instruments' },
-  { href: '/reports', icon: FileText, label: 'Report Generation' },
-  { href: '/audit-trail', icon: History, label: 'Audit Trail' },
 ];
 
 export function SidebarNav({ isMobile = false }: SidebarNavProps) {
@@ -61,11 +53,6 @@ export function SidebarNav({ isMobile = false }: SidebarNavProps) {
           >
             <item.icon className="h-5 w-5" />
             {isMobile && item.label}
-            {item.badge && isMobile && (
-              <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
-                {item.badge}
-              </Badge>
-            )}
           </Link>
         );
 
