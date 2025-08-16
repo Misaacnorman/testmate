@@ -901,11 +901,15 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
     const uniqueMaterialCategories = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
         "ReceiveSampleDialog.useMemo[uniqueMaterialCategories]": ()=>{
             const categories = allTests.map({
-                "ReceiveSampleDialog.useMemo[uniqueMaterialCategories].categories": (test)=>test.material
+                "ReceiveSampleDialog.useMemo[uniqueMaterialCategories].categories": (test)=>test.material.toLowerCase().trim()
             }["ReceiveSampleDialog.useMemo[uniqueMaterialCategories].categories"]);
             return [
                 ...new Set(categories)
-            ];
+            ].map({
+                "ReceiveSampleDialog.useMemo[uniqueMaterialCategories]": (cat)=>allTests.find({
+                        "ReceiveSampleDialog.useMemo[uniqueMaterialCategories]": (t)=>t.material.toLowerCase().trim() === cat
+                    }["ReceiveSampleDialog.useMemo[uniqueMaterialCategories]"]).material
+            }["ReceiveSampleDialog.useMemo[uniqueMaterialCategories]"]);
         }
     }["ReceiveSampleDialog.useMemo[uniqueMaterialCategories]"], [
         allTests
@@ -2334,7 +2338,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                 columnNumber: 17
                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4",
-                                children: uniqueMaterialCategories.map((category)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                children: uniqueMaterialCategories.map((category, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "flex items-center space-x-2",
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$checkbox$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Checkbox"], {
@@ -2356,7 +2360,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                 columnNumber: 23
                                             }, this)
                                         ]
-                                    }, category, true, {
+                                    }, `${category}-${index}`, true, {
                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
                                         lineNumber: 1044,
                                         columnNumber: 21

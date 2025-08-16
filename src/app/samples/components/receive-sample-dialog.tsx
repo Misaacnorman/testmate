@@ -186,8 +186,10 @@ export function ReceiveSampleDialog({
   }, [open, toast, resetAllState]);
 
   const uniqueMaterialCategories = useMemo(() => {
-    const categories = allTests.map((test) => test.material.toLowerCase().trim());
-    return [...new Set(categories)].map(cat => allTests.find(t => t.material.toLowerCase().trim() === cat)!.material);
+    const categories = allTests
+      .filter((test) => typeof test.material === 'string') // Add this line to filter out tests without a material
+      .map((test) => test.material.toLowerCase().trim());
+    return [...new Set(categories)].map(cat => allTests.find(t => t.material && t.material.toLowerCase().trim() === cat)!.material);
   }, [allTests]);
 
   const handleNext = async () => {
@@ -1088,7 +1090,7 @@ export function ReceiveSampleDialog({
                         {allTests
                           .filter(
                             (t) =>
-                              t.material.toLowerCase().trim() ===
+                              t.material && t.material.toLowerCase().trim() ===
                               category.toLowerCase().trim()
                           )
                           .map((test) => (
