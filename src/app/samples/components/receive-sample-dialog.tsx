@@ -44,6 +44,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Calendar } from '@/components/ui/calendar';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/hooks/use-auth';
 
 // Step 1 Schema
 const step1Schema = z
@@ -114,6 +115,7 @@ export function ReceiveSampleDialog({
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
   const router = useRouter();
+  const { user } = useAuth();
 
   const [step1Data, setStep1Data] = useState<Step1Data | null>(null);
   const [selectedCategories, setSelectedCategories] = useState<
@@ -129,9 +131,15 @@ export function ReceiveSampleDialog({
     defaultValues: {
       isSameBillingClient: 'yes',
       transmittalModes: [],
-      receivedBy: '',
+      receivedBy: user?.displayName || user?.email || '',
     },
   });
+
+  useEffect(() => {
+    if (user) {
+      form1.setValue('receivedBy', user.displayName || user.email || '');
+    }
+  }, [user, form1]);
 
   const specialCategories = useMemo(
     () => ['Concrete Cubes', 'Bricks', 'Blocks', 'Pavers', 'Cylinder'],
@@ -143,13 +151,13 @@ export function ReceiveSampleDialog({
     form1.reset({
       isSameBillingClient: 'yes',
       transmittalModes: [],
-      receivedBy: '',
+      receivedBy: user?.displayName || user?.email || '',
     });
     setStep1Data(null);
     setSelectedCategories({});
     setStep4Data({});
     setIsSubmitting(false);
-  }, [form1]);
+  }, [form1, user]);
 
   useEffect(() => {
     if (open) {
@@ -879,10 +887,11 @@ export function ReceiveSampleDialog({
                     )}
                   </div>
                   <div className="space-y-2">
-                    <Label>Date & Time of Receipt</Label>
+                    <Label>Date &amp; Time of Receipt</Label>
                     <Input
                       value={format(receiptDate, 'yyyy-MM-dd HH:mm')}
                       readOnly
+                      className="bg-muted/50"
                     />
                   </div>
                 </div>
@@ -1253,7 +1262,7 @@ export function ReceiveSampleDialog({
               <div className="space-y-6 pr-4">
                 <div className="space-y-2">
                   <h3 className="text-lg font-semibold">
-                    Client & Project Details
+                    Client &amp; Project Details
                   </h3>
                   <div className="text-sm space-y-1">
                     <p>
@@ -1415,3 +1424,5 @@ export function ReceiveSampleDialog({
     </Dialog>
   );
 }
+
+    
