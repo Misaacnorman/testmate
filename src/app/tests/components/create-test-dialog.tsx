@@ -27,7 +27,7 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import type { Test } from '@/lib/types';
 import { suggestTestCode } from '@/ai/flows/suggest-test-code-flow';
-
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const testSchema = z.object({
   id: z.string().min(1, 'Test Code is required.'),
@@ -56,7 +56,12 @@ interface CreateTestDialogProps {
   processing: boolean;
 }
 
-export function CreateTestDialog({ open, onOpenChange, onSubmit, processing }: CreateTestDialogProps) {
+export function CreateTestDialog({
+  open,
+  onOpenChange,
+  onSubmit,
+  processing,
+}: CreateTestDialogProps) {
   const form = useForm<TestFormValues>({
     resolver: zodResolver(testSchema),
     defaultValues: {
@@ -79,21 +84,20 @@ export function CreateTestDialog({ open, onOpenChange, onSubmit, processing }: C
     const material = form.getValues('material');
     const method = form.getValues('method');
     try {
-        if (material && method) {
-            const code = await suggestTestCode({material, method});
-            form.setValue('id', code);
-        }
+      if (material && method) {
+        const code = await suggestTestCode({ material, method });
+        form.setValue('id', code);
+      }
     } catch (error) {
-        console.error("Failed to suggest test code", error);
+      console.error('Failed to suggest test code', error);
     } finally {
-        setSuggesting(false);
+      setSuggesting(false);
     }
   };
-  
+
   const handleSubmit = (data: TestFormValues) => {
     onSubmit(data);
   };
-  
 
   React.useEffect(() => {
     if (!open) {
@@ -103,7 +107,7 @@ export function CreateTestDialog({ open, onOpenChange, onSubmit, processing }: C
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-3xl">
         <DialogHeader>
           <DialogTitle>Create New Test</DialogTitle>
           <DialogDescription>
@@ -111,138 +115,172 @@ export function CreateTestDialog({ open, onOpenChange, onSubmit, processing }: C
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-            <div className="flex items-end gap-2">
-                 <FormField
-                    control={form.control}
-                    name="id"
-                    render={({ field }) => (
+          <form onSubmit={form.handleSubmit(handleSubmit)}>
+            <ScrollArea className="h-[60vh] p-1">
+              <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-6">
+                  <div className="flex items-end gap-2">
+                    <FormField
+                      control={form.control}
+                      name="id"
+                      render={({ field }) => (
                         <FormItem className="flex-grow">
-                        <FormLabel>Test Code</FormLabel>
-                        <FormControl>
+                          <FormLabel>Test Code</FormLabel>
+                          <FormControl>
                             <Input placeholder="e.g., BLHE-101" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      onClick={handleSuggestCode}
+                      disabled={suggesting}
+                    >
+                      {suggesting ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Wand2 className="h-4 w-4" />
+                      )}
+                      <span className="sr-only">Suggest Code</span>
+                    </Button>
+                  </div>
+
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Material Test</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="e.g., Complete Blood Count"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
-                        </FormItem>
+                      </FormItem>
                     )}
-                 />
-                <Button type="button" variant="outline" size="icon" onClick={handleSuggestCode} disabled={suggesting}>
-                  {suggesting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wand2 className="h-4 w-4" />}
-                  <span className="sr-only">Suggest Code</span>
-                </Button>
-            </div>
-            
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Material Test</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., Complete Blood Count" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="material"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Material Category</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., Blood" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="method"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Test Method(s)</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., Automated Hematology" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-             <FormField
-              control={form.control}
-              name="unit"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Unit</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., mg/dL" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="turnAroundTime"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Lead Time (Days)</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., 2" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-             <FormField
-              control={form.control}
-              name="priceUGX"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Amount (UGX)</FormLabel>
-                  <FormControl>
-                    <Input type="number" placeholder="e.g., 185000" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="price"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Amount (USD)</FormLabel>
-                  <FormControl>
-                    <Input type="number" placeholder="e.g., 50.00" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="isAccredited"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                  <div className="space-y-0.5">
-                    <FormLabel>Accredited Test</FormLabel>
-                  </div>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <DialogFooter>
+                  />
+                  <FormField
+                    control={form.control}
+                    name="material"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Material Category</FormLabel>
+                        <FormControl>
+                          <Input placeholder="e.g., Blood" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="method"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Test Method(s)</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="e.g., Automated Hematology"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="space-y-6">
+                  <FormField
+                    control={form.control}
+                    name="unit"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Unit</FormLabel>
+                        <FormControl>
+                          <Input placeholder="e.g., mg/dL" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="turnAroundTime"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Lead Time (Days)</FormLabel>
+                        <FormControl>
+                          <Input placeholder="e.g., 2" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="priceUGX"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Amount (UGX)</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            placeholder="e.g., 185000"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="price"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Amount (USD)</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            placeholder="e.g., 50.00"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="isAccredited"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm mt-8">
+                        <div className="space-y-0.5">
+                          <FormLabel>Accredited Test</FormLabel>
+                        </div>
+                        <FormControl>
+                          <Switch
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+            </ScrollArea>
+            <DialogFooter className="pt-6 px-6 pb-6 border-t">
               <Button type="submit" disabled={processing}>
-                {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {processing && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
                 Create Test
               </Button>
             </DialogFooter>
