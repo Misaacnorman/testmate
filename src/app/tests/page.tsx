@@ -17,6 +17,8 @@ import {
 import type { Test } from '@/lib/types';
 import { processImportedFile } from '@/ai/flows/process-import-flow';
 import { getTests, saveTests } from '../data/page';
+import { doc, setDoc, deleteDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase/config';
 
 export default function TestsPage() {
   const { toast } = useToast();
@@ -34,50 +36,101 @@ export default function TestsPage() {
     rows: [],
   });
   
-  React.useEffect(() => {
-    const loadTests = async () => {
-        setLoading(true);
+  const loadTests = React.useCallback(async () => {
+    setLoading(true);
+    try {
         const data = await getTests();
         setTests(data);
+    } catch (error) {
+        console.error("Failed to load tests:", error);
+        toast({
+            variant: "destructive",
+            title: "Error",
+            description: "Failed to load tests from the database."
+        });
+    } finally {
         setLoading(false);
     }
+  }, [toast]);
+
+  React.useEffect(() => {
     loadTests();
-  }, []);
+  }, [loadTests]);
 
-  const persistTests = async (updatedTests: Test[]) => {
+  const handleFieldUpdate = async (id: string, field: keyof Test, value: any) => {
     setProcessing(true);
-    await saveTests(updatedTests);
-    setTests(updatedTests);
-    setProcessing(false);
-  }
-
-  const handleFieldUpdate = (id: string, field: keyof Test, value: any) => {
     const updatedTests = tests.map(t => t.id === id ? {...t, [field]: value} : t);
-    persistTests(updatedTests);
+    setTests(updatedTests); // Optimistic update
+    try {
+        const testToUpdate = updatedTests.find(t => t.id === id);
+        if(testToUpdate) {
+            const testRef = doc(db, "tests", id);
+            await setDoc(testRef, { [field]: value }, { merge: true });
+        }
+    } catch (error) {
+        console.error("Failed to update test:", error);
+        toast({
+            variant: "destructive",
+            title: "Update Failed",
+            description: "Could not save changes to the database."
+        });
+        setTests(tests); // Revert optimistic update
+    } finally {
+        setProcessing(false);
+    }
   };
 
 
   const handleCreateTest = async (newTest: Omit<Test, 'id'> & { id: string }) => {
-    const updatedTests = [...tests, newTest];
-    await persistTests(updatedTests);
-    setCreateDialogOpen(false);
-    toast({
-      title: 'Success',
-      description: 'Test created successfully.',
-    });
+    setProcessing(true);
+    try {
+        const docRef = doc(db, "tests", newTest.id);
+        await setDoc(docRef, newTest);
+        setTests(prevTests => [...prevTests, newTest]);
+        setCreateDialogOpen(false);
+        toast({
+          title: 'Success',
+          description: 'Test created successfully.',
+        });
+    } catch(error) {
+        console.error("Failed to create test:", error);
+        toast({
+            variant: "destructive",
+            title: "Create Failed",
+            description: "Could not create the new test in the database."
+        });
+    } finally {
+        setProcessing(false);
+    }
   };
 
   const handleEditTest = async (updatedTest: Test) => {
-    const updatedTests = tests.map((test) =>
+    setProcessing(true);
+    const originalTests = tests;
+    setTests(tests.map((test) =>
       test.id === updatedTest.id ? updatedTest : test
-    );
-    await persistTests(updatedTests);
+    ));
     setEditDialogOpen(false);
     setSelectedTest(null);
-    toast({
-      title: 'Success',
-      description: 'Test updated successfully.',
-    });
+
+    try {
+        const testRef = doc(db, "tests", updatedTest.id);
+        await setDoc(testRef, updatedTest, { merge: true });
+        toast({
+          title: 'Success',
+          description: 'Test updated successfully.',
+        });
+    } catch(error) {
+        setTests(originalTests); // Revert
+        console.error("Failed to edit test:", error);
+        toast({
+            variant: "destructive",
+            title: "Update Failed",
+            description: "Could not save changes to the database."
+        });
+    } finally {
+        setProcessing(false);
+    }
   };
 
   const openEditDialog = (test: Test) => {
@@ -86,27 +139,55 @@ export default function TestsPage() {
   };
 
   const handleDeleteTest = async (testId: string) => {
-    const updatedTests = tests.filter((test) => test.id !== testId);
-    await persistTests(updatedTests);
-    toast({
-      title: 'Success',
-      description: 'Test deleted successfully.',
-    });
+    setProcessing(true);
+    const originalTests = tests;
+    setTests(tests.filter((test) => test.id !== testId));
+    try {
+        await deleteDoc(doc(db, "tests", testId));
+        toast({
+          title: 'Success',
+          description: 'Test deleted successfully.',
+        });
+    } catch (error) {
+        setTests(originalTests);
+        console.error("Failed to delete test:", error);
+        toast({
+            variant: "destructive",
+            title: "Delete Failed",
+            description: "Could not delete the test from the database."
+        });
+    } finally {
+        setProcessing(false);
+    }
   };
 
   const handleDeleteSelected = async () => {
+    setProcessing(true);
     const selectedIds = Object.keys(rowSelection).map(
       (key) => filteredData[parseInt(key)].id
     );
     const updatedTests = tests.filter(
       (test) => !selectedIds.includes(test.id)
     );
-    await persistTests(updatedTests);
-    setRowSelection({});
-    toast({
-      title: 'Success',
-      description: `${selectedIds.length} tests deleted successfully.`,
-    });
+    
+    try {
+        await saveTests(updatedTests); // This will re-sync the entire collection
+        setTests(updatedTests);
+        setRowSelection({});
+        toast({
+          title: 'Success',
+          description: `${selectedIds.length} tests deleted successfully.`,
+        });
+    } catch(error) {
+        console.error("Failed to delete selected tests:", error);
+        toast({
+            variant: "destructive",
+            title: "Delete Failed",
+            description: "Could not delete selected tests."
+        });
+    } finally {
+        setProcessing(false);
+    }
   };
 
   const handleImport = (data: ParsedData) => {
@@ -132,7 +213,8 @@ export default function TestsPage() {
       }));
 
       const updatedTests = [...tests, ...newTests];
-      await persistTests(updatedTests);
+      await saveTests(updatedTests); // Persist all tests
+      setTests(updatedTests);
       
       setImportPreviewOpen(false);
       toast({
