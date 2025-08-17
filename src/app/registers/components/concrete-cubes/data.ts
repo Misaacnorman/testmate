@@ -29,11 +29,18 @@ export async function getConcreteCubes(): Promise<ConcreteCubeSample[]> {
 export async function updateCubeTestResults(updatedSamples: ConcreteCubeSample[]): Promise<void> {
     const batch = writeBatch(db);
     
+    // Assume shared values are taken from the first sample
+    const sharedValues: Partial<ConcreteCubeSample> = {};
+    if (updatedSamples.length > 0) {
+        if (updatedSamples[0].machineUsed) sharedValues.machineUsed = updatedSamples[0].machineUsed;
+        if (updatedSamples[0].recordedTemp) sharedValues.recordedTemp = updatedSamples[0].recordedTemp;
+    }
+
     updatedSamples.forEach(sample => {
         if (!sample.id) return;
         const docRef = doc(db, 'concrete-cubes-register', sample.id);
         
-        const updateData: Partial<ConcreteCubeSample> = {};
+        const updateData: Partial<ConcreteCubeSample> = { ...sharedValues };
 
         // Only update fields that have a value to avoid overwriting with undefined/null
         if (sample.length) updateData.length = sample.length;
@@ -42,10 +49,6 @@ export async function updateCubeTestResults(updatedSamples: ConcreteCubeSample[]
         if (sample.weight) updateData.weight = sample.weight;
         if (sample.load) updateData.load = sample.load;
         if (sample.modeOfFailure) updateData.modeOfFailure = sample.modeOfFailure;
-        
-        // These values are shared across the set
-        if (sample.machineUsed) updateData.machineUsed = sample.machineUsed;
-        if (sample.recordedTemp) updateData.recordedTemp = sample.recordedTemp;
         
         batch.update(docRef, updateData);
     });

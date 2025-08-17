@@ -21,19 +21,19 @@ import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
-const testResultSchema = z.object({
+const testResultSampleSchema = z.object({
   length: z.coerce.number().min(1, 'Required'),
   width: z.coerce.number().min(1, 'Required'),
   height: z.coerce.number().min(1, 'Required'),
   weight: z.coerce.number().min(0.1, 'Required'),
   load: z.coerce.number().min(0.1, 'Required'),
   modeOfFailure: z.string().min(1, 'Required'),
-  machineUsed: z.string().min(1, 'Required'),
-  recordedTemp: z.coerce.number().optional(),
 });
 
 const formSchema = z.object({
-  samples: z.array(testResultSchema),
+  samples: z.array(testResultSampleSchema),
+  machineUsed: z.string().min(1, 'Required'),
+  recordedTemp: z.coerce.number().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -58,9 +58,9 @@ export function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }: Tes
         weight: s.weight || 0,
         load: s.load || 0,
         modeOfFailure: s.modeOfFailure || '',
-        machineUsed: sampleSet.machineUsed || '',
-        recordedTemp: s.recordedTemp || 0,
       })),
+      machineUsed: sampleSet.machineUsed || '',
+      recordedTemp: sampleSet.recordedTemp || undefined,
     },
   });
 
@@ -79,9 +79,9 @@ export function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }: Tes
         weight: s.weight || 0,
         load: s.load || 0,
         modeOfFailure: s.modeOfFailure || '',
-        machineUsed: sampleSet.machineUsed || s.machineUsed || '',
-        recordedTemp: sampleSet.recordedTemp || s.recordedTemp || undefined,
-      }))
+      })),
+      machineUsed: sampleSet.machineUsed || '',
+      recordedTemp: sampleSet.recordedTemp || undefined,
     });
     setCurrentStep(0);
   }, [sampleSet, form, open]);
@@ -92,16 +92,14 @@ export function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }: Tes
   const currentSample = sampleSet.samples[currentStep];
 
   const handleNext = async () => {
-    const isValid = await form.trigger(`samples.${currentStep}`);
+    // Trigger validation for all shared fields and the current sample fields
+    const isValid = await form.trigger();
+    
     if (isValid && currentStep < totalSteps - 1) {
       const currentValues = form.getValues(`samples.${currentStep}`);
       const nextStepIndex = currentStep + 1;
       
       const nextStepValues = form.getValues(`samples.${nextStepIndex}`);
-      
-      // Carry over shared values to the next step
-      form.setValue(`samples.${nextStepIndex}.machineUsed`, currentValues.machineUsed);
-      form.setValue(`samples.${nextStepIndex}.recordedTemp`, currentValues.recordedTemp);
 
       // Only carry over individual values if the next step seems untouched
       const isNextStepPristine = (
@@ -137,8 +135,8 @@ export function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }: Tes
       ...originalSample,
       ...data.samples[index],
       // Ensure shared values are consistent across the set
-      machineUsed: data.samples[0].machineUsed,
-      recordedTemp: data.samples[0].recordedTemp,
+      machineUsed: data.machineUsed,
+      recordedTemp: data.recordedTemp,
     }));
     onSave(updatedSamples);
   };
@@ -153,7 +151,7 @@ export function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }: Tes
           </DialogDescription>
         </DialogHeader>
 
-        <div className="p-1 space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="p-1 space-y-4">
           <Progress value={progress} className="w-full" />
           <div className="text-center text-sm font-medium">
             Sample {currentStep + 1} of {totalSteps} (ID: {currentSample.sampleSerialNumber || currentSample.id})
@@ -181,6 +179,8 @@ export function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }: Tes
                     />
                 </div>
                 {form.formState.errors.samples?.[currentStep]?.length && <p className="text-destructive text-xs">{form.formState.errors.samples[currentStep]?.length?.message}</p>}
+                 {form.formState.errors.samples?.[currentStep]?.width && <p className="text-destructive text-xs">{form.formState.errors.samples[currentStep]?.width?.message}</p>}
+                 {form.formState.errors.samples?.[currentStep]?.height && <p className="text-destructive text-xs">{form.formState.errors.samples[currentStep]?.height?.message}</p>}
               </div>
 
                <div className="space-y-2">
@@ -212,45 +212,47 @@ export function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }: Tes
                     />
                   {form.formState.errors.samples?.[currentStep]?.modeOfFailure && <p className="text-destructive text-xs">{form.formState.errors.samples[currentStep]?.modeOfFailure?.message}</p>}
                 </div>
-
+                
+                <Separator className="md:col-span-2"/>
+                
                 <div className="space-y-2">
-                  <Label htmlFor={`machineUsed-${currentStep}`}>Machine Used</Label>
+                  <Label>Machine Used</Label>
                   <Controller
-                      name={`samples.${currentStep}.machineUsed`}
+                      name="machineUsed"
                       control={form.control}
-                      render={({ field }) => <Input id={`machineUsed-${currentStep}`} {...field} />}
+                      render={({ field }) => <Input {...field} />}
                     />
-                  {form.formState.errors.samples?.[currentStep]?.machineUsed && <p className="text-destructive text-xs">{form.formState.errors.samples[currentStep]?.machineUsed?.message}</p>}
+                  {form.formState.errors.machineUsed && <p className="text-destructive text-xs">{form.formState.errors.machineUsed.message}</p>}
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor={`recordedTemp-${currentStep}`}>Temperature (°C)</Label>
+                  <Label>Temperature (°C)</Label>
                    <Controller
-                      name={`samples.${currentStep}.recordedTemp`}
+                      name="recordedTemp"
                       control={form.control}
-                      render={({ field }) => <Input id={`recordedTemp-${currentStep}`} type="number" {...field} />}
+                      render={({ field }) => <Input type="number" {...field} />}
                     />
                 </div>
             </div>
-        </div>
 
-        <DialogFooter className="pt-4">
-            <div className="w-full flex justify-between">
-                <Button variant="outline" onClick={handleBack} disabled={currentStep === 0}>
-                    Back
-                </Button>
-                <div className="flex gap-2">
-                    <DialogClose asChild>
-                      <Button variant="ghost">Cancel</Button>
-                    </DialogClose>
-                    {currentStep < totalSteps - 1 ? (
-                    <Button onClick={handleNext}>Next</Button>
-                    ) : (
-                    <Button onClick={form.handleSubmit(onSubmit)}>Save Results</Button>
-                    )}
-                </div>
-            </div>
-        </DialogFooter>
+          <DialogFooter className="pt-4">
+              <div className="w-full flex justify-between">
+                  <Button variant="outline" type="button" onClick={handleBack} disabled={currentStep === 0}>
+                      Back
+                  </Button>
+                  <div className="flex gap-2">
+                      <DialogClose asChild>
+                        <Button variant="ghost" type="button">Cancel</Button>
+                      </DialogClose>
+                      {currentStep < totalSteps - 1 ? (
+                      <Button type="button" onClick={handleNext}>Next</Button>
+                      ) : (
+                      <Button type="submit">Save Results</Button>
+                      )}
+                  </div>
+              </div>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );
