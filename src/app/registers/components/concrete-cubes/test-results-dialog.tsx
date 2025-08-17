@@ -121,6 +121,8 @@ export function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }: Tes
     const updatedSamples = sampleSet.samples.map((originalSample, index) => ({
       ...originalSample,
       ...data.samples[index],
+      // Ensure machineUsed is consistent across the set
+      machineUsed: data.samples[0].machineUsed,
     }));
     onSave(updatedSamples);
   };
