@@ -11,12 +11,12 @@ import type { Receipt } from '@/lib/types';
 
 
 export default function LogPage({ params }: { params: { id: string } }) {
-  const { id } = params;
   const [receiptData, setReceiptData] = useState<Receipt | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchReceipt = async () => {
+      const { id } = params;
       if (!id) return;
       try {
         const docRef = doc(db, 'receipts', id);
@@ -36,7 +36,7 @@ export default function LogPage({ params }: { params: { id: string } }) {
     };
 
     fetchReceipt();
-  }, [id]);
+  }, [params]);
 
   if (loading) {
     return <div className="flex h-screen items-center justify-center">Loading receipt...</div>;
