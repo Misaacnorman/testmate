@@ -188,21 +188,6 @@ function SampleReceipt({ data }) {
             return 'Invalid Date';
         }
     };
-    const allTests = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].useMemo({
-        "SampleReceipt.useMemo[allTests]": ()=>{
-            return Object.entries(data.categories).flatMap({
-                "SampleReceipt.useMemo[allTests]": ([category, catData])=>Object.entries(catData.tests).map({
-                        "SampleReceipt.useMemo[allTests]": ([testId, test])=>({
-                                category,
-                                test,
-                                testId
-                            })
-                    }["SampleReceipt.useMemo[allTests]"])
-            }["SampleReceipt.useMemo[allTests]"]);
-        }
-    }["SampleReceipt.useMemo[allTests]"], [
-        data.categories
-    ]);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "bg-white max-w-4xl mx-auto p-8 rounded-lg shadow-xl",
         children: [
@@ -217,19 +202,19 @@ function SampleReceipt({ data }) {
                             className: "mr-2 h-4 w-4"
                         }, void 0, false, {
                             fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                            lineNumber: 51,
+                            lineNumber: 35,
                             columnNumber: 17
                         }, this),
                         "Print / Save PDF"
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                    lineNumber: 50,
+                    lineNumber: 34,
                     columnNumber: 13
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                lineNumber: 49,
+                lineNumber: 33,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -246,7 +231,7 @@ function SampleReceipt({ data }) {
                                         className: "h-16 w-16 text-primary"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                        lineNumber: 58,
+                                        lineNumber: 42,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -256,7 +241,7 @@ function SampleReceipt({ data }) {
                                                 children: "TestMate Inc."
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                lineNumber: 60,
+                                                lineNumber: 44,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -264,7 +249,7 @@ function SampleReceipt({ data }) {
                                                 children: "Advanced Laboratory Services"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                lineNumber: 61,
+                                                lineNumber: 45,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -272,7 +257,7 @@ function SampleReceipt({ data }) {
                                                 children: "123 Lab Lane, Kampala, Uganda"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                lineNumber: 62,
+                                                lineNumber: 46,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -280,19 +265,19 @@ function SampleReceipt({ data }) {
                                                 children: "contact@testmate.dev | +256 777 123456"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                lineNumber: 63,
+                                                lineNumber: 47,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                        lineNumber: 59,
+                                        lineNumber: 43,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                lineNumber: 57,
+                                lineNumber: 41,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -303,7 +288,7 @@ function SampleReceipt({ data }) {
                                         children: "Sample Receipt"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                        lineNumber: 67,
+                                        lineNumber: 51,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -314,19 +299,19 @@ function SampleReceipt({ data }) {
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                        lineNumber: 68,
+                                        lineNumber: 52,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                lineNumber: 66,
+                                lineNumber: 50,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                        lineNumber: 56,
+                        lineNumber: 40,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -345,14 +330,14 @@ function SampleReceipt({ data }) {
                                                         className: "mr-2 h-5 w-5 text-primary"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                        lineNumber: 76,
+                                                        lineNumber: 60,
                                                         columnNumber: 91
                                                     }, this),
                                                     "Client & Project Information"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                lineNumber: 76,
+                                                lineNumber: 60,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -364,7 +349,7 @@ function SampleReceipt({ data }) {
                                                                 children: "Client:"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                                lineNumber: 78,
+                                                                lineNumber: 62,
                                                                 columnNumber: 28
                                                             }, this),
                                                             " ",
@@ -375,7 +360,7 @@ function SampleReceipt({ data }) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                        lineNumber: 78,
+                                                        lineNumber: 62,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -384,7 +369,7 @@ function SampleReceipt({ data }) {
                                                                 children: "Address:"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                                lineNumber: 79,
+                                                                lineNumber: 63,
                                                                 columnNumber: 28
                                                             }, this),
                                                             " ",
@@ -392,7 +377,7 @@ function SampleReceipt({ data }) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                        lineNumber: 79,
+                                                        lineNumber: 63,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -401,7 +386,7 @@ function SampleReceipt({ data }) {
                                                                 children: "Project:"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                                lineNumber: 80,
+                                                                lineNumber: 64,
                                                                 columnNumber: 28
                                                             }, this),
                                                             " ",
@@ -409,19 +394,19 @@ function SampleReceipt({ data }) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                        lineNumber: 80,
+                                                        lineNumber: 64,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                lineNumber: 77,
+                                                lineNumber: 61,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                        lineNumber: 75,
+                                        lineNumber: 59,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -434,14 +419,14 @@ function SampleReceipt({ data }) {
                                                         className: "mr-2 h-5 w-5 text-primary"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                        lineNumber: 86,
+                                                        lineNumber: 70,
                                                         columnNumber: 91
                                                     }, this),
                                                     "Billing Information"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                lineNumber: 86,
+                                                lineNumber: 70,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -454,7 +439,7 @@ function SampleReceipt({ data }) {
                                                                     children: "Billed To:"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                                    lineNumber: 90,
+                                                                    lineNumber: 74,
                                                                     columnNumber: 36
                                                                 }, this),
                                                                 " ",
@@ -465,7 +450,7 @@ function SampleReceipt({ data }) {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                            lineNumber: 90,
+                                                            lineNumber: 74,
                                                             columnNumber: 33
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -474,7 +459,7 @@ function SampleReceipt({ data }) {
                                                                     children: "Address:"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                                    lineNumber: 91,
+                                                                    lineNumber: 75,
                                                                     columnNumber: 36
                                                                 }, this),
                                                                 " ",
@@ -482,7 +467,7 @@ function SampleReceipt({ data }) {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                            lineNumber: 91,
+                                                            lineNumber: 75,
                                                             columnNumber: 33
                                                         }, this)
                                                     ]
@@ -490,24 +475,24 @@ function SampleReceipt({ data }) {
                                                     children: "Billed to the client."
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                    lineNumber: 94,
+                                                    lineNumber: 78,
                                                     columnNumber: 29
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                lineNumber: 87,
+                                                lineNumber: 71,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                        lineNumber: 85,
+                                        lineNumber: 69,
                                         columnNumber: 18
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                lineNumber: 73,
+                                lineNumber: 57,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -523,14 +508,14 @@ function SampleReceipt({ data }) {
                                                         className: "mr-2 h-5 w-5 text-primary"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                        lineNumber: 103,
+                                                        lineNumber: 87,
                                                         columnNumber: 92
                                                     }, this),
                                                     "Receiving Details"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                lineNumber: 103,
+                                                lineNumber: 87,
                                                 columnNumber: 22
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -542,7 +527,7 @@ function SampleReceipt({ data }) {
                                                                 children: "Received On:"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                                lineNumber: 105,
+                                                                lineNumber: 89,
                                                                 columnNumber: 28
                                                             }, this),
                                                             " ",
@@ -550,7 +535,7 @@ function SampleReceipt({ data }) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                        lineNumber: 105,
+                                                        lineNumber: 89,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -559,7 +544,7 @@ function SampleReceipt({ data }) {
                                                                 children: "Received By:"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                                lineNumber: 106,
+                                                                lineNumber: 90,
                                                                 columnNumber: 28
                                                             }, this),
                                                             " ",
@@ -567,7 +552,7 @@ function SampleReceipt({ data }) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                        lineNumber: 106,
+                                                        lineNumber: 90,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -576,7 +561,7 @@ function SampleReceipt({ data }) {
                                                                 children: "Delivered By:"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                                lineNumber: 107,
+                                                                lineNumber: 91,
                                                                 columnNumber: 28
                                                             }, this),
                                                             " ",
@@ -587,7 +572,7 @@ function SampleReceipt({ data }) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                        lineNumber: 107,
+                                                        lineNumber: 91,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -596,7 +581,7 @@ function SampleReceipt({ data }) {
                                                                 children: "Sample Status:"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                                lineNumber: 108,
+                                                                lineNumber: 92,
                                                                 columnNumber: 28
                                                             }, this),
                                                             " ",
@@ -604,19 +589,19 @@ function SampleReceipt({ data }) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                        lineNumber: 108,
+                                                        lineNumber: 92,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                lineNumber: 104,
+                                                lineNumber: 88,
                                                 columnNumber: 22
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                        lineNumber: 102,
+                                        lineNumber: 86,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -629,14 +614,14 @@ function SampleReceipt({ data }) {
                                                         className: "mr-2 h-5 w-5 text-primary"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                        lineNumber: 114,
+                                                        lineNumber: 98,
                                                         columnNumber: 92
                                                     }, this),
                                                     "Reporting Details"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                lineNumber: 114,
+                                                lineNumber: 98,
                                                 columnNumber: 22
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -648,7 +633,7 @@ function SampleReceipt({ data }) {
                                                                 children: "Results Transmittal:"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                                lineNumber: 116,
+                                                                lineNumber: 100,
                                                                 columnNumber: 28
                                                             }, this),
                                                             " ",
@@ -656,7 +641,7 @@ function SampleReceipt({ data }) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                        lineNumber: 116,
+                                                        lineNumber: 100,
                                                         columnNumber: 25
                                                     }, this),
                                                     data.transmittalModes.includes('Email') && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -665,7 +650,7 @@ function SampleReceipt({ data }) {
                                                                 children: "Email:"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                                lineNumber: 117,
+                                                                lineNumber: 101,
                                                                 columnNumber: 72
                                                             }, this),
                                                             " ",
@@ -673,7 +658,7 @@ function SampleReceipt({ data }) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                        lineNumber: 117,
+                                                        lineNumber: 101,
                                                         columnNumber: 69
                                                     }, this),
                                                     data.transmittalModes.includes('Whatsapp') && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -682,7 +667,7 @@ function SampleReceipt({ data }) {
                                                                 children: "Whatsapp:"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                                lineNumber: 118,
+                                                                lineNumber: 102,
                                                                 columnNumber: 75
                                                             }, this),
                                                             " ",
@@ -690,31 +675,31 @@ function SampleReceipt({ data }) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                        lineNumber: 118,
+                                                        lineNumber: 102,
                                                         columnNumber: 72
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                lineNumber: 115,
+                                                lineNumber: 99,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                        lineNumber: 113,
+                                        lineNumber: 97,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                lineNumber: 100,
+                                lineNumber: 84,
                                 columnNumber: 14
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                        lineNumber: 72,
+                        lineNumber: 56,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -727,14 +712,14 @@ function SampleReceipt({ data }) {
                                         className: "mr-2 h-5 w-5 text-primary"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                        lineNumber: 125,
+                                        lineNumber: 109,
                                         columnNumber: 88
                                     }, this),
                                     "Tests to be Performed"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                lineNumber: 125,
+                                lineNumber: 109,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -746,25 +731,27 @@ function SampleReceipt({ data }) {
                                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableRow"], {
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableHead"], {
-                                                        className: "w-[150px]",
+                                                        className: "w-[150px] text-center",
                                                         children: "Material Category"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                        lineNumber: 130,
+                                                        lineNumber: 114,
                                                         columnNumber: 29
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableHead"], {
+                                                        className: "text-center",
                                                         children: "Material Test"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                        lineNumber: 131,
+                                                        lineNumber: 115,
                                                         columnNumber: 29
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableHead"], {
+                                                        className: "text-center",
                                                         children: "Test Method(s)"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                        lineNumber: 132,
+                                                        lineNumber: 116,
                                                         columnNumber: 29
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableHead"], {
@@ -772,217 +759,226 @@ function SampleReceipt({ data }) {
                                                         children: "Quantity"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                        lineNumber: 133,
+                                                        lineNumber: 117,
                                                         columnNumber: 29
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableHead"], {
+                                                        className: "text-center",
                                                         children: "Concrete Details"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                        lineNumber: 134,
+                                                        lineNumber: 118,
                                                         columnNumber: 29
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                lineNumber: 129,
+                                                lineNumber: 113,
                                                 columnNumber: 25
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                            lineNumber: 128,
+                                            lineNumber: 112,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableBody"], {
-                                            children: allTests.map(({ category, test, testId }, index)=>{
-                                                const specialTestDetails = data.specialData?.[category]?.[testId];
-                                                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableRow"], {
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableCell"], {
-                                                            children: category
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                            lineNumber: 142,
-                                                            columnNumber: 37
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableCell"], {
-                                                            children: test.materialTest
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                            lineNumber: 143,
-                                                            columnNumber: 37
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableCell"], {
-                                                            children: test.testMethods
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                            lineNumber: 144,
-                                                            columnNumber: 37
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableCell"], {
-                                                            className: "text-center",
-                                                            children: test.quantity
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                            lineNumber: 145,
-                                                            columnNumber: 37
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableCell"], {
-                                                            children: specialTestDetails ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                className: "space-y-2 text-xs",
-                                                                children: specialTestDetails.sets.map((set, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                        className: "p-2 bg-gray-50 rounded",
-                                                                        children: [
-                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                                                children: [
-                                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
-                                                                                        children: [
-                                                                                            "Set ",
-                                                                                            i + 1
-                                                                                        ]
-                                                                                    }, void 0, true, {
-                                                                                        fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                                                        lineNumber: 151,
-                                                                                        columnNumber: 60
-                                                                                    }, this),
-                                                                                    " (Qty: ",
-                                                                                    specialTestDetails.setDistribution[i],
-                                                                                    ")"
-                                                                                ]
-                                                                            }, void 0, true, {
-                                                                                fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                                                lineNumber: 151,
-                                                                                columnNumber: 57
-                                                                            }, this),
-                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                                                children: [
-                                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
-                                                                                        children: "Casting:"
-                                                                                    }, void 0, false, {
-                                                                                        fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                                                        lineNumber: 152,
-                                                                                        columnNumber: 60
-                                                                                    }, this),
-                                                                                    " ",
-                                                                                    parseAndFormatDate(set.castingDate, 'dd-MMM-yy')
-                                                                                ]
-                                                                            }, void 0, true, {
-                                                                                fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                                                lineNumber: 152,
-                                                                                columnNumber: 57
-                                                                            }, this),
-                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                                                children: [
-                                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
-                                                                                        children: "Testing:"
-                                                                                    }, void 0, false, {
-                                                                                        fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                                                        lineNumber: 153,
-                                                                                        columnNumber: 60
-                                                                                    }, this),
-                                                                                    " ",
-                                                                                    parseAndFormatDate(set.testingDate, 'dd-MMM-yy')
-                                                                                ]
-                                                                            }, void 0, true, {
-                                                                                fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                                                lineNumber: 153,
-                                                                                columnNumber: 57
-                                                                            }, this),
-                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                                                children: [
-                                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
-                                                                                        children: "Age:"
-                                                                                    }, void 0, false, {
-                                                                                        fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                                                        lineNumber: 154,
-                                                                                        columnNumber: 60
-                                                                                    }, this),
-                                                                                    " ",
-                                                                                    set.age || 'N/A',
-                                                                                    " days"
-                                                                                ]
-                                                                            }, void 0, true, {
-                                                                                fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                                                lineNumber: 154,
-                                                                                columnNumber: 57
-                                                                            }, this),
-                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                                                children: [
-                                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
-                                                                                        children: "Area:"
-                                                                                    }, void 0, false, {
-                                                                                        fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                                                        lineNumber: 155,
-                                                                                        columnNumber: 60
-                                                                                    }, this),
-                                                                                    " ",
-                                                                                    set.areaOfUse || 'N/A'
-                                                                                ]
-                                                                            }, void 0, true, {
-                                                                                fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                                                lineNumber: 155,
-                                                                                columnNumber: 57
-                                                                            }, this),
-                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                                                children: [
-                                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
-                                                                                        children: "IDs:"
-                                                                                    }, void 0, false, {
-                                                                                        fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                                                        lineNumber: 156,
-                                                                                        columnNumber: 60
-                                                                                    }, this),
-                                                                                    " ",
-                                                                                    Array.isArray(set.serials) ? set.serials.join(', ') : ''
-                                                                                ]
-                                                                            }, void 0, true, {
-                                                                                fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                                                lineNumber: 156,
-                                                                                columnNumber: 57
-                                                                            }, this)
-                                                                        ]
-                                                                    }, i, true, {
-                                                                        fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                                        lineNumber: 150,
-                                                                        columnNumber: 53
-                                                                    }, this))
+                                            children: Object.entries(data.categories).flatMap(([category, catData])=>{
+                                                const testsInCategory = Object.entries(catData.tests);
+                                                if (testsInCategory.length === 0) return [];
+                                                return testsInCategory.map(([testId, test], index)=>{
+                                                    const specialTestDetails = data.specialData?.[category]?.[testId];
+                                                    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableRow"], {
+                                                        children: [
+                                                            index === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableCell"], {
+                                                                rowSpan: testsInCategory.length,
+                                                                className: "text-center align-middle font-medium",
+                                                                children: category
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                                lineNumber: 148,
-                                                                columnNumber: 45
-                                                            }, this) : 'N/A'
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                            lineNumber: 146,
-                                                            columnNumber: 37
-                                                        }, this)
-                                                    ]
-                                                }, index, true, {
-                                                    fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                    lineNumber: 141,
-                                                    columnNumber: 33
-                                                }, this);
+                                                                lineNumber: 131,
+                                                                columnNumber: 41
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableCell"], {
+                                                                className: "text-center",
+                                                                children: test.materialTest
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
+                                                                lineNumber: 135,
+                                                                columnNumber: 37
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableCell"], {
+                                                                className: "text-center",
+                                                                children: test.testMethods
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
+                                                                lineNumber: 136,
+                                                                columnNumber: 37
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableCell"], {
+                                                                className: "text-center",
+                                                                children: test.quantity
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
+                                                                lineNumber: 137,
+                                                                columnNumber: 37
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableCell"], {
+                                                                children: specialTestDetails ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                    className: "space-y-3 text-xs",
+                                                                    children: specialTestDetails.sets.map((set, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                            className: "p-3 bg-gray-50 rounded-md border text-left",
+                                                                            children: [
+                                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                                    className: "font-bold mb-1",
+                                                                                    children: [
+                                                                                        "Set ",
+                                                                                        i + 1,
+                                                                                        " (Qty: ",
+                                                                                        specialTestDetails.setDistribution[i],
+                                                                                        ")"
+                                                                                    ]
+                                                                                }, void 0, true, {
+                                                                                    fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
+                                                                                    lineNumber: 143,
+                                                                                    columnNumber: 57
+                                                                                }, this),
+                                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                                    children: [
+                                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                                                                            children: "Casting:"
+                                                                                        }, void 0, false, {
+                                                                                            fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
+                                                                                            lineNumber: 144,
+                                                                                            columnNumber: 60
+                                                                                        }, this),
+                                                                                        " ",
+                                                                                        parseAndFormatDate(set.castingDate, 'dd-MMM-yy')
+                                                                                    ]
+                                                                                }, void 0, true, {
+                                                                                    fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
+                                                                                    lineNumber: 144,
+                                                                                    columnNumber: 57
+                                                                                }, this),
+                                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                                    children: [
+                                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                                                                            children: "Testing:"
+                                                                                        }, void 0, false, {
+                                                                                            fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
+                                                                                            lineNumber: 145,
+                                                                                            columnNumber: 60
+                                                                                        }, this),
+                                                                                        " ",
+                                                                                        parseAndFormatDate(set.testingDate, 'dd-MMM-yy')
+                                                                                    ]
+                                                                                }, void 0, true, {
+                                                                                    fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
+                                                                                    lineNumber: 145,
+                                                                                    columnNumber: 57
+                                                                                }, this),
+                                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                                    children: [
+                                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                                                                            children: "Age:"
+                                                                                        }, void 0, false, {
+                                                                                            fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
+                                                                                            lineNumber: 146,
+                                                                                            columnNumber: 60
+                                                                                        }, this),
+                                                                                        " ",
+                                                                                        set.age || 'N/A',
+                                                                                        " days"
+                                                                                    ]
+                                                                                }, void 0, true, {
+                                                                                    fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
+                                                                                    lineNumber: 146,
+                                                                                    columnNumber: 57
+                                                                                }, this),
+                                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                                    children: [
+                                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                                                                            children: "Area:"
+                                                                                        }, void 0, false, {
+                                                                                            fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
+                                                                                            lineNumber: 147,
+                                                                                            columnNumber: 60
+                                                                                        }, this),
+                                                                                        " ",
+                                                                                        set.areaOfUse || 'N/A'
+                                                                                    ]
+                                                                                }, void 0, true, {
+                                                                                    fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
+                                                                                    lineNumber: 147,
+                                                                                    columnNumber: 57
+                                                                                }, this),
+                                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                                    children: [
+                                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                                                                            children: "IDs:"
+                                                                                        }, void 0, false, {
+                                                                                            fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
+                                                                                            lineNumber: 148,
+                                                                                            columnNumber: 60
+                                                                                        }, this),
+                                                                                        " ",
+                                                                                        Array.isArray(set.serials) ? set.serials.join(', ') : ''
+                                                                                    ]
+                                                                                }, void 0, true, {
+                                                                                    fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
+                                                                                    lineNumber: 148,
+                                                                                    columnNumber: 57
+                                                                                }, this)
+                                                                            ]
+                                                                        }, i, true, {
+                                                                            fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
+                                                                            lineNumber: 142,
+                                                                            columnNumber: 53
+                                                                        }, this))
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
+                                                                    lineNumber: 140,
+                                                                    columnNumber: 45
+                                                                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                    className: "text-center",
+                                                                    children: "N/A"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
+                                                                    lineNumber: 152,
+                                                                    columnNumber: 45
+                                                                }, this)
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
+                                                                lineNumber: 138,
+                                                                columnNumber: 37
+                                                            }, this)
+                                                        ]
+                                                    }, `${category}-${testId}`, true, {
+                                                        fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
+                                                        lineNumber: 129,
+                                                        columnNumber: 33
+                                                    }, this);
+                                                });
                                             })
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                            lineNumber: 137,
+                                            lineNumber: 121,
                                             columnNumber: 21
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                    lineNumber: 127,
+                                    lineNumber: 111,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                lineNumber: 126,
+                                lineNumber: 110,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                        lineNumber: 124,
+                        lineNumber: 108,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -993,7 +989,7 @@ function SampleReceipt({ data }) {
                                 children: "Notes"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                lineNumber: 171,
+                                lineNumber: 164,
                                 columnNumber: 13
                             }, this),
                             Object.entries(data.categories).some(([_, catData])=>catData.notes) ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1007,7 +1003,7 @@ function SampleReceipt({ data }) {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                                lineNumber: 176,
+                                                lineNumber: 169,
                                                 columnNumber: 47
                                             }, this),
                                             " ",
@@ -1015,25 +1011,25 @@ function SampleReceipt({ data }) {
                                         ]
                                     }, category, true, {
                                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                        lineNumber: 176,
+                                        lineNumber: 169,
                                         columnNumber: 29
                                     }, this) : null)
                             }, void 0, false, {
                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                lineNumber: 173,
+                                lineNumber: 166,
                                 columnNumber: 18
                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                 className: "text-sm text-gray-600",
                                 children: "No special notes provided."
                             }, void 0, false, {
                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                lineNumber: 181,
+                                lineNumber: 174,
                                 columnNumber: 17
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                        lineNumber: 170,
+                        lineNumber: 163,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("footer", {
@@ -1043,7 +1039,7 @@ function SampleReceipt({ data }) {
                                 children: "Thank you for choosing TestMate Inc. for your testing needs. All samples are handled with care and precision."
                             }, void 0, false, {
                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                lineNumber: 186,
+                                lineNumber: 179,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1051,29 +1047,29 @@ function SampleReceipt({ data }) {
                                 children: "This is a system-generated receipt and does not require a signature."
                             }, void 0, false, {
                                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                                lineNumber: 187,
+                                lineNumber: 180,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                        lineNumber: 185,
+                        lineNumber: 178,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-                lineNumber: 55,
+                lineNumber: 39,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/logs/[id]/components/sample-receipt.tsx",
-        lineNumber: 48,
+        lineNumber: 32,
         columnNumber: 5
     }, this);
 }
-_s(SampleReceipt, "is2fNyEjuyXEYXiCUv1IsyjZcAk=", false, function() {
+_s(SampleReceipt, "PTw1p+U7xTE5awVZ4hEdAvvJJ1k=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$to$2d$print$2f$lib$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useReactToPrint"]
     ];

@@ -11,14 +11,15 @@ import type { Receipt } from '@/lib/types';
 
 
 export default function LogPage({ params }: { params: { id: string } }) {
+  const { id } = params;
   const [receiptData, setReceiptData] = useState<Receipt | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchReceipt = async () => {
-      if (!params.id) return;
+      if (!id) return;
       try {
-        const docRef = doc(db, 'receipts', params.id);
+        const docRef = doc(db, 'receipts', id);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -35,7 +36,7 @@ export default function LogPage({ params }: { params: { id: string } }) {
     };
 
     fetchReceipt();
-  }, [params.id]);
+  }, [id]);
 
   if (loading) {
     return <div className="flex h-screen items-center justify-center">Loading receipt...</div>;
