@@ -51,7 +51,11 @@ export function BlocksBricksRegister() {
             ...firstSample,
             samples: sortedSamples,
         };
-      }).sort((a, b) => (b.receivedAt || '').localeCompare(a.receivedAt || ''));
+      }).sort((a, b) => {
+          const dateA = a.receivedAt ? new Date(a.receivedAt).getTime() : 0;
+          const dateB = b.receivedAt ? new Date(b.receivedAt).getTime() : 0;
+          return dateB - dateA;
+      });
 
       setSamples(processedData);
 
