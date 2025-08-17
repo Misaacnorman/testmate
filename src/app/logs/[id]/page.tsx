@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, use } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { notFound } from 'next/navigation';
@@ -10,13 +10,16 @@ import { fromFirestore } from '@/lib/utils';
 import type { Receipt } from '@/lib/types';
 
 
-export default function LogPage({ params }: { params: { id: string } }) {
+export default function LogPage({ params: paramsPromise }: { params: { id: string } }) {
   const [receiptData, setReceiptData] = useState<Receipt | null>(null);
   const [loading, setLoading] = useState(true);
+  
+  // The 'use' hook is not available in the version of React being used.
+  // We will access params directly and manage the id in the useEffect hook.
+  const { id } = paramsPromise;
 
   useEffect(() => {
     const fetchReceipt = async () => {
-      const { id } = params;
       if (!id) return;
       try {
         const docRef = doc(db, 'receipts', id);
@@ -35,10 +38,10 @@ export default function LogPage({ params }: { params: { id: string } }) {
       }
     };
 
-    if (params.id) {
+    if (id) {
       fetchReceipt();
     }
-  }, [params.id]);
+  }, [id]);
 
   if (loading) {
     return <div className="flex h-screen items-center justify-center">Loading receipt...</div>;
@@ -54,4 +57,3 @@ export default function LogPage({ params }: { params: { id: string } }) {
     </div>
   );
 }
-

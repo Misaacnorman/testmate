@@ -1087,7 +1087,9 @@ function LogPage({ params }) {
                 setLoading(false);
             }
         };
-        fetchReceipt();
+        if (params.id) {
+            fetchReceipt();
+        }
     }, [
         params.id
     ]);
@@ -1097,7 +1099,7 @@ function LogPage({ params }) {
             children: "Loading receipt..."
         }, void 0, false, {
             fileName: "[project]/src/app/logs/[id]/page.tsx",
-            lineNumber: 42,
+            lineNumber: 44,
             columnNumber: 12
         }, this);
     }
@@ -1110,12 +1112,12 @@ function LogPage({ params }) {
             data: receiptData
         }, void 0, false, {
             fileName: "[project]/src/app/logs/[id]/page.tsx",
-            lineNumber: 51,
+            lineNumber: 53,
             columnNumber: 8
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/app/logs/[id]/page.tsx",
-        lineNumber: 50,
+        lineNumber: 52,
         columnNumber: 5
     }, this);
 }
