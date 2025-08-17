@@ -187,9 +187,9 @@ export function ReceiveSampleDialog({
 
   const uniqueMaterialCategories = useMemo(() => {
     const categories = allTests
-      .filter((test) => typeof test.material === 'string') // Add this line to filter out tests without a material
-      .map((test) => test.material.toLowerCase().trim());
-    return [...new Set(categories)].map(cat => allTests.find(t => t.material && t.material.toLowerCase().trim() === cat)!.material);
+      .filter((test) => typeof test.material === 'string')
+      .map((test) => test.material);
+    return [...new Set(categories)].sort((a, b) => a.localeCompare(b));
   }, [allTests]);
 
   const handleNext = async () => {
@@ -1426,7 +1426,3 @@ export function ReceiveSampleDialog({
     </Dialog>
   );
 }
-
-    
-
-    
