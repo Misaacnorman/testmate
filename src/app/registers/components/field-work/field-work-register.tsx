@@ -44,14 +44,14 @@ export function FieldWorkRegister() {
         <CardHeader>
             <div className="flex justify-between items-center">
                 <div>
-                    <CardTitle>Field Work Instructions</CardTitle>
+                    <CardTitle>Projects</CardTitle>
                     <CardDescription>
-                        Records of all assigned field work.
+                        Records of all assigned field work instructions.
                     </CardDescription>
                 </div>
                  <Button>
                     <PlusCircle className="mr-2 h-4 w-4" />
-                    New Instruction
+                    New Project
                 </Button>
             </div>
         </CardHeader>
