@@ -131,7 +131,7 @@ export const getBlockBrickColumns = ({ onEdit, onDelete }: BlockBrickColumnsProp
   },
   {
     id: 'dimensions',
-    header: () => <div className="text-center">Dimensions (mm)</div>,
+    header: () => <div className="text-center px-1">Dimensions (mm)</div>,
     columns: [
         {
             accessorKey: 'length',
@@ -152,7 +152,7 @@ export const getBlockBrickColumns = ({ onEdit, onDelete }: BlockBrickColumnsProp
   },
   {
     id: 'holeDimensions',
-    header: () => <div className="text-center">Dimensions of Holes & No. for Hollow Blocks</div>,
+    header: () => <div className="text-center border-x-2 border-white px-1">Dimensions of Holes & No. for Hollow Blocks</div>,
     columns: [
         {
             id: 'holeA',
@@ -371,5 +371,3 @@ export const getBlockBrickColumns = ({ onEdit, onDelete }: BlockBrickColumnsProp
     },
   },
 ];
-
-    
