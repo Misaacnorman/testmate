@@ -6,6 +6,7 @@ import {
   Beaker,
   FlaskConical,
   ClipboardList,
+  Archive,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -26,6 +27,7 @@ const navItems = [
   { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { href: '/samples', icon: FlaskConical, label: 'Samples'},
   { href: '/logs', icon: ClipboardList, label: 'Receipts'},
+  { href: '/registers', icon: Archive, label: 'Registers' },
   { href: '/tests', icon: Beaker, label: 'Tests' },
 ];
 
