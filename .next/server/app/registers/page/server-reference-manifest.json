@@ -11,7 +11,7 @@
         "app/registers/page": "action-browser"
       }
     },
-    "6074eae2d7a8b12208d8f4bd6de0f79e6773a47ee7": {
+    "7074eae2d7a8b12208d8f4bd6de0f79e6773a47ee7": {
       "workers": {
         "app/registers/page": {
           "moduleId": "[project]/.next-internal/server/app/registers/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/registers/components/concrete-cubes/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/app/registers/components/pavers/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/src/app/registers/components/blocks-bricks/data.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
@@ -66,7 +66,7 @@
         "app/registers/page": "action-browser"
       }
     },
-    "600201ae595c2f649f3dcab18dd189d9eef504b2d1": {
+    "700201ae595c2f649f3dcab18dd189d9eef504b2d1": {
       "workers": {
         "app/registers/page": {
           "moduleId": "[project]/.next-internal/server/app/registers/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/registers/components/concrete-cubes/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/app/registers/components/pavers/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/src/app/registers/components/blocks-bricks/data.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
@@ -121,7 +121,7 @@
         "app/registers/page": "action-browser"
       }
     },
-    "6006d623186252fa3c30ea56d83ea43d6eaf354727": {
+    "7006d623186252fa3c30ea56d83ea43d6eaf354727": {
       "workers": {
         "app/registers/page": {
           "moduleId": "[project]/.next-internal/server/app/registers/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/registers/components/concrete-cubes/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/app/registers/components/pavers/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/src/app/registers/components/blocks-bricks/data.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",

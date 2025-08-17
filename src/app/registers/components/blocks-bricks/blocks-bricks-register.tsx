@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -115,7 +114,7 @@ export function BlocksBricksRegister() {
   const handleSaveEdit = async (data: Partial<GroupedBlockBrickSample>) => {
     if (!selectedSampleSet) return;
     try {
-      await updateSampleSetDetails(selectedSampleSet.receiptId, selectedSampleSet.setNumber || 0, data);
+      await updateSampleSetDetails(selectedSampleSet.receiptId, selectedSampleSet.testId, selectedSampleSet.setNumber || 0, data);
       toast({
         title: 'Success',
         description: 'Sample set details have been updated.',
@@ -136,7 +135,7 @@ export function BlocksBricksRegister() {
   const handleSaveTestResults = async (data: Partial<GroupedBlockBrickSample>) => {
     if (!selectedSampleSet) return;
     try {
-      await updateBlockBrickTestResults(selectedSampleSet.receiptId, selectedSampleSet.setNumber || 0, data);
+      await updateBlockBrickTestResults(selectedSampleSet.receiptId, selectedSampleSet.testId, selectedSampleSet.setNumber || 0, data);
       toast({
         title: 'Success',
         description: 'Test results have been saved.',
@@ -157,7 +156,7 @@ export function BlocksBricksRegister() {
   const handleIssueCertificate = async (data: any) => {
      if (!selectedSampleSet) return;
     try {
-      await issueCertificateForBlockBrickTest(selectedSampleSet.receiptId, selectedSampleSet.setNumber || 0, data);
+      await issueCertificateForBlockBrickTest(selectedSampleSet.receiptId, selectedSampleSet.testId, selectedSampleSet.setNumber || 0, data);
       toast({
         title: 'Success',
         description: 'Certificate details have been issued and saved.',
@@ -192,7 +191,7 @@ export function BlocksBricksRegister() {
         <CardHeader>
             <div className="flex justify-between items-center">
                 <div>
-                    <CardTitle>Blocks & Bricks Register</CardTitle>
+                    <CardTitle>Blocks &amp; Bricks Register</CardTitle>
                     <CardDescription>
                         Detailed records of all block and brick samples.
                     </CardDescription>

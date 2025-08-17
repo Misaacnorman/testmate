@@ -1,4 +1,3 @@
-
 'use server';
 
 import { collection, getDocs, orderBy, query, writeBatch, doc, where } from 'firebase/firestore';
@@ -26,12 +25,12 @@ export async function getPavers(): Promise<PaverSample[]> {
   }
 }
 
-export async function updateSampleSetDetails(receiptId: string, setNumber: number, data: Partial<GroupedPaverSample>): Promise<void> {
-    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber), where('testId', '==', data.testId));
+export async function updateSampleSetDetails(receiptId: string, testId: string, setNumber: number, data: Partial<GroupedPaverSample>): Promise<void> {
+    const q = query(registerCollection, where('receiptId', '==', receiptId), where('testId', '==', testId), where('setNumber', '==', setNumber));
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
-        throw new Error(`No samples found for receiptId ${receiptId} and setNumber ${setNumber}.`);
+        throw new Error(`No samples found for receiptId ${receiptId}, testId ${testId}, and setNumber ${setNumber}.`);
     }
 
     const batch = writeBatch(db);
@@ -88,12 +87,12 @@ export async function deletePaverTestGroup(receiptId: string, testId: string, se
     await batch.commit();
 }
 
-export async function updatePaverTestResults(receiptId: string, setNumber: number, data: Partial<GroupedPaverSample>): Promise<void> {
-    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber), where('testId', '==', data.testId));
+export async function updatePaverTestResults(receiptId: string, testId: string, setNumber: number, data: Partial<GroupedPaverSample>): Promise<void> {
+    const q = query(registerCollection, where('receiptId', '==', receiptId), where('testId', '==', testId), where('setNumber', '==', setNumber));
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
-        throw new Error(`No samples found for receiptId ${receiptId} and setNumber ${setNumber}.`);
+        throw new Error(`No samples found for receiptId ${receiptId}, testId ${testId} and setNumber ${setNumber}.`);
     }
 
     const batch = writeBatch(db);
@@ -125,12 +124,12 @@ export async function updatePaverTestResults(receiptId: string, setNumber: numbe
     await batch.commit();
 }
 
-export async function issueCertificateForPaverTest(receiptId: string, setNumber: number, data: any): Promise<void> {
-    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber), where('testId', '==', data.testId));
+export async function issueCertificateForPaverTest(receiptId: string, testId: string, setNumber: number, data: any): Promise<void> {
+    const q = query(registerCollection, where('receiptId', '==', receiptId), where('testId', '==', testId), where('setNumber', '==', setNumber));
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
-        throw new Error(`No samples found for receiptId ${receiptId} and setNumber ${setNumber}.`);
+        throw new Error(`No samples found for receiptId ${receiptId}, testId ${testId} and setNumber ${setNumber}.`);
     }
 
     const batch = writeBatch(db);

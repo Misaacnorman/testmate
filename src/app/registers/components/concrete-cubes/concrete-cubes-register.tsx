@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -51,7 +50,11 @@ export function ConcreteCubesRegister() {
             ...firstSample,
             samples: sortedSamples,
         };
-      }).sort((a, b) => (b.receivedAt || '').localeCompare(a.receivedAt || ''));
+      }).sort((a, b) => {
+          const dateA = a.receivedAt ? new Date(a.receivedAt).getTime() : 0;
+          const dateB = b.receivedAt ? new Date(b.receivedAt).getTime() : 0;
+          return dateB - dateA;
+      });
 
       setSamples(processedData);
 
@@ -111,7 +114,7 @@ export function ConcreteCubesRegister() {
   const handleSaveEdit = async (data: Partial<GroupedConcreteCubeSample>) => {
     if (!selectedSampleSet) return;
     try {
-      await updateSampleSetDetails(selectedSampleSet.receiptId, selectedSampleSet.setNumber || 0, data);
+      await updateSampleSetDetails(selectedSampleSet.receiptId, selectedSampleSet.testId, selectedSampleSet.setNumber || 0, data);
       toast({
         title: 'Success',
         description: 'Sample set details have been updated.',
@@ -132,7 +135,7 @@ export function ConcreteCubesRegister() {
   const handleSaveTestResults = async (data: Partial<GroupedConcreteCubeSample>) => {
     if (!selectedSampleSet) return;
     try {
-      await updateCubeTestResults(selectedSampleSet.receiptId, selectedSampleSet.setNumber || 0, data);
+      await updateCubeTestResults(selectedSampleSet.receiptId, selectedSampleSet.testId, selectedSampleSet.setNumber || 0, data);
       toast({
         title: 'Success',
         description: 'Test results have been saved.',
@@ -153,7 +156,7 @@ export function ConcreteCubesRegister() {
   const handleIssueCertificate = async (data: any) => {
      if (!selectedSampleSet) return;
     try {
-      await issueCertificateForCubeTest(selectedSampleSet.receiptId, selectedSampleSet.setNumber || 0, data);
+      await issueCertificateForCubeTest(selectedSampleSet.receiptId, selectedSampleSet.testId, selectedSampleSet.setNumber || 0, data);
       toast({
         title: 'Success',
         description: 'Certificate details have been issued and saved.',
