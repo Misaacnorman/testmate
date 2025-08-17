@@ -32,6 +32,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 const receiptDetailsSchema = z.object({
   clientName: z.string().min(1, 'Client name is required'),
   projectTitle: z.string().min(1, 'Project title is required'),
+  paverType: z.string().optional(),
 });
 
 const testResultSampleSchema = z.object({
@@ -47,6 +48,7 @@ const testResultsSchema = z.object({
   samples: z.array(testResultSampleSchema),
   machineUsed: z.string().optional(),
   recordedTemp: z.coerce.number().optional(),
+  paversPerSqM: z.coerce.number().optional(),
 });
 
 const issueSchema = z.object({
@@ -93,6 +95,7 @@ export function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }: E
     defaultValues: {
       clientName: sampleSet.clientName,
       projectTitle: sampleSet.projectTitle,
+      paverType: sampleSet.paverType,
       samples: sampleSet.samples.map(s => ({
         length: s.length,
         width: s.width,
@@ -103,6 +106,7 @@ export function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }: E
       })),
       machineUsed: sampleSet.machineUsed,
       recordedTemp: sampleSet.recordedTemp,
+      paversPerSqM: sampleSet.paversPerSqM,
       certificateNumber: sampleSet.certificateNumber,
       comment: sampleSet.comment,
       technician: sampleSet.technician || user?.displayName || user?.email || '',
@@ -124,6 +128,7 @@ export function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }: E
       form.reset({
         clientName: sampleSet.clientName,
         projectTitle: sampleSet.projectTitle,
+        paverType: sampleSet.paverType || undefined,
         samples: sampleSet.samples.map(s => ({
           length: s.length || undefined,
           width: s.width || undefined,
@@ -134,6 +139,7 @@ export function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }: E
         })),
         machineUsed: sampleSet.machineUsed || undefined,
         recordedTemp: sampleSet.recordedTemp || undefined,
+        paversPerSqM: sampleSet.paversPerSqM || undefined,
         certificateNumber: sampleSet.certificateNumber || '',
         comment: sampleSet.comment || '',
         technician: sampleSet.technician || user?.displayName || user?.email || '',
@@ -237,6 +243,11 @@ export function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }: E
                           <Controller name="projectTitle" control={form.control} render={({ field }) => <Input {...field} />} />
                           {form.formState.errors.projectTitle && <p className="text-destructive text-xs">{form.formState.errors.projectTitle.message}</p>}
                         </div>
+                         <div className="space-y-2">
+                          <Label>Paver Type</Label>
+                          <Controller name="paverType" control={form.control} render={({ field }) => <Input {...field} />} />
+                          {form.formState.errors.paverType && <p className="text-destructive text-xs">{form.formState.errors.paverType.message}</p>}
+                        </div>
                     </div>
                 </div>
             )}
@@ -271,7 +282,7 @@ export function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }: E
                         </div>
                     ))}
                     <Separator />
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
                         <div className="space-y-2">
                             <Label>Machine Used</Label>
                             <Controller name="machineUsed" control={form.control} render={({ field }) => <Input {...field} />} />
@@ -279,6 +290,10 @@ export function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }: E
                         <div className="space-y-2">
                             <Label>Temperature (°C)</Label>
                             <Controller name="recordedTemp" control={form.control} render={({ field }) => <Input type="number" {...field} value={field.value ?? ''} />} />
+                        </div>
+                         <div className="space-y-2">
+                            <Label>Pavers / m²</Label>
+                            <Controller name="paversPerSqM" control={form.control} render={({ field }) => <Input type="number" {...field} value={field.value ?? ''} />} />
                         </div>
                     </div>
                 </ScrollArea>

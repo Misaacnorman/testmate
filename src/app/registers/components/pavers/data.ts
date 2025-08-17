@@ -38,7 +38,7 @@ export async function updateSampleSetDetails(receiptId: string, setNumber: numbe
     
     // These are fields that are shared across all samples in the set
     const sharedUpdateData: any = {};
-    const updatableSharedFields = ['clientName', 'projectTitle', 'castingDate', 'testingDate', 'age', 'areaOfUse', 'machineUsed', 'recordedTemp', 'certificateNumber', 'comment', 'technician', 'dateOfIssue', 'issueId', 'takenBy', 'dateTaken', 'contact'];
+    const updatableSharedFields = ['clientName', 'projectTitle', 'castingDate', 'testingDate', 'age', 'areaOfUse', 'paverType', 'machineUsed', 'recordedTemp', 'certificateNumber', 'comment', 'technician', 'dateOfIssue', 'issueId', 'takenBy', 'dateTaken', 'contact', 'paversPerSqM'];
 
     updatableSharedFields.forEach(field => {
         if (data.hasOwnProperty(field)) {
@@ -101,6 +101,7 @@ export async function updatePaverTestResults(receiptId: string, setNumber: numbe
     const sharedData = {
       machineUsed: data.machineUsed,
       recordedTemp: data.recordedTemp,
+      paversPerSqM: data.paversPerSqM,
     };
 
     snapshot.docs.forEach(doc => {

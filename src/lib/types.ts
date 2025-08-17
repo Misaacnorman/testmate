@@ -1,6 +1,5 @@
 
 
-
 export type Test = {
   id: string;
   name: string; // was materialTest
@@ -72,9 +71,11 @@ export type PaverSample = {
   testingDate?: string;
   age?: number;
   areaOfUse?: string;
+  paverType?: string;
   length?: number;
   width?: number;
   height?: number;
+  paversPerSqM?: number;
   weight?: number;
   load?: number;
   modeOfFailure?: string;

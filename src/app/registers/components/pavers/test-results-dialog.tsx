@@ -35,6 +35,7 @@ const formSchema = z.object({
   samples: z.array(sampleSchema),
   machineUsed: z.string().optional(),
   recordedTemp: z.coerce.number().optional(),
+  paversPerSqM: z.coerce.number().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -55,6 +56,7 @@ export function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }: Tes
       samples: sampleSet.samples,
       machineUsed: sampleSet.machineUsed || '',
       recordedTemp: sampleSet.recordedTemp,
+      paversPerSqM: sampleSet.paversPerSqM,
     },
   });
   
@@ -72,6 +74,7 @@ export function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }: Tes
         })),
         machineUsed: sampleSet.machineUsed || '',
         recordedTemp: sampleSet.recordedTemp || undefined,
+        paversPerSqM: sampleSet.paversPerSqM || undefined,
       });
       setCurrentStep(0);
     }
@@ -151,7 +154,7 @@ export function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }: Tes
            {currentStep === sampleSet.samples.length - 1 && (
             <>
               <Separator />
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
                   <div className="space-y-2">
                       <Label>Machine Used</Label>
                       <Controller name="machineUsed" control={form.control} render={({ field }) => <Input {...field} value={field.value ?? ''} />} />
@@ -159,6 +162,10 @@ export function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }: Tes
                   <div className="space-y-2">
                       <Label>Temperature (°C)</Label>
                       <Controller name="recordedTemp" control={form.control} render={({ field }) => <Input type="number" {...field} value={field.value ?? ''} />} />
+                  </div>
+                  <div className="space-y-2">
+                      <Label>Pavers / m²</Label>
+                      <Controller name="paversPerSqM" control={form.control} render={({ field }) => <Input type="number" {...field} value={field.value ?? ''} />} />
                   </div>
               </div>
             </>

@@ -125,6 +125,14 @@ export const getPaverColumns = ({ onEdit, onDelete }: PaverColumnsProps): Column
     }
   },
   {
+    accessorKey: 'paverType',
+    header: 'Paver Type',
+     cell: ({ row }) => {
+       const rowCount = row.original.samples.length;
+       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.paverType || '-'}</div>
+    }
+  },
+  {
     accessorKey: 'sampleId',
     header: 'Sample ID',
     cell: ({ row }) => renderCellWithSubItems(row.original.samples.map(s => s.sampleSerialNumber)),
@@ -149,6 +157,19 @@ export const getPaverColumns = ({ onEdit, onDelete }: PaverColumnsProps): Column
             cell: ({row}) => renderCellWithSubItems(row.original.samples.map(s => s.height)),
         }
     ]
+  },
+   {
+    accessorKey: 'paversPerSqM',
+    header: 'Pavers/m²',
+    cell: ({ row }) => {
+       const rowCount = row.original.samples.length;
+       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.paversPerSqM || '-'}</div>
+    }
+  },
+  {
+    id: 'calculatedArea',
+    header: 'Area (mm²)',
+    cell: ({ row }) => renderCellWithSubItems(row.original.samples.map(s => (s.length && s.width ? s.length * s.width : undefined))),
   },
   {
     accessorKey: 'weight',
