@@ -28,6 +28,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { CalendarIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Calendar } from '@/components/ui/calendar';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const receiptDetailsSchema = z.object({
   clientName: z.string().min(1, 'Client name is required'),
@@ -147,7 +148,7 @@ export function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }: E
     }
   }, [sampleSet, user, open, form]);
 
-  const processForm = async () => {
+  const processForm = async (event: React.MouseEvent<HTMLButtonElement>) => {
     let isValid = false;
     const currentStepName = steps[currentStep];
 
@@ -163,10 +164,11 @@ export function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }: E
     
     if (!isValid) return;
 
-    if (currentStep < steps.length - 1) {
+    const buttonName = event.currentTarget.name;
+
+    if (buttonName === 'next' && currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
-    } else {
-        // This is the final step, so we submit the form data
+    } else if (buttonName === 'save') {
         const data = form.getValues();
         const finalData: Partial<GroupedConcreteCubeSample> = {
             ...data,
@@ -236,9 +238,9 @@ export function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }: E
             )}
             
             {steps[currentStep] === 'Test Results' && (
-                 <div className="p-4 space-y-4 max-h-[50vh] overflow-y-auto">
+                 <ScrollArea className="h-[50vh] p-4">
                     {fields.map((field, index) => (
-                        <div key={field.id} className="p-4 border rounded-lg space-y-4">
+                        <div key={field.id} className="p-4 border rounded-lg space-y-4 mb-4">
                             <h4 className="font-semibold text-center">Sample ID: {sampleSet.samples[index].sampleSerialNumber}</h4>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div className="space-y-2">
@@ -275,11 +277,11 @@ export function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }: E
                             <Controller name="recordedTemp" control={form.control} render={({ field }) => <Input type="number" {...field} value={field.value ?? ''} />} />
                         </div>
                     </div>
-                </div>
+                </ScrollArea>
             )}
             
             {steps[currentStep] === 'Issue Details' && (
-                <div className="p-4 space-y-4">
+                <ScrollArea className="h-[50vh] p-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <Label>Certificate No.</Label>
@@ -317,7 +319,7 @@ export function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }: E
                             {form.formState.errors.contact && <p className="text-destructive text-xs">{form.formState.errors.contact.message}</p>}
                         </div>
                     </div>
-                </div>
+                </ScrollArea>
             )}
 
             <DialogFooter className="pt-4">
@@ -330,9 +332,9 @@ export function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }: E
                             <Button variant="ghost" type="button">Cancel</Button>
                         </DialogClose>
                         {currentStep < steps.length - 1 ? (
-                            <Button type="button" onClick={processForm}>Next</Button>
+                            <Button type="button" name="next" onClick={processForm}>Next</Button>
                         ) : (
-                            <Button type="button" onClick={processForm}>Save Changes</Button>
+                            <Button type="button" name="save" onClick={processForm}>Save Changes</Button>
                         )}
                     </div>
                 </div>

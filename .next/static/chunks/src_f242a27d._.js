@@ -1919,7 +1919,7 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
         open,
         form
     ]);
-    const handleNext = async ()=>{
+    const processForm = async ()=>{
         let isValid = false;
         const currentStepName = steps[currentStep];
         if (currentStepName === 'Receipt Details') {
@@ -1933,46 +1933,35 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                 'machineUsed',
                 'recordedTemp'
             ]);
-        } else {
-            isValid = true;
-        }
-        if (isValid && currentStep < steps.length - 1) {
-            setCurrentStep(currentStep + 1);
-        }
-    };
-    const handleBack = ()=>{
-        if (currentStep > 0) {
-            setCurrentStep(currentStep - 1);
-        }
-    };
-    const onSubmit = async (data)=>{
-        let isValid = false;
-        const currentStepName = steps[currentStep];
-        if (currentStepName === 'Issue Details') {
+        } else if (currentStepName === 'Issue Details') {
             isValid = await form.trigger([
                 'certificateNumber',
                 'takenBy',
                 'contact'
             ]);
         } else {
-            isValid = true; // Assume other steps were validated on "Next"
+            isValid = true;
         }
-        if (!isValid) {
-            toast({
-                variant: 'destructive',
-                title: 'Validation Error',
-                description: 'Please fill in all required fields for the current step.'
-            });
-            return;
+        if (!isValid) return;
+        if (currentStep < steps.length - 1) {
+            setCurrentStep(currentStep + 1);
+        } else {
+            // This is the final step, so we submit the form data
+            const data = form.getValues();
+            const finalData = {
+                ...data,
+                samples: sampleSet.samples.map((originalSample, index)=>({
+                        ...originalSample,
+                        ...data.samples[index]
+                    }))
+            };
+            onSave(finalData);
         }
-        const finalData = {
-            ...data,
-            samples: sampleSet.samples.map((originalSample, index)=>({
-                    ...originalSample,
-                    ...data.samples[index]
-                }))
-        };
-        onSave(finalData);
+    };
+    const handleBack = ()=>{
+        if (currentStep > 0) {
+            setCurrentStep(currentStep - 1);
+        }
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Dialog"], {
         open: open,
@@ -1986,7 +1975,7 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                             children: "Edit Sample Set"
                         }, void 0, false, {
                             fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                            lineNumber: 206,
+                            lineNumber: 193,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DialogDescription"], {
@@ -1996,17 +1985,16 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                            lineNumber: 207,
+                            lineNumber: 194,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                    lineNumber: 205,
+                    lineNumber: 192,
                     columnNumber: 9
                 }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
-                    onSubmit: form.handleSubmit(onSubmit),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "space-y-4 p-1",
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2019,7 +2007,7 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                             children: index + 1
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                            lineNumber: 216,
+                                            lineNumber: 204,
                                             columnNumber: 25
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2027,23 +2015,23 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                             children: stepName
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                            lineNumber: 225,
+                                            lineNumber: 213,
                                             columnNumber: 25
                                         }, this)
                                     ]
                                 }, stepName, true, {
                                     fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                    lineNumber: 215,
+                                    lineNumber: 203,
                                     columnNumber: 21
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                            lineNumber: 213,
+                            lineNumber: 201,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$separator$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Separator"], {}, void 0, false, {
                             fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                            lineNumber: 231,
+                            lineNumber: 219,
                             columnNumber: 13
                         }, this),
                         steps[currentStep] === 'Receipt Details' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2058,7 +2046,7 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                 children: "Client Name"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                lineNumber: 237,
+                                                lineNumber: 225,
                                                 columnNumber: 27
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -2068,12 +2056,12 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                         ...field
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                        lineNumber: 238,
+                                                        lineNumber: 226,
                                                         columnNumber: 103
                                                     }, void 0)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                lineNumber: 238,
+                                                lineNumber: 226,
                                                 columnNumber: 27
                                             }, this),
                                             form.formState.errors.clientName && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2081,13 +2069,13 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                 children: form.formState.errors.clientName.message
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                lineNumber: 239,
+                                                lineNumber: 227,
                                                 columnNumber: 64
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                        lineNumber: 236,
+                                        lineNumber: 224,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2097,7 +2085,7 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                 children: "Project Title"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                lineNumber: 242,
+                                                lineNumber: 230,
                                                 columnNumber: 27
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -2107,12 +2095,12 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                         ...field
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                        lineNumber: 243,
+                                                        lineNumber: 231,
                                                         columnNumber: 105
                                                     }, void 0)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                lineNumber: 243,
+                                                lineNumber: 231,
                                                 columnNumber: 27
                                             }, this),
                                             form.formState.errors.projectTitle && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2120,24 +2108,24 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                 children: form.formState.errors.projectTitle.message
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                lineNumber: 244,
+                                                lineNumber: 232,
                                                 columnNumber: 66
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                        lineNumber: 241,
+                                        lineNumber: 229,
                                         columnNumber: 25
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                lineNumber: 235,
+                                lineNumber: 223,
                                 columnNumber: 21
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                            lineNumber: 234,
+                            lineNumber: 222,
                             columnNumber: 17
                         }, this),
                         steps[currentStep] === 'Test Results' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2154,7 +2142,7 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                lineNumber: 254,
+                                                lineNumber: 242,
                                                 columnNumber: 29
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2167,7 +2155,7 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                                 children: "Dimensions (mm)"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                                lineNumber: 257,
+                                                                lineNumber: 245,
                                                                 columnNumber: 37
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2182,12 +2170,12 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                                                 type: "number"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                                                lineNumber: 259,
+                                                                                lineNumber: 247,
                                                                                 columnNumber: 132
                                                                             }, void 0)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                                        lineNumber: 259,
+                                                                        lineNumber: 247,
                                                                         columnNumber: 41
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -2199,12 +2187,12 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                                                 type: "number"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                                                lineNumber: 260,
+                                                                                lineNumber: 248,
                                                                                 columnNumber: 131
                                                                             }, void 0)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                                        lineNumber: 260,
+                                                                        lineNumber: 248,
                                                                         columnNumber: 41
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -2216,16 +2204,80 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                                                 type: "number"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                                                lineNumber: 261,
+                                                                                lineNumber: 249,
                                                                                 columnNumber: 132
                                                                             }, void 0)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                                        lineNumber: 261,
+                                                                        lineNumber: 249,
                                                                         columnNumber: 41
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
+                                                                fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
+                                                                lineNumber: 246,
+                                                                columnNumber: 37
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
+                                                        lineNumber: 244,
+                                                        columnNumber: 33
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "space-y-2",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
+                                                                children: "Weight (kg)"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
+                                                                lineNumber: 253,
+                                                                columnNumber: 37
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
+                                                                name: `samples.${index}.weight`,
+                                                                control: form.control,
+                                                                render: ({ field })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
+                                                                        ...field,
+                                                                        type: "number"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
+                                                                        lineNumber: 254,
+                                                                        columnNumber: 128
+                                                                    }, void 0)
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
+                                                                lineNumber: 254,
+                                                                columnNumber: 37
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
+                                                        lineNumber: 252,
+                                                        columnNumber: 33
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "space-y-2",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
+                                                                children: "Load (kN)"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
+                                                                lineNumber: 257,
+                                                                columnNumber: 37
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
+                                                                name: `samples.${index}.load`,
+                                                                control: form.control,
+                                                                render: ({ field })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
+                                                                        ...field,
+                                                                        type: "number"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
+                                                                        lineNumber: 258,
+                                                                        columnNumber: 126
+                                                                    }, void 0)
+                                                            }, void 0, false, {
                                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
                                                                 lineNumber: 258,
                                                                 columnNumber: 37
@@ -2237,77 +2289,13 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                         columnNumber: 33
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "space-y-2",
-                                                        children: [
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
-                                                                children: "Weight (kg)"
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                                lineNumber: 265,
-                                                                columnNumber: 37
-                                                            }, this),
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
-                                                                name: `samples.${index}.weight`,
-                                                                control: form.control,
-                                                                render: ({ field })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
-                                                                        ...field,
-                                                                        type: "number"
-                                                                    }, void 0, false, {
-                                                                        fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                                        lineNumber: 266,
-                                                                        columnNumber: 128
-                                                                    }, void 0)
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                                lineNumber: 266,
-                                                                columnNumber: 37
-                                                            }, this)
-                                                        ]
-                                                    }, void 0, true, {
-                                                        fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                        lineNumber: 264,
-                                                        columnNumber: 33
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "space-y-2",
-                                                        children: [
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
-                                                                children: "Load (kN)"
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                                lineNumber: 269,
-                                                                columnNumber: 37
-                                                            }, this),
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
-                                                                name: `samples.${index}.load`,
-                                                                control: form.control,
-                                                                render: ({ field })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
-                                                                        ...field,
-                                                                        type: "number"
-                                                                    }, void 0, false, {
-                                                                        fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                                        lineNumber: 270,
-                                                                        columnNumber: 126
-                                                                    }, void 0)
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                                lineNumber: 270,
-                                                                columnNumber: 37
-                                                            }, this)
-                                                        ]
-                                                    }, void 0, true, {
-                                                        fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                        lineNumber: 268,
-                                                        columnNumber: 33
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                         className: "space-y-2 md:col-span-3",
                                                         children: [
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
                                                                 children: "Mode of Failure"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                                lineNumber: 273,
+                                                                lineNumber: 261,
                                                                 columnNumber: 37
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -2317,35 +2305,35 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                                         ...field
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                                        lineNumber: 274,
+                                                                        lineNumber: 262,
                                                                         columnNumber: 135
                                                                     }, void 0)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                                lineNumber: 274,
+                                                                lineNumber: 262,
                                                                 columnNumber: 37
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                        lineNumber: 272,
+                                                        lineNumber: 260,
                                                         columnNumber: 34
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                lineNumber: 255,
+                                                lineNumber: 243,
                                                 columnNumber: 29
                                             }, this)
                                         ]
                                     }, field.id, true, {
                                         fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                        lineNumber: 253,
+                                        lineNumber: 241,
                                         columnNumber: 25
                                     }, this)),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$separator$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Separator"], {}, void 0, false, {
                                     fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                    lineNumber: 279,
+                                    lineNumber: 267,
                                     columnNumber: 21
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2358,7 +2346,7 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                     children: "Machine Used"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                    lineNumber: 282,
+                                                    lineNumber: 270,
                                                     columnNumber: 29
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -2368,18 +2356,18 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                             ...field
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                            lineNumber: 283,
+                                                            lineNumber: 271,
                                                             columnNumber: 106
                                                         }, void 0)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                    lineNumber: 283,
+                                                    lineNumber: 271,
                                                     columnNumber: 29
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                            lineNumber: 281,
+                                            lineNumber: 269,
                                             columnNumber: 25
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2389,7 +2377,7 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                     children: "Temperature (°C)"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                    lineNumber: 286,
+                                                    lineNumber: 274,
                                                     columnNumber: 29
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -2401,30 +2389,30 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                             value: field.value ?? ''
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                            lineNumber: 287,
+                                                            lineNumber: 275,
                                                             columnNumber: 107
                                                         }, void 0)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                    lineNumber: 287,
+                                                    lineNumber: 275,
                                                     columnNumber: 29
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                            lineNumber: 285,
+                                            lineNumber: 273,
                                             columnNumber: 25
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                    lineNumber: 280,
+                                    lineNumber: 268,
                                     columnNumber: 21
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                            lineNumber: 251,
+                            lineNumber: 239,
                             columnNumber: 18
                         }, this),
                         steps[currentStep] === 'Issue Details' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2439,7 +2427,7 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                 children: "Certificate No."
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                lineNumber: 297,
+                                                lineNumber: 285,
                                                 columnNumber: 29
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -2449,12 +2437,12 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                         ...field
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                        lineNumber: 298,
+                                                        lineNumber: 286,
                                                         columnNumber: 112
                                                     }, void 0)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                lineNumber: 298,
+                                                lineNumber: 286,
                                                 columnNumber: 29
                                             }, this),
                                             form.formState.errors.certificateNumber && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2462,13 +2450,13 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                 children: form.formState.errors.certificateNumber.message
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                lineNumber: 299,
+                                                lineNumber: 287,
                                                 columnNumber: 73
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                        lineNumber: 296,
+                                        lineNumber: 284,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2478,7 +2466,7 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                 children: "Issue ID/Serial No."
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                lineNumber: 302,
+                                                lineNumber: 290,
                                                 columnNumber: 29
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -2488,8 +2476,104 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                         ...field
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                        lineNumber: 303,
+                                                        lineNumber: 291,
                                                         columnNumber: 102
+                                                    }, void 0)
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
+                                                lineNumber: 291,
+                                                columnNumber: 29
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
+                                        lineNumber: 289,
+                                        columnNumber: 25
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "space-y-2 md:col-span-2",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
+                                                children: "Comment/Remark"
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
+                                                lineNumber: 294,
+                                                columnNumber: 29
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
+                                                name: "comment",
+                                                control: form.control,
+                                                render: ({ field })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Textarea"], {
+                                                        ...field
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
+                                                        lineNumber: 295,
+                                                        columnNumber: 102
+                                                    }, void 0)
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
+                                                lineNumber: 295,
+                                                columnNumber: 29
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
+                                        lineNumber: 293,
+                                        columnNumber: 26
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "space-y-2",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
+                                                children: "Technician"
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
+                                                lineNumber: 298,
+                                                columnNumber: 29
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
+                                                name: "technician",
+                                                control: form.control,
+                                                render: ({ field })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
+                                                        ...field,
+                                                        readOnly: true,
+                                                        className: "bg-muted/50"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
+                                                        lineNumber: 299,
+                                                        columnNumber: 105
+                                                    }, void 0)
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
+                                                lineNumber: 299,
+                                                columnNumber: 29
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
+                                        lineNumber: 297,
+                                        columnNumber: 25
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "space-y-2",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
+                                                children: "Date of Issue"
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
+                                                lineNumber: 302,
+                                                columnNumber: 29
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
+                                                name: "dateOfIssue",
+                                                control: form.control,
+                                                render: ({ field })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
+                                                        ...field,
+                                                        type: "date"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
+                                                        lineNumber: 303,
+                                                        columnNumber: 106
                                                     }, void 0)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
@@ -2503,19 +2587,19 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "space-y-2 md:col-span-2",
+                                        className: "space-y-2",
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
-                                                children: "Comment/Remark"
+                                                children: "Taken By"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
                                                 lineNumber: 306,
                                                 columnNumber: 29
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
-                                                name: "comment",
+                                                name: "takenBy",
                                                 control: form.control,
-                                                render: ({ field })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Textarea"], {
+                                                render: ({ field })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
                                                         ...field
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
@@ -2526,115 +2610,19 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
                                                 lineNumber: 307,
                                                 columnNumber: 29
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                        lineNumber: 305,
-                                        columnNumber: 26
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "space-y-2",
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
-                                                children: "Technician"
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                lineNumber: 310,
-                                                columnNumber: 29
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
-                                                name: "technician",
-                                                control: form.control,
-                                                render: ({ field })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
-                                                        ...field,
-                                                        readOnly: true,
-                                                        className: "bg-muted/50"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                        lineNumber: 311,
-                                                        columnNumber: 105
-                                                    }, void 0)
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                lineNumber: 311,
-                                                columnNumber: 29
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                        lineNumber: 309,
-                                        columnNumber: 25
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "space-y-2",
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
-                                                children: "Date of Issue"
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                lineNumber: 314,
-                                                columnNumber: 29
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
-                                                name: "dateOfIssue",
-                                                control: form.control,
-                                                render: ({ field })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
-                                                        ...field,
-                                                        type: "date"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                        lineNumber: 315,
-                                                        columnNumber: 106
-                                                    }, void 0)
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                lineNumber: 315,
-                                                columnNumber: 29
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                        lineNumber: 313,
-                                        columnNumber: 25
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "space-y-2",
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
-                                                children: "Taken By"
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                lineNumber: 318,
-                                                columnNumber: 29
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
-                                                name: "takenBy",
-                                                control: form.control,
-                                                render: ({ field })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
-                                                        ...field
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                        lineNumber: 319,
-                                                        columnNumber: 102
-                                                    }, void 0)
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                lineNumber: 319,
-                                                columnNumber: 29
                                             }, this),
                                             form.formState.errors.takenBy && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                 className: "text-destructive text-xs",
                                                 children: form.formState.errors.takenBy.message
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                lineNumber: 320,
+                                                lineNumber: 308,
                                                 columnNumber: 63
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                        lineNumber: 317,
+                                        lineNumber: 305,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2644,7 +2632,7 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                 children: "Date Taken"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                lineNumber: 323,
+                                                lineNumber: 311,
                                                 columnNumber: 29
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -2655,18 +2643,18 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                         type: "date"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                        lineNumber: 324,
+                                                        lineNumber: 312,
                                                         columnNumber: 104
                                                     }, void 0)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                lineNumber: 324,
+                                                lineNumber: 312,
                                                 columnNumber: 29
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                        lineNumber: 322,
+                                        lineNumber: 310,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2676,7 +2664,7 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                 children: "Contact"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                lineNumber: 327,
+                                                lineNumber: 315,
                                                 columnNumber: 29
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -2686,12 +2674,12 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                         ...field
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                        lineNumber: 328,
+                                                        lineNumber: 316,
                                                         columnNumber: 102
                                                     }, void 0)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                lineNumber: 328,
+                                                lineNumber: 316,
                                                 columnNumber: 29
                                             }, this),
                                             form.formState.errors.contact && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2699,24 +2687,24 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                 children: form.formState.errors.contact.message
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                lineNumber: 329,
+                                                lineNumber: 317,
                                                 columnNumber: 63
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                        lineNumber: 326,
+                                        lineNumber: 314,
                                         columnNumber: 25
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                lineNumber: 295,
+                                lineNumber: 283,
                                 columnNumber: 21
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                            lineNumber: 294,
+                            lineNumber: 282,
                             columnNumber: 17
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DialogFooter"], {
@@ -2732,7 +2720,7 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                         children: "Back"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                        lineNumber: 337,
+                                        lineNumber: 325,
                                         columnNumber: 21
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2746,62 +2734,63 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                     children: "Cancel"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                    lineNumber: 342,
+                                                    lineNumber: 330,
                                                     columnNumber: 29
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                lineNumber: 341,
+                                                lineNumber: 329,
                                                 columnNumber: 25
                                             }, this),
                                             currentStep < steps.length - 1 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
                                                 type: "button",
-                                                onClick: handleNext,
+                                                onClick: processForm,
                                                 children: "Next"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                lineNumber: 345,
+                                                lineNumber: 333,
                                                 columnNumber: 29
                                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
-                                                type: "submit",
+                                                type: "button",
+                                                onClick: processForm,
                                                 children: "Save Changes"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                                lineNumber: 347,
+                                                lineNumber: 335,
                                                 columnNumber: 29
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                        lineNumber: 340,
+                                        lineNumber: 328,
                                         columnNumber: 21
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                                lineNumber: 336,
+                                lineNumber: 324,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                            lineNumber: 335,
+                            lineNumber: 323,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-                    lineNumber: 212,
+                    lineNumber: 200,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-            lineNumber: 204,
+            lineNumber: 191,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/app/registers/components/concrete-cubes/edit-sample-set-dialog.tsx",
-        lineNumber: 203,
+        lineNumber: 190,
         columnNumber: 5
     }, this);
 }
@@ -2902,9 +2891,8 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
         open,
         form
     ]);
-    const handleNext = ()=>{
+    const processStep = ()=>{
         if (currentStep < sampleSet.samples.length - 1) {
-            // Carry over the data from the current step to the next
             const currentValues = form.getValues(`samples.${currentStep}`);
             form.setValue(`samples.${currentStep + 1}`, {
                 ...form.getValues(`samples.${currentStep + 1}`),
@@ -2916,22 +2904,23 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                 modeOfFailure: currentValues.modeOfFailure
             });
             setCurrentStep(currentStep + 1);
+        } else {
+            // This is the final step, so we submit the form data
+            const data = form.getValues();
+            const finalData = {
+                ...data,
+                samples: sampleSet.samples.map((originalSample, index)=>({
+                        ...originalSample,
+                        ...data.samples[index]
+                    }))
+            };
+            onSave(finalData);
         }
     };
     const handleBack = ()=>{
         if (currentStep > 0) {
             setCurrentStep(currentStep - 1);
         }
-    };
-    const onSubmit = (data)=>{
-        const finalData = {
-            ...data,
-            samples: sampleSet.samples.map((originalSample, index)=>({
-                    ...originalSample,
-                    ...data.samples[index]
-                }))
-        };
-        onSave(finalData);
     };
     const currentSample = form.watch(`samples.${currentStep}`);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Dialog"], {
@@ -2946,7 +2935,7 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                             children: "Enter Test Results"
                         }, void 0, false, {
                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                            lineNumber: 120,
+                            lineNumber: 119,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DialogDescription"], {
@@ -2960,17 +2949,16 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                            lineNumber: 121,
+                            lineNumber: 120,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                    lineNumber: 119,
+                    lineNumber: 118,
                     columnNumber: 9
                 }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
-                    onSubmit: form.handleSubmit(onSubmit),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "space-y-4 p-1",
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2985,7 +2973,7 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                 children: "Dimensions (mm)"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                lineNumber: 130,
+                                                lineNumber: 129,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3001,12 +2989,12 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                                 value: field.value ?? ''
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                                lineNumber: 132,
+                                                                lineNumber: 131,
                                                                 columnNumber: 122
                                                             }, void 0)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                        lineNumber: 132,
+                                                        lineNumber: 131,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -3019,12 +3007,12 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                                 value: field.value ?? ''
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                                lineNumber: 133,
+                                                                lineNumber: 132,
                                                                 columnNumber: 121
                                                             }, void 0)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                        lineNumber: 133,
+                                                        lineNumber: 132,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -3037,24 +3025,24 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                                 value: field.value ?? ''
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                                lineNumber: 134,
+                                                                lineNumber: 133,
                                                                 columnNumber: 122
                                                             }, void 0)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                        lineNumber: 134,
+                                                        lineNumber: 133,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                lineNumber: 131,
+                                                lineNumber: 130,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                        lineNumber: 129,
+                                        lineNumber: 128,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3064,7 +3052,7 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                 children: "Weight (kg)"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                lineNumber: 138,
+                                                lineNumber: 137,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -3076,18 +3064,18 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                         value: field.value ?? ''
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                        lineNumber: 139,
+                                                        lineNumber: 138,
                                                         columnNumber: 118
                                                     }, void 0)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                lineNumber: 139,
+                                                lineNumber: 138,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                        lineNumber: 137,
+                                        lineNumber: 136,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3097,7 +3085,7 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                 children: "Load (kN)"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                lineNumber: 142,
+                                                lineNumber: 141,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -3109,18 +3097,18 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                         value: field.value ?? ''
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                        lineNumber: 143,
+                                                        lineNumber: 142,
                                                         columnNumber: 116
                                                     }, void 0)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                lineNumber: 143,
+                                                lineNumber: 142,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                        lineNumber: 141,
+                                        lineNumber: 140,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3130,7 +3118,7 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                 children: "Mode of Failure"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                lineNumber: 146,
+                                                lineNumber: 145,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -3141,36 +3129,36 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                         value: field.value ?? ''
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                        lineNumber: 147,
+                                                        lineNumber: 146,
                                                         columnNumber: 125
                                                     }, void 0)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                lineNumber: 147,
+                                                lineNumber: 146,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                        lineNumber: 145,
+                                        lineNumber: 144,
                                         columnNumber: 18
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                lineNumber: 128,
+                                lineNumber: 127,
                                 columnNumber: 14
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                            lineNumber: 127,
+                            lineNumber: 126,
                             columnNumber: 11
                         }, this),
                         currentStep === sampleSet.samples.length - 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$separator$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Separator"], {}, void 0, false, {
                                     fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                    lineNumber: 154,
+                                    lineNumber: 153,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3183,7 +3171,7 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                     children: "Machine Used"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                    lineNumber: 157,
+                                                    lineNumber: 156,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -3194,18 +3182,18 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                             value: field.value ?? ''
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                            lineNumber: 158,
+                                                            lineNumber: 157,
                                                             columnNumber: 100
                                                         }, void 0)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                    lineNumber: 158,
+                                                    lineNumber: 157,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                            lineNumber: 156,
+                                            lineNumber: 155,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3215,7 +3203,7 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                     children: "Temperature (°C)"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                    lineNumber: 161,
+                                                    lineNumber: 160,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -3227,24 +3215,24 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                             value: field.value ?? ''
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                            lineNumber: 162,
+                                                            lineNumber: 161,
                                                             columnNumber: 101
                                                         }, void 0)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                    lineNumber: 162,
+                                                    lineNumber: 161,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                            lineNumber: 160,
+                                            lineNumber: 159,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                    lineNumber: 155,
+                                    lineNumber: 154,
                                     columnNumber: 15
                                 }, this)
                             ]
@@ -3262,7 +3250,7 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                         children: "Back"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                        lineNumber: 170,
+                                        lineNumber: 169,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3275,57 +3263,58 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                 children: "Cancel"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                lineNumber: 174,
+                                                lineNumber: 173,
                                                 columnNumber: 21
                                             }, this),
                                             currentStep < sampleSet.samples.length - 1 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
                                                 type: "button",
-                                                onClick: handleNext,
+                                                onClick: processStep,
                                                 children: "Next"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                lineNumber: 176,
+                                                lineNumber: 175,
                                                 columnNumber: 25
                                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
-                                                type: "submit",
+                                                type: "button",
+                                                onClick: processStep,
                                                 children: "Save Results"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                lineNumber: 178,
+                                                lineNumber: 177,
                                                 columnNumber: 25
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                        lineNumber: 173,
+                                        lineNumber: 172,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                lineNumber: 169,
+                                lineNumber: 168,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                            lineNumber: 168,
+                            lineNumber: 167,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                    lineNumber: 126,
+                    lineNumber: 125,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-            lineNumber: 118,
+            lineNumber: 117,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-        lineNumber: 117,
+        lineNumber: 116,
         columnNumber: 5
     }, this);
 }
