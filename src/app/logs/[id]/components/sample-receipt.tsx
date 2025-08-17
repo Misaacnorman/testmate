@@ -6,9 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { format, parseISO } from 'date-fns';
 import { useReactToPrint } from 'react-to-print';
-import { Printer, TestTube, User, Folder, Calendar, Truck, Microscope, ClipboardList } from 'lucide-react';
+import { Printer, TestTube, User, Folder, Calendar, Truck, Microscope, ClipboardList, ArrowLeft } from 'lucide-react';
 import type { Receipt } from '@/lib/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import Link from 'next/link';
 
 export function SampleReceipt({ data }: { data: Receipt }) {
   const componentRef = useRef<HTMLDivElement>(null);
@@ -30,11 +31,19 @@ export function SampleReceipt({ data }: { data: Receipt }) {
 
   return (
     <div className="bg-white max-w-4xl mx-auto p-8 rounded-lg shadow-xl">
-        <div className="flex justify-end gap-2 mb-4">
-            <Button onClick={handlePrint} variant="outline" size="sm">
-                <Printer className="mr-2 h-4 w-4" />
-                Print / Save PDF
+        <div className="flex justify-between items-center mb-4">
+            <Button asChild variant="outline" size="sm">
+                <Link href="/logs">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Back to Logs
+                </Link>
             </Button>
+            <div className="flex gap-2">
+                <Button onClick={handlePrint} variant="outline" size="sm">
+                    <Printer className="mr-2 h-4 w-4" />
+                    Print / Save PDF
+                </Button>
+           </div>
        </div>
       <div ref={componentRef} className="p-4 sm:p-6 lg:p-8 text-black">
         <header className="flex justify-between items-start pb-6 border-b-2 border-gray-800">
