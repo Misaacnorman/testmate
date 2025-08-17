@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, use } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { notFound } from 'next/navigation';
@@ -10,11 +10,11 @@ import { fromFirestore } from '@/lib/utils';
 import type { Receipt } from '@/lib/types';
 
 
-export default function LogPage({ params }: { params: { id: string } }) {
+export default function LogPage({ params }: { params: Promise<{ id: string }> }) {
   const [receiptData, setReceiptData] = useState<Receipt | null>(null);
   const [loading, setLoading] = useState(true);
   
-  const { id } = params;
+  const { id } = use(params);
 
   useEffect(() => {
     const fetchReceipt = async () => {

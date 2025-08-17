@@ -1106,13 +1106,11 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
-function LogPage({ params: paramsPromise }) {
+function LogPage({ params }) {
     _s();
     const [receiptData, setReceiptData] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
-    // The 'use' hook is not available in the version of React being used.
-    // We will access params directly and manage the id in the useEffect hook.
-    const { id } = paramsPromise;
+    const { id } = params;
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "LogPage.useEffect": ()=>{
             const fetchReceipt = {
@@ -1150,7 +1148,7 @@ function LogPage({ params: paramsPromise }) {
             children: "Loading receipt..."
         }, void 0, false, {
             fileName: "[project]/src/app/logs/[id]/page.tsx",
-            lineNumber: 47,
+            lineNumber: 45,
             columnNumber: 12
         }, this);
     }
@@ -1163,12 +1161,12 @@ function LogPage({ params: paramsPromise }) {
             data: receiptData
         }, void 0, false, {
             fileName: "[project]/src/app/logs/[id]/page.tsx",
-            lineNumber: 56,
+            lineNumber: 54,
             columnNumber: 8
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/app/logs/[id]/page.tsx",
-        lineNumber: 55,
+        lineNumber: 53,
         columnNumber: 5
     }, this);
 }
