@@ -13,6 +13,7 @@ import { PaversRegister } from './components/pavers/pavers-register';
 import { BlocksBricksRegister } from './components/blocks-bricks/blocks-bricks-register';
 import { CylindersRegister } from './components/cylinders/cylinders-register';
 import { WaterAbsorptionRegister } from './components/water-absorption/water-absorption-register';
+import { ProjectsRegister } from './components/projects-register';
 
 export default function RegistersPage() {
   return (
@@ -33,6 +34,7 @@ export default function RegistersPage() {
             <TabsTrigger value="pavers">Pavers</TabsTrigger>
             <TabsTrigger value="cylinders">Cylinders</TabsTrigger>
             <TabsTrigger value="water-absorption">Water Absorption</TabsTrigger>
+            <TabsTrigger value="projects">Projects</TabsTrigger>
           </TabsList>
           <TabsContent value="concrete-cubes" className="flex-grow">
             <ConcreteCubesRegister />
@@ -48,6 +50,9 @@ export default function RegistersPage() {
           </TabsContent>
           <TabsContent value="water-absorption" className="flex-grow">
             <WaterAbsorptionRegister />
+          </TabsContent>
+          <TabsContent value="projects" className="flex-grow">
+            <ProjectsRegister />
           </TabsContent>
         </Tabs>
       </div>
