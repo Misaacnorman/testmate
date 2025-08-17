@@ -10,7 +10,6 @@ import {
   getSortedRowModel,
   SortingState,
   useReactTable,
-  RowSelectionState,
 } from '@tanstack/react-table';
 
 import {
@@ -28,16 +27,12 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   loading: boolean;
-  rowSelection: RowSelectionState;
-  setRowSelection: React.Dispatch<React.SetStateAction<RowSelectionState>>;
 }
 
 export function ConcreteCubesDataTable<TData, TValue>({
   columns,
   data,
   loading,
-  rowSelection,
-  setRowSelection,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
@@ -48,10 +43,8 @@ export function ConcreteCubesDataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-     onRowSelectionChange: setRowSelection,
     state: {
       sorting,
-      rowSelection
     },
     initialState: {
       pagination: {
@@ -125,8 +118,7 @@ export function ConcreteCubesDataTable<TData, TValue>({
        </div>
       <div className="flex items-center justify-between space-x-2 p-4 border-t">
         <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{' '}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
+          {table.getFilteredRowModel().rows.length} row(s) found.
         </div>
         <div className="flex items-center space-x-2">
             <span className="text-sm">

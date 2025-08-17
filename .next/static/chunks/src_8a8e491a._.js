@@ -169,7 +169,7 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
     __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
 }
 }}),
-"[project]/src/app/registers/components/concrete-cubes/data:b36449 [app-client] (ecmascript) <text/javascript>": ((__turbopack_context__) => {
+"[project]/src/app/registers/components/concrete-cubes/data:f8bea8 [app-client] (ecmascript) <text/javascript>": ((__turbopack_context__) => {
 "use strict";
 
 var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
@@ -180,7 +180,23 @@ var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/build/webpack/loaders/next-flight-loader/action-client-wrapper.js [app-client] (ecmascript)");
 "use turbopack no side effects";
 ;
-var getConcreteCubes = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createServerReference"])("00a397b6fc7964f531715ad9fae934640560c2de96", __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["callServer"], void 0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["findSourceMapURL"], "getConcreteCubes"); //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4vZGF0YS50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJcbid1c2Ugc2VydmVyJztcblxuaW1wb3J0IHsgY29sbGVjdGlvbiwgZ2V0RG9jcywgb3JkZXJCeSwgcXVlcnkgfSBmcm9tICdmaXJlYmFzZS9maXJlc3RvcmUnO1xuaW1wb3J0IHsgZGIgfSBmcm9tICdAL2xpYi9maXJlYmFzZS9jb25maWcnO1xuaW1wb3J0IHR5cGUgeyBDb25jcmV0ZUN1YmVTYW1wbGUgfSBmcm9tICdAL2xpYi90eXBlcyc7XG5pbXBvcnQgeyBmcm9tRmlyZXN0b3JlIH0gZnJvbSAnQC9saWIvdXRpbHMnO1xuXG5jb25zdCByZWdpc3RlckNvbGxlY3Rpb24gPSBjb2xsZWN0aW9uKGRiLCAnY29uY3JldGUtY3ViZXMtcmVnaXN0ZXInKTtcblxuZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIGdldENvbmNyZXRlQ3ViZXMoKTogUHJvbWlzZTxDb25jcmV0ZUN1YmVTYW1wbGVbXT4ge1xuICAvLyBTaW11bGF0ZSBuZXR3b3JrIGRlbGF5IGZvciBhIGJldHRlciBVWFxuICBhd2FpdCBuZXcgUHJvbWlzZShyZXNvbHZlID0+IHNldFRpbWVvdXQocmVzb2x2ZSwgNTAwKSk7XG4gIHRyeSB7XG4gICAgY29uc3QgcSA9IHF1ZXJ5KHJlZ2lzdGVyQ29sbGVjdGlvbiwgb3JkZXJCeSgncmVjZWl2ZWRBdCcsICdkZXNjJykpO1xuICAgIGNvbnN0IHNuYXBzaG90ID0gYXdhaXQgZ2V0RG9jcyhxKTtcbiAgICBpZiAoc25hcHNob3QuZW1wdHkpIHtcbiAgICAgICAgY29uc29sZS5sb2coXCJObyBkb2N1bWVudHMgZm91bmQgaW4gY29uY3JldGUtY3ViZXMtcmVnaXN0ZXIuXCIpO1xuICAgICAgICByZXR1cm4gW107XG4gICAgfVxuICAgIHJldHVybiBzbmFwc2hvdC5kb2NzLm1hcChkb2MgPT4gZnJvbUZpcmVzdG9yZTxDb25jcmV0ZUN1YmVTYW1wbGU+KHsgaWQ6IGRvYy5pZCwgLi4uZG9jLmRhdGEoKSB9KSk7XG4gIH0gY2F0Y2goZSkge1xuICAgIGNvbnNvbGUuZXJyb3IoXCJFcnJvciBmZXRjaGluZyBmcm9tIGNvbmNyZXRlLWN1YmVzLXJlZ2lzdGVyOiBcIiwgZSk7XG4gICAgLy8gSWYgY29sbGVjdGlvbiBkb2Vzbid0IGV4aXN0LCBpdCB3aWxsIHRocm93LiBSZXR1cm4gZW1wdHkgYXJyYXkgaW4gdGhhdCBjYXNlLlxuICAgIHJldHVybiBbXTtcbiAgfVxufVxuIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI2VEFVc0IifQ==
+var getConcreteCubes = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createServerReference"])("00a397b6fc7964f531715ad9fae934640560c2de96", __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["callServer"], void 0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["findSourceMapURL"], "getConcreteCubes"); //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4vZGF0YS50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJcbid1c2Ugc2VydmVyJztcblxuaW1wb3J0IHsgY29sbGVjdGlvbiwgZ2V0RG9jcywgb3JkZXJCeSwgcXVlcnksIHdyaXRlQmF0Y2gsIGRvYyB9IGZyb20gJ2ZpcmViYXNlL2ZpcmVzdG9yZSc7XG5pbXBvcnQgeyBkYiB9IGZyb20gJ0AvbGliL2ZpcmViYXNlL2NvbmZpZyc7XG5pbXBvcnQgdHlwZSB7IENvbmNyZXRlQ3ViZVNhbXBsZSB9IGZyb20gJ0AvbGliL3R5cGVzJztcbmltcG9ydCB7IGZyb21GaXJlc3RvcmUgfSBmcm9tICdAL2xpYi91dGlscyc7XG5cbmNvbnN0IHJlZ2lzdGVyQ29sbGVjdGlvbiA9IGNvbGxlY3Rpb24oZGIsICdjb25jcmV0ZS1jdWJlcy1yZWdpc3RlcicpO1xuXG5leHBvcnQgYXN5bmMgZnVuY3Rpb24gZ2V0Q29uY3JldGVDdWJlcygpOiBQcm9taXNlPENvbmNyZXRlQ3ViZVNhbXBsZVtdPiB7XG4gIC8vIFNpbXVsYXRlIG5ldHdvcmsgZGVsYXkgZm9yIGEgYmV0dGVyIFVYXG4gIGF3YWl0IG5ldyBQcm9taXNlKHJlc29sdmUgPT4gc2V0VGltZW91dChyZXNvbHZlLCA1MDApKTtcbiAgdHJ5IHtcbiAgICBjb25zdCBxID0gcXVlcnkocmVnaXN0ZXJDb2xsZWN0aW9uLCBvcmRlckJ5KCdyZWNlaXZlZEF0JywgJ2Rlc2MnKSk7XG4gICAgY29uc3Qgc25hcHNob3QgPSBhd2FpdCBnZXREb2NzKHEpO1xuICAgIGlmIChzbmFwc2hvdC5lbXB0eSkge1xuICAgICAgICBjb25zb2xlLmxvZyhcIk5vIGRvY3VtZW50cyBmb3VuZCBpbiBjb25jcmV0ZS1jdWJlcy1yZWdpc3Rlci5cIik7XG4gICAgICAgIHJldHVybiBbXTtcbiAgICB9XG4gICAgcmV0dXJuIHNuYXBzaG90LmRvY3MubWFwKGRvYyA9PiBmcm9tRmlyZXN0b3JlPENvbmNyZXRlQ3ViZVNhbXBsZT4oeyBpZDogZG9jLmlkLCAuLi5kb2MuZGF0YSgpIH0pKTtcbiAgfSBjYXRjaChlKSB7XG4gICAgY29uc29sZS5lcnJvcihcIkVycm9yIGZldGNoaW5nIGZyb20gY29uY3JldGUtY3ViZXMtcmVnaXN0ZXI6IFwiLCBlKTtcbiAgICAvLyBJZiBjb2xsZWN0aW9uIGRvZXNuJ3QgZXhpc3QsIGl0IHdpbGwgdGhyb3cuIFJldHVybiBlbXB0eSBhcnJheSBpbiB0aGF0IGNhc2UuXG4gICAgcmV0dXJuIFtdO1xuICB9XG59XG5cblxuZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIHVwZGF0ZUN1YmVUZXN0UmVzdWx0cyh1cGRhdGVkU2FtcGxlczogQ29uY3JldGVDdWJlU2FtcGxlW10pOiBQcm9taXNlPHZvaWQ+IHtcbiAgICBjb25zdCBiYXRjaCA9IHdyaXRlQmF0Y2goZGIpO1xuXG4gICAgdXBkYXRlZFNhbXBsZXMuZm9yRWFjaChzYW1wbGUgPT4ge1xuICAgICAgICBjb25zdCBkb2NSZWYgPSBkb2MoZGIsICdjb25jcmV0ZS1jdWJlcy1yZWdpc3RlcicsIHNhbXBsZS5pZCk7XG4gICAgICAgIGNvbnN0IHsgaWQsIC4uLnNhbXBsZURhdGEgfSA9IHNhbXBsZTsgLy8gRXhjbHVkZSBvcmlnaW5hbCBpZCBmcm9tIHRoZSBkYXRhIHRvIGJlIHdyaXR0ZW5cbiAgICAgICAgYmF0Y2gudXBkYXRlKGRvY1JlZiwgc2FtcGxlRGF0YSk7XG4gICAgfSk7XG5cbiAgICBhd2FpdCBiYXRjaC5jb21taXQoKTtcbn1cbiJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiNlRBVXNCIn0=
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/src/app/registers/components/concrete-cubes/data:a865db [app-client] (ecmascript) <text/javascript>": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+/* __next_internal_action_entry_do_not_use__ [{"408385756c86f70ccb930927038bff8219f3f85bf8":"updateCubeTestResults"},"src/app/registers/components/concrete-cubes/data.ts",""] */ __turbopack_context__.s({
+    "updateCubeTestResults": (()=>updateCubeTestResults)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/build/webpack/loaders/next-flight-loader/action-client-wrapper.js [app-client] (ecmascript)");
+"use turbopack no side effects";
+;
+var updateCubeTestResults = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createServerReference"])("408385756c86f70ccb930927038bff8219f3f85bf8", __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["callServer"], void 0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$client$2d$wrapper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["findSourceMapURL"], "updateCubeTestResults"); //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4vZGF0YS50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJcbid1c2Ugc2VydmVyJztcblxuaW1wb3J0IHsgY29sbGVjdGlvbiwgZ2V0RG9jcywgb3JkZXJCeSwgcXVlcnksIHdyaXRlQmF0Y2gsIGRvYyB9IGZyb20gJ2ZpcmViYXNlL2ZpcmVzdG9yZSc7XG5pbXBvcnQgeyBkYiB9IGZyb20gJ0AvbGliL2ZpcmViYXNlL2NvbmZpZyc7XG5pbXBvcnQgdHlwZSB7IENvbmNyZXRlQ3ViZVNhbXBsZSB9IGZyb20gJ0AvbGliL3R5cGVzJztcbmltcG9ydCB7IGZyb21GaXJlc3RvcmUgfSBmcm9tICdAL2xpYi91dGlscyc7XG5cbmNvbnN0IHJlZ2lzdGVyQ29sbGVjdGlvbiA9IGNvbGxlY3Rpb24oZGIsICdjb25jcmV0ZS1jdWJlcy1yZWdpc3RlcicpO1xuXG5leHBvcnQgYXN5bmMgZnVuY3Rpb24gZ2V0Q29uY3JldGVDdWJlcygpOiBQcm9taXNlPENvbmNyZXRlQ3ViZVNhbXBsZVtdPiB7XG4gIC8vIFNpbXVsYXRlIG5ldHdvcmsgZGVsYXkgZm9yIGEgYmV0dGVyIFVYXG4gIGF3YWl0IG5ldyBQcm9taXNlKHJlc29sdmUgPT4gc2V0VGltZW91dChyZXNvbHZlLCA1MDApKTtcbiAgdHJ5IHtcbiAgICBjb25zdCBxID0gcXVlcnkocmVnaXN0ZXJDb2xsZWN0aW9uLCBvcmRlckJ5KCdyZWNlaXZlZEF0JywgJ2Rlc2MnKSk7XG4gICAgY29uc3Qgc25hcHNob3QgPSBhd2FpdCBnZXREb2NzKHEpO1xuICAgIGlmIChzbmFwc2hvdC5lbXB0eSkge1xuICAgICAgICBjb25zb2xlLmxvZyhcIk5vIGRvY3VtZW50cyBmb3VuZCBpbiBjb25jcmV0ZS1jdWJlcy1yZWdpc3Rlci5cIik7XG4gICAgICAgIHJldHVybiBbXTtcbiAgICB9XG4gICAgcmV0dXJuIHNuYXBzaG90LmRvY3MubWFwKGRvYyA9PiBmcm9tRmlyZXN0b3JlPENvbmNyZXRlQ3ViZVNhbXBsZT4oeyBpZDogZG9jLmlkLCAuLi5kb2MuZGF0YSgpIH0pKTtcbiAgfSBjYXRjaChlKSB7XG4gICAgY29uc29sZS5lcnJvcihcIkVycm9yIGZldGNoaW5nIGZyb20gY29uY3JldGUtY3ViZXMtcmVnaXN0ZXI6IFwiLCBlKTtcbiAgICAvLyBJZiBjb2xsZWN0aW9uIGRvZXNuJ3QgZXhpc3QsIGl0IHdpbGwgdGhyb3cuIFJldHVybiBlbXB0eSBhcnJheSBpbiB0aGF0IGNhc2UuXG4gICAgcmV0dXJuIFtdO1xuICB9XG59XG5cblxuZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIHVwZGF0ZUN1YmVUZXN0UmVzdWx0cyh1cGRhdGVkU2FtcGxlczogQ29uY3JldGVDdWJlU2FtcGxlW10pOiBQcm9taXNlPHZvaWQ+IHtcbiAgICBjb25zdCBiYXRjaCA9IHdyaXRlQmF0Y2goZGIpO1xuXG4gICAgdXBkYXRlZFNhbXBsZXMuZm9yRWFjaChzYW1wbGUgPT4ge1xuICAgICAgICBjb25zdCBkb2NSZWYgPSBkb2MoZGIsICdjb25jcmV0ZS1jdWJlcy1yZWdpc3RlcicsIHNhbXBsZS5pZCk7XG4gICAgICAgIGNvbnN0IHsgaWQsIC4uLnNhbXBsZURhdGEgfSA9IHNhbXBsZTsgLy8gRXhjbHVkZSBvcmlnaW5hbCBpZCBmcm9tIHRoZSBkYXRhIHRvIGJlIHdyaXR0ZW5cbiAgICAgICAgYmF0Y2gudXBkYXRlKGRvY1JlZiwgc2FtcGxlRGF0YSk7XG4gICAgfSk7XG5cbiAgICBhd2FpdCBiYXRjaC5jb21taXQoKTtcbn1cbiJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoia1VBNkJzQiJ9
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
 }
@@ -1041,7 +1057,7 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
-function ConcreteCubesDataTable({ columns, data, loading }) {
+function ConcreteCubesDataTable({ columns, data, loading, rowSelection, setRowSelection }) {
     _s();
     const [sorting, setSorting] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const table = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$react$2d$table$2f$build$2f$lib$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["useReactTable"])({
@@ -1051,8 +1067,10 @@ function ConcreteCubesDataTable({ columns, data, loading }) {
         getPaginationRowModel: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$table$2d$core$2f$build$2f$lib$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["getPaginationRowModel"])(),
         onSortingChange: setSorting,
         getSortedRowModel: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$table$2d$core$2f$build$2f$lib$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["getSortedRowModel"])(),
+        onRowSelectionChange: setRowSelection,
         state: {
-            sorting
+            sorting,
+            rowSelection
         },
         initialState: {
             pagination: {
@@ -1077,17 +1095,17 @@ function ConcreteCubesDataTable({ columns, data, loading }) {
                                             children: header.isPlaceholder ? null : (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$react$2d$table$2f$build$2f$lib$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["flexRender"])(header.column.columnDef.header, header.getContext())
                                         }, header.id, false, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                                            lineNumber: 64,
+                                            lineNumber: 71,
                                             columnNumber: 21
                                         }, this))
                                 }, headerGroup.id, false, {
                                     fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                                    lineNumber: 62,
+                                    lineNumber: 69,
                                     columnNumber: 17
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                            lineNumber: 60,
+                            lineNumber: 67,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableBody"], {
@@ -1102,22 +1120,22 @@ function ConcreteCubesDataTable({ columns, data, loading }) {
                                                     className: "h-6 w-4/5"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                                                    lineNumber: 83,
+                                                    lineNumber: 90,
                                                     columnNumber: 33
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                                                lineNumber: 82,
+                                                lineNumber: 89,
                                                 columnNumber: 29
                                             }, this)
                                         }, columnDef.id || i, false, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                                            lineNumber: 81,
+                                            lineNumber: 88,
                                             columnNumber: 25
                                         }, this))
                                 }, i, false, {
                                     fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                                    lineNumber: 79,
+                                    lineNumber: 86,
                                     columnNumber: 21
                                 }, this)) : table.getRowModel().rows?.length ? table.getRowModel().rows.map((row)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableRow"], {
                                     "data-state": row.getIsSelected() && 'selected',
@@ -1127,12 +1145,12 @@ function ConcreteCubesDataTable({ columns, data, loading }) {
                                             children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$react$2d$table$2f$build$2f$lib$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["flexRender"])(cell.column.columnDef.cell, cell.getContext())
                                         }, cell.id, false, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                                            lineNumber: 97,
+                                            lineNumber: 104,
                                             columnNumber: 25
                                         }, this))
                                 }, row.id, false, {
                                     fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                                    lineNumber: 91,
+                                    lineNumber: 98,
                                     columnNumber: 21
                                 }, this)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableRow"], {
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableCell"], {
@@ -1141,28 +1159,28 @@ function ConcreteCubesDataTable({ columns, data, loading }) {
                                     children: "No concrete cube samples found."
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                                    lineNumber: 108,
+                                    lineNumber: 115,
                                     columnNumber: 21
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                                lineNumber: 107,
+                                lineNumber: 114,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                            lineNumber: 76,
+                            lineNumber: 83,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                    lineNumber: 59,
+                    lineNumber: 66,
                     columnNumber: 13
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                lineNumber: 58,
+                lineNumber: 65,
                 columnNumber: 8
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1171,12 +1189,15 @@ function ConcreteCubesDataTable({ columns, data, loading }) {
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "flex-1 text-sm text-muted-foreground",
                         children: [
+                            table.getFilteredSelectedRowModel().rows.length,
+                            " of",
+                            ' ',
                             table.getFilteredRowModel().rows.length,
-                            " row(s) found."
+                            " row(s) selected."
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                        lineNumber: 120,
+                        lineNumber: 127,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1192,7 +1213,7 @@ function ConcreteCubesDataTable({ columns, data, loading }) {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                                lineNumber: 124,
+                                lineNumber: 132,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -1203,7 +1224,7 @@ function ConcreteCubesDataTable({ columns, data, loading }) {
                                 children: "Previous"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                                lineNumber: 127,
+                                lineNumber: 135,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -1214,25 +1235,25 @@ function ConcreteCubesDataTable({ columns, data, loading }) {
                                 children: "Next"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                                lineNumber: 135,
+                                lineNumber: 143,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                        lineNumber: 123,
+                        lineNumber: 131,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                lineNumber: 119,
+                lineNumber: 126,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-        lineNumber: 57,
+        lineNumber: 64,
         columnNumber: 5
     }, this);
 }
@@ -1244,6 +1265,808 @@ _s(ConcreteCubesDataTable, "qg5rok0fZeVwH4q3itwzrlIy2qs=", false, function() {
 _c = ConcreteCubesDataTable;
 var _c;
 __turbopack_context__.k.register(_c, "ConcreteCubesDataTable");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/src/components/ui/dialog.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "Dialog": (()=>Dialog),
+    "DialogClose": (()=>DialogClose),
+    "DialogContent": (()=>DialogContent),
+    "DialogDescription": (()=>DialogDescription),
+    "DialogFooter": (()=>DialogFooter),
+    "DialogHeader": (()=>DialogHeader),
+    "DialogOverlay": (()=>DialogOverlay),
+    "DialogPortal": (()=>DialogPortal),
+    "DialogTitle": (()=>DialogTitle),
+    "DialogTrigger": (()=>DialogTrigger)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$dialog$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@radix-ui/react-dialog/dist/index.mjs [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/x.js [app-client] (ecmascript) <export default as X>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/utils.ts [app-client] (ecmascript)");
+"use client";
+;
+;
+;
+;
+;
+const Dialog = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$dialog$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Root"];
+const DialogTrigger = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$dialog$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Trigger"];
+const DialogPortal = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$dialog$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Portal"];
+const DialogClose = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$dialog$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Close"];
+const DialogOverlay = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["forwardRef"])(({ className, ...props }, ref)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$dialog$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Overlay"], {
+        ref: ref,
+        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0", className),
+        ...props
+    }, void 0, false, {
+        fileName: "[project]/src/components/ui/dialog.tsx",
+        lineNumber: 21,
+        columnNumber: 3
+    }, this));
+_c = DialogOverlay;
+DialogOverlay.displayName = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$dialog$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Overlay"].displayName;
+const DialogContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["forwardRef"])(_c1 = ({ className, children, ...props }, ref)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(DialogPortal, {
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(DialogOverlay, {}, void 0, false, {
+                fileName: "[project]/src/components/ui/dialog.tsx",
+                lineNumber: 37,
+                columnNumber: 5
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$dialog$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Content"], {
+                ref: ref,
+                className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg", className),
+                ...props,
+                children: [
+                    children,
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$dialog$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Close"], {
+                        className: "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
+                                className: "h-4 w-4"
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/ui/dialog.tsx",
+                                lineNumber: 48,
+                                columnNumber: 9
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                className: "sr-only",
+                                children: "Close"
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/ui/dialog.tsx",
+                                lineNumber: 49,
+                                columnNumber: 9
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/components/ui/dialog.tsx",
+                        lineNumber: 47,
+                        columnNumber: 7
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/components/ui/dialog.tsx",
+                lineNumber: 38,
+                columnNumber: 5
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "[project]/src/components/ui/dialog.tsx",
+        lineNumber: 36,
+        columnNumber: 3
+    }, this));
+_c2 = DialogContent;
+DialogContent.displayName = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$dialog$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Content"].displayName;
+const DialogHeader = ({ className, ...props })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("flex flex-col space-y-1.5 text-center sm:text-left", className),
+        ...props
+    }, void 0, false, {
+        fileName: "[project]/src/components/ui/dialog.tsx",
+        lineNumber: 60,
+        columnNumber: 3
+    }, this);
+_c3 = DialogHeader;
+DialogHeader.displayName = "DialogHeader";
+const DialogFooter = ({ className, ...props })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className),
+        ...props
+    }, void 0, false, {
+        fileName: "[project]/src/components/ui/dialog.tsx",
+        lineNumber: 74,
+        columnNumber: 3
+    }, this);
+_c4 = DialogFooter;
+DialogFooter.displayName = "DialogFooter";
+const DialogTitle = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["forwardRef"])(_c5 = ({ className, ...props }, ref)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$dialog$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Title"], {
+        ref: ref,
+        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("text-lg font-semibold leading-none tracking-tight", className),
+        ...props
+    }, void 0, false, {
+        fileName: "[project]/src/components/ui/dialog.tsx",
+        lineNumber: 88,
+        columnNumber: 3
+    }, this));
+_c6 = DialogTitle;
+DialogTitle.displayName = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$dialog$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Title"].displayName;
+const DialogDescription = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["forwardRef"])(_c7 = ({ className, ...props }, ref)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$dialog$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Description"], {
+        ref: ref,
+        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("text-sm text-muted-foreground", className),
+        ...props
+    }, void 0, false, {
+        fileName: "[project]/src/components/ui/dialog.tsx",
+        lineNumber: 103,
+        columnNumber: 3
+    }, this));
+_c8 = DialogDescription;
+DialogDescription.displayName = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$dialog$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Description"].displayName;
+;
+var _c, _c1, _c2, _c3, _c4, _c5, _c6, _c7, _c8;
+__turbopack_context__.k.register(_c, "DialogOverlay");
+__turbopack_context__.k.register(_c1, "DialogContent$React.forwardRef");
+__turbopack_context__.k.register(_c2, "DialogContent");
+__turbopack_context__.k.register(_c3, "DialogHeader");
+__turbopack_context__.k.register(_c4, "DialogFooter");
+__turbopack_context__.k.register(_c5, "DialogTitle$React.forwardRef");
+__turbopack_context__.k.register(_c6, "DialogTitle");
+__turbopack_context__.k.register(_c7, "DialogDescription$React.forwardRef");
+__turbopack_context__.k.register(_c8, "DialogDescription");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/src/components/ui/label.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "Label": (()=>Label)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$label$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@radix-ui/react-label/dist/index.mjs [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$class$2d$variance$2d$authority$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/class-variance-authority/dist/index.mjs [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/utils.ts [app-client] (ecmascript)");
+"use client";
+;
+;
+;
+;
+;
+const labelVariants = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$class$2d$variance$2d$authority$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cva"])("text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70");
+const Label = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["forwardRef"])(_c = ({ className, ...props }, ref)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$label$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Root"], {
+        ref: ref,
+        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])(labelVariants(), className),
+        ...props
+    }, void 0, false, {
+        fileName: "[project]/src/components/ui/label.tsx",
+        lineNumber: 18,
+        columnNumber: 3
+    }, this));
+_c1 = Label;
+Label.displayName = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$label$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Root"].displayName;
+;
+var _c, _c1;
+__turbopack_context__.k.register(_c, "Label$React.forwardRef");
+__turbopack_context__.k.register(_c1, "Label");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/src/components/ui/progress.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "Progress": (()=>Progress)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$progress$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@radix-ui/react-progress/dist/index.mjs [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/utils.ts [app-client] (ecmascript)");
+"use client";
+;
+;
+;
+;
+const Progress = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["forwardRef"])(_c = ({ className, value, ...props }, ref)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$progress$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Root"], {
+        ref: ref,
+        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("relative h-4 w-full overflow-hidden rounded-full bg-secondary", className),
+        ...props,
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$progress$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Indicator"], {
+            className: "h-full w-full flex-1 bg-primary transition-all",
+            style: {
+                transform: `translateX(-${100 - (value || 0)}%)`
+            }
+        }, void 0, false, {
+            fileName: "[project]/src/components/ui/progress.tsx",
+            lineNumber: 20,
+            columnNumber: 5
+        }, this)
+    }, void 0, false, {
+        fileName: "[project]/src/components/ui/progress.tsx",
+        lineNumber: 12,
+        columnNumber: 3
+    }, this));
+_c1 = Progress;
+Progress.displayName = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$progress$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Root"].displayName;
+;
+var _c, _c1;
+__turbopack_context__.k.register(_c, "Progress$React.forwardRef");
+__turbopack_context__.k.register(_c1, "Progress");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "TestResultsDialog": (()=>TestResultsDialog)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/dialog.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/button.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/label.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/input.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$separator$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/separator.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$progress$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/progress.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/react-hook-form/dist/index.esm.mjs [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$hookform$2f$resolvers$2f$zod$2f$dist$2f$zod$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@hookform/resolvers/zod/dist/zod.mjs [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$lib$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/zod/lib/index.mjs [app-client] (ecmascript)");
+;
+var _s = __turbopack_context__.k.signature();
+'use client';
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+const testResultSchema = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$lib$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["z"].object({
+    length: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$lib$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["z"].coerce.number().min(1, 'Required'),
+    width: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$lib$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["z"].coerce.number().min(1, 'Required'),
+    height: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$lib$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["z"].coerce.number().min(1, 'Required'),
+    weight: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$lib$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["z"].coerce.number().min(0, 'Required'),
+    load: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$lib$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["z"].coerce.number().min(0, 'Required'),
+    machineUsed: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$lib$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["z"].string().min(1, 'Required'),
+    modeOfFailure: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$lib$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["z"].string().min(1, 'Required'),
+    recordedTemp: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$lib$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["z"].coerce.number()
+});
+const formSchema = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$lib$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["z"].object({
+    samples: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$lib$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["z"].array(testResultSchema)
+});
+function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
+    _s();
+    const [currentStep, setCurrentStep] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(0);
+    const form = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useForm"])({
+        resolver: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$hookform$2f$resolvers$2f$zod$2f$dist$2f$zod$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["zodResolver"])(formSchema),
+        defaultValues: {
+            samples: sampleSet.samples.map({
+                "TestResultsDialog.useForm[form]": (s)=>({
+                        length: s.length || 0,
+                        width: s.width || 0,
+                        height: s.height || 0,
+                        weight: s.weight || 0,
+                        load: s.load || 0,
+                        machineUsed: s.machineUsed || '',
+                        modeOfFailure: s.modeOfFailure || '',
+                        recordedTemp: s.recordedTemp || 0
+                    })
+            }["TestResultsDialog.useForm[form]"])
+        }
+    });
+    const { fields } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useFieldArray"])({
+        control: form.control,
+        name: 'samples'
+    });
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "TestResultsDialog.useEffect": ()=>{
+            // Reset form when dialog reopens with new data
+            form.reset({
+                samples: sampleSet.samples.map({
+                    "TestResultsDialog.useEffect": (s)=>({
+                            length: s.length || 0,
+                            width: s.width || 0,
+                            height: s.height || 0,
+                            weight: s.weight || 0,
+                            load: s.load || 0,
+                            machineUsed: s.machineUsed || '',
+                            modeOfFailure: s.modeOfFailure || '',
+                            recordedTemp: s.recordedTemp || 0
+                        })
+                }["TestResultsDialog.useEffect"])
+            });
+            setCurrentStep(0);
+        }
+    }["TestResultsDialog.useEffect"], [
+        sampleSet,
+        form,
+        open
+    ]);
+    const totalSteps = fields.length;
+    const progress = (currentStep + 1) / totalSteps * 100;
+    const currentSample = sampleSet.samples[currentStep];
+    const handleNext = async ()=>{
+        const isValid = await form.trigger(`samples.${currentStep}`);
+        if (isValid && currentStep < totalSteps - 1) {
+            setCurrentStep(currentStep + 1);
+        }
+    };
+    const handleBack = ()=>{
+        if (currentStep > 0) {
+            setCurrentStep(currentStep - 1);
+        }
+    };
+    const onSubmit = (data)=>{
+        const updatedSamples = sampleSet.samples.map((originalSample, index)=>({
+                ...originalSample,
+                ...data.samples[index]
+            }));
+        onSave(updatedSamples);
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Dialog"], {
+        open: open,
+        onOpenChange: onOpenChange,
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DialogContent"], {
+            className: "sm:max-w-2xl",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DialogHeader"], {
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DialogTitle"], {
+                            children: "Enter Test Results"
+                        }, void 0, false, {
+                            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                            lineNumber: 119,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DialogDescription"], {
+                            children: [
+                                "For Sample Set from Receipt ID: ",
+                                sampleSet.receiptId
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                            lineNumber: 120,
+                            columnNumber: 11
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                    lineNumber: 118,
+                    columnNumber: 9
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "p-1 space-y-4",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$progress$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Progress"], {
+                            value: progress,
+                            className: "w-full"
+                        }, void 0, false, {
+                            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                            lineNumber: 126,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "text-center text-sm font-medium",
+                            children: [
+                                "Sample ",
+                                currentStep + 1,
+                                " of ",
+                                totalSteps,
+                                " (ID: ",
+                                currentSample.sampleSerialNumber || currentSample.id,
+                                ")"
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                            lineNumber: 127,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$separator$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Separator"], {}, void 0, false, {
+                            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                            lineNumber: 130,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "space-y-2",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
+                                            children: "Dimensions (mm)"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                            lineNumber: 134,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "flex gap-2",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
+                                                    name: `samples.${currentStep}.length`,
+                                                    control: form.control,
+                                                    render: ({ field })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
+                                                            placeholder: "Length",
+                                                            ...field,
+                                                            type: "number"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                                            lineNumber: 139,
+                                                            columnNumber: 46
+                                                        }, void 0)
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                                    lineNumber: 136,
+                                                    columnNumber: 20
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
+                                                    name: `samples.${currentStep}.width`,
+                                                    control: form.control,
+                                                    render: ({ field })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
+                                                            placeholder: "Width",
+                                                            ...field,
+                                                            type: "number"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                                            lineNumber: 144,
+                                                            columnNumber: 46
+                                                        }, void 0)
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                                    lineNumber: 141,
+                                                    columnNumber: 21
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
+                                                    name: `samples.${currentStep}.height`,
+                                                    control: form.control,
+                                                    render: ({ field })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
+                                                            placeholder: "Height",
+                                                            ...field,
+                                                            type: "number"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                                            lineNumber: 149,
+                                                            columnNumber: 46
+                                                        }, void 0)
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                                    lineNumber: 146,
+                                                    columnNumber: 22
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                            lineNumber: 135,
+                                            columnNumber: 17
+                                        }, this),
+                                        form.formState.errors.samples?.[currentStep]?.length && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            className: "text-destructive text-xs",
+                                            children: form.formState.errors.samples[currentStep]?.length?.message
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                            lineNumber: 152,
+                                            columnNumber: 74
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                    lineNumber: 133,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "space-y-2",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
+                                            htmlFor: `weight-${currentStep}`,
+                                            children: "Weight (kg)"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                            lineNumber: 156,
+                                            columnNumber: 19
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
+                                            name: `samples.${currentStep}.weight`,
+                                            control: form.control,
+                                            render: ({ field })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
+                                                    id: `weight-${currentStep}`,
+                                                    type: "number",
+                                                    ...field
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                                    lineNumber: 160,
+                                                    columnNumber: 46
+                                                }, void 0)
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                            lineNumber: 157,
+                                            columnNumber: 19
+                                        }, this),
+                                        form.formState.errors.samples?.[currentStep]?.weight && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            className: "text-destructive text-xs",
+                                            children: form.formState.errors.samples[currentStep]?.weight?.message
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                            lineNumber: 162,
+                                            columnNumber: 76
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                    lineNumber: 155,
+                                    columnNumber: 16
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "space-y-2",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
+                                            htmlFor: `load-${currentStep}`,
+                                            children: "Load (kN)"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                            lineNumber: 166,
+                                            columnNumber: 19
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
+                                            name: `samples.${currentStep}.load`,
+                                            control: form.control,
+                                            render: ({ field })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
+                                                    id: `load-${currentStep}`,
+                                                    type: "number",
+                                                    ...field
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                                    lineNumber: 170,
+                                                    columnNumber: 46
+                                                }, void 0)
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                            lineNumber: 167,
+                                            columnNumber: 20
+                                        }, this),
+                                        form.formState.errors.samples?.[currentStep]?.load && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            className: "text-destructive text-xs",
+                                            children: form.formState.errors.samples[currentStep]?.load?.message
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                            lineNumber: 172,
+                                            columnNumber: 74
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                    lineNumber: 165,
+                                    columnNumber: 16
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "space-y-2",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
+                                            htmlFor: `machineUsed-${currentStep}`,
+                                            children: "Machine Used"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                            lineNumber: 176,
+                                            columnNumber: 19
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
+                                            name: `samples.${currentStep}.machineUsed`,
+                                            control: form.control,
+                                            render: ({ field })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
+                                                    id: `machineUsed-${currentStep}`,
+                                                    ...field
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                                    lineNumber: 180,
+                                                    columnNumber: 46
+                                                }, void 0)
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                            lineNumber: 177,
+                                            columnNumber: 19
+                                        }, this),
+                                        form.formState.errors.samples?.[currentStep]?.machineUsed && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            className: "text-destructive text-xs",
+                                            children: form.formState.errors.samples[currentStep]?.machineUsed?.message
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                            lineNumber: 182,
+                                            columnNumber: 81
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                    lineNumber: 175,
+                                    columnNumber: 17
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "space-y-2",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
+                                            htmlFor: `modeOfFailure-${currentStep}`,
+                                            children: "Mode of Failure"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                            lineNumber: 186,
+                                            columnNumber: 19
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
+                                            name: `samples.${currentStep}.modeOfFailure`,
+                                            control: form.control,
+                                            render: ({ field })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
+                                                    id: `modeOfFailure-${currentStep}`,
+                                                    ...field
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                                    lineNumber: 190,
+                                                    columnNumber: 46
+                                                }, void 0)
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                            lineNumber: 187,
+                                            columnNumber: 20
+                                        }, this),
+                                        form.formState.errors.samples?.[currentStep]?.modeOfFailure && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            className: "text-destructive text-xs",
+                                            children: form.formState.errors.samples[currentStep]?.modeOfFailure?.message
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                            lineNumber: 192,
+                                            columnNumber: 83
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                    lineNumber: 185,
+                                    columnNumber: 17
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "space-y-2",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
+                                            htmlFor: `recordedTemp-${currentStep}`,
+                                            children: "Temperature (°C)"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                            lineNumber: 196,
+                                            columnNumber: 19
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
+                                            name: `samples.${currentStep}.recordedTemp`,
+                                            control: form.control,
+                                            render: ({ field })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
+                                                    id: `recordedTemp-${currentStep}`,
+                                                    type: "number",
+                                                    ...field
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                                    lineNumber: 200,
+                                                    columnNumber: 46
+                                                }, void 0)
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                            lineNumber: 197,
+                                            columnNumber: 20
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                    lineNumber: 195,
+                                    columnNumber: 17
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                            lineNumber: 132,
+                            columnNumber: 12
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                    lineNumber: 125,
+                    columnNumber: 9
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DialogFooter"], {
+                    className: "pt-4",
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "w-full flex justify-between",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
+                                variant: "outline",
+                                onClick: handleBack,
+                                disabled: currentStep === 0,
+                                children: "Back"
+                            }, void 0, false, {
+                                fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                lineNumber: 208,
+                                columnNumber: 17
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex gap-2",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DialogClose"], {
+                                        asChild: true,
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
+                                            variant: "ghost",
+                                            children: "Cancel"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                            lineNumber: 213,
+                                            columnNumber: 23
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                        lineNumber: 212,
+                                        columnNumber: 21
+                                    }, this),
+                                    currentStep < totalSteps - 1 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
+                                        onClick: handleNext,
+                                        children: "Next"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                        lineNumber: 216,
+                                        columnNumber: 21
+                                    }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
+                                        onClick: form.handleSubmit(onSubmit),
+                                        children: "Save Results"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                        lineNumber: 218,
+                                        columnNumber: 21
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                                lineNumber: 211,
+                                columnNumber: 17
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                        lineNumber: 207,
+                        columnNumber: 13
+                    }, this)
+                }, void 0, false, {
+                    fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+                    lineNumber: 206,
+                    columnNumber: 9
+                }, this)
+            ]
+        }, void 0, true, {
+            fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+            lineNumber: 117,
+            columnNumber: 7
+        }, this)
+    }, void 0, false, {
+        fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
+        lineNumber: 116,
+        columnNumber: 5
+    }, this);
+}
+_s(TestResultsDialog, "i+8ysOqoY6eUo0PQGkKIlTyFgaM=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useForm"],
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useFieldArray"]
+    ];
+});
+_c = TestResultsDialog;
+var _c;
+__turbopack_context__.k.register(_c, "TestResultsDialog");
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
 }
@@ -1260,12 +2083,17 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/card.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$use$2d$toast$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/hooks/use-toast.ts [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$data$3a$b36449__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$text$2f$javascript$3e$__ = __turbopack_context__.i("[project]/src/app/registers/components/concrete-cubes/data:b36449 [app-client] (ecmascript) <text/javascript>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$data$3a$f8bea8__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$text$2f$javascript$3e$__ = __turbopack_context__.i("[project]/src/app/registers/components/concrete-cubes/data:f8bea8 [app-client] (ecmascript) <text/javascript>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$data$3a$a865db__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$text$2f$javascript$3e$__ = __turbopack_context__.i("[project]/src/app/registers/components/concrete-cubes/data:a865db [app-client] (ecmascript) <text/javascript>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$columns$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/app/registers/components/concrete-cubes/columns.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$data$2d$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/app/registers/components/concrete-cubes/data-table.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/button.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$test$2d$results$2d$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 'use client';
+;
+;
 ;
 ;
 ;
@@ -1277,11 +2105,13 @@ function ConcreteCubesRegister() {
     const [samples, setSamples] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
     const { toast } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$use$2d$toast$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useToast"])();
+    const [rowSelection, setRowSelection] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({});
+    const [isTestDialogOpen, setIsTestDialogOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const loadSamples = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
         "ConcreteCubesRegister.useCallback[loadSamples]": async ()=>{
             setLoading(true);
             try {
-                const data = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$data$3a$b36449__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$text$2f$javascript$3e$__["getConcreteCubes"])();
+                const data = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$data$3a$f8bea8__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$text$2f$javascript$3e$__["getConcreteCubes"])();
                 const groupedData = {};
                 data.forEach({
                     "ConcreteCubesRegister.useCallback[loadSamples]": (sample)=>{
@@ -1337,29 +2167,91 @@ function ConcreteCubesRegister() {
     }["ConcreteCubesRegister.useEffect"], [
         loadSamples
     ]);
+    const selectedRowIndex = Object.keys(rowSelection)[0];
+    const selectedRow = selectedRowIndex !== undefined ? samples[parseInt(selectedRowIndex, 10)] : null;
+    const isOneRowSelected = Object.keys(rowSelection).length === 1;
+    const handleTestResultsSave = async (updatedSamples)=>{
+        try {
+            await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$data$3a$a865db__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$text$2f$javascript$3e$__["updateCubeTestResults"])(updatedSamples);
+            toast({
+                title: 'Success',
+                description: 'Test results have been saved successfully.'
+            });
+            setIsTestDialogOpen(false);
+            setRowSelection({});
+            loadSamples(); // Refresh data
+        } catch (error) {
+            toast({
+                variant: 'destructive',
+                title: 'Error',
+                description: 'Failed to save test results.'
+            });
+        }
+    };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
         className: "h-full flex flex-col",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardHeader"], {
-                children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardTitle"], {
-                        children: "Concrete Cubes Register"
-                    }, void 0, false, {
-                        fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
-                        lineNumber: 67,
-                        columnNumber: 13
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardDescription"], {
-                        children: "Detailed records of all concrete cube samples."
-                    }, void 0, false, {
-                        fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
-                        lineNumber: 68,
-                        columnNumber: 13
-                    }, this)
-                ]
-            }, void 0, true, {
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "flex justify-between items-start",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardTitle"], {
+                                    children: "Concrete Cubes Register"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
+                                    lineNumber: 98,
+                                    columnNumber: 21
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardDescription"], {
+                                    children: "Detailed records of all concrete cube samples."
+                                }, void 0, false, {
+                                    fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
+                                    lineNumber: 99,
+                                    columnNumber: 21
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
+                            lineNumber: 97,
+                            columnNumber: 17
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "flex gap-2",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
+                                    disabled: !isOneRowSelected,
+                                    onClick: ()=>setIsTestDialogOpen(true),
+                                    children: "Test"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
+                                    lineNumber: 104,
+                                    columnNumber: 21
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
+                                    disabled: !isOneRowSelected,
+                                    children: "Issue"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
+                                    lineNumber: 105,
+                                    columnNumber: 21
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
+                            lineNumber: 103,
+                            columnNumber: 17
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
+                    lineNumber: 96,
+                    columnNumber: 13
+                }, this)
+            }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
-                lineNumber: 66,
+                lineNumber: 95,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -1367,25 +2259,37 @@ function ConcreteCubesRegister() {
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$data$2d$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ConcreteCubesDataTable"], {
                     columns: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$columns$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["columns"],
                     data: samples,
-                    loading: loading
+                    loading: loading,
+                    rowSelection: rowSelection,
+                    setRowSelection: setRowSelection
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
-                    lineNumber: 73,
+                    lineNumber: 110,
                     columnNumber: 13
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
-                lineNumber: 72,
+                lineNumber: 109,
                 columnNumber: 9
+            }, this),
+            selectedRow && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$test$2d$results$2d$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TestResultsDialog"], {
+                open: isTestDialogOpen,
+                onOpenChange: setIsTestDialogOpen,
+                sampleSet: selectedRow,
+                onSave: handleTestResultsSave
+            }, void 0, false, {
+                fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
+                lineNumber: 119,
+                columnNumber: 13
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
-        lineNumber: 65,
+        lineNumber: 94,
         columnNumber: 5
     }, this);
 }
-_s(ConcreteCubesRegister, "hG0csxmMJcYnR2HDST1YwHJ3DXo=", false, function() {
+_s(ConcreteCubesRegister, "xqnqTwXX09fSv7OcQGMYWoQJa90=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$use$2d$toast$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useToast"]
     ];
@@ -1707,4 +2611,4 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
 }}),
 }]);
 
-//# sourceMappingURL=src_d689acdc._.js.map
+//# sourceMappingURL=src_8a8e491a._.js.map
