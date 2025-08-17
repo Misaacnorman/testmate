@@ -77,8 +77,8 @@ export function ConcreteCubesDataTable<TData, TValue>({
                 {loading ? (
                 Array.from({ length: 15 }).map((_, i) => (
                     <TableRow key={i}>
-                    {columns.map((columnDef: any) => (
-                        <TableCell key={columnDef.id || i} className="p-0">
+                    {table.getAllLeafColumns().map((column, j) => (
+                        <TableCell key={`${i}-${j}`} className="p-0">
                             <div className="flex items-center justify-center w-full h-12">
                                 <Skeleton className="h-6 w-4/5" />
                             </div>
