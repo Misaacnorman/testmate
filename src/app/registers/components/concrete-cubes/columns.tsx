@@ -105,12 +105,12 @@ export const columns: ColumnDef<ConcreteCubeSample>[] = [
     header: 'Weight (kg)',
   },
   {
-    accessorKey: 'machineUsed',
-    header: 'Machine Used',
-  },
-  {
     accessorKey: 'load',
     header: 'Load (kN)',
+  },
+  {
+    accessorKey: 'machineUsed',
+    header: 'Machine Used',
   },
   {
     accessorKey: 'modeOfFailure',

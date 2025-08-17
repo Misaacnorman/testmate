@@ -65,6 +65,17 @@
       "layer": {
         "app/tests/page": "action-browser"
       }
+    },
+    "00a397b6fc7964f531715ad9fae934640560c2de96": {
+      "workers": {
+        "app/registers/page": {
+          "moduleId": "[project]/.next-internal/server/app/registers/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/registers/components/concrete-cubes/data.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/registers/page": "action-browser"
+      }
     }
   },
   "edge": {},
