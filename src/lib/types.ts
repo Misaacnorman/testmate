@@ -95,6 +95,51 @@ export interface GroupedPaverSample extends PaverSample {
     samples: PaverSample[];
 }
 
+export type BlockBrickSample = {
+  id: string; // Document ID from firestore
+  sampleId: string; // Human-readable sample ID
+  receiptId: string;
+  clientName: string;
+  projectTitle: string;
+  receivedAt: string;
+  sampleSerialNumber?: string;
+  setNumber?: number;
+  castingDate?: string;
+  testingDate?: string;
+  age?: number;
+  areaOfUse?: string;
+  length?: number;
+  width?: number;
+  height?: number;
+  weight?: number;
+  load?: number;
+  modeOfFailure?: string;
+  machineUsed?: string;
+  recordedTemp?: number;
+  certificateNumber?: string;
+  comment?: string;
+  technician?: string;
+  dateOfIssue?: string;
+  issueId?: string;
+  takenBy?: string;
+  dateTaken?: string;
+  contact?: string;
+  // Hole Dimensions
+  holeA_number?: number;
+  holeA_length?: number;
+  holeA_width?: number;
+  holeB_number?: number;
+  holeB_length?: number;
+  holeB_width?: number;
+  notch_number?: number;
+  notch_length?: number;
+  notch_width?: number;
+};
+
+export interface GroupedBlockBrickSample extends BlockBrickSample {
+  samples: BlockBrickSample[];
+}
+
 
 export type IssueCertificateData = {
   certificateNumber: string;

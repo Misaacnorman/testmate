@@ -233,7 +233,8 @@ async function deleteReceipt(receiptId) {
         'asphalt-register',
         'soil-register',
         'aggregates-fine-register',
-        'aggregates-coarse-register'
+        'aggregates-coarse-register',
+        'pavers-register'
     ];
     for (const registerName of possibleRegisters){
         try {
