@@ -5,11 +5,11 @@ import {
   LayoutDashboard,
   Beaker,
   FlaskConical,
+  ClipboardList,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { Badge } from '@/components/ui/badge';
 import {
   Tooltip,
   TooltipContent,
@@ -25,6 +25,7 @@ interface SidebarNavProps {
 const navItems = [
   { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { href: '/samples', icon: FlaskConical, label: 'Samples'},
+  { href: '/logs', icon: ClipboardList, label: 'Receipts'},
   { href: '/tests', icon: Beaker, label: 'Tests' },
 ];
 

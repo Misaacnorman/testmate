@@ -180,12 +180,12 @@ const Table = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$
             ...props
         }, void 0, false, {
             fileName: "[project]/src/components/ui/table.tsx",
-            lineNumber: 10,
+            lineNumber: 11,
             columnNumber: 5
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/components/ui/table.tsx",
-        lineNumber: 9,
+        lineNumber: 10,
         columnNumber: 3
     }, this));
 _c1 = Table;
@@ -196,7 +196,7 @@ const TableHeader = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project
         ...props
     }, void 0, false, {
         fileName: "[project]/src/components/ui/table.tsx",
-        lineNumber: 23,
+        lineNumber: 24,
         columnNumber: 3
     }, this));
 _c3 = TableHeader;
@@ -207,7 +207,7 @@ const TableBody = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5
         ...props
     }, void 0, false, {
         fileName: "[project]/src/components/ui/table.tsx",
-        lineNumber: 31,
+        lineNumber: 32,
         columnNumber: 3
     }, this));
 _c5 = TableBody;
@@ -218,7 +218,7 @@ const TableFooter = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project
         ...props
     }, void 0, false, {
         fileName: "[project]/src/components/ui/table.tsx",
-        lineNumber: 43,
+        lineNumber: 44,
         columnNumber: 3
     }, this));
 _c7 = TableFooter;
@@ -229,18 +229,18 @@ const TableRow = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d
         ...props
     }, void 0, false, {
         fileName: "[project]/src/components/ui/table.tsx",
-        lineNumber: 58,
+        lineNumber: 59,
         columnNumber: 3
     }, this));
 _c9 = TableRow;
 TableRow.displayName = "TableRow";
 const TableHead = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["forwardRef"])(_c10 = ({ className, ...props }, ref)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
         ref: ref,
-        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0", className),
+        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("h-12 px-4 text-center align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0", className),
         ...props
     }, void 0, false, {
         fileName: "[project]/src/components/ui/table.tsx",
-        lineNumber: 73,
+        lineNumber: 74,
         columnNumber: 3
     }, this));
 _c11 = TableHead;
@@ -251,7 +251,7 @@ const TableCell = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5
         ...props
     }, void 0, false, {
         fileName: "[project]/src/components/ui/table.tsx",
-        lineNumber: 88,
+        lineNumber: 89,
         columnNumber: 3
     }, this));
 _c13 = TableCell;
@@ -262,7 +262,7 @@ const TableCaption = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$projec
         ...props
     }, void 0, false, {
         fileName: "[project]/src/components/ui/table.tsx",
-        lineNumber: 100,
+        lineNumber: 101,
         columnNumber: 3
     }, this));
 _c15 = TableCaption;

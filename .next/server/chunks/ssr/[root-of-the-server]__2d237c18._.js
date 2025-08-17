@@ -668,6 +668,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$layout$2d$dashboard$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__LayoutDashboard$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/layout-dashboard.js [app-ssr] (ecmascript) <export default as LayoutDashboard>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$beaker$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Beaker$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/beaker.js [app-ssr] (ecmascript) <export default as Beaker>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$flask$2d$conical$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__FlaskConical$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/flask-conical.js [app-ssr] (ecmascript) <export default as FlaskConical>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clipboard$2d$list$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ClipboardList$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/clipboard-list.js [app-ssr] (ecmascript) <export default as ClipboardList>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/client/app-dir/link.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/navigation.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$tooltip$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/tooltip.tsx [app-ssr] (ecmascript)");
@@ -693,6 +694,11 @@ const navItems = [
         label: 'Samples'
     },
     {
+        href: '/logs',
+        icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clipboard$2d$list$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ClipboardList$3e$__["ClipboardList"],
+        label: 'Receipts'
+    },
+    {
         href: '/tests',
         icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$beaker$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Beaker$3e$__["Beaker"],
         label: 'Tests'
@@ -711,7 +717,7 @@ function SidebarNav({ isMobile = false }) {
                         className: "h-4 w-4 transition-all group-hover:scale-110"
                     }, void 0, false, {
                         fileName: "[project]/src/components/layout/sidebar-nav.tsx",
-                        lineNumber: 42,
+                        lineNumber: 43,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -719,13 +725,13 @@ function SidebarNav({ isMobile = false }) {
                         children: "TestMate"
                     }, void 0, false, {
                         fileName: "[project]/src/components/layout/sidebar-nav.tsx",
-                        lineNumber: 43,
+                        lineNumber: 44,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/layout/sidebar-nav.tsx",
-                lineNumber: 38,
+                lineNumber: 39,
                 columnNumber: 7
             }, this),
             navItems.map((item)=>{
@@ -738,14 +744,14 @@ function SidebarNav({ isMobile = false }) {
                             className: "h-5 w-5"
                         }, void 0, false, {
                             fileName: "[project]/src/components/layout/sidebar-nav.tsx",
-                            lineNumber: 56,
+                            lineNumber: 57,
                             columnNumber: 13
                         }, this),
                         isMobile && item.label
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/layout/sidebar-nav.tsx",
-                    lineNumber: 48,
+                    lineNumber: 49,
                     columnNumber: 11
                 }, this);
                 if (isMobile) {
@@ -753,7 +759,7 @@ function SidebarNav({ isMobile = false }) {
                         children: linkContent
                     }, item.href, false, {
                         fileName: "[project]/src/components/layout/sidebar-nav.tsx",
-                        lineNumber: 62,
+                        lineNumber: 63,
                         columnNumber: 18
                     }, this);
                 }
@@ -764,7 +770,7 @@ function SidebarNav({ isMobile = false }) {
                             children: linkContent
                         }, void 0, false, {
                             fileName: "[project]/src/components/layout/sidebar-nav.tsx",
-                            lineNumber: 67,
+                            lineNumber: 68,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$tooltip$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TooltipContent"], {
@@ -772,13 +778,13 @@ function SidebarNav({ isMobile = false }) {
                             children: item.label
                         }, void 0, false, {
                             fileName: "[project]/src/components/layout/sidebar-nav.tsx",
-                            lineNumber: 68,
+                            lineNumber: 69,
                             columnNumber: 13
                         }, this)
                     ]
                 }, item.href, true, {
                     fileName: "[project]/src/components/layout/sidebar-nav.tsx",
-                    lineNumber: 66,
+                    lineNumber: 67,
                     columnNumber: 11
                 }, this);
             })
