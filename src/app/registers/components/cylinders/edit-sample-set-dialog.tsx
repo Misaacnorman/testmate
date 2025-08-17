@@ -96,16 +96,16 @@ export function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }: E
   React.useEffect(() => {
     if (sampleSet && open) {
       form.reset({
-        clientName: sampleSet.clientName,
-        projectTitle: sampleSet.projectTitle,
+        clientName: sampleSet.clientName || '',
+        projectTitle: sampleSet.projectTitle || '',
         samples: sampleSet.samples.map(s => ({
           diameter: s.diameter || undefined,
           height: s.height || undefined,
           weight: s.weight || undefined,
           load: s.load || undefined,
-          modeOfFailure: s.modeOfFailure || undefined,
+          modeOfFailure: s.modeOfFailure || '',
         })),
-        machineUsed: sampleSet.machineUsed || undefined,
+        machineUsed: sampleSet.machineUsed || '',
         recordedTemp: sampleSet.recordedTemp || undefined,
         certificateNumber: sampleSet.certificateNumber || '',
         comment: sampleSet.comment || '',

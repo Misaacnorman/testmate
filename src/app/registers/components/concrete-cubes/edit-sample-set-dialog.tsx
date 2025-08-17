@@ -27,7 +27,6 @@ import { useAuth } from '@/hooks/use-auth';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { CalendarIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Calendar } from '@/components/ui/calendar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 const receiptDetailsSchema = z.object({
@@ -92,26 +91,26 @@ export function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }: E
   const form = useForm<FormValues>({
     // resolver: zodResolver(formSchema), // We'll trigger validation manually per step
     defaultValues: {
-      clientName: sampleSet.clientName,
-      projectTitle: sampleSet.projectTitle,
+      clientName: sampleSet.clientName || '',
+      projectTitle: sampleSet.projectTitle || '',
       samples: sampleSet.samples.map(s => ({
         length: s.length,
         width: s.width,
         height: s.height,
         weight: s.weight,
         load: s.load,
-        modeOfFailure: s.modeOfFailure,
+        modeOfFailure: s.modeOfFailure || '',
       })),
-      machineUsed: sampleSet.machineUsed,
+      machineUsed: sampleSet.machineUsed || '',
       recordedTemp: sampleSet.recordedTemp,
-      certificateNumber: sampleSet.certificateNumber,
-      comment: sampleSet.comment,
+      certificateNumber: sampleSet.certificateNumber || '',
+      comment: sampleSet.comment || '',
       technician: sampleSet.technician || user?.displayName || user?.email || '',
       dateOfIssue: sampleSet.dateOfIssue ? format(parseISO(sampleSet.dateOfIssue), 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd'),
-      issueId: sampleSet.issueId,
-      takenBy: sampleSet.takenBy,
+      issueId: sampleSet.issueId || '',
+      takenBy: sampleSet.takenBy || '',
       dateTaken: sampleSet.dateTaken ? format(parseISO(sampleSet.dateTaken), 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd'),
-      contact: sampleSet.contact,
+      contact: sampleSet.contact || '',
     },
   });
 
@@ -131,9 +130,9 @@ export function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }: E
           height: s.height || undefined,
           weight: s.weight || undefined,
           load: s.load || undefined,
-          modeOfFailure: s.modeOfFailure || undefined,
+          modeOfFailure: s.modeOfFailure || '',
         })),
-        machineUsed: sampleSet.machineUsed || undefined,
+        machineUsed: sampleSet.machineUsed || '',
         recordedTemp: sampleSet.recordedTemp || undefined,
         certificateNumber: sampleSet.certificateNumber || '',
         comment: sampleSet.comment || '',

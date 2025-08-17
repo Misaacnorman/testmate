@@ -285,6 +285,17 @@
       "layer": {
         "app/registers/page": "action-browser"
       }
+    },
+    "400509c04a87e61b14b8316868a1ecf08bfbda96d3": {
+      "workers": {
+        "app/registers/page": {
+          "moduleId": "[project]/.next-internal/server/app/registers/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/registers/components/concrete-cubes/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/app/registers/components/pavers/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/src/app/registers/components/blocks-bricks/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE3 => \"[project]/src/app/registers/components/cylinders/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE4 => \"[project]/src/app/registers/components/water-absorption/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE5 => \"[project]/src/app/registers/components/field-work/data.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/registers/page": "action-browser"
+      }
     }
   },
   "edge": {}

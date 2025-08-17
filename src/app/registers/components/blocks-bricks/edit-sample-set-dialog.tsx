@@ -107,15 +107,15 @@ export function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }: E
   React.useEffect(() => {
     if (sampleSet && open) {
       form.reset({
-        clientName: sampleSet.clientName,
-        projectTitle: sampleSet.projectTitle,
+        clientName: sampleSet.clientName || '',
+        projectTitle: sampleSet.projectTitle || '',
         samples: sampleSet.samples.map(s => ({
           length: s.length || undefined,
           width: s.width || undefined,
           height: s.height || undefined,
           weight: s.weight || undefined,
           load: s.load || undefined,
-          modeOfFailure: s.modeOfFailure || undefined,
+          modeOfFailure: s.modeOfFailure || '',
           holeA_number: s.holeA_number || undefined,
           holeA_length: s.holeA_length || undefined,
           holeA_width: s.holeA_width || undefined,
@@ -126,7 +126,7 @@ export function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }: E
           notch_length: s.notch_length || undefined,
           notch_width: s.notch_width || undefined,
         })),
-        machineUsed: sampleSet.machineUsed || undefined,
+        machineUsed: sampleSet.machineUsed || '',
         recordedTemp: sampleSet.recordedTemp || undefined,
         certificateNumber: sampleSet.certificateNumber || '',
         comment: sampleSet.comment || '',

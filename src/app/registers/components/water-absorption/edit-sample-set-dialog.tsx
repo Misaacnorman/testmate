@@ -95,8 +95,8 @@ export function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }: E
   React.useEffect(() => {
     if (sampleSet && open) {
       form.reset({
-        clientName: sampleSet.clientName,
-        projectTitle: sampleSet.projectTitle,
+        clientName: sampleSet.clientName || '',
+        projectTitle: sampleSet.projectTitle || '',
         sampleType: sampleSet.sampleType || '',
         samples: sampleSet.samples.map(s => ({
           length: s.length || undefined,
