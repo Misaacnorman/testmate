@@ -414,6 +414,7 @@ async function updateSampleSetDetails(receiptId, setNumber, data) {
         'testingDate',
         'age',
         'areaOfUse',
+        'paverType',
         'machineUsed',
         'recordedTemp',
         'certificateNumber',
@@ -423,7 +424,8 @@ async function updateSampleSetDetails(receiptId, setNumber, data) {
         'issueId',
         'takenBy',
         'dateTaken',
-        'contact'
+        'contact',
+        'paversPerSqM'
     ];
     updatableSharedFields.forEach((field)=>{
         if (data.hasOwnProperty(field)) {
@@ -481,7 +483,8 @@ async function updatePaverTestResults(receiptId, setNumber, data) {
     const batch = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["writeBatch"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$firebase$2f$config$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["db"]);
     const sharedData = {
         machineUsed: data.machineUsed,
-        recordedTemp: data.recordedTemp
+        recordedTemp: data.recordedTemp,
+        paversPerSqM: data.paversPerSqM
     };
     snapshot.docs.forEach((doc)=>{
         const sampleId = doc.id;
