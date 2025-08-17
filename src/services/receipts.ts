@@ -50,23 +50,22 @@ export async function processAndSaveReceipt(receiptData: any): Promise<{ id: str
      Object.entries(catData.tests).forEach(([testId, testData]: [string, any]) => {
 
         const isSpecialCategory = Object.keys(specialData).includes(category) && specialData[category][testId];
+        const lowerCaseCategory = category.toLowerCase();
+        let registerName = lowerCaseCategory.replace(/\s/g, '-') + '-register';
 
+        if (testData.materialTest.toLowerCase().trim() === 'water absorption') {
+            registerName = 'water-absorption-register';
+        } else if (lowerCaseCategory === 'bricks' || lowerCaseCategory === 'blocks') {
+            registerName = 'blocks-bricks-register';
+        } else if (lowerCaseCategory === 'cylinder') {
+            registerName = 'cylinder-register';
+        }
+        
         if (isSpecialCategory) {
             const specialTestData = specialData[category][testId];
             specialTestData.sets.forEach((set: any, setIndex: number) => {
                 set.serials.forEach((serialId: string, sampleIndex: number) => {
                     const sampleDocId = generateSampleId(category, formData.projectTitle);
-                    
-                    const lowerCaseCategory = category.toLowerCase();
-                    let registerName = lowerCaseCategory.replace(/\s/g, '-') + '-register';
-                    if (lowerCaseCategory === 'bricks' || lowerCaseCategory === 'blocks') {
-                        registerName = 'blocks-bricks-register';
-                    } else if (lowerCaseCategory === 'cylinder') {
-                        registerName = 'cylinder-register';
-                    } else if (lowerCaseCategory === 'water absorption') {
-                        registerName = 'water-absorption-register';
-                    }
-
                     const sampleRef = doc(db, registerName, sampleDocId);
                     
                     const sampleRecord = {
@@ -84,6 +83,8 @@ export async function processAndSaveReceipt(receiptData: any): Promise<{ id: str
                         testingDate: set.testingDate || null,
                         age: set.age || null,
                         areaOfUse: set.areaOfUse || null,
+                        class: set.class || null,
+                        paverType: set.paverType || null,
                         sampleType: set.sampleType || null,
                         setNumber: setIndex + 1,
                     };
@@ -93,18 +94,6 @@ export async function processAndSaveReceipt(receiptData: any): Promise<{ id: str
         } else {
              for (let i = 0; i < testData.quantity; i++) {
                 const sampleDocId = generateSampleId(category, formData.projectTitle);
-                
-                const lowerCaseCategory = category.toLowerCase();
-                let registerName = lowerCaseCategory.replace(/\s/g, '-') + '-register';
-                 if (lowerCaseCategory === 'bricks' || lowerCaseCategory === 'blocks') {
-                    registerName = 'blocks-bricks-register';
-                } else if (lowerCaseCategory === 'cylinder') {
-                    registerName = 'cylinder-register';
-                } else if (lowerCaseCategory === 'water absorption') {
-                    registerName = 'water-absorption-register';
-                }
-
-
                 const sampleRef = doc(db, registerName, sampleDocId);
                  const sampleRecord = {
                     sampleId: sampleDocId,

@@ -1007,7 +1007,7 @@ async function updateSampleSetDetails(receiptId, testId, setNumber, data) {
         'testingDate',
         'age',
         'areaOfUse',
-        'class',
+        'sampleType',
         'certificateNumber',
         'comment',
         'technician',
