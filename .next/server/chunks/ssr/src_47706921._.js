@@ -444,9 +444,10 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
         {
             id: 'select',
             header: ({ table })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$checkbox$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Checkbox"], {
-                    checked: table.getIsAllPageRowsSelected() || table.getIsSomePageRowsSelected() && 'indeterminate',
+                    checked: table.getIsAllPageRowsSelected(),
                     onCheckedChange: (value)=>table.toggleAllPageRowsSelected(!!value),
-                    "aria-label": "Select all"
+                    "aria-label": "Select all",
+                    disabled: true
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
                     lineNumber: 53,
@@ -458,7 +459,7 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                     "aria-label": "Select row"
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                    lineNumber: 63,
+                    lineNumber: 61,
                     columnNumber: 7
                 }, this),
             enableSorting: false,
@@ -477,7 +478,7 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                     children: row.original.receivedAt ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$parseISO$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["parseISO"])(row.original.receivedAt), 'yyyy-MM-dd') : '-'
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                    lineNumber: 77,
+                    lineNumber: 75,
                     columnNumber: 16
                 }, this);
             }
@@ -495,7 +496,7 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                     children: row.original.clientName
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                    lineNumber: 85,
+                    lineNumber: 83,
                     columnNumber: 16
                 }, this);
             }
@@ -513,7 +514,7 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                     children: row.original.projectTitle
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                    lineNumber: 93,
+                    lineNumber: 91,
                     columnNumber: 16
                 }, this);
             }
@@ -532,7 +533,7 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                     children: value
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                    lineNumber: 102,
+                    lineNumber: 100,
                     columnNumber: 15
                 }, this);
             }
@@ -551,7 +552,7 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                     children: value
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                    lineNumber: 111,
+                    lineNumber: 109,
                     columnNumber: 15
                 }, this);
             }
@@ -569,7 +570,7 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                     children: row.original.class || '-'
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                    lineNumber: 119,
+                    lineNumber: 117,
                     columnNumber: 15
                 }, this);
             }
@@ -587,7 +588,7 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                     children: row.original.age || '-'
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                    lineNumber: 127,
+                    lineNumber: 125,
                     columnNumber: 15
                 }, this);
             }
@@ -605,7 +606,7 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                     children: row.original.areaOfUse || '-'
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                    lineNumber: 135,
+                    lineNumber: 133,
                     columnNumber: 15
                 }, this);
             }
@@ -622,7 +623,7 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                     children: "Dimensions (mm)"
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                    lineNumber: 145,
+                    lineNumber: 143,
                     columnNumber: 19
                 }, this),
             columns: [
@@ -671,7 +672,7 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                     children: row.original.machineUsed || '-'
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                    lineNumber: 184,
+                    lineNumber: 182,
                     columnNumber: 15
                 }, this);
             }
@@ -689,7 +690,7 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                     children: row.original.recordedTemp || '-'
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                    lineNumber: 192,
+                    lineNumber: 190,
                     columnNumber: 15
                 }, this);
             }
@@ -707,7 +708,7 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                     children: row.original.certificateNumber || '-'
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                    lineNumber: 200,
+                    lineNumber: 198,
                     columnNumber: 15
                 }, this);
             }
@@ -725,7 +726,7 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                     children: row.original.comment || '-'
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                    lineNumber: 208,
+                    lineNumber: 206,
                     columnNumber: 15
                 }, this);
             }
@@ -743,7 +744,7 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                     children: row.original.technician || '-'
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                    lineNumber: 216,
+                    lineNumber: 214,
                     columnNumber: 15
                 }, this);
             }
@@ -762,7 +763,7 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                     children: value
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                    lineNumber: 225,
+                    lineNumber: 223,
                     columnNumber: 15
                 }, this);
             }
@@ -780,7 +781,7 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                     children: row.original.issueId || '-'
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                    lineNumber: 233,
+                    lineNumber: 231,
                     columnNumber: 15
                 }, this);
             }
@@ -798,7 +799,7 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                     children: row.original.takenBy || '-'
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                    lineNumber: 241,
+                    lineNumber: 239,
                     columnNumber: 15
                 }, this);
             }
@@ -817,7 +818,7 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                     children: value
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                    lineNumber: 250,
+                    lineNumber: 248,
                     columnNumber: 15
                 }, this);
             }
@@ -835,7 +836,7 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                     children: row.original.contact || '-'
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                    lineNumber: 258,
+                    lineNumber: 256,
                     columnNumber: 15
                 }, this);
             }
@@ -853,7 +854,7 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                     children: row.original.receiptId
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                    lineNumber: 266,
+                    lineNumber: 264,
                     columnNumber: 15
                 }, this);
             }
@@ -883,25 +884,25 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                                                     children: "Open menu"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                                                    lineNumber: 280,
+                                                    lineNumber: 278,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$ellipsis$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MoreHorizontal$3e$__["MoreHorizontal"], {
                                                     className: "h-4 w-4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                                                    lineNumber: 281,
+                                                    lineNumber: 279,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                                            lineNumber: 279,
+                                            lineNumber: 277,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                                        lineNumber: 278,
+                                        lineNumber: 276,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenuContent"], {
@@ -911,7 +912,7 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                                                 children: "Actions"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                                                lineNumber: 285,
+                                                lineNumber: 283,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
@@ -919,7 +920,7 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                                                 children: "Edit Record"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                                                lineNumber: 286,
+                                                lineNumber: 284,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
@@ -927,12 +928,12 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                                                 children: "Issue Certificate"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                                                lineNumber: 287,
+                                                lineNumber: 285,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenuSeparator"], {}, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                                                lineNumber: 288,
+                                                lineNumber: 286,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2d$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AlertDialogTrigger"], {
@@ -942,24 +943,24 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                                                     children: "Delete Record"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                                                    lineNumber: 290,
+                                                    lineNumber: 288,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                                                lineNumber: 289,
+                                                lineNumber: 287,
                                                 columnNumber: 20
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                                        lineNumber: 284,
+                                        lineNumber: 282,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                                lineNumber: 277,
+                                lineNumber: 275,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2d$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AlertDialogContent"], {
@@ -970,7 +971,7 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                                                 children: "Are you absolutely sure?"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                                                lineNumber: 298,
+                                                lineNumber: 296,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2d$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AlertDialogDescription"], {
@@ -981,13 +982,13 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                                                lineNumber: 299,
+                                                lineNumber: 297,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                                        lineNumber: 297,
+                                        lineNumber: 295,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2d$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AlertDialogFooter"], {
@@ -996,7 +997,7 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                                                 children: "Cancel"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                                                lineNumber: 305,
+                                                lineNumber: 303,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2d$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AlertDialogAction"], {
@@ -1004,30 +1005,30 @@ const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue })=>[
                                                 children: "Continue"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                                                lineNumber: 306,
+                                                lineNumber: 304,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                                        lineNumber: 304,
+                                        lineNumber: 302,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                                lineNumber: 296,
+                                lineNumber: 294,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                        lineNumber: 276,
+                        lineNumber: 274,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                    lineNumber: 275,
+                    lineNumber: 273,
                     columnNumber: 9
                 }, this);
             }
@@ -1200,6 +1201,7 @@ function ConcreteCubesDataTable({ columns, data, loading, rowSelection, setRowSe
         onSortingChange: setSorting,
         getSortedRowModel: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$table$2d$core$2f$build$2f$lib$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["getSortedRowModel"])(),
         onRowSelectionChange: setRowSelection,
+        enableMultiRowSelection: false,
         state: {
             sorting,
             rowSelection
@@ -1227,17 +1229,17 @@ function ConcreteCubesDataTable({ columns, data, loading, rowSelection, setRowSe
                                             children: header.isPlaceholder ? null : (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$react$2d$table$2f$build$2f$lib$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["flexRender"])(header.column.columnDef.header, header.getContext())
                                         }, header.id, false, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                                            lineNumber: 71,
+                                            lineNumber: 72,
                                             columnNumber: 21
                                         }, this))
                                 }, headerGroup.id, false, {
                                     fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                                    lineNumber: 69,
+                                    lineNumber: 70,
                                     columnNumber: 17
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                            lineNumber: 67,
+                            lineNumber: 68,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TableBody"], {
@@ -1252,22 +1254,22 @@ function ConcreteCubesDataTable({ columns, data, loading, rowSelection, setRowSe
                                                     className: "h-6 w-4/5"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                                                    lineNumber: 90,
+                                                    lineNumber: 91,
                                                     columnNumber: 33
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                                                lineNumber: 89,
+                                                lineNumber: 90,
                                                 columnNumber: 29
                                             }, this)
                                         }, `${i}-${column.id || j}`, false, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                                            lineNumber: 88,
+                                            lineNumber: 89,
                                             columnNumber: 25
                                         }, this))
                                 }, i, false, {
                                     fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                                    lineNumber: 86,
+                                    lineNumber: 87,
                                     columnNumber: 21
                                 }, this)) : table.getRowModel().rows?.length ? table.getRowModel().rows.map((row)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TableRow"], {
                                     "data-state": row.getIsSelected() && 'selected',
@@ -1277,12 +1279,12 @@ function ConcreteCubesDataTable({ columns, data, loading, rowSelection, setRowSe
                                             children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$react$2d$table$2f$build$2f$lib$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["flexRender"])(cell.column.columnDef.cell, cell.getContext())
                                         }, cell.id, false, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                                            lineNumber: 104,
+                                            lineNumber: 105,
                                             columnNumber: 25
                                         }, this))
                                 }, row.id, false, {
                                     fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                                    lineNumber: 98,
+                                    lineNumber: 99,
                                     columnNumber: 21
                                 }, this)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TableRow"], {
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TableCell"], {
@@ -1291,28 +1293,28 @@ function ConcreteCubesDataTable({ columns, data, loading, rowSelection, setRowSe
                                     children: "No concrete cube samples found."
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                                    lineNumber: 115,
+                                    lineNumber: 116,
                                     columnNumber: 21
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                                lineNumber: 114,
+                                lineNumber: 115,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                            lineNumber: 83,
+                            lineNumber: 84,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                    lineNumber: 66,
+                    lineNumber: 67,
                     columnNumber: 13
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                lineNumber: 65,
+                lineNumber: 66,
                 columnNumber: 8
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1329,7 +1331,7 @@ function ConcreteCubesDataTable({ columns, data, loading, rowSelection, setRowSe
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                        lineNumber: 127,
+                        lineNumber: 128,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1345,7 +1347,7 @@ function ConcreteCubesDataTable({ columns, data, loading, rowSelection, setRowSe
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                                lineNumber: 132,
+                                lineNumber: 133,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -1356,7 +1358,7 @@ function ConcreteCubesDataTable({ columns, data, loading, rowSelection, setRowSe
                                 children: "Previous"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                                lineNumber: 135,
+                                lineNumber: 136,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -1367,25 +1369,25 @@ function ConcreteCubesDataTable({ columns, data, loading, rowSelection, setRowSe
                                 children: "Next"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                                lineNumber: 143,
+                                lineNumber: 144,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                        lineNumber: 131,
+                        lineNumber: 132,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-                lineNumber: 126,
+                lineNumber: 127,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/registers/components/concrete-cubes/data-table.tsx",
-        lineNumber: 64,
+        lineNumber: 65,
         columnNumber: 5
     }, this);
 }

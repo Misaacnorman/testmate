@@ -73,12 +73,19 @@ export function ConcreteCubesRegister() {
     let setToOpen = sampleSet;
     if (!setToOpen) {
         const selectedIndex = parseInt(Object.keys(rowSelection)[0], 10);
+        if (isNaN(selectedIndex) || !samples[selectedIndex]) return;
         setToOpen = samples[selectedIndex];
     }
     
     if (setToOpen) {
-        setSelectedSampleSet(setToOpen);
-        setTestDialogOpen(true);
+        // If certificate number exists, it means it has been issued, so we edit the issue details.
+        // Otherwise, we edit the test results.
+        if (setToOpen.certificateNumber) {
+            handleOpenIssueDialog(setToOpen);
+        } else {
+            setSelectedSampleSet(setToOpen);
+            setTestDialogOpen(true);
+        }
     }
   };
   
@@ -86,6 +93,7 @@ export function ConcreteCubesRegister() {
     let setToOpen = sampleSet;
     if (!setToOpen) {
         const selectedIndex = parseInt(Object.keys(rowSelection)[0], 10);
+        if (isNaN(selectedIndex) || !samples[selectedIndex]) return;
         setToOpen = samples[selectedIndex];
     }
     
