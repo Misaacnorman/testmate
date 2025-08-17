@@ -955,6 +955,10 @@ body {
   width: 80%;
 }
 
+.w-64 {
+  width: 16rem;
+}
+
 .min-w-0 {
   min-width: 0;
 }
@@ -1209,6 +1213,10 @@ body {
 
 .gap-8 {
   gap: 2rem;
+}
+
+.gap-3 {
+  gap: .75rem;
 }
 
 .gap-x-8 {
@@ -3061,6 +3069,10 @@ body {
 
   .sm\:pl-14 {
     padding-left: 3.5rem;
+  }
+
+  .sm\:pl-64 {
+    padding-left: 16rem;
   }
 
   .sm\:text-left {

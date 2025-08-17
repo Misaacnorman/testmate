@@ -28,12 +28,12 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <TooltipProvider>
       <div className="flex min-h-screen w-full flex-col bg-muted/40">
-        <aside className="fixed inset-y-0 left-0 z-20 hidden w-14 flex-col border-r bg-background sm:flex">
-          <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
+        <aside className="fixed inset-y-0 left-0 z-20 hidden w-64 flex-col border-r bg-background sm:flex">
+          <div className="flex flex-col gap-4 px-2 sm:py-5">
             <SidebarNav />
-          </nav>
+          </div>
         </aside>
-        <div className="flex flex-col sm:pl-14">
+        <div className="flex flex-col sm:pl-64">
           <Header />
           <main className="flex-1 flex flex-col p-4 sm:px-6 sm:py-0 md:gap-8 bg-background">
             {children}
