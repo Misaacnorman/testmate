@@ -518,19 +518,6 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$a
 ;
 ;
 ;
-const getDayWithOrdinal = (day)=>{
-    if (day > 3 && day < 21) return `${day}th`;
-    switch(day % 10){
-        case 1:
-            return `${day}st`;
-        case 2:
-            return `${day}nd`;
-        case 3:
-            return `${day}rd`;
-        default:
-            return `${day}th`;
-    }
-};
 const columns = ({ onDelete })=>[
         {
             accessorKey: 'id',
@@ -543,13 +530,13 @@ const columns = ({ onDelete })=>[
                             className: "ml-2 h-4 w-4"
                         }, void 0, false, {
                             fileName: "[project]/src/app/logs/components/columns.tsx",
-                            lineNumber: 57,
+                            lineNumber: 46,
                             columnNumber: 9
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/logs/components/columns.tsx",
-                    lineNumber: 52,
+                    lineNumber: 41,
                     columnNumber: 7
                 }, this),
             cell: ({ row })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -560,13 +547,13 @@ const columns = ({ onDelete })=>[
                         children: row.getValue('id')
                     }, void 0, false, {
                         fileName: "[project]/src/app/logs/components/columns.tsx",
-                        lineNumber: 62,
-                        columnNumber: 9
+                        lineNumber: 51,
+                        columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/app/logs/components/columns.tsx",
-                    lineNumber: 61,
-                    columnNumber: 7
+                    lineNumber: 50,
+                    columnNumber: 9
                 }, this)
         },
         {
@@ -580,13 +567,13 @@ const columns = ({ onDelete })=>[
                             className: "ml-2 h-4 w-4"
                         }, void 0, false, {
                             fileName: "[project]/src/app/logs/components/columns.tsx",
-                            lineNumber: 76,
+                            lineNumber: 65,
                             columnNumber: 9
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/logs/components/columns.tsx",
-                    lineNumber: 71,
+                    lineNumber: 60,
                     columnNumber: 7
                 }, this),
             cell: ({ row })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -594,26 +581,19 @@ const columns = ({ onDelete })=>[
                     children: row.getValue('clientName')
                 }, void 0, false, {
                     fileName: "[project]/src/app/logs/components/columns.tsx",
-                    lineNumber: 79,
-                    columnNumber: 25
+                    lineNumber: 68,
+                    columnNumber: 24
                 }, this)
         },
         {
             accessorKey: 'projectTitle',
-            header: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "text-center",
-                    children: "Project Title"
-                }, void 0, false, {
-                    fileName: "[project]/src/app/logs/components/columns.tsx",
-                    lineNumber: 83,
-                    columnNumber: 19
-                }, this),
+            header: 'Project Title',
             cell: ({ row })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "text-center",
                     children: row.getValue('projectTitle')
                 }, void 0, false, {
                     fileName: "[project]/src/app/logs/components/columns.tsx",
-                    lineNumber: 84,
+                    lineNumber: 73,
                     columnNumber: 24
                 }, this)
         },
@@ -628,13 +608,13 @@ const columns = ({ onDelete })=>[
                             className: "ml-2 h-4 w-4"
                         }, void 0, false, {
                             fileName: "[project]/src/app/logs/components/columns.tsx",
-                            lineNumber: 94,
+                            lineNumber: 83,
                             columnNumber: 9
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/logs/components/columns.tsx",
-                    lineNumber: 89,
+                    lineNumber: 78,
                     columnNumber: 7
                 }, this),
             cell: ({ row })=>{
@@ -644,19 +624,17 @@ const columns = ({ onDelete })=>[
                     children: "N/A"
                 }, void 0, false, {
                     fileName: "[project]/src/app/logs/components/columns.tsx",
-                    lineNumber: 99,
+                    lineNumber: 88,
                     columnNumber: 31
                 }, this);
                 try {
                     const date = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$parseISO$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["parseISO"])(dateString.replace(' ', 'T'));
-                    const day = date.getDate();
-                    const formattedDate = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])(date, `yyyy-MM-${getDayWithOrdinal(day)}`);
                     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "text-center",
-                        children: formattedDate
+                        className: "text-center font-medium",
+                        children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])(date, "PPP p")
                     }, void 0, false, {
                         fileName: "[project]/src/app/logs/components/columns.tsx",
-                        lineNumber: 104,
+                        lineNumber: 91,
                         columnNumber: 16
                     }, this);
                 } catch (e) {
@@ -666,7 +644,7 @@ const columns = ({ onDelete })=>[
                         children: "Invalid Date"
                     }, void 0, false, {
                         fileName: "[project]/src/app/logs/components/columns.tsx",
-                        lineNumber: 107,
+                        lineNumber: 94,
                         columnNumber: 16
                     }, this);
                 }
@@ -693,25 +671,25 @@ const columns = ({ onDelete })=>[
                                                     children: "Open menu"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/logs/components/columns.tsx",
-                                                    lineNumber: 121,
+                                                    lineNumber: 108,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$ellipsis$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MoreHorizontal$3e$__["MoreHorizontal"], {
                                                     className: "h-4 w-4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/logs/components/columns.tsx",
-                                                    lineNumber: 122,
+                                                    lineNumber: 109,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/logs/components/columns.tsx",
-                                            lineNumber: 120,
+                                            lineNumber: 107,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/logs/components/columns.tsx",
-                                        lineNumber: 119,
+                                        lineNumber: 106,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenuContent"], {
@@ -721,7 +699,7 @@ const columns = ({ onDelete })=>[
                                                 children: "Actions"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/logs/components/columns.tsx",
-                                                lineNumber: 126,
+                                                lineNumber: 113,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
@@ -731,17 +709,17 @@ const columns = ({ onDelete })=>[
                                                     children: "View Details"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/logs/components/columns.tsx",
-                                                    lineNumber: 128,
+                                                    lineNumber: 115,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/logs/components/columns.tsx",
-                                                lineNumber: 127,
+                                                lineNumber: 114,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenuSeparator"], {}, void 0, false, {
                                                 fileName: "[project]/src/app/logs/components/columns.tsx",
-                                                lineNumber: 130,
+                                                lineNumber: 117,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2d$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AlertDialogTrigger"], {
@@ -751,24 +729,24 @@ const columns = ({ onDelete })=>[
                                                     children: "Delete"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/logs/components/columns.tsx",
-                                                    lineNumber: 132,
+                                                    lineNumber: 119,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/logs/components/columns.tsx",
-                                                lineNumber: 131,
+                                                lineNumber: 118,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/logs/components/columns.tsx",
-                                        lineNumber: 125,
+                                        lineNumber: 112,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/logs/components/columns.tsx",
-                                lineNumber: 118,
+                                lineNumber: 105,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2d$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AlertDialogContent"], {
@@ -779,20 +757,20 @@ const columns = ({ onDelete })=>[
                                                 children: "Are you absolutely sure?"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/logs/components/columns.tsx",
-                                                lineNumber: 140,
+                                                lineNumber: 127,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2d$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AlertDialogDescription"], {
                                                 children: "This action cannot be undone. This will permanently delete the receipt and all of its associated sample records from the database."
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/logs/components/columns.tsx",
-                                                lineNumber: 141,
+                                                lineNumber: 128,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/logs/components/columns.tsx",
-                                        lineNumber: 139,
+                                        lineNumber: 126,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2d$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AlertDialogFooter"], {
@@ -801,7 +779,7 @@ const columns = ({ onDelete })=>[
                                                 children: "Cancel"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/logs/components/columns.tsx",
-                                                lineNumber: 147,
+                                                lineNumber: 134,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2d$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AlertDialogAction"], {
@@ -809,30 +787,30 @@ const columns = ({ onDelete })=>[
                                                 children: "Continue"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/logs/components/columns.tsx",
-                                                lineNumber: 148,
+                                                lineNumber: 135,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/logs/components/columns.tsx",
-                                        lineNumber: 146,
+                                        lineNumber: 133,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/logs/components/columns.tsx",
-                                lineNumber: 138,
+                                lineNumber: 125,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/logs/components/columns.tsx",
-                        lineNumber: 117,
+                        lineNumber: 104,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/app/logs/components/columns.tsx",
-                    lineNumber: 116,
+                    lineNumber: 103,
                     columnNumber: 9
                 }, this);
             }
