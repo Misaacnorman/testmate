@@ -57,8 +57,9 @@ export async function processAndSaveReceipt(receiptData: any): Promise<{ id: str
                 set.serials.forEach((serialId: string, sampleIndex: number) => {
                     const sampleDocId = generateSampleId(category, formData.projectTitle);
                     
-                    let registerName = category.toLowerCase().replace(/\s/g, '-') + '-register';
-                    if (category.toLowerCase() === 'bricks' || category.toLowerCase() === 'blocks') {
+                    const lowerCaseCategory = category.toLowerCase();
+                    let registerName = lowerCaseCategory.replace(/\s/g, '-') + '-register';
+                    if (lowerCaseCategory === 'bricks' || lowerCaseCategory === 'blocks') {
                         registerName = 'blocks-bricks-register';
                     }
 
@@ -89,10 +90,12 @@ export async function processAndSaveReceipt(receiptData: any): Promise<{ id: str
              for (let i = 0; i < testData.quantity; i++) {
                 const sampleDocId = generateSampleId(category, formData.projectTitle);
                 
-                let registerName = category.toLowerCase().replace(/\s/g, '-') + '-register';
-                if (category.toLowerCase() === 'bricks' || category.toLowerCase() === 'blocks') {
+                const lowerCaseCategory = category.toLowerCase();
+                let registerName = lowerCaseCategory.replace(/\s/g, '-') + '-register';
+                if (lowerCaseCategory === 'bricks' || lowerCaseCategory === 'blocks') {
                     registerName = 'blocks-bricks-register';
                 }
+
 
                 const sampleRef = doc(db, registerName, sampleDocId);
                  const sampleRecord = {
