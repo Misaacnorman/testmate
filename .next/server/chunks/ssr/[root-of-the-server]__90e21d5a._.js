@@ -224,10 +224,18 @@ async function getConcreteCubes() {
 }
 async function updateCubeTestResults(updatedSamples) {
     const batch = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["writeBatch"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$firebase$2f$config$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["db"]);
+    // Assume shared values are taken from the first sample
+    const sharedValues = {};
+    if (updatedSamples.length > 0) {
+        if (updatedSamples[0].machineUsed) sharedValues.machineUsed = updatedSamples[0].machineUsed;
+        if (updatedSamples[0].recordedTemp) sharedValues.recordedTemp = updatedSamples[0].recordedTemp;
+    }
     updatedSamples.forEach((sample)=>{
         if (!sample.id) return;
         const docRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["doc"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$firebase$2f$config$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["db"], 'concrete-cubes-register', sample.id);
-        const updateData = {};
+        const updateData = {
+            ...sharedValues
+        };
         // Only update fields that have a value to avoid overwriting with undefined/null
         if (sample.length) updateData.length = sample.length;
         if (sample.width) updateData.width = sample.width;
@@ -235,9 +243,6 @@ async function updateCubeTestResults(updatedSamples) {
         if (sample.weight) updateData.weight = sample.weight;
         if (sample.load) updateData.load = sample.load;
         if (sample.modeOfFailure) updateData.modeOfFailure = sample.modeOfFailure;
-        // These values are shared across the set
-        if (sample.machineUsed) updateData.machineUsed = sample.machineUsed;
-        if (sample.recordedTemp) updateData.recordedTemp = sample.recordedTemp;
         batch.update(docRef, updateData);
     });
     await batch.commit();

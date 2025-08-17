@@ -230,7 +230,7 @@ export function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }: Tes
                    <Controller
                       name="recordedTemp"
                       control={form.control}
-                      render={({ field }) => <Input type="number" {...field} />}
+                      render={({ field }) => <Input type="number" {...field} value={field.value ?? ''} />}
                     />
                 </div>
             </div>
