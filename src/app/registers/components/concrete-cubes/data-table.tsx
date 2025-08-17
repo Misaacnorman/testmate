@@ -52,18 +52,18 @@ export function ConcreteCubesDataTable<TData, TValue>({
     },
     initialState: {
       pagination: {
-        pageSize: 50,
+        pageSize: 10,
       },
     },
   });
 
   return (
     <div className="h-full flex flex-col">
-       <div className="rounded-md border flex-grow overflow-auto">
+       <div className="rounded-md border flex-grow overflow-auto relative">
             <Table>
-            <TableHeader className="sticky top-0 bg-primary/90 backdrop-blur-sm">
+            <TableHeader className="sticky top-0 bg-primary z-10">
                 {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id} className="hover:bg-primary">
+                <TableRow key={headerGroup.id} className="hover:bg-primary/90">
                     {headerGroup.headers.map((header) => (
                     <TableHead key={header.id} colSpan={header.colSpan} className="text-white font-bold h-14">
                         {header.isPlaceholder
@@ -81,9 +81,11 @@ export function ConcreteCubesDataTable<TData, TValue>({
                 {loading ? (
                 Array.from({ length: 15 }).map((_, i) => (
                     <TableRow key={i}>
-                    {columns.map((column, j) => (
-                        <TableCell key={j}>
-                        <Skeleton className="h-6 w-full" />
+                    {columns.map((columnDef) => (
+                        <TableCell key={(columnDef.header as string) || i} className="p-0">
+                            <div className="flex items-center justify-center w-full h-12">
+                                <Skeleton className="h-6 w-4/5" />
+                            </div>
                         </TableCell>
                     ))}
                     </TableRow>
@@ -93,10 +95,10 @@ export function ConcreteCubesDataTable<TData, TValue>({
                     <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && 'selected'}
-                    className="[&_td]:py-2"
+                    className="[&_td]:p-0"
                     >
                     {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id} className="text-center">
+                        <TableCell key={cell.id} className="text-center relative align-top border-b">
                         {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()
@@ -148,4 +150,3 @@ export function ConcreteCubesDataTable<TData, TValue>({
     </div>
   );
 }
-

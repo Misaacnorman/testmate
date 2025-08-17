@@ -22,16 +22,20 @@ export type Receipt = {
 
 
 export type ConcreteCubeSample = {
-  id: string;
-  receivedAt: string;
+  id: string; // Document ID from firestore
+  sampleId: string; // Human-readable sample ID
+  receiptId: string;
   clientName: string;
   projectTitle: string;
+  receivedAt: string;
+  sampleSerialNumber?: string;
+  setNumber?: number;
+
   castingDate?: string;
   testingDate?: string;
   class?: string;
   age?: number;
   areaOfUse?: string;
-  sampleId: string;
   length?: number;
   width?: number;
   height?: number;
@@ -48,5 +52,8 @@ export type ConcreteCubeSample = {
   takenBy?: string;
   dateTaken?: string;
   contact?: string;
-  receiptId: string;
 };
+
+export interface GroupedConcreteCubeSample extends ConcreteCubeSample {
+    samples: ConcreteCubeSample[];
+}

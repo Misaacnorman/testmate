@@ -1,7 +1,7 @@
 
 'use server';
 
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import type { ConcreteCubeSample } from '@/lib/types';
 import { fromFirestore } from '@/lib/utils';
@@ -12,7 +12,8 @@ export async function getConcreteCubes(): Promise<ConcreteCubeSample[]> {
   // Simulate network delay for a better UX
   await new Promise(resolve => setTimeout(resolve, 500));
   try {
-    const snapshot = await getDocs(registerCollection);
+    const q = query(registerCollection, orderBy('receivedAt', 'desc'));
+    const snapshot = await getDocs(q);
     if (snapshot.empty) {
         console.log("No documents found in concrete-cubes-register.");
         return [];

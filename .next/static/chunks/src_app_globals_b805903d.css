@@ -913,6 +913,10 @@ body {
   width: 150px;
 }
 
+.w-4\/5 {
+  width: 80%;
+}
+
 .min-w-0 {
   min-width: 0;
 }
@@ -1703,6 +1707,10 @@ body {
 
 .text-right {
   text-align: right;
+}
+
+.align-top {
+  vertical-align: top;
 }
 
 .align-middle {
@@ -3320,6 +3328,10 @@ body {
 
 .\[\&_svg\]\:shrink-0 svg {
   flex-shrink: 0;
+}
+
+.\[\&_td\]\:p-0 td {
+  padding: 0;
 }
 
 .\[\&_td\]\:py-1 td {

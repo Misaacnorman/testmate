@@ -354,12 +354,12 @@ const columns = [
         header: 'Weight (kg)'
     },
     {
-        accessorKey: 'machineUsed',
-        header: 'Machine Used'
-    },
-    {
         accessorKey: 'load',
         header: 'Load (kN)'
+    },
+    {
+        accessorKey: 'machineUsed',
+        header: 'Machine Used'
     },
     {
         accessorKey: 'modeOfFailure',

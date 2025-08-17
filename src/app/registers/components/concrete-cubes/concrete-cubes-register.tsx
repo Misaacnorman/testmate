@@ -6,11 +6,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useToast } from '@/hooks/use-toast';
 import { getConcreteCubes } from './data';
 import { columns } from './columns';
-import { ConcreteCubeSample } from '@/lib/types';
+import { ConcreteCubeSample, GroupedConcreteCubeSample } from '@/lib/types';
 import { ConcreteCubesDataTable } from './data-table';
 
 export function ConcreteCubesRegister() {
-  const [samples, setSamples] = React.useState<ConcreteCubeSample[]>([]);
+  const [samples, setSamples] = React.useState<GroupedConcreteCubeSample[]>([]);
   const [loading, setLoading] = React.useState(true);
   const { toast } = useToast();
 
@@ -18,7 +18,26 @@ export function ConcreteCubesRegister() {
     setLoading(true);
     try {
       const data = await getConcreteCubes();
-      setSamples(data);
+      
+      const groupedData: { [key: string]: ConcreteCubeSample[] } = {};
+      data.forEach(sample => {
+        const key = `${sample.receiptId}-${sample.setNumber || '0'}`;
+        if (!groupedData[key]) {
+          groupedData[key] = [];
+        }
+        groupedData[key].push(sample);
+      });
+
+      const processedData: GroupedConcreteCubeSample[] = Object.values(groupedData).map(group => {
+        const firstSample = group[0];
+        return {
+            ...firstSample,
+            samples: group,
+        };
+      });
+
+      setSamples(processedData);
+
     } catch (error) {
       console.error('Failed to load concrete cube samples:', error);
       toast({
@@ -53,4 +72,3 @@ export function ConcreteCubesRegister() {
     </Card>
   );
 }
-
