@@ -43,10 +43,9 @@ const renderCellWithSubItems = (items: (string | number | undefined)[]) => (
 interface ConcreteCubeColumnsProps {
   onEdit: (sampleSet: GroupedConcreteCubeSample) => void;
   onDelete: (receiptId: string, setNumber: number) => void;
-  onIssue: (sampleSet: GroupedConcreteCubeSample) => void;
 }
 
-export const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue }: ConcreteCubeColumnsProps): ColumnDef<GroupedConcreteCubeSample>[] => [
+export const getConcreteCubeColumns = ({ onEdit, onDelete }: ConcreteCubeColumnsProps): ColumnDef<GroupedConcreteCubeSample>[] => [
   {
     id: 'select',
     header: ({ table }) => (
@@ -282,7 +281,6 @@ export const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue }: ConcreteCu
               <DropdownMenuContent align="end">
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
                   <DropdownMenuItem onClick={() => onEdit(sampleSet)}>Edit Record</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => onIssue(sampleSet)}>Issue Certificate</DropdownMenuItem>
                   <DropdownMenuSeparator />
                    <AlertDialogTrigger asChild>
                       <DropdownMenuItem className="text-destructive">
@@ -312,5 +310,3 @@ export const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue }: ConcreteCu
     },
   },
 ];
-
-    

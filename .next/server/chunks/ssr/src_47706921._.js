@@ -2754,17 +2754,25 @@ function ConcreteCubesRegister() {
         let setToOpen = sampleSet;
         if (!setToOpen) {
             const selectedIndex = parseInt(Object.keys(rowSelection)[0], 10);
+            if (isNaN(selectedIndex) || !samples[selectedIndex]) return;
             setToOpen = samples[selectedIndex];
         }
         if (setToOpen) {
-            setSelectedSampleSet(setToOpen);
-            setTestDialogOpen(true);
+            // If certificate number exists, it means it has been issued, so we edit the issue details.
+            // Otherwise, we edit the test results.
+            if (setToOpen.certificateNumber) {
+                handleOpenIssueDialog(setToOpen);
+            } else {
+                setSelectedSampleSet(setToOpen);
+                setTestDialogOpen(true);
+            }
         }
     };
     const handleOpenIssueDialog = (sampleSet)=>{
         let setToOpen = sampleSet;
         if (!setToOpen) {
             const selectedIndex = parseInt(Object.keys(rowSelection)[0], 10);
+            if (isNaN(selectedIndex) || !samples[selectedIndex]) return;
             setToOpen = samples[selectedIndex];
         }
         if (setToOpen) {
@@ -2849,20 +2857,20 @@ function ConcreteCubesRegister() {
                                     children: "Concrete Cubes Register"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
-                                    lineNumber: 166,
+                                    lineNumber: 174,
                                     columnNumber: 21
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardDescription"], {
                                     children: "Detailed records of all concrete cube samples."
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
-                                    lineNumber: 167,
+                                    lineNumber: 175,
                                     columnNumber: 21
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
-                            lineNumber: 165,
+                            lineNumber: 173,
                             columnNumber: 17
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2874,7 +2882,7 @@ function ConcreteCubesRegister() {
                                     children: "Test"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
-                                    lineNumber: 172,
+                                    lineNumber: 180,
                                     columnNumber: 21
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -2884,24 +2892,24 @@ function ConcreteCubesRegister() {
                                     children: "Issue"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
-                                    lineNumber: 178,
+                                    lineNumber: 186,
                                     columnNumber: 21
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
-                            lineNumber: 171,
+                            lineNumber: 179,
                             columnNumber: 17
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
-                    lineNumber: 164,
+                    lineNumber: 172,
                     columnNumber: 13
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
-                lineNumber: 163,
+                lineNumber: 171,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -2914,12 +2922,12 @@ function ConcreteCubesRegister() {
                     setRowSelection: setRowSelection
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
-                    lineNumber: 189,
+                    lineNumber: 197,
                     columnNumber: 13
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
-                lineNumber: 188,
+                lineNumber: 196,
                 columnNumber: 9
             }, this),
             selectedSampleSet && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$test$2d$results$2d$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TestResultsDialog"], {
@@ -2929,7 +2937,7 @@ function ConcreteCubesRegister() {
                 onSave: handleSaveTestResults
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
-                lineNumber: 198,
+                lineNumber: 206,
                 columnNumber: 13
             }, this),
             selectedSampleSet && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$issue$2d$certificate$2d$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["IssueCertificateDialog"], {
@@ -2939,13 +2947,13 @@ function ConcreteCubesRegister() {
                 onSave: handleIssueCertificate
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
-                lineNumber: 206,
+                lineNumber: 214,
                 columnNumber: 13
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
-        lineNumber: 162,
+        lineNumber: 170,
         columnNumber: 5
     }, this);
 }

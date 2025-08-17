@@ -3,7 +3,7 @@
 
 import { collection, getDocs, orderBy, query, writeBatch, doc, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
-import type { ConcreteCubeSample, IssueCertificateData } from '@/lib/types';
+import type { ConcreteCubeSample, GroupedConcreteCubeSample } from '@/lib/types';
 import { fromFirestore } from '@/lib/utils';
 
 const registerCollection = collection(db, 'concrete-cubes-register');
@@ -26,31 +26,45 @@ export async function getConcreteCubes(): Promise<ConcreteCubeSample[]> {
   }
 }
 
-export async function updateCubeTestResults(updatedSamples: ConcreteCubeSample[]): Promise<void> {
-    const batch = writeBatch(db);
-    
-    // Assume shared values are taken from the first sample
-    const sharedValues: Partial<ConcreteCubeSample> = {};
-    if (updatedSamples.length > 0) {
-        if (updatedSamples[0].machineUsed) sharedValues.machineUsed = updatedSamples[0].machineUsed;
-        if (updatedSamples[0].recordedTemp) sharedValues.recordedTemp = updatedSamples[0].recordedTemp;
+export async function updateSampleSetDetails(receiptId: string, setNumber: number, data: Partial<GroupedConcreteCubeSample>): Promise<void> {
+    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber));
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+        throw new Error(`No samples found for receiptId ${receiptId} and setNumber ${setNumber}.`);
     }
 
-    updatedSamples.forEach(sample => {
-        if (!sample.id) return;
-        const docRef = doc(db, 'concrete-cubes-register', sample.id);
-        
-        const updateData: Partial<ConcreteCubeSample> = { ...sharedValues };
+    const batch = writeBatch(db);
+    
+    // These are fields that are shared across all samples in the set
+    const sharedUpdateData: any = {};
+    const updatableSharedFields = ['clientName', 'projectTitle', 'castingDate', 'testingDate', 'age', 'areaOfUse', 'class', 'machineUsed', 'recordedTemp', 'certificateNumber', 'comment', 'technician', 'dateOfIssue', 'issueId', 'takenBy', 'dateTaken', 'contact'];
 
-        // Only update fields that have a value to avoid overwriting with undefined/null
-        if (sample.length) updateData.length = sample.length;
-        if (sample.width) updateData.width = sample.width;
-        if (sample.height) updateData.height = sample.height;
-        if (sample.weight) updateData.weight = sample.weight;
-        if (sample.load) updateData.load = sample.load;
-        if (sample.modeOfFailure) updateData.modeOfFailure = sample.modeOfFailure;
+    updatableSharedFields.forEach(field => {
+        if (data.hasOwnProperty(field)) {
+            sharedUpdateData[field] = (data as any)[field];
+        }
+    });
+
+    snapshot.docs.forEach(document => {
+        const sampleId = document.id;
+        const individualSampleData = data.samples?.find(s => s.id === sampleId);
         
-        batch.update(docRef, updateData);
+        const updateDataForDoc = { ...sharedUpdateData };
+
+        // These are fields that are unique to each sample
+        if (individualSampleData) {
+            const updatableIndividualFields = ['length', 'width', 'height', 'weight', 'load', 'modeOfFailure', 'sampleSerialNumber'];
+            updatableIndividualFields.forEach(field => {
+                if (individualSampleData.hasOwnProperty(field)) {
+                    updateDataForDoc[field] = (individualSampleData as any)[field];
+                }
+            });
+        }
+        
+        if (Object.keys(updateDataForDoc).length > 0) {
+            batch.update(document.ref, updateDataForDoc);
+        }
     });
 
     await batch.commit();
@@ -69,23 +83,6 @@ export async function deleteCubeTestGroup(receiptId: string, setNumber: number):
     const batch = writeBatch(db);
     snapshot.docs.forEach(document => {
         batch.delete(document.ref);
-    });
-
-    await batch.commit();
-}
-
-
-export async function issueCertificateForCubeTest(receiptId: string, setNumber: number, data: IssueCertificateData): Promise<void> {
-    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber));
-    const snapshot = await getDocs(q);
-
-    if (snapshot.empty) {
-        throw new Error(`No samples found for receiptId ${receiptId} and setNumber ${setNumber}.`);
-    }
-
-    const batch = writeBatch(db);
-    snapshot.docs.forEach(document => {
-        batch.update(document.ref, data);
     });
 
     await batch.commit();

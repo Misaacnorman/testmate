@@ -4,22 +4,20 @@
 import * as React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { getConcreteCubes, updateCubeTestResults, deleteCubeTestGroup, issueCertificateForCubeTest } from './data';
+import { getConcreteCubes, deleteCubeTestGroup, updateSampleSetDetails } from './data';
 import { getConcreteCubeColumns } from './columns';
-import { ConcreteCubeSample, GroupedConcreteCubeSample, IssueCertificateData } from '@/lib/types';
+import { ConcreteCubeSample, GroupedConcreteCubeSample } from '@/lib/types';
 import { ConcreteCubesDataTable } from './data-table';
 import { Button } from '@/components/ui/button';
-import { TestResultsDialog } from './test-results-dialog';
-import { IssueCertificateDialog } from './issue-certificate-dialog';
 import { RowSelectionState } from '@tanstack/react-table';
+import { EditSampleSetDialog } from './edit-sample-set-dialog';
 
 export function ConcreteCubesRegister() {
   const [samples, setSamples] = React.useState<GroupedConcreteCubeSample[]>([]);
   const [loading, setLoading] = React.useState(true);
   const { toast } = useToast();
   const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
-  const [isTestDialogOpen, setTestDialogOpen] = React.useState(false);
-  const [isIssueDialogOpen, setIssueDialogOpen] = React.useState(false);
+  const [isEditDialogOpen, setEditDialogOpen] = React.useState(false);
   const [selectedSampleSet, setSelectedSampleSet] = React.useState<GroupedConcreteCubeSample | null>(null);
 
   const loadSamples = React.useCallback(async () => {
@@ -69,27 +67,7 @@ export function ConcreteCubesRegister() {
     loadSamples();
   }, [loadSamples]);
 
-  const handleOpenTestDialog = (sampleSet?: GroupedConcreteCubeSample) => {
-    let setToOpen = sampleSet;
-    if (!setToOpen) {
-        const selectedIndex = parseInt(Object.keys(rowSelection)[0], 10);
-        if (isNaN(selectedIndex) || !samples[selectedIndex]) return;
-        setToOpen = samples[selectedIndex];
-    }
-    
-    if (setToOpen) {
-        // If certificate number exists, it means it has been issued, so we edit the issue details.
-        // Otherwise, we edit the test results.
-        if (setToOpen.certificateNumber) {
-            handleOpenIssueDialog(setToOpen);
-        } else {
-            setSelectedSampleSet(setToOpen);
-            setTestDialogOpen(true);
-        }
-    }
-  };
-  
-  const handleOpenIssueDialog = (sampleSet?: GroupedConcreteCubeSample) => {
+  const handleOpenEditDialog = (sampleSet?: GroupedConcreteCubeSample) => {
     let setToOpen = sampleSet;
     if (!setToOpen) {
         const selectedIndex = parseInt(Object.keys(rowSelection)[0], 10);
@@ -99,7 +77,7 @@ export function ConcreteCubesRegister() {
     
     if (setToOpen) {
         setSelectedSampleSet(setToOpen);
-        setIssueDialogOpen(true);
+        setEditDialogOpen(true);
     }
   };
 
@@ -122,49 +100,28 @@ export function ConcreteCubesRegister() {
     }
   };
 
-  const handleSaveTestResults = async (updatedSamples: ConcreteCubeSample[]) => {
+  const handleSave = async (data: Partial<GroupedConcreteCubeSample>) => {
+    if (!selectedSampleSet) return;
     try {
-        await updateCubeTestResults(updatedSamples);
-        toast({
-            title: "Success",
-            description: "Test results have been saved successfully.",
-        });
-        setTestDialogOpen(false);
-        setRowSelection({});
-        // Reload data to reflect changes
-        loadSamples(); 
-    } catch (error) {
-        console.error("Failed to save test results:", error);
-        toast({
-            variant: "destructive",
-            title: "Save Failed",
-            description: "Could not save the test results.",
-        });
-    }
-  }
-
-  const handleIssueCertificate = async (data: IssueCertificateData) => {
-     if (!selectedSampleSet) return;
-    try {
-      await issueCertificateForCubeTest(selectedSampleSet.receiptId, selectedSampleSet.setNumber || 0, data);
+      await updateSampleSetDetails(selectedSampleSet.receiptId, selectedSampleSet.setNumber || 0, data);
       toast({
         title: 'Success',
-        description: 'Certificate details have been saved.',
+        description: 'Sample set details have been updated.',
       });
-      setIssueDialogOpen(false);
+      setEditDialogOpen(false);
       setRowSelection({});
       loadSamples();
     } catch (error) {
-      console.error('Failed to issue certificate:', error);
+      console.error('Failed to save details:', error);
       toast({
         variant: 'destructive',
         title: 'Save Failed',
-        description: 'Could not save certificate details.',
+        description: 'Could not save the updated details.',
       });
     }
   };
   
-  const columns = React.useMemo(() => getConcreteCubeColumns({ onEdit: handleOpenTestDialog, onDelete: handleDelete, onIssue: handleOpenIssueDialog }), [handleDelete]);
+  const columns = React.useMemo(() => getConcreteCubeColumns({ onEdit: handleOpenEditDialog, onDelete: handleDelete }), [handleDelete]);
 
   return (
     <Card className="h-full flex flex-col">
@@ -178,17 +135,10 @@ export function ConcreteCubesRegister() {
                 </div>
                 <div className="flex gap-2">
                     <Button 
-                        onClick={() => handleOpenTestDialog()}
+                        onClick={() => handleOpenEditDialog()}
                         disabled={Object.keys(rowSelection).length !== 1}
                     >
-                        Test
-                    </Button>
-                    <Button 
-                        onClick={() => handleOpenIssueDialog()}
-                        variant="outline"
-                        disabled={Object.keys(rowSelection).length !== 1}
-                    >
-                        Issue
+                        Edit / Enter Data
                     </Button>
                 </div>
             </div>
@@ -203,19 +153,11 @@ export function ConcreteCubesRegister() {
             />
         </CardContent>
         {selectedSampleSet && (
-            <TestResultsDialog 
-                open={isTestDialogOpen}
-                onOpenChange={setTestDialogOpen}
+            <EditSampleSetDialog
+                open={isEditDialogOpen}
+                onOpenChange={setEditDialogOpen}
                 sampleSet={selectedSampleSet}
-                onSave={handleSaveTestResults}
-            />
-        )}
-        {selectedSampleSet && (
-            <IssueCertificateDialog
-                open={isIssueDialogOpen}
-                onOpenChange={setIssueDialogOpen}
-                sampleSet={selectedSampleSet}
-                onSave={handleIssueCertificate}
+                onSave={handleSave}
             />
         )}
     </Card>
