@@ -35,7 +35,9 @@ export default function LogPage({ params }: { params: { id: string } }) {
       }
     };
 
-    fetchReceipt();
+    if (params.id) {
+      fetchReceipt();
+    }
   }, [params.id]);
 
   if (loading) {
