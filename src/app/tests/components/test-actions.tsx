@@ -45,24 +45,27 @@ export function TestActions({
   const { toast } = useToast();
 
   const materials = React.useMemo(() => {
-    const allMaterials = data.map((test) => test.material);
+    const allMaterials = data.map((test) => test.material).filter(Boolean);
     return [...new Set(allMaterials)];
   }, [data]);
 
   React.useEffect(() => {
     let filtered = data;
 
-    if(searchTerm) {
-        filtered = filtered.filter((test) =>
-            test.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            test.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            test.material.toLowerCase().includes(searchTerm.toLowerCase())
+    if (searchTerm) {
+      filtered = filtered.filter((test) => {
+        const term = searchTerm.toLowerCase();
+        return (
+          (test.name && test.name.toLowerCase().includes(term)) ||
+          (test.id && test.id.toLowerCase().includes(term)) ||
+          (test.material && test.material.toLowerCase().includes(term))
         );
+      });
     }
     
     if (materialFilter.length > 0) {
       filtered = filtered.filter((test) =>
-        materialFilter.includes(test.material)
+        test.material && materialFilter.includes(test.material)
       );
     }
 
