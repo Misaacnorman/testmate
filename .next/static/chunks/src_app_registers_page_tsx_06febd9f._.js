@@ -6,9 +6,10 @@
   "static/chunks/src_app_registers_components_blocks-bricks_8c9c662e._.js",
   "static/chunks/src_app_registers_components_cylinders_641bed0f._.js",
   "static/chunks/src_app_registers_components_water-absorption_4bcfa997._.js",
+  "static/chunks/src_app_registers_components_projects-register_tsx_0a11462f._.js",
   "static/chunks/src_app_registers_page_tsx_3b17d824._.js",
   "static/chunks/src_components_ui_a24b0482._.js",
-  "static/chunks/node_modules_36a6ab8c._.js"
+  "static/chunks/node_modules_c4ea5ab2._.js"
 ],
     source: "dynamic"
 });

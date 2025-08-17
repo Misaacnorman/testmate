@@ -1,5 +1,6 @@
 
 
+
 export type Test = {
   id: string;
   name: string; // was materialTest
@@ -226,3 +227,19 @@ export type IssueCertificateData = {
   contact: string;
   issueId?: string;
 };
+
+export type FieldWorkInstruction = {
+  id: string;
+  date: string;
+  projectIdBig: string;
+  projectIdSmall: string;
+  client: string;
+  project: string;
+  engineerInCharge: string;
+  fieldTests: string;
+  technicianInCharge: string;
+  startDate: string;
+  endDate: string;
+  remarks: string;
+};
+
