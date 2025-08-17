@@ -87,3 +87,57 @@ export async function deleteCubeTestGroup(receiptId: string, setNumber: number):
 
     await batch.commit();
 }
+
+export async function updateCubeTestResults(receiptId: string, setNumber: number, data: Partial<GroupedConcreteCubeSample>): Promise<void> {
+    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber));
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+        throw new Error(`No samples found for receiptId ${receiptId} and setNumber ${setNumber}.`);
+    }
+
+    const batch = writeBatch(db);
+
+    const sharedData = {
+      machineUsed: data.machineUsed,
+      recordedTemp: data.recordedTemp,
+    };
+
+    snapshot.docs.forEach(doc => {
+        const sampleId = doc.id;
+        const sampleData = data.samples?.find(s => s.id === sampleId);
+        
+        if (sampleData) {
+            const updatePayload = {
+                ...sharedData,
+                length: sampleData.length,
+                width: sampleData.width,
+                height: sampleData.height,
+                weight: sampleData.weight,
+                load: sampleData.load,
+                modeOfFailure: sampleData.modeOfFailure,
+            };
+            batch.update(doc.ref, updatePayload);
+        }
+    });
+
+    await batch.commit();
+}
+
+export async function issueCertificateForCubeTest(receiptId: string, setNumber: number, data: any): Promise<void> {
+    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber));
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+        throw new Error(`No samples found for receiptId ${receiptId} and setNumber ${setNumber}.`);
+    }
+
+    const batch = writeBatch(db);
+    
+    snapshot.docs.forEach(doc => {
+        batch.update(doc.ref, data);
+    });
+
+    await batch.commit();
+}
+

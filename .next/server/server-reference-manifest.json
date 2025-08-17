@@ -77,17 +77,6 @@
         "app/registers/page": "action-browser"
       }
     },
-    "408385756c86f70ccb930927038bff8219f3f85bf8": {
-      "workers": {
-        "app/registers/page": {
-          "moduleId": "[project]/.next-internal/server/app/registers/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/registers/components/concrete-cubes/data.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
-          "async": false
-        }
-      },
-      "layer": {
-        "app/registers/page": "action-browser"
-      }
-    },
     "6074eae2d7a8b12208d8f4bd6de0f79e6773a47ee7": {
       "workers": {
         "app/registers/page": {
@@ -99,7 +88,7 @@
         "app/registers/page": "action-browser"
       }
     },
-    "707ef623f9fcc5aa515abfe0a22b4d6f6647380cf3": {
+    "703ca03c4527c8e17b524a8340f5c7fa96254f9859": {
       "workers": {
         "app/registers/page": {
           "moduleId": "[project]/.next-internal/server/app/registers/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/registers/components/concrete-cubes/data.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
