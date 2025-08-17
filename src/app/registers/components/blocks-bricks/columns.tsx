@@ -156,7 +156,7 @@ export const getBlockBrickColumns = ({ onEdit, onDelete }: BlockBrickColumnsProp
     columns: [
         {
             id: 'holeA',
-            header: 'Hole a',
+            header: () => <div className="border-r-2 border-white pr-2">Hole a</div>,
             columns: [
                 {
                     accessorKey: 'holeA_number',
@@ -177,7 +177,7 @@ export const getBlockBrickColumns = ({ onEdit, onDelete }: BlockBrickColumnsProp
         },
         {
             id: 'holeB',
-            header: 'Hole b',
+            header: () => <div className="border-r-2 border-white pr-2">Hole b</div>,
             columns: [
                 {
                     accessorKey: 'holeB_number',
@@ -371,3 +371,5 @@ export const getBlockBrickColumns = ({ onEdit, onDelete }: BlockBrickColumnsProp
     },
   },
 ];
+
+    
