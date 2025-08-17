@@ -61,25 +61,45 @@ export const getFieldWorkColumns = (): ColumnDef<FieldWorkInstruction>[] => [
             cell: ({row}) => <div className="w-[200px]">{row.original.fieldTests}</div>
         },
         {
-            accessorKey: 'technicianInCharge',
+            accessorKey: 'fieldTechnician',
             header: 'Technician in Charge',
         },
         {
-            accessorKey: 'startDate',
+            accessorKey: 'fieldStartDate',
             header: 'Start Date',
-            cell: ({ row }) => <div>{row.original.startDate ? format(parseISO(row.original.startDate), 'yyyy-MM-dd') : '-'}</div>,
+            cell: ({ row }) => <div>{row.original.fieldStartDate ? format(parseISO(row.original.fieldStartDate), 'yyyy-MM-dd') : '-'}</div>,
         },
         {
-            accessorKey: 'endDate',
+            accessorKey: 'fieldEndDate',
             header: 'End Date',
-            cell: ({ row }) => <div>{row.original.endDate ? format(parseISO(row.original.endDate), 'yyyy-MM-dd') : '-'}</div>,
+            cell: ({ row }) => <div>{row.original.fieldEndDate ? format(parseISO(row.original.fieldEndDate), 'yyyy-MM-dd') : '-'}</div>,
         },
         {
-            accessorKey: 'remarks',
+            accessorKey: 'fieldRemarks',
             header: 'Remark(s)',
         },
     ]
   },
+  {
+    id: 'labWorkInstructions',
+    header: () => <div className="text-center">SCOPE OF WORK (LABORATORY TESTING)</div>,
+    columns: [
+        { accessorKey: 'labTestsDescription', header: 'Laboratory Test Description and number of tests' },
+        { accessorKey: 'labTechnician', header: 'Technician in Charge' },
+        { accessorKey: 'labStartDate', header: 'Start Date', cell: ({ row }) => <div>{row.original.labStartDate ? format(parseISO(row.original.labStartDate), 'yyyy-MM-dd') : '-'}</div> },
+        { accessorKey: 'labAgreedDeliveryDate', header: 'Agreed Delivery Date', cell: ({ row }) => <div>{row.original.labAgreedDeliveryDate ? format(parseISO(row.original.labAgreedDeliveryDate), 'yyyy-MM-dd') : '-'}</div> },
+        { accessorKey: 'labAgreedDeliverySignature', header: 'Signature' },
+        { accessorKey: 'labActualDeliveryDate', header: 'Actual Delivery date', cell: ({ row }) => <div>{row.original.labActualDeliveryDate ? format(parseISO(row.original.labActualDeliveryDate), 'yyyy-MM-dd') : '-'}</div> },
+        { accessorKey: 'labActualDeliverySignature', header: 'Signature' },
+        { accessorKey: 'labRemarks', header: 'Remark(s)' },
+    ]
+  },
+  { accessorKey: 'acknowledgement', header: 'Acknowledgement after Delivery' },
+  { accessorKey: 'reportIssuedBy', header: 'Report issued By' },
+  { accessorKey: 'reportPickedBy', header: 'Report Picked/ Delivered to' },
+  { accessorKey: 'reportContact', header: 'Contact' },
+  { accessorKey: 'reportDateTime', header: 'Date and Time', cell: ({ row }) => <div>{row.original.reportDateTime ? format(parseISO(row.original.reportDateTime), 'yyyy-MM-dd p') : '-'}</div> },
+  { accessorKey: 'sampleReceiptNumber', header: 'Sample Receipt Number' },
   {
     id: 'actions',
     cell: ({ row }) => {

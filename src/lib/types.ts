@@ -1,6 +1,5 @@
 
 
-
 export type Test = {
   id: string;
   name: string; // was materialTest
@@ -236,10 +235,26 @@ export type FieldWorkInstruction = {
   client: string;
   project: string;
   engineerInCharge: string;
+  // Field Work
   fieldTests: string;
-  technicianInCharge: string;
-  startDate: string;
-  endDate: string;
-  remarks: string;
+  fieldTechnician: string;
+  fieldStartDate: string;
+  fieldEndDate: string;
+  fieldRemarks: string;
+  // Lab Work
+  labTestsDescription: string;
+  labTechnician: string;
+  labStartDate: string;
+  labAgreedDeliveryDate: string;
+  labAgreedDeliverySignature: string;
+  labActualDeliveryDate: string;
+  labActualDeliverySignature: string;
+  labRemarks: string;
+  // Reporting
+  acknowledgement: string;
+  reportIssuedBy: string;
+  reportPickedBy: string;
+  reportContact: string;
+  reportDateTime: string;
+  sampleReceiptNumber: string;
 };
-
