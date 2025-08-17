@@ -143,6 +143,42 @@ export interface GroupedBlockBrickSample extends BlockBrickSample {
   samples: BlockBrickSample[];
 }
 
+export type CylinderSample = {
+  id: string; // Document ID from firestore
+  sampleId: string; // Human-readable sample ID
+  receiptId: string;
+  clientName: string;
+  projectTitle: string;
+  receivedAt: string;
+  testId: string;
+  sampleSerialNumber?: string;
+  setNumber?: number;
+  castingDate?: string;
+  testingDate?: string;
+  class?: string;
+  age?: number;
+  areaOfUse?: string;
+  diameter?: number;
+  height?: number;
+  weight?: number;
+  load?: number;
+  modeOfFailure?: string;
+  machineUsed?: string;
+  recordedTemp?: number;
+  certificateNumber?: string;
+  comment?: string;
+  technician?: string;
+  dateOfIssue?: string;
+  issueId?: string;
+  takenBy?: string;
+  dateTaken?: string;
+  contact?: string;
+};
+
+export interface GroupedCylinderSample extends CylinderSample {
+    samples: CylinderSample[];
+}
+
 
 export type IssueCertificateData = {
   certificateNumber: string;

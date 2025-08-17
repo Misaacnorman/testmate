@@ -61,6 +61,8 @@ export async function processAndSaveReceipt(receiptData: any): Promise<{ id: str
                     let registerName = lowerCaseCategory.replace(/\s/g, '-') + '-register';
                     if (lowerCaseCategory === 'bricks' || lowerCaseCategory === 'blocks') {
                         registerName = 'blocks-bricks-register';
+                    } else if (lowerCaseCategory === 'cylinder') {
+                        registerName = 'cylinder-register';
                     }
 
                     const sampleRef = doc(db, registerName, sampleDocId);
@@ -92,8 +94,10 @@ export async function processAndSaveReceipt(receiptData: any): Promise<{ id: str
                 
                 const lowerCaseCategory = category.toLowerCase();
                 let registerName = lowerCaseCategory.replace(/\s/g, '-') + '-register';
-                if (lowerCaseCategory === 'bricks' || lowerCaseCategory === 'blocks') {
+                 if (lowerCaseCategory === 'bricks' || lowerCaseCategory === 'blocks') {
                     registerName = 'blocks-bricks-register';
+                } else if (lowerCaseCategory === 'cylinder') {
+                    registerName = 'cylinder-register';
                 }
 
 

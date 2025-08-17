@@ -253,7 +253,8 @@ async function updateSampleSetDetails(receiptId, testId, setNumber, data) {
     ];
     updatableSharedFields.forEach((field)=>{
         if (data.hasOwnProperty(field)) {
-            sharedUpdateData[field] = data[field];
+            const value = data[field];
+            sharedUpdateData[field] = value === undefined ? null : value;
         }
     });
     snapshot.docs.forEach((document)=>{
@@ -275,7 +276,8 @@ async function updateSampleSetDetails(receiptId, testId, setNumber, data) {
             ];
             updatableIndividualFields.forEach((field)=>{
                 if (individualSampleData.hasOwnProperty(field)) {
-                    updateDataForDoc[field] = individualSampleData[field];
+                    const value = individualSampleData[field];
+                    updateDataForDoc[field] = value === undefined ? null : value;
                 }
             });
         }
@@ -307,7 +309,7 @@ async function updateCubeTestResults(receiptId, testId, setNumber, data) {
     const batch = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["writeBatch"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$firebase$2f$config$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["db"]);
     const sharedData = {
         machineUsed: data.machineUsed,
-        recordedTemp: data.recordedTemp
+        recordedTemp: data.recordedTemp === undefined ? null : data.recordedTemp
     };
     snapshot.docs.forEach((doc)=>{
         const sampleId = doc.id;
@@ -322,6 +324,11 @@ async function updateCubeTestResults(receiptId, testId, setNumber, data) {
                 load: sampleData.load,
                 modeOfFailure: sampleData.modeOfFailure
             };
+            for(const key in updatePayload){
+                if (updatePayload[key] === undefined) {
+                    updatePayload[key] = null;
+                }
+            }
             batch.update(doc.ref, updatePayload);
         }
     });
@@ -334,6 +341,11 @@ async function issueCertificateForCubeTest(receiptId, testId, setNumber, data) {
         throw new Error(`No samples found for receiptId ${receiptId}, testId ${testId} and setNumber ${setNumber}.`);
     }
     const batch = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["writeBatch"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$firebase$2f$config$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["db"]);
+    for(const key in data){
+        if (data[key] === undefined) {
+            data[key] = null;
+        }
+    }
     snapshot.docs.forEach((doc)=>{
         batch.update(doc.ref, data);
     });
@@ -429,7 +441,8 @@ async function updateSampleSetDetails(receiptId, testId, setNumber, data) {
     ];
     updatableSharedFields.forEach((field)=>{
         if (data.hasOwnProperty(field)) {
-            sharedUpdateData[field] = data[field];
+            const value = data[field];
+            sharedUpdateData[field] = value === undefined ? null : value;
         }
     });
     snapshot.docs.forEach((document)=>{
@@ -451,7 +464,8 @@ async function updateSampleSetDetails(receiptId, testId, setNumber, data) {
             ];
             updatableIndividualFields.forEach((field)=>{
                 if (individualSampleData.hasOwnProperty(field)) {
-                    updateDataForDoc[field] = individualSampleData[field];
+                    const value = individualSampleData[field];
+                    updateDataForDoc[field] = value === undefined ? null : value;
                 }
             });
         }
@@ -483,7 +497,7 @@ async function updatePaverTestResults(receiptId, testId, setNumber, data) {
     const batch = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["writeBatch"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$firebase$2f$config$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["db"]);
     const sharedData = {
         machineUsed: data.machineUsed,
-        recordedTemp: data.recordedTemp,
+        recordedTemp: data.recordedTemp === undefined ? null : data.recordedTemp,
         paversPerSqM: data.paversPerSqM
     };
     snapshot.docs.forEach((doc)=>{
@@ -499,6 +513,11 @@ async function updatePaverTestResults(receiptId, testId, setNumber, data) {
                 load: sampleData.load,
                 modeOfFailure: sampleData.modeOfFailure
             };
+            for(const key in updatePayload){
+                if (updatePayload[key] === undefined) {
+                    updatePayload[key] = null;
+                }
+            }
             batch.update(doc.ref, updatePayload);
         }
     });
@@ -511,6 +530,11 @@ async function issueCertificateForPaverTest(receiptId, testId, setNumber, data) 
         throw new Error(`No samples found for receiptId ${receiptId}, testId ${testId} and setNumber ${setNumber}.`);
     }
     const batch = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["writeBatch"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$firebase$2f$config$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["db"]);
+    for(const key in data){
+        if (data[key] === undefined) {
+            data[key] = null;
+        }
+    }
     snapshot.docs.forEach((doc)=>{
         batch.update(doc.ref, data);
     });
@@ -604,7 +628,8 @@ async function updateSampleSetDetails(receiptId, testId, setNumber, data) {
     ];
     updatableSharedFields.forEach((field)=>{
         if (data.hasOwnProperty(field)) {
-            sharedUpdateData[field] = data[field];
+            const value = data[field];
+            sharedUpdateData[field] = value === undefined ? null : value;
         }
     });
     snapshot.docs.forEach((document)=>{
@@ -635,7 +660,8 @@ async function updateSampleSetDetails(receiptId, testId, setNumber, data) {
             ];
             updatableIndividualFields.forEach((field)=>{
                 if (individualSampleData.hasOwnProperty(field)) {
-                    updateDataForDoc[field] = individualSampleData[field];
+                    const value = individualSampleData[field];
+                    updateDataForDoc[field] = value === undefined ? null : value;
                 }
             });
         }
@@ -667,7 +693,7 @@ async function updateBlockBrickTestResults(receiptId, testId, setNumber, data) {
     const batch = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["writeBatch"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$firebase$2f$config$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["db"]);
     const sharedData = {
         machineUsed: data.machineUsed,
-        recordedTemp: data.recordedTemp
+        recordedTemp: data.recordedTemp === undefined ? null : data.recordedTemp
     };
     snapshot.docs.forEach((doc)=>{
         const sampleId = doc.id;
@@ -691,6 +717,11 @@ async function updateBlockBrickTestResults(receiptId, testId, setNumber, data) {
                 notch_length: sampleData.notch_length,
                 notch_width: sampleData.notch_width
             };
+            for(const key in updatePayload){
+                if (updatePayload[key] === undefined) {
+                    updatePayload[key] = null;
+                }
+            }
             batch.update(doc.ref, updatePayload);
         }
     });
@@ -703,6 +734,11 @@ async function issueCertificateForBlockBrickTest(receiptId, testId, setNumber, d
         throw new Error(`No samples found for receiptId ${receiptId}, testId ${testId} and setNumber ${setNumber}.`);
     }
     const batch = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["writeBatch"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$firebase$2f$config$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["db"]);
+    for(const key in data){
+        if (data[key] === undefined) {
+            data[key] = null;
+        }
+    }
     snapshot.docs.forEach((doc)=>{
         batch.update(doc.ref, data);
     });
