@@ -1604,7 +1604,17 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
     const handleNext = async ()=>{
         const isValid = await form.trigger(`samples.${currentStep}`);
         if (isValid && currentStep < totalSteps - 1) {
-            setCurrentStep(currentStep + 1);
+            const currentValues = form.getValues(`samples.${currentStep}`);
+            const nextStepIndex = currentStep + 1;
+            // Carry over values to the next step if they haven't been touched yet.
+            const nextStepValues = form.getValues(`samples.${nextStepIndex}`);
+            const isNextStepPristine = Object.values(nextStepValues).every((val)=>val === 0 || val === '');
+            if (isNextStepPristine) {
+                form.setValue(`samples.${nextStepIndex}.machineUsed`, currentValues.machineUsed);
+                form.setValue(`samples.${nextStepIndex}.modeOfFailure`, currentValues.modeOfFailure);
+                form.setValue(`samples.${nextStepIndex}.recordedTemp`, currentValues.recordedTemp);
+            }
+            setCurrentStep(nextStepIndex);
         }
     };
     const handleBack = ()=>{
@@ -1631,7 +1641,7 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                             children: "Enter Test Results"
                         }, void 0, false, {
                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                            lineNumber: 119,
+                            lineNumber: 132,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DialogDescription"], {
@@ -1641,13 +1651,13 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                            lineNumber: 120,
+                            lineNumber: 133,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                    lineNumber: 118,
+                    lineNumber: 131,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1658,7 +1668,7 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                             className: "w-full"
                         }, void 0, false, {
                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                            lineNumber: 126,
+                            lineNumber: 139,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1674,12 +1684,12 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                            lineNumber: 127,
+                            lineNumber: 140,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$separator$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Separator"], {}, void 0, false, {
                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                            lineNumber: 130,
+                            lineNumber: 143,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1692,7 +1702,7 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                             children: "Dimensions (mm)"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                            lineNumber: 134,
+                                            lineNumber: 147,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1707,12 +1717,12 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                             type: "number"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                            lineNumber: 139,
+                                                            lineNumber: 152,
                                                             columnNumber: 46
                                                         }, void 0)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                    lineNumber: 136,
+                                                    lineNumber: 149,
                                                     columnNumber: 20
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -1724,12 +1734,12 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                             type: "number"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                            lineNumber: 144,
+                                                            lineNumber: 157,
                                                             columnNumber: 46
                                                         }, void 0)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                    lineNumber: 141,
+                                                    lineNumber: 154,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -1741,18 +1751,18 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                             type: "number"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                            lineNumber: 149,
+                                                            lineNumber: 162,
                                                             columnNumber: 46
                                                         }, void 0)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                    lineNumber: 146,
+                                                    lineNumber: 159,
                                                     columnNumber: 22
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                            lineNumber: 135,
+                                            lineNumber: 148,
                                             columnNumber: 17
                                         }, this),
                                         form.formState.errors.samples?.[currentStep]?.length && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1760,13 +1770,13 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                             children: form.formState.errors.samples[currentStep]?.length?.message
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                            lineNumber: 152,
+                                            lineNumber: 165,
                                             columnNumber: 74
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                    lineNumber: 133,
+                                    lineNumber: 146,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1777,7 +1787,7 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                             children: "Weight (kg)"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                            lineNumber: 156,
+                                            lineNumber: 169,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -1789,12 +1799,12 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                     ...field
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                    lineNumber: 160,
+                                                    lineNumber: 173,
                                                     columnNumber: 46
                                                 }, void 0)
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                            lineNumber: 157,
+                                            lineNumber: 170,
                                             columnNumber: 19
                                         }, this),
                                         form.formState.errors.samples?.[currentStep]?.weight && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1802,13 +1812,13 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                             children: form.formState.errors.samples[currentStep]?.weight?.message
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                            lineNumber: 162,
+                                            lineNumber: 175,
                                             columnNumber: 76
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                    lineNumber: 155,
+                                    lineNumber: 168,
                                     columnNumber: 16
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1819,7 +1829,7 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                             children: "Load (kN)"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                            lineNumber: 166,
+                                            lineNumber: 179,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -1831,12 +1841,12 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                     ...field
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                    lineNumber: 170,
+                                                    lineNumber: 183,
                                                     columnNumber: 46
                                                 }, void 0)
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                            lineNumber: 167,
+                                            lineNumber: 180,
                                             columnNumber: 20
                                         }, this),
                                         form.formState.errors.samples?.[currentStep]?.load && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1844,13 +1854,13 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                             children: form.formState.errors.samples[currentStep]?.load?.message
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                            lineNumber: 172,
+                                            lineNumber: 185,
                                             columnNumber: 74
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                    lineNumber: 165,
+                                    lineNumber: 178,
                                     columnNumber: 16
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1861,7 +1871,7 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                             children: "Machine Used"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                            lineNumber: 176,
+                                            lineNumber: 189,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -1872,12 +1882,12 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                     ...field
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                    lineNumber: 180,
+                                                    lineNumber: 193,
                                                     columnNumber: 46
                                                 }, void 0)
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                            lineNumber: 177,
+                                            lineNumber: 190,
                                             columnNumber: 19
                                         }, this),
                                         form.formState.errors.samples?.[currentStep]?.machineUsed && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1885,13 +1895,13 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                             children: form.formState.errors.samples[currentStep]?.machineUsed?.message
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                            lineNumber: 182,
+                                            lineNumber: 195,
                                             columnNumber: 81
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                    lineNumber: 175,
+                                    lineNumber: 188,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1902,7 +1912,7 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                             children: "Mode of Failure"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                            lineNumber: 186,
+                                            lineNumber: 199,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -1913,12 +1923,12 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                     ...field
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                    lineNumber: 190,
+                                                    lineNumber: 203,
                                                     columnNumber: 46
                                                 }, void 0)
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                            lineNumber: 187,
+                                            lineNumber: 200,
                                             columnNumber: 20
                                         }, this),
                                         form.formState.errors.samples?.[currentStep]?.modeOfFailure && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1926,13 +1936,13 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                             children: form.formState.errors.samples[currentStep]?.modeOfFailure?.message
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                            lineNumber: 192,
+                                            lineNumber: 205,
                                             columnNumber: 83
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                    lineNumber: 185,
+                                    lineNumber: 198,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1943,7 +1953,7 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                             children: "Temperature (°C)"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                            lineNumber: 196,
+                                            lineNumber: 209,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -1955,30 +1965,30 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                                     ...field
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                                    lineNumber: 200,
+                                                    lineNumber: 213,
                                                     columnNumber: 46
                                                 }, void 0)
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                            lineNumber: 197,
+                                            lineNumber: 210,
                                             columnNumber: 20
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                    lineNumber: 195,
+                                    lineNumber: 208,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                            lineNumber: 132,
+                            lineNumber: 145,
                             columnNumber: 12
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                    lineNumber: 125,
+                    lineNumber: 138,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DialogFooter"], {
@@ -1993,7 +2003,7 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                 children: "Back"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                lineNumber: 208,
+                                lineNumber: 221,
                                 columnNumber: 17
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2006,12 +2016,12 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                             children: "Cancel"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                            lineNumber: 213,
+                                            lineNumber: 226,
                                             columnNumber: 23
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                        lineNumber: 212,
+                                        lineNumber: 225,
                                         columnNumber: 21
                                     }, this),
                                     currentStep < totalSteps - 1 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -2019,42 +2029,42 @@ function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }) {
                                         children: "Next"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                        lineNumber: 216,
+                                        lineNumber: 229,
                                         columnNumber: 21
                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
                                         onClick: form.handleSubmit(onSubmit),
                                         children: "Save Results"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                        lineNumber: 218,
+                                        lineNumber: 231,
                                         columnNumber: 21
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                                lineNumber: 211,
+                                lineNumber: 224,
                                 columnNumber: 17
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                        lineNumber: 207,
+                        lineNumber: 220,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-                    lineNumber: 206,
+                    lineNumber: 219,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-            lineNumber: 117,
+            lineNumber: 130,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/app/registers/components/concrete-cubes/test-results-dialog.tsx",
-        lineNumber: 116,
+        lineNumber: 129,
         columnNumber: 5
     }, this);
 }

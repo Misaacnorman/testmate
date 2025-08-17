@@ -1,7 +1,7 @@
 
 'use server';
 
-import { collection, getDocs, orderBy, query, writeBatch, doc } from 'firebase/firestore';
+import { collection, getDocs, orderBy, query, writeBatch, doc, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import type { ConcreteCubeSample } from '@/lib/types';
 import { fromFirestore } from '@/lib/utils';
@@ -30,18 +30,40 @@ export async function updateCubeTestResults(updatedSamples: ConcreteCubeSample[]
     const batch = writeBatch(db);
     
     updatedSamples.forEach(sample => {
+        if (!sample.id) return;
         const docRef = doc(db, 'concrete-cubes-register', sample.id);
-        // We only update the fields relevant to the test results
-        batch.update(docRef, {
-            length: sample.length,
-            width: sample.width,
-            height: sample.height,
-            weight: sample.weight,
-            load: sample.load,
-            machineUsed: sample.machineUsed,
-            modeOfFailure: sample.modeOfFailure,
-            recordedTemp: sample.recordedTemp,
-        });
+        
+        const updateData: Partial<ConcreteCubeSample> = {};
+
+        // Only update fields that have a value to avoid overwriting with undefined/null
+        if (sample.length) updateData.length = sample.length;
+        if (sample.width) updateData.width = sample.width;
+        if (sample.height) updateData.height = sample.height;
+        if (sample.weight) updateData.weight = sample.weight;
+        if (sample.load) updateData.load = sample.load;
+        if (sample.machineUsed) updateData.machineUsed = sample.machineUsed;
+        if (sample.modeOfFailure) updateData.modeOfFailure = sample.modeOfFailure;
+        if (sample.recordedTemp) updateData.recordedTemp = sample.recordedTemp;
+
+        batch.update(docRef, updateData);
+    });
+
+    await batch.commit();
+}
+
+
+export async function deleteCubeTestGroup(receiptId: string, setNumber: number): Promise<void> {
+    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber));
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+        console.warn(`No samples found for receiptId ${receiptId} and setNumber ${setNumber} to delete.`);
+        return;
+    }
+
+    const batch = writeBatch(db);
+    snapshot.docs.forEach(document => {
+        batch.delete(document.ref);
     });
 
     await batch.commit();

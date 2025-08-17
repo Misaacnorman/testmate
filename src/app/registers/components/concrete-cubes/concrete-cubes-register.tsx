@@ -4,8 +4,8 @@
 import * as React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { getConcreteCubes, updateCubeTestResults } from './data';
-import { columns } from './columns';
+import { getConcreteCubes, updateCubeTestResults, deleteCubeTestGroup } from './data';
+import { getConcreteCubeColumns } from './columns';
 import { ConcreteCubeSample, GroupedConcreteCubeSample } from '@/lib/types';
 import { ConcreteCubesDataTable } from './data-table';
 import { Button } from '@/components/ui/button';
@@ -67,12 +67,34 @@ export function ConcreteCubesRegister() {
     loadSamples();
   }, [loadSamples]);
 
-  const handleOpenTestDialog = () => {
-    const selectedIndex = parseInt(Object.keys(rowSelection)[0], 10);
-    const sampleSet = samples[selectedIndex];
-    if (sampleSet) {
-        setSelectedSampleSet(sampleSet);
+  const handleOpenTestDialog = (sampleSet?: GroupedConcreteCubeSample) => {
+    let setToOpen = sampleSet;
+    if (!setToOpen) {
+        const selectedIndex = parseInt(Object.keys(rowSelection)[0], 10);
+        setToOpen = samples[selectedIndex];
+    }
+    
+    if (setToOpen) {
+        setSelectedSampleSet(setToOpen);
         setTestDialogOpen(true);
+    }
+  };
+
+  const handleDelete = async (receiptId: string, setNumber: number) => {
+    try {
+      await deleteCubeTestGroup(receiptId, setNumber);
+      toast({
+        title: 'Success',
+        description: `Sample group ${receiptId}-${setNumber} has been deleted.`,
+      });
+      loadSamples(); // Refresh data
+    } catch (error) {
+      console.error('Failed to delete sample group:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Delete Failed',
+        description: 'Could not delete the sample group from the register.',
+      });
     }
   };
 
@@ -96,6 +118,8 @@ export function ConcreteCubesRegister() {
         });
     }
   }
+  
+  const columns = React.useMemo(() => getConcreteCubeColumns({ onEdit: handleOpenTestDialog, onDelete: handleDelete }), [handleDelete]);
 
   return (
     <Card className="h-full flex flex-col">
@@ -109,7 +133,7 @@ export function ConcreteCubesRegister() {
                 </div>
                 <div className="flex gap-2">
                     <Button 
-                        onClick={handleOpenTestDialog}
+                        onClick={() => handleOpenTestDialog()}
                         disabled={Object.keys(rowSelection).length !== 1}
                     >
                         Test

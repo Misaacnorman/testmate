@@ -15,6 +15,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import type { GroupedConcreteCubeSample } from '@/lib/types';
 import { Separator } from '@/components/ui/separator';
 
@@ -29,7 +40,12 @@ const renderCellWithSubItems = (items: (string | number | undefined)[]) => (
   </div>
 );
 
-export const columns: ColumnDef<GroupedConcreteCubeSample>[] = [
+interface ConcreteCubeColumnsProps {
+  onEdit: (sampleSet: GroupedConcreteCubeSample) => void;
+  onDelete: (receiptId: string, setNumber: number) => void;
+}
+
+export const getConcreteCubeColumns = ({ onEdit, onDelete }: ConcreteCubeColumnsProps): ColumnDef<GroupedConcreteCubeSample>[] => [
   {
     id: 'select',
     header: ({ table }) => (
@@ -254,28 +270,46 @@ export const columns: ColumnDef<GroupedConcreteCubeSample>[] = [
     id: 'actions',
     cell: ({ row }) => {
       const rowCount = row.original.samples.length;
+      const sampleSet = row.original;
       return (
         <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">
-            <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuItem>Edit Record</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-destructive">
-                Delete Record
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-            </DropdownMenu>
+            <AlertDialog>
+              <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="h-8 w-8 p-0">
+                  <span className="sr-only">Open menu</span>
+                  <MoreHorizontal className="h-4 w-4" />
+                  </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={() => onEdit(sampleSet)}>Edit Record</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                   <AlertDialogTrigger asChild>
+                      <DropdownMenuItem className="text-destructive">
+                        Delete Record
+                      </DropdownMenuItem>
+                    </AlertDialogTrigger>
+              </DropdownMenuContent>
+              </DropdownMenu>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        This action cannot be undone. This will permanently delete this entire
+                        sample set ({sampleSet.samples.length} sample(s)) from the register.
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => onDelete(sampleSet.receiptId, sampleSet.setNumber || 0)}>
+                        Continue
+                    </AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+            </AlertDialog>
         </div>
       );
     },
   },
 ];
-
-    
