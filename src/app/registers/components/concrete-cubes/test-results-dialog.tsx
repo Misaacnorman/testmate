@@ -94,7 +94,20 @@ export function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }: Tes
   const handleNext = async () => {
     const isValid = await form.trigger(`samples.${currentStep}`);
     if (isValid && currentStep < totalSteps - 1) {
-      setCurrentStep(currentStep + 1);
+      const currentValues = form.getValues(`samples.${currentStep}`);
+      const nextStepIndex = currentStep + 1;
+      
+      // Carry over values to the next step if they haven't been touched yet.
+      const nextStepValues = form.getValues(`samples.${nextStepIndex}`);
+      const isNextStepPristine = Object.values(nextStepValues).every(val => val === 0 || val === '');
+
+      if (isNextStepPristine) {
+        form.setValue(`samples.${nextStepIndex}.machineUsed`, currentValues.machineUsed);
+        form.setValue(`samples.${nextStepIndex}.modeOfFailure`, currentValues.modeOfFailure);
+        form.setValue(`samples.${nextStepIndex}.recordedTemp`, currentValues.recordedTemp);
+      }
+      
+      setCurrentStep(nextStepIndex);
     }
   };
 
