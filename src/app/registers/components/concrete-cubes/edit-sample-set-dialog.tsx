@@ -148,37 +148,42 @@ export function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }: E
     }
   }, [sampleSet, user, open, form]);
 
-  const processForm = async (event: React.MouseEvent<HTMLButtonElement>) => {
-    let isValid = false;
+  const validateStep = async () => {
     const currentStepName = steps[currentStep];
-
     if (currentStepName === 'Receipt Details') {
-      isValid = await form.trigger(['clientName', 'projectTitle']);
-    } else if (currentStepName === 'Test Results') {
-      isValid = await form.trigger(['samples', 'machineUsed', 'recordedTemp']);
-    } else if (currentStepName === 'Issue Details') {
-      isValid = await form.trigger(['certificateNumber', 'takenBy', 'contact']);
-    } else {
-        isValid = true;
+      return await form.trigger(['clientName', 'projectTitle']);
     }
-    
+    if (currentStepName === 'Test Results') {
+      return await form.trigger(['samples', 'machineUsed', 'recordedTemp']);
+    }
+    if (currentStepName === 'Issue Details') {
+      return await form.trigger(['certificateNumber', 'takenBy', 'contact']);
+    }
+    return true;
+  };
+
+  const handleNext = async () => {
+    const isValid = await validateStep();
     if (!isValid) return;
 
-    const buttonName = event.currentTarget.name;
-
-    if (buttonName === 'next' && currentStep < steps.length - 1) {
+    if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
-    } else if (buttonName === 'save') {
-        const data = form.getValues();
-        const finalData: Partial<GroupedConcreteCubeSample> = {
-            ...data,
-            samples: sampleSet.samples.map((originalSample, index) => ({
-                ...originalSample,
-                ...data.samples[index],
-            })),
-        };
-        onSave(finalData);
     }
+  };
+
+  const handleSave = async () => {
+    const isValid = await validateStep();
+    if (!isValid) return;
+
+    const data = form.getValues();
+    const finalData: Partial<GroupedConcreteCubeSample> = {
+      ...data,
+      samples: sampleSet.samples.map((originalSample, index) => ({
+        ...originalSample,
+        ...data.samples[index],
+      })),
+    };
+    onSave(finalData);
   };
 
 
@@ -332,9 +337,9 @@ export function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }: E
                             <Button variant="ghost" type="button">Cancel</Button>
                         </DialogClose>
                         {currentStep < steps.length - 1 ? (
-                            <Button type="button" name="next" onClick={processForm}>Next</Button>
+                            <Button type="button" onClick={handleNext}>Next</Button>
                         ) : (
-                            <Button type="button" name="save" onClick={processForm}>Save Changes</Button>
+                            <Button type="button" onClick={handleSave}>Save Changes</Button>
                         )}
                     </div>
                 </div>
