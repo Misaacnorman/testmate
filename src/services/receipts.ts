@@ -63,6 +63,8 @@ export async function processAndSaveReceipt(receiptData: any): Promise<{ id: str
                         registerName = 'blocks-bricks-register';
                     } else if (lowerCaseCategory === 'cylinder') {
                         registerName = 'cylinder-register';
+                    } else if (lowerCaseCategory === 'water absorption') {
+                        registerName = 'water-absorption-register';
                     }
 
                     const sampleRef = doc(db, registerName, sampleDocId);
@@ -98,6 +100,8 @@ export async function processAndSaveReceipt(receiptData: any): Promise<{ id: str
                     registerName = 'blocks-bricks-register';
                 } else if (lowerCaseCategory === 'cylinder') {
                     registerName = 'cylinder-register';
+                } else if (lowerCaseCategory === 'water absorption') {
+                    registerName = 'water-absorption-register';
                 }
 
 

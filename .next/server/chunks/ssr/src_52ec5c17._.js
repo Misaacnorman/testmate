@@ -82,7 +82,7 @@ function TestActions({ data, onFilter, onImport, onDeleteSelected, processing, s
     const fileInputRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
     const { toast } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$use$2d$toast$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useToast"])();
     const materials = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
-        const allMaterials = data.map((test)=>test.material);
+        const allMaterials = data.map((test)=>test.material).filter(Boolean);
         return [
             ...new Set(allMaterials)
         ];
@@ -92,10 +92,13 @@ function TestActions({ data, onFilter, onImport, onDeleteSelected, processing, s
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         let filtered = data;
         if (searchTerm) {
-            filtered = filtered.filter((test)=>test.name.toLowerCase().includes(searchTerm.toLowerCase()) || test.id.toLowerCase().includes(searchTerm.toLowerCase()) || test.material.toLowerCase().includes(searchTerm.toLowerCase()));
+            filtered = filtered.filter((test)=>{
+                const term = searchTerm.toLowerCase();
+                return test.name && test.name.toLowerCase().includes(term) || test.id && test.id.toLowerCase().includes(term) || test.material && test.material.toLowerCase().includes(term);
+            });
         }
         if (materialFilter.length > 0) {
-            filtered = filtered.filter((test)=>materialFilter.includes(test.material));
+            filtered = filtered.filter((test)=>test.material && materialFilter.includes(test.material));
         }
         if (accreditationFilter !== null) {
             const isAccredited = accreditationFilter === 'Accredited';
@@ -142,19 +145,19 @@ function TestActions({ data, onFilter, onImport, onDeleteSelected, processing, s
                             className: "mr-2"
                         }, void 0, false, {
                             fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                            lineNumber: 97,
+                            lineNumber: 100,
                             columnNumber: 83
                         }, this),
                         "Download"
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                    lineNumber: 97,
+                    lineNumber: 100,
                     columnNumber: 60
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                lineNumber: 97,
+                lineNumber: 100,
                 columnNumber: 17
             }, this)
         });
@@ -200,7 +203,7 @@ function TestActions({ data, onFilter, onImport, onDeleteSelected, processing, s
                         className: "absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"
                     }, void 0, false, {
                         fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                        lineNumber: 131,
+                        lineNumber: 134,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -212,13 +215,13 @@ function TestActions({ data, onFilter, onImport, onDeleteSelected, processing, s
                         disabled: processing
                     }, void 0, false, {
                         fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                        lineNumber: 132,
+                        lineNumber: 135,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                lineNumber: 130,
+                lineNumber: 133,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenu"], {
@@ -235,7 +238,7 @@ function TestActions({ data, onFilter, onImport, onDeleteSelected, processing, s
                                     className: "h-3.5 w-3.5"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                                    lineNumber: 144,
+                                    lineNumber: 147,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -243,7 +246,7 @@ function TestActions({ data, onFilter, onImport, onDeleteSelected, processing, s
                                     children: "Filter"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                                    lineNumber: 145,
+                                    lineNumber: 148,
                                     columnNumber: 13
                                 }, this),
                                 activeFilterCount > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Badge"], {
@@ -251,18 +254,18 @@ function TestActions({ data, onFilter, onImport, onDeleteSelected, processing, s
                                     children: activeFilterCount
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                                    lineNumber: 146,
+                                    lineNumber: 149,
                                     columnNumber: 39
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                            lineNumber: 143,
+                            lineNumber: 146,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                        lineNumber: 142,
+                        lineNumber: 145,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenuContent"], {
@@ -273,12 +276,12 @@ function TestActions({ data, onFilter, onImport, onDeleteSelected, processing, s
                                 children: "Filter by Material"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                                lineNumber: 150,
+                                lineNumber: 153,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenuSeparator"], {}, void 0, false, {
                                 fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                                lineNumber: 151,
+                                lineNumber: 154,
                                 columnNumber: 11
                             }, this),
                             materials.map((material)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenuCheckboxItem"], {
@@ -287,19 +290,19 @@ function TestActions({ data, onFilter, onImport, onDeleteSelected, processing, s
                                     children: material
                                 }, material, false, {
                                     fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                                    lineNumber: 153,
+                                    lineNumber: 156,
                                     columnNumber: 13
                                 }, this)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenuSeparator"], {}, void 0, false, {
                                 fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                                lineNumber: 161,
+                                lineNumber: 164,
                                 columnNumber: 12
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenuLabel"], {
                                 children: "Accreditation"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                                lineNumber: 162,
+                                lineNumber: 165,
                                 columnNumber: 12
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenuCheckboxItem"], {
@@ -308,7 +311,7 @@ function TestActions({ data, onFilter, onImport, onDeleteSelected, processing, s
                                 children: "Accredited"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                                lineNumber: 163,
+                                lineNumber: 166,
                                 columnNumber: 12
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenuCheckboxItem"], {
@@ -317,19 +320,19 @@ function TestActions({ data, onFilter, onImport, onDeleteSelected, processing, s
                                 children: "Not Accredited"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                                lineNumber: 164,
+                                lineNumber: 167,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                        lineNumber: 149,
+                        lineNumber: 152,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                lineNumber: 141,
+                lineNumber: 144,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -340,7 +343,7 @@ function TestActions({ data, onFilter, onImport, onDeleteSelected, processing, s
                 accept: ".xlsx, .xls, .csv"
             }, void 0, false, {
                 fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                lineNumber: 169,
+                lineNumber: 172,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -354,13 +357,13 @@ function TestActions({ data, onFilter, onImport, onDeleteSelected, processing, s
                         className: "animate-spin"
                     }, void 0, false, {
                         fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                        lineNumber: 177,
+                        lineNumber: 180,
                         columnNumber: 23
                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$upload$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Upload$3e$__["Upload"], {
                         className: "h-3.5 w-3.5"
                     }, void 0, false, {
                         fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                        lineNumber: 177,
+                        lineNumber: 180,
                         columnNumber: 62
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -368,13 +371,13 @@ function TestActions({ data, onFilter, onImport, onDeleteSelected, processing, s
                         children: "Import"
                     }, void 0, false, {
                         fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                        lineNumber: 178,
+                        lineNumber: 181,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                lineNumber: 176,
+                lineNumber: 179,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -388,7 +391,7 @@ function TestActions({ data, onFilter, onImport, onDeleteSelected, processing, s
                         className: "h-3.5 w-3.5"
                     }, void 0, false, {
                         fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                        lineNumber: 182,
+                        lineNumber: 185,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -396,13 +399,13 @@ function TestActions({ data, onFilter, onImport, onDeleteSelected, processing, s
                         children: "Export"
                     }, void 0, false, {
                         fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                        lineNumber: 183,
+                        lineNumber: 186,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                lineNumber: 181,
+                lineNumber: 184,
                 columnNumber: 7
             }, this),
             selectionCount > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -416,7 +419,7 @@ function TestActions({ data, onFilter, onImport, onDeleteSelected, processing, s
                         className: "h-3.5 w-3.5"
                     }, void 0, false, {
                         fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                        lineNumber: 188,
+                        lineNumber: 191,
                         columnNumber: 13
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -427,13 +430,13 @@ function TestActions({ data, onFilter, onImport, onDeleteSelected, processing, s
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                        lineNumber: 189,
+                        lineNumber: 192,
                         columnNumber: 13
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                lineNumber: 187,
+                lineNumber: 190,
                 columnNumber: 11
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -444,13 +447,13 @@ function TestActions({ data, onFilter, onImport, onDeleteSelected, processing, s
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/tests/components/test-actions.tsx",
-                lineNumber: 192,
+                lineNumber: 195,
                 columnNumber: 8
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/tests/components/test-actions.tsx",
-        lineNumber: 129,
+        lineNumber: 132,
         columnNumber: 5
     }, this);
 }

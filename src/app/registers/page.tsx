@@ -12,6 +12,7 @@ import { ConcreteCubesRegister } from './components/concrete-cubes/concrete-cube
 import { PaversRegister } from './components/pavers/pavers-register';
 import { BlocksBricksRegister } from './components/blocks-bricks/blocks-bricks-register';
 import { CylindersRegister } from './components/cylinders/cylinders-register';
+import { WaterAbsorptionRegister } from './components/water-absorption/water-absorption-register';
 
 export default function RegistersPage() {
   return (
@@ -45,15 +46,8 @@ export default function RegistersPage() {
           <TabsContent value="cylinders" className="flex-grow">
              <CylindersRegister />
           </TabsContent>
-          <TabsContent value="water-absorption">
-            <Card>
-                <CardHeader>
-                    <CardTitle>Water Absorption Register</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <p>Content for Water Absorption will be added here.</p>
-                </CardContent>
-            </Card>
+          <TabsContent value="water-absorption" className="flex-grow">
+            <WaterAbsorptionRegister />
           </TabsContent>
         </Tabs>
       </div>

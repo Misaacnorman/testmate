@@ -179,6 +179,42 @@ export interface GroupedCylinderSample extends CylinderSample {
     samples: CylinderSample[];
 }
 
+export type WaterAbsorptionSample = {
+  id: string; // Document ID from firestore
+  sampleId: string; // Human-readable sample ID
+  receiptId: string;
+  clientName: string;
+  projectTitle: string;
+  receivedAt: string;
+  testId: string;
+  sampleSerialNumber?: string;
+  setNumber?: number;
+  castingDate?: string;
+  testingDate?: string;
+  class?: string;
+  age?: number;
+  areaOfUse?: string;
+  length?: number;
+  width?: number;
+  height?: number;
+  ovenDriedWeight?: number;
+  weightAfterSoaking?: number;
+  weightOfWater?: number;
+  calculatedWaterAbsorption?: number;
+  certificateNumber?: string;
+  comment?: string;
+  technician?: string;
+  dateOfIssue?: string;
+  issueId?: string;
+  takenBy?: string;
+  dateTaken?: string;
+  contact?: string;
+};
+
+export interface GroupedWaterAbsorptionSample extends WaterAbsorptionSample {
+    samples: WaterAbsorptionSample[];
+}
+
 
 export type IssueCertificateData = {
   certificateNumber: string;
