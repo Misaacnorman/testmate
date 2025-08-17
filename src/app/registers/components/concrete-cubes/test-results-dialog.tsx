@@ -77,12 +77,11 @@ export function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }: Tes
     }
   }, [sampleSet, open, form]);
 
-  const handleNext = () => {
+  const processStep = () => {
     if (currentStep < sampleSet.samples.length - 1) {
-        // Carry over the data from the current step to the next
         const currentValues = form.getValues(`samples.${currentStep}`);
         form.setValue(`samples.${currentStep + 1}`, {
-            ...form.getValues(`samples.${currentStep + 1}`), // Keep existing ID, etc.
+            ...form.getValues(`samples.${currentStep + 1}`),
             length: currentValues.length,
             width: currentValues.width,
             height: currentValues.height,
@@ -91,6 +90,17 @@ export function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }: Tes
             modeOfFailure: currentValues.modeOfFailure,
         });
         setCurrentStep(currentStep + 1);
+    } else {
+        // This is the final step, so we submit the form data
+        const data = form.getValues();
+         const finalData: Partial<GroupedConcreteCubeSample> = {
+          ...data,
+          samples: sampleSet.samples.map((originalSample, index) => ({
+            ...originalSample,
+            ...data.samples[index],
+          })),
+        };
+        onSave(finalData);
     }
   };
 
@@ -98,17 +108,6 @@ export function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }: Tes
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }
-  };
-
-  const onSubmit = (data: FormValues) => {
-    const finalData: Partial<GroupedConcreteCubeSample> = {
-      ...data,
-      samples: sampleSet.samples.map((originalSample, index) => ({
-        ...originalSample,
-        ...data.samples[index],
-      })),
-    };
-    onSave(finalData);
   };
   
   const currentSample = form.watch(`samples.${currentStep}`);
@@ -123,7 +122,7 @@ export function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }: Tes
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-1">
+        <div className="space-y-4 p-1">
           <div className="p-4 border rounded-lg space-y-4">
              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
@@ -173,16 +172,15 @@ export function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }: Tes
                 <div className="flex gap-2">
                     <Button variant="ghost" type="button" onClick={() => onOpenChange(false)}>Cancel</Button>
                     {currentStep < sampleSet.samples.length - 1 ? (
-                        <Button type="button" onClick={handleNext}>Next</Button>
+                        <Button type="button" onClick={processStep}>Next</Button>
                     ) : (
-                        <Button type="submit">Save Results</Button>
+                        <Button type="button" onClick={processStep}>Save Results</Button>
                     )}
                 </div>
             </div>
           </DialogFooter>
-        </form>
+        </div>
       </DialogContent>
     </Dialog>
   );
 }
-

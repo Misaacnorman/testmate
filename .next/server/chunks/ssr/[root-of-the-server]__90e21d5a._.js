@@ -183,9 +183,11 @@ function fromFirestore(data) {
 
 var { g: global, __dirname } = __turbopack_context__;
 {
-/* __next_internal_action_entry_do_not_use__ [{"00a397b6fc7964f531715ad9fae934640560c2de96":"getConcreteCubes","6074eae2d7a8b12208d8f4bd6de0f79e6773a47ee7":"deleteCubeTestGroup","703ca03c4527c8e17b524a8340f5c7fa96254f9859":"updateSampleSetDetails"},"",""] */ __turbopack_context__.s({
+/* __next_internal_action_entry_do_not_use__ [{"00a397b6fc7964f531715ad9fae934640560c2de96":"getConcreteCubes","6074eae2d7a8b12208d8f4bd6de0f79e6773a47ee7":"deleteCubeTestGroup","703ca03c4527c8e17b524a8340f5c7fa96254f9859":"updateSampleSetDetails","707ef623f9fcc5aa515abfe0a22b4d6f6647380cf3":"issueCertificateForCubeTest","708385756c86f70ccb930927038bff8219f3f85bf8":"updateCubeTestResults"},"",""] */ __turbopack_context__.s({
     "deleteCubeTestGroup": (()=>deleteCubeTestGroup),
     "getConcreteCubes": (()=>getConcreteCubes),
+    "issueCertificateForCubeTest": (()=>issueCertificateForCubeTest),
+    "updateCubeTestResults": (()=>updateCubeTestResults),
     "updateSampleSetDetails": (()=>updateSampleSetDetails)
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/build/webpack/loaders/next-flight-loader/server-reference.js [app-rsc] (ecmascript)");
@@ -296,15 +298,60 @@ async function deleteCubeTestGroup(receiptId, setNumber) {
     });
     await batch.commit();
 }
+async function updateCubeTestResults(receiptId, setNumber, data) {
+    const q = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["query"])(registerCollection, (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["where"])('receiptId', '==', receiptId), (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["where"])('setNumber', '==', setNumber));
+    const snapshot = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["getDocs"])(q);
+    if (snapshot.empty) {
+        throw new Error(`No samples found for receiptId ${receiptId} and setNumber ${setNumber}.`);
+    }
+    const batch = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["writeBatch"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$firebase$2f$config$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["db"]);
+    const sharedData = {
+        machineUsed: data.machineUsed,
+        recordedTemp: data.recordedTemp
+    };
+    snapshot.docs.forEach((doc)=>{
+        const sampleId = doc.id;
+        const sampleData = data.samples?.find((s)=>s.id === sampleId);
+        if (sampleData) {
+            const updatePayload = {
+                ...sharedData,
+                length: sampleData.length,
+                width: sampleData.width,
+                height: sampleData.height,
+                weight: sampleData.weight,
+                load: sampleData.load,
+                modeOfFailure: sampleData.modeOfFailure
+            };
+            batch.update(doc.ref, updatePayload);
+        }
+    });
+    await batch.commit();
+}
+async function issueCertificateForCubeTest(receiptId, setNumber, data) {
+    const q = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["query"])(registerCollection, (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["where"])('receiptId', '==', receiptId), (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["where"])('setNumber', '==', setNumber));
+    const snapshot = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["getDocs"])(q);
+    if (snapshot.empty) {
+        throw new Error(`No samples found for receiptId ${receiptId} and setNumber ${setNumber}.`);
+    }
+    const batch = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["writeBatch"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$firebase$2f$config$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["db"]);
+    snapshot.docs.forEach((doc)=>{
+        batch.update(doc.ref, data);
+    });
+    await batch.commit();
+}
 ;
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$validate$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["ensureServerEntryExports"])([
     getConcreteCubes,
     updateSampleSetDetails,
-    deleteCubeTestGroup
+    deleteCubeTestGroup,
+    updateCubeTestResults,
+    issueCertificateForCubeTest
 ]);
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(getConcreteCubes, "00a397b6fc7964f531715ad9fae934640560c2de96", null);
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(updateSampleSetDetails, "703ca03c4527c8e17b524a8340f5c7fa96254f9859", null);
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(deleteCubeTestGroup, "6074eae2d7a8b12208d8f4bd6de0f79e6773a47ee7", null);
+(0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(updateCubeTestResults, "708385756c86f70ccb930927038bff8219f3f85bf8", null);
+(0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(issueCertificateForCubeTest, "707ef623f9fcc5aa515abfe0a22b4d6f6647380cf3", null);
 }}),
 "[project]/.next-internal/server/app/registers/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/registers/components/concrete-cubes/data.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript) <locals>": ((__turbopack_context__) => {
 "use strict";
@@ -313,6 +360,8 @@ var { g: global, __dirname } = __turbopack_context__;
 {
 __turbopack_context__.s({});
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$data$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/app/registers/components/concrete-cubes/data.ts [app-rsc] (ecmascript)");
+;
+;
 ;
 ;
 ;
@@ -334,7 +383,9 @@ var { g: global, __dirname } = __turbopack_context__;
 __turbopack_context__.s({
     "00a397b6fc7964f531715ad9fae934640560c2de96": (()=>__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$data$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["getConcreteCubes"]),
     "6074eae2d7a8b12208d8f4bd6de0f79e6773a47ee7": (()=>__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$data$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["deleteCubeTestGroup"]),
-    "703ca03c4527c8e17b524a8340f5c7fa96254f9859": (()=>__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$data$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["updateSampleSetDetails"])
+    "703ca03c4527c8e17b524a8340f5c7fa96254f9859": (()=>__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$data$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["updateSampleSetDetails"]),
+    "707ef623f9fcc5aa515abfe0a22b4d6f6647380cf3": (()=>__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$data$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["issueCertificateForCubeTest"]),
+    "708385756c86f70ccb930927038bff8219f3f85bf8": (()=>__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$data$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["updateCubeTestResults"])
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$data$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/app/registers/components/concrete-cubes/data.ts [app-rsc] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f2e$next$2d$internal$2f$server$2f$app$2f$registers$2f$page$2f$actions$2e$js__$7b$__ACTIONS_MODULE0__$3d3e$__$225b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$data$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$2922$__$7d$__$5b$app$2d$rsc$5d$__$28$server__actions__loader$2c$__ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i('[project]/.next-internal/server/app/registers/page/actions.js { ACTIONS_MODULE0 => "[project]/src/app/registers/components/concrete-cubes/data.ts [app-rsc] (ecmascript)" } [app-rsc] (server actions loader, ecmascript) <locals>');
@@ -347,7 +398,9 @@ var { g: global, __dirname } = __turbopack_context__;
 __turbopack_context__.s({
     "00a397b6fc7964f531715ad9fae934640560c2de96": (()=>__TURBOPACK__imported__module__$5b$project$5d2f2e$next$2d$internal$2f$server$2f$app$2f$registers$2f$page$2f$actions$2e$js__$7b$__ACTIONS_MODULE0__$3d3e$__$225b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$data$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$2922$__$7d$__$5b$app$2d$rsc$5d$__$28$server__actions__loader$2c$__ecmascript$29$__$3c$exports$3e$__["00a397b6fc7964f531715ad9fae934640560c2de96"]),
     "6074eae2d7a8b12208d8f4bd6de0f79e6773a47ee7": (()=>__TURBOPACK__imported__module__$5b$project$5d2f2e$next$2d$internal$2f$server$2f$app$2f$registers$2f$page$2f$actions$2e$js__$7b$__ACTIONS_MODULE0__$3d3e$__$225b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$data$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$2922$__$7d$__$5b$app$2d$rsc$5d$__$28$server__actions__loader$2c$__ecmascript$29$__$3c$exports$3e$__["6074eae2d7a8b12208d8f4bd6de0f79e6773a47ee7"]),
-    "703ca03c4527c8e17b524a8340f5c7fa96254f9859": (()=>__TURBOPACK__imported__module__$5b$project$5d2f2e$next$2d$internal$2f$server$2f$app$2f$registers$2f$page$2f$actions$2e$js__$7b$__ACTIONS_MODULE0__$3d3e$__$225b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$data$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$2922$__$7d$__$5b$app$2d$rsc$5d$__$28$server__actions__loader$2c$__ecmascript$29$__$3c$exports$3e$__["703ca03c4527c8e17b524a8340f5c7fa96254f9859"])
+    "703ca03c4527c8e17b524a8340f5c7fa96254f9859": (()=>__TURBOPACK__imported__module__$5b$project$5d2f2e$next$2d$internal$2f$server$2f$app$2f$registers$2f$page$2f$actions$2e$js__$7b$__ACTIONS_MODULE0__$3d3e$__$225b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$data$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$2922$__$7d$__$5b$app$2d$rsc$5d$__$28$server__actions__loader$2c$__ecmascript$29$__$3c$exports$3e$__["703ca03c4527c8e17b524a8340f5c7fa96254f9859"]),
+    "707ef623f9fcc5aa515abfe0a22b4d6f6647380cf3": (()=>__TURBOPACK__imported__module__$5b$project$5d2f2e$next$2d$internal$2f$server$2f$app$2f$registers$2f$page$2f$actions$2e$js__$7b$__ACTIONS_MODULE0__$3d3e$__$225b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$data$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$2922$__$7d$__$5b$app$2d$rsc$5d$__$28$server__actions__loader$2c$__ecmascript$29$__$3c$exports$3e$__["707ef623f9fcc5aa515abfe0a22b4d6f6647380cf3"]),
+    "708385756c86f70ccb930927038bff8219f3f85bf8": (()=>__TURBOPACK__imported__module__$5b$project$5d2f2e$next$2d$internal$2f$server$2f$app$2f$registers$2f$page$2f$actions$2e$js__$7b$__ACTIONS_MODULE0__$3d3e$__$225b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$data$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$2922$__$7d$__$5b$app$2d$rsc$5d$__$28$server__actions__loader$2c$__ecmascript$29$__$3c$exports$3e$__["708385756c86f70ccb930927038bff8219f3f85bf8"])
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f2e$next$2d$internal$2f$server$2f$app$2f$registers$2f$page$2f$actions$2e$js__$7b$__ACTIONS_MODULE0__$3d3e$__$225b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$data$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$2922$__$7d$__$5b$app$2d$rsc$5d$__$28$server__actions__loader$2c$__ecmascript$29$__$3c$module__evaluation$3e$__ = __turbopack_context__.i('[project]/.next-internal/server/app/registers/page/actions.js { ACTIONS_MODULE0 => "[project]/src/app/registers/components/concrete-cubes/data.ts [app-rsc] (ecmascript)" } [app-rsc] (server actions loader, ecmascript) <module evaluation>');
 var __TURBOPACK__imported__module__$5b$project$5d2f2e$next$2d$internal$2f$server$2f$app$2f$registers$2f$page$2f$actions$2e$js__$7b$__ACTIONS_MODULE0__$3d3e$__$225b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$concrete$2d$cubes$2f$data$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$2922$__$7d$__$5b$app$2d$rsc$5d$__$28$server__actions__loader$2c$__ecmascript$29$__$3c$exports$3e$__ = __turbopack_context__.i('[project]/.next-internal/server/app/registers/page/actions.js { ACTIONS_MODULE0 => "[project]/src/app/registers/components/concrete-cubes/data.ts [app-rsc] (ecmascript)" } [app-rsc] (server actions loader, ecmascript) <exports>');

@@ -147,7 +147,7 @@ export function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }: E
     }
   }, [sampleSet, user, open, form]);
 
-  const handleNext = async () => {
+  const processForm = async () => {
     let isValid = false;
     const currentStepName = steps[currentStep];
 
@@ -155,48 +155,35 @@ export function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }: E
       isValid = await form.trigger(['clientName', 'projectTitle']);
     } else if (currentStepName === 'Test Results') {
       isValid = await form.trigger(['samples', 'machineUsed', 'recordedTemp']);
+    } else if (currentStepName === 'Issue Details') {
+      isValid = await form.trigger(['certificateNumber', 'takenBy', 'contact']);
     } else {
         isValid = true;
     }
     
-    if (isValid && currentStep < steps.length - 1) {
+    if (!isValid) return;
+
+    if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
+    } else {
+        // This is the final step, so we submit the form data
+        const data = form.getValues();
+        const finalData: Partial<GroupedConcreteCubeSample> = {
+            ...data,
+            samples: sampleSet.samples.map((originalSample, index) => ({
+                ...originalSample,
+                ...data.samples[index],
+            })),
+        };
+        onSave(finalData);
     }
   };
+
 
   const handleBack = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }
-  };
-
-  const onSubmit = async (data: FormValues) => {
-    let isValid = false;
-    const currentStepName = steps[currentStep];
-
-    if (currentStepName === 'Issue Details') {
-        isValid = await form.trigger(['certificateNumber', 'takenBy', 'contact']);
-    } else {
-        isValid = true; // Assume other steps were validated on "Next"
-    }
-
-    if (!isValid) {
-        toast({
-            variant: 'destructive',
-            title: 'Validation Error',
-            description: 'Please fill in all required fields for the current step.',
-        });
-        return;
-    }
-    
-    const finalData: Partial<GroupedConcreteCubeSample> = {
-        ...data,
-        samples: sampleSet.samples.map((originalSample, index) => ({
-            ...originalSample,
-            ...data.samples[index],
-        })),
-    };
-    onSave(finalData);
   };
 
   return (
@@ -209,7 +196,8 @@ export function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }: E
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-1">
+        {/* The form tag is now just a container */}
+        <div className="space-y-4 p-1">
             <div className="flex items-center justify-center space-x-4 p-2">
                 {steps.map((stepName, index) => (
                     <div key={stepName} className="flex items-center space-x-2">
@@ -342,14 +330,14 @@ export function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }: E
                             <Button variant="ghost" type="button">Cancel</Button>
                         </DialogClose>
                         {currentStep < steps.length - 1 ? (
-                            <Button type="button" onClick={handleNext}>Next</Button>
+                            <Button type="button" onClick={processForm}>Next</Button>
                         ) : (
-                            <Button type="submit">Save Changes</Button>
+                            <Button type="button" onClick={processForm}>Save Changes</Button>
                         )}
                     </div>
                 </div>
             </DialogFooter>
-        </form>
+        </div>
       </DialogContent>
     </Dialog>
   );
