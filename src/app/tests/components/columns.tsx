@@ -60,7 +60,7 @@ export const columns = ({
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         className="text-center w-full whitespace-normal"
       >
-        Material Category
+        <div>Material<br/>Category</div>
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
@@ -97,7 +97,7 @@ export const columns = ({
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           className="text-center w-full whitespace-normal"
         >
-          Accreditation Status
+          <div>Accreditation<br/>Status</div>
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       ),
@@ -144,7 +144,7 @@ export const columns = ({
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="text-center w-full whitespace-normal"
+          className="text-center w-full"
         >
           <div>Amount<br/>(UGX)</div>
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -162,7 +162,7 @@ export const columns = ({
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="text-center w-full whitespace-normal"
+          className="text-center w-full"
         >
           <div>Amount<br/>(USD)</div>
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -188,7 +188,7 @@ export const columns = ({
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="text-center w-full whitespace-normal"
+          className="text-center w-full"
         >
           <div>Lead Time<br/>(Days)</div>
           <ArrowUpDown className="ml-2 h-4 w-4" />
