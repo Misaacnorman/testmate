@@ -58,11 +58,13 @@ export const columns = ({
       <Button
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        className="text-center w-full whitespace-normal"
       >
         Material Category
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
+    cell: ({ row }) => <div className="text-center">{row.getValue('material')}</div>,
   },
   {
     accessorKey: 'id',
@@ -75,15 +77,17 @@ export const columns = ({
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
-    cell: ({ row }) => <div className="font-medium">{row.getValue('id')}</div>,
+    cell: ({ row }) => <div className="font-medium text-center">{row.getValue('id')}</div>,
   },
   {
     accessorKey: 'name',
     header: 'Material Test',
+     cell: ({ row }) => <div className="text-center">{row.getValue('name')}</div>,
   },
   {
     accessorKey: 'method',
     header: 'Test Method(s)',
+    cell: ({ row }) => <div className="text-center w-[200px]">{row.getValue('method')}</div>,
   },
   {
     accessorKey: 'isAccredited',
@@ -91,6 +95,7 @@ export const columns = ({
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="text-center w-full whitespace-normal"
         >
           Accreditation Status
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -99,11 +104,13 @@ export const columns = ({
     cell: ({ row }) => {
       const test = row.original;
       return (
-        <Switch
-          checked={test.isAccredited}
-          onCheckedChange={(value) => onFieldUpdate(test.id, 'isAccredited', value)}
-          aria-label="Accreditation status"
-        />
+        <div className="flex justify-center">
+            <Switch
+                checked={test.isAccredited}
+                onCheckedChange={(value) => onFieldUpdate(test.id, 'isAccredited', value)}
+                aria-label="Accreditation status"
+            />
+        </div>
       );
     },
   },
@@ -121,11 +128,13 @@ export const columns = ({
     cell: ({ row }) => {
         const test = row.original;
         return (
-            <Input
-            value={test.unit}
-            onChange={(e) => onFieldUpdate(test.id, 'unit', e.target.value)}
-            className="w-24 border-none bg-transparent focus:bg-white focus:ring-1"
-            />
+            <div className="text-center">
+                <Input
+                value={test.unit}
+                onChange={(e) => onFieldUpdate(test.id, 'unit', e.target.value)}
+                className="w-24 border-none bg-transparent focus:bg-white focus:ring-1 text-center"
+                />
+            </div>
         );
     }
   },
@@ -143,7 +152,7 @@ export const columns = ({
     cell: ({ row }) => {
         const test = row.original;
         const formatted = new Intl.NumberFormat('en-US').format(test.priceUGX);
-        return <div className="text-right font-mono">{formatted}</div>;
+        return <div className="text-center font-mono">{formatted}</div>;
     }
   },
   {
@@ -160,12 +169,14 @@ export const columns = ({
       cell: ({ row }) => {
         const test = row.original;
         return (
-            <Input
-            type="number"
-            value={test.price}
-            onChange={(e) => onFieldUpdate(test.id, 'price', parseFloat(e.target.value) || 0)}
-            className="w-24 border-none bg-transparent text-right font-mono focus:bg-white focus:ring-1"
-            />
+            <div className="text-center">
+                <Input
+                type="number"
+                value={test.price}
+                onChange={(e) => onFieldUpdate(test.id, 'price', parseFloat(e.target.value) || 0)}
+                className="w-24 border-none bg-transparent text-center font-mono focus:bg-white focus:ring-1"
+                />
+            </div>
         );
     }
   },
@@ -175,6 +186,7 @@ export const columns = ({
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="text-center w-full whitespace-normal"
         >
           Lead Time (Days)
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -183,11 +195,13 @@ export const columns = ({
     cell: ({ row }) => {
         const test = row.original;
         return (
-            <Input
-            value={test.turnAroundTime}
-            onChange={(e) => onFieldUpdate(test.id, 'turnAroundTime', e.target.value)}
-            className="w-32 border-none bg-transparent focus:bg-white focus:ring-1"
-            />
+            <div className="text-center">
+                <Input
+                value={test.turnAroundTime}
+                onChange={(e) => onFieldUpdate(test.id, 'turnAroundTime', e.target.value)}
+                className="w-32 border-none bg-transparent focus:bg-white focus:ring-1 text-center"
+                />
+            </div>
         );
     }
   },
@@ -196,27 +210,29 @@ export const columns = ({
     cell: ({ row }) => {
       const test = row.original;
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => onEdit(test)}>
-              Edit Full Record
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => onDelete(test.id)}
-              className="text-destructive"
-            >
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="text-center">
+            <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuItem onClick={() => onEdit(test)}>
+                Edit Full Record
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                onClick={() => onDelete(test.id)}
+                className="text-destructive"
+                >
+                Delete
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+            </DropdownMenu>
+        </div>
       );
     },
   },
