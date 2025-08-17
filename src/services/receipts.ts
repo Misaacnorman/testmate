@@ -10,7 +10,6 @@ import {
 import { db } from '@/lib/firebase/config';
 
 // A simple function to generate a unique ID for the receipt.
-// In a real app, you might want a more robust solution.
 function generateReceiptId() {
   const date = new Date();
   const year = date.getFullYear().toString().slice(-2);
@@ -19,6 +18,15 @@ function generateReceiptId() {
   const randomPart = Math.random().toString(36).substring(2, 7).toUpperCase();
   return `${year}${month}${day}-${randomPart}`;
 }
+
+// A simple function to generate a unique ID for a sample.
+function generateSampleId(material: string, project: string) {
+    const materialCode = material.substring(0, 3).toUpperCase();
+    const projectCode = project.substring(0, 3).toUpperCase();
+    const randomPart = Math.random().toString(36).substring(2, 6).toUpperCase();
+    return `${materialCode}/${projectCode}-${randomPart}`;
+}
+
 
 export async function processAndSaveReceipt(receiptData: any): Promise<{ id: string }> {
   const batch = writeBatch(db);
@@ -36,9 +44,65 @@ export async function processAndSaveReceipt(receiptData: any): Promise<{ id: str
 
   batch.set(receiptRef, newReceipt);
 
-  // Here you could add more logic to update other collections,
-  // for example, a "samples" collection or an "audit-log".
-  // For now, we just save the receipt.
+  const { formData, categories, specialData } = receiptData;
+
+  Object.entries(categories).forEach(([category, catData]: [string, any]) => {
+     Object.entries(catData.tests).forEach(([testId, testData]: [string, any]) => {
+
+        const isSpecialCategory = Object.keys(specialData).includes(category) && specialData[category][testId];
+
+        if (isSpecialCategory) {
+            const specialTestData = specialData[category][testId];
+            specialTestData.sets.forEach((set: any, setIndex: number) => {
+                set.serials.forEach((serialId: string, sampleIndex: number) => {
+                    const sampleDocId = generateSampleId(category, formData.projectTitle);
+                    const registerName = category.toLowerCase().replace(/\s/g, '-') + '-register';
+                    const sampleRef = doc(db, registerName, sampleDocId);
+                    
+                    const sampleRecord = {
+                        sampleId: sampleDocId,
+                        receiptId: receiptId,
+                        clientName: formData.clientName,
+                        projectTitle: formData.projectTitle,
+                        material: category,
+                        test: testData.materialTest,
+                        testId: testId,
+                        sampleSerialNumber: serialId,
+                        status: 'Pending',
+                        receivedAt: receiptData.receiptDate,
+                        castingDate: set.castingDate || null,
+                        testingDate: set.testingDate || null,
+                        age: set.age || null,
+                        areaOfUse: set.areaOfUse || null,
+                        class: set.class || null,
+                        setNumber: setIndex + 1,
+                    };
+                    batch.set(sampleRef, sampleRecord);
+                });
+            });
+        } else {
+             for (let i = 0; i < testData.quantity; i++) {
+                const sampleDocId = generateSampleId(category, formData.projectTitle);
+                const registerName = category.toLowerCase().replace(/\s/g, '-') + '-register';
+                const sampleRef = doc(db, registerName, sampleDocId);
+                 const sampleRecord = {
+                    sampleId: sampleDocId,
+                    receiptId: receiptId,
+                    clientName: formData.clientName,
+                    projectTitle: formData.projectTitle,
+                    material: category,
+                    test: testData.materialTest,
+                    testId: testId,
+                    status: 'Pending',
+                    receivedAt: receiptData.receiptDate,
+                    notes: catData.notes || null,
+                };
+                batch.set(sampleRef, sampleRecord);
+             }
+        }
+     });
+  });
+
 
   await batch.commit();
 

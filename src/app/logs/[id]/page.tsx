@@ -1,0 +1,49 @@
+
+'use client';
+
+import { useEffect, useState } from 'react';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase/config';
+import { notFound } from 'next/navigation';
+import { SampleReceipt } from './components/sample-receipt';
+
+export default function LogPage({ params }: { params: { id: string } }) {
+  const [receiptData, setReceiptData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchReceipt = async () => {
+      if (!params.id) return;
+      try {
+        const docRef = doc(db, 'receipts', params.id);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          setReceiptData(docSnap.data());
+        } else {
+          setReceiptData(null);
+        }
+      } catch (error) {
+        console.error("Error fetching receipt:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReceipt();
+  }, [params.id]);
+
+  if (loading) {
+    return <div className="flex h-screen items-center justify-center">Loading receipt...</div>;
+  }
+
+  if (!receiptData) {
+    return notFound();
+  }
+
+  return (
+    <div className="p-4 sm:p-6 lg:p-8 bg-background">
+       <SampleReceipt data={receiptData} />
+    </div>
+  );
+}

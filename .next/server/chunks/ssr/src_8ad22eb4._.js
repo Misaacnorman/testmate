@@ -786,10 +786,11 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
         resetAllState
     ]);
     const uniqueMaterialCategories = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
-        const categories = allTests.map((test)=>test.material.toLowerCase().trim());
+        const categories = allTests.filter((test)=>typeof test.material === 'string') // Add this line to filter out tests without a material
+        .map((test)=>test.material.toLowerCase().trim());
         return [
             ...new Set(categories)
-        ].map((cat)=>allTests.find((t)=>t.material.toLowerCase().trim() === cat).material);
+        ].map((cat)=>allTests.find((t)=>t.material && t.material.toLowerCase().trim() === cat).material);
     }, [
         allTests
     ]);
@@ -1125,12 +1126,12 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                            lineNumber: 599,
+                            lineNumber: 601,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                        lineNumber: 598,
+                        lineNumber: 600,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$accordion$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AccordionContent"], {
@@ -1146,7 +1147,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                 children: "Casting Date"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 604,
+                                                lineNumber: 606,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$popover$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Popover"], {
@@ -1161,25 +1162,25 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                     className: "mr-2 h-4 w-4"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                    lineNumber: 614,
+                                                                    lineNumber: 616,
                                                                     columnNumber: 21
                                                                 }, this),
                                                                 set.castingDate ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])(new Date(set.castingDate), 'PPP') : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                     children: "Pick a date"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                    lineNumber: 618,
+                                                                    lineNumber: 620,
                                                                     columnNumber: 23
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                            lineNumber: 607,
+                                                            lineNumber: 609,
                                                             columnNumber: 19
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 606,
+                                                        lineNumber: 608,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$popover$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["PopoverContent"], {
@@ -1191,24 +1192,24 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                             initialFocus: true
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                            lineNumber: 623,
+                                                            lineNumber: 625,
                                                             columnNumber: 19
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 622,
+                                                        lineNumber: 624,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 605,
+                                                lineNumber: 607,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                        lineNumber: 603,
+                                        lineNumber: 605,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1218,7 +1219,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                 children: "Testing Date"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 635,
+                                                lineNumber: 637,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$popover$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Popover"], {
@@ -1233,25 +1234,25 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                     className: "mr-2 h-4 w-4"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                    lineNumber: 645,
+                                                                    lineNumber: 647,
                                                                     columnNumber: 21
                                                                 }, this),
                                                                 set.testingDate ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])(new Date(set.testingDate), 'PPP') : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                     children: "Pick a date"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                    lineNumber: 649,
+                                                                    lineNumber: 651,
                                                                     columnNumber: 23
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                            lineNumber: 638,
+                                                            lineNumber: 640,
                                                             columnNumber: 19
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 637,
+                                                        lineNumber: 639,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$popover$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["PopoverContent"], {
@@ -1263,24 +1264,24 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                             initialFocus: true
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                            lineNumber: 654,
+                                                            lineNumber: 656,
                                                             columnNumber: 19
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 653,
+                                                        lineNumber: 655,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 636,
+                                                lineNumber: 638,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                        lineNumber: 634,
+                                        lineNumber: 636,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1290,7 +1291,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                 children: "Age (Days)"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 668,
+                                                lineNumber: 670,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -1299,19 +1300,19 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                 onChange: (e)=>handleSetDataChange(category, testId, i, 'age', e.target.value)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 669,
+                                                lineNumber: 671,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                        lineNumber: 667,
+                                        lineNumber: 669,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                lineNumber: 602,
+                                lineNumber: 604,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1324,7 +1325,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                 children: "Area of Use"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 680,
+                                                lineNumber: 682,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -1332,13 +1333,13 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                 onChange: (e)=>handleSetDataChange(category, testId, i, 'areaOfUse', e.target.value)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 681,
+                                                lineNumber: 683,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                        lineNumber: 679,
+                                        lineNumber: 681,
                                         columnNumber: 13
                                     }, this),
                                     category.toLowerCase() === 'concrete cubes' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1348,7 +1349,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                 children: "Class"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 696,
+                                                lineNumber: 698,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -1356,19 +1357,19 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                 onChange: (e)=>handleSetDataChange(category, testId, i, 'class', e.target.value)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 697,
+                                                lineNumber: 699,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                        lineNumber: 695,
+                                        lineNumber: 697,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                lineNumber: 678,
+                                lineNumber: 680,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1378,7 +1379,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                         children: "Sample IDs"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                        lineNumber: 713,
+                                        lineNumber: 715,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1388,30 +1389,30 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                 onChange: (e)=>handleSampleIdChange(category, testId, i, sIndex, e.target.value)
                                             }, sIndex, false, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 718,
+                                                lineNumber: 720,
                                                 columnNumber: 19
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                        lineNumber: 714,
+                                        lineNumber: 716,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                lineNumber: 712,
+                                lineNumber: 714,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                        lineNumber: 601,
+                        lineNumber: 603,
                         columnNumber: 9
                     }, this)
                 ]
             }, i, true, {
                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                lineNumber: 597,
+                lineNumber: 599,
                 columnNumber: 7
             }, this));
     };
@@ -1436,7 +1437,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                            lineNumber: 750,
+                            lineNumber: 752,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogDescription"], {
@@ -1449,13 +1450,13 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                            lineNumber: 751,
+                            lineNumber: 753,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                    lineNumber: 749,
+                    lineNumber: 751,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1476,7 +1477,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         children: "Client Name"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 768,
+                                                        lineNumber: 770,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -1484,7 +1485,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         ...form1.register('clientName')
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 769,
+                                                        lineNumber: 771,
                                                         columnNumber: 21
                                                     }, this),
                                                     form1.formState.errors.clientName && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1492,13 +1493,13 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         children: form1.formState.errors.clientName.message
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 771,
+                                                        lineNumber: 773,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 767,
+                                                lineNumber: 769,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1509,7 +1510,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         children: "Client Address"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 777,
+                                                        lineNumber: 779,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -1517,7 +1518,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         ...form1.register('clientAddress')
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 778,
+                                                        lineNumber: 780,
                                                         columnNumber: 21
                                                     }, this),
                                                     form1.formState.errors.clientAddress && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1525,19 +1526,19 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         children: form1.formState.errors.clientAddress.message
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 783,
+                                                        lineNumber: 785,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 776,
+                                                lineNumber: 778,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                        lineNumber: 766,
+                                        lineNumber: 768,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1551,7 +1552,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         children: "Client Contact"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 791,
+                                                        lineNumber: 793,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -1559,7 +1560,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         ...form1.register('clientContact')
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 792,
+                                                        lineNumber: 794,
                                                         columnNumber: 21
                                                     }, this),
                                                     form1.formState.errors.clientContact && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1567,13 +1568,13 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         children: form1.formState.errors.clientContact.message
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 797,
+                                                        lineNumber: 799,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 790,
+                                                lineNumber: 792,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1583,7 +1584,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         children: "Is the billing client the same?"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 803,
+                                                        lineNumber: 805,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Controller"], {
@@ -1602,7 +1603,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                                 id: "yes"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                                lineNumber: 814,
+                                                                                lineNumber: 816,
                                                                                 columnNumber: 29
                                                                             }, void 0),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
@@ -1610,13 +1611,13 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                                 children: "Yes"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                                lineNumber: 815,
+                                                                                lineNumber: 817,
                                                                                 columnNumber: 29
                                                                             }, void 0)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                        lineNumber: 813,
+                                                                        lineNumber: 815,
                                                                         columnNumber: 27
                                                                     }, void 0),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1627,7 +1628,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                                 id: "no"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                                lineNumber: 818,
+                                                                                lineNumber: 820,
                                                                                 columnNumber: 29
                                                                             }, void 0),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
@@ -1635,36 +1636,36 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                                 children: "No"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                                lineNumber: 819,
+                                                                                lineNumber: 821,
                                                                                 columnNumber: 29
                                                                             }, void 0)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                        lineNumber: 817,
+                                                                        lineNumber: 819,
                                                                         columnNumber: 27
                                                                     }, void 0)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                lineNumber: 808,
+                                                                lineNumber: 810,
                                                                 columnNumber: 25
                                                             }, void 0)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 804,
+                                                        lineNumber: 806,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 802,
+                                                lineNumber: 804,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                        lineNumber: 789,
+                                        lineNumber: 791,
                                         columnNumber: 17
                                     }, this),
                                     form1.watch('isSameBillingClient') === 'no' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1681,7 +1682,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                 children: "Billing Client Name"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                lineNumber: 831,
+                                                                lineNumber: 833,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -1689,7 +1690,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                 ...form1.register('billingName')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                lineNumber: 832,
+                                                                lineNumber: 834,
                                                                 columnNumber: 25
                                                             }, this),
                                                             form1.formState.errors.billingName && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1697,13 +1698,13 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                 children: form1.formState.errors.billingName.message
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                lineNumber: 837,
+                                                                lineNumber: 839,
                                                                 columnNumber: 27
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 830,
+                                                        lineNumber: 832,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1714,7 +1715,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                 children: "Billing Client Address"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                lineNumber: 843,
+                                                                lineNumber: 845,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -1722,7 +1723,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                 ...form1.register('billingAddress')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                lineNumber: 846,
+                                                                lineNumber: 848,
                                                                 columnNumber: 25
                                                             }, this),
                                                             form1.formState.errors.billingAddress && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1730,19 +1731,19 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                 children: form1.formState.errors.billingAddress.message
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                lineNumber: 851,
+                                                                lineNumber: 853,
                                                                 columnNumber: 27
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 842,
+                                                        lineNumber: 844,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 829,
+                                                lineNumber: 831,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1753,7 +1754,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         children: "Billing Client Contact"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 858,
+                                                        lineNumber: 860,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -1761,7 +1762,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         ...form1.register('billingContact')
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 861,
+                                                        lineNumber: 863,
                                                         columnNumber: 23
                                                     }, this),
                                                     form1.formState.errors.billingContact && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1769,24 +1770,24 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         children: form1.formState.errors.billingContact.message
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 866,
+                                                        lineNumber: 868,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 857,
+                                                lineNumber: 859,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                        lineNumber: 828,
+                                        lineNumber: 830,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$separator$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Separator"], {}, void 0, false, {
                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                        lineNumber: 874,
+                                        lineNumber: 876,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1800,7 +1801,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         children: "Project Title"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 878,
+                                                        lineNumber: 880,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -1808,7 +1809,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         ...form1.register('projectTitle')
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 879,
+                                                        lineNumber: 881,
                                                         columnNumber: 21
                                                     }, this),
                                                     form1.formState.errors.projectTitle && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1816,13 +1817,13 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         children: form1.formState.errors.projectTitle.message
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 884,
+                                                        lineNumber: 886,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 877,
+                                                lineNumber: 879,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1832,7 +1833,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         children: "Date & Time of Receipt"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 890,
+                                                        lineNumber: 892,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -1841,19 +1842,19 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         className: "bg-muted/50"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 891,
+                                                        lineNumber: 893,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 889,
+                                                lineNumber: 891,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                        lineNumber: 876,
+                                        lineNumber: 878,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1867,7 +1868,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         children: "Sample Status on Arrival"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 901,
+                                                        lineNumber: 903,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -1875,7 +1876,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         ...form1.register('sampleStatus')
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 904,
+                                                        lineNumber: 906,
                                                         columnNumber: 21
                                                     }, this),
                                                     form1.formState.errors.sampleStatus && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1883,13 +1884,13 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         children: form1.formState.errors.sampleStatus.message
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 909,
+                                                        lineNumber: 911,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 900,
+                                                lineNumber: 902,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1900,7 +1901,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         children: "Received By"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 915,
+                                                        lineNumber: 917,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -1910,7 +1911,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         className: "bg-muted/50"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 916,
+                                                        lineNumber: 918,
                                                         columnNumber: 21
                                                     }, this),
                                                     form1.formState.errors.receivedBy && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1918,19 +1919,19 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         children: form1.formState.errors.receivedBy.message
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 923,
+                                                        lineNumber: 925,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 914,
+                                                lineNumber: 916,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                        lineNumber: 899,
+                                        lineNumber: 901,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1944,7 +1945,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         children: "Delivered By"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 931,
+                                                        lineNumber: 933,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -1952,7 +1953,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         ...form1.register('deliveredBy')
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 932,
+                                                        lineNumber: 934,
                                                         columnNumber: 21
                                                     }, this),
                                                     form1.formState.errors.deliveredBy && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1960,13 +1961,13 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         children: form1.formState.errors.deliveredBy.message
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 937,
+                                                        lineNumber: 939,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 930,
+                                                lineNumber: 932,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1977,7 +1978,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         children: "Deliverer's Contact"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 943,
+                                                        lineNumber: 945,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -1985,7 +1986,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         ...form1.register('deliveredByContact')
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 946,
+                                                        lineNumber: 948,
                                                         columnNumber: 21
                                                     }, this),
                                                     form1.formState.errors.deliveredByContact && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1993,19 +1994,19 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         children: form1.formState.errors.deliveredByContact.message
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 951,
+                                                        lineNumber: 953,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 942,
+                                                lineNumber: 944,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                        lineNumber: 929,
+                                        lineNumber: 931,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2017,7 +2018,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                     children: "Mode of Results Transmittal"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                    lineNumber: 959,
+                                                    lineNumber: 961,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Controller"], {
@@ -2043,7 +2044,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                             }
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                            lineNumber: 967,
+                                                                            lineNumber: 969,
                                                                             columnNumber: 31
                                                                         }, void 0),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
@@ -2051,23 +2052,23 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                             children: mode
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                            lineNumber: 983,
+                                                                            lineNumber: 985,
                                                                             columnNumber: 31
                                                                         }, void 0)
                                                                     ]
                                                                 }, mode, true, {
                                                                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                    lineNumber: 966,
+                                                                    lineNumber: 968,
                                                                     columnNumber: 29
                                                                 }, void 0))
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                            lineNumber: 964,
+                                                            lineNumber: 966,
                                                             columnNumber: 25
                                                         }, void 0)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                    lineNumber: 960,
+                                                    lineNumber: 962,
                                                     columnNumber: 21
                                                 }, this),
                                                 form1.formState.errors.transmittalModes && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2075,18 +2076,18 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                     children: form1.formState.errors.transmittalModes.message
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                    lineNumber: 990,
+                                                    lineNumber: 992,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                            lineNumber: 958,
+                                            lineNumber: 960,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                        lineNumber: 957,
+                                        lineNumber: 959,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2100,7 +2101,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         children: "Email Address"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 1000,
+                                                        lineNumber: 1002,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -2109,7 +2110,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         placeholder: "example@domain.com"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 1001,
+                                                        lineNumber: 1003,
                                                         columnNumber: 23
                                                     }, this),
                                                     form1.formState.errors.email && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2117,13 +2118,13 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         children: form1.formState.errors.email.message
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 1007,
+                                                        lineNumber: 1009,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 999,
+                                                lineNumber: 1001,
                                                 columnNumber: 21
                                             }, this),
                                             form1.watch('transmittalModes')?.includes('Whatsapp') && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2134,7 +2135,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         children: "Whatsapp Number"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 1015,
+                                                        lineNumber: 1017,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -2143,7 +2144,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         placeholder: "+256..."
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 1016,
+                                                        lineNumber: 1018,
                                                         columnNumber: 23
                                                     }, this),
                                                     form1.formState.errors.whatsapp && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2151,30 +2152,30 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         children: form1.formState.errors.whatsapp.message
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 1022,
+                                                        lineNumber: 1024,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 1014,
+                                                lineNumber: 1016,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                        lineNumber: 997,
+                                        lineNumber: 999,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                lineNumber: 765,
+                                lineNumber: 767,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                            lineNumber: 764,
+                            lineNumber: 766,
                             columnNumber: 13
                         }, this),
                         currentStep === 2 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2186,12 +2187,12 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                         className: "h-10 w-full"
                                     }, i, false, {
                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                        lineNumber: 1038,
+                                        lineNumber: 1040,
                                         columnNumber: 21
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                lineNumber: 1036,
+                                lineNumber: 1038,
                                 columnNumber: 17
                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4",
@@ -2204,7 +2205,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                 onCheckedChange: ()=>handleCategoryToggle(category)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 1045,
+                                                lineNumber: 1047,
                                                 columnNumber: 23
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
@@ -2213,23 +2214,23 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                 children: category
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 1050,
+                                                lineNumber: 1052,
                                                 columnNumber: 23
                                             }, this)
                                         ]
                                     }, `${category}-${index}`, true, {
                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                        lineNumber: 1044,
+                                        lineNumber: 1046,
                                         columnNumber: 21
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                lineNumber: 1042,
+                                lineNumber: 1044,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                            lineNumber: 1034,
+                            lineNumber: 1036,
                             columnNumber: 13
                         }, this),
                         currentStep === 3 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$accordion$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Accordion"], {
@@ -2247,7 +2248,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         children: category
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 1066,
+                                                        lineNumber: 1068,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2257,7 +2258,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                 children: "Sample Quantity:"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                lineNumber: 1070,
+                                                                lineNumber: 1072,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -2269,24 +2270,24 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                 min: 1
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                lineNumber: 1071,
+                                                                lineNumber: 1073,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 1069,
+                                                        lineNumber: 1071,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 1065,
+                                                lineNumber: 1067,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                            lineNumber: 1064,
+                                            lineNumber: 1066,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$accordion$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AccordionContent"], {
@@ -2299,12 +2300,12 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         children: "Select Tests:"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 1086,
+                                                        lineNumber: 1088,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                         className: "grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4",
-                                                        children: allTests.filter((t)=>t.material.toLowerCase().trim() === category.toLowerCase().trim()).map((test)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        children: allTests.filter((t)=>t.material && t.material.toLowerCase().trim() === category.toLowerCase().trim()).map((test)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                 className: "flex items-center justify-between",
                                                                 children: [
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2316,7 +2317,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                                 onCheckedChange: ()=>handleTestToggle(category, test)
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                                lineNumber: 1100,
+                                                                                lineNumber: 1102,
                                                                                 columnNumber: 33
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
@@ -2324,13 +2325,13 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                                 children: test.name
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                                lineNumber: 1109,
+                                                                                lineNumber: 1111,
                                                                                 columnNumber: 33
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                        lineNumber: 1099,
+                                                                        lineNumber: 1101,
                                                                         columnNumber: 31
                                                                     }, this),
                                                                     selectedCategories[category]?.tests[test.id] && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -2342,18 +2343,18 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                         min: 0
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                        lineNumber: 1114,
+                                                                        lineNumber: 1116,
                                                                         columnNumber: 33
                                                                     }, this)
                                                                 ]
                                                             }, test.id, true, {
                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                lineNumber: 1095,
+                                                                lineNumber: 1097,
                                                                 columnNumber: 29
                                                             }, this))
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 1087,
+                                                        lineNumber: 1089,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2362,7 +2363,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                 children: "Notes"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                lineNumber: 1136,
+                                                                lineNumber: 1138,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Textarea"], {
@@ -2371,35 +2372,35 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                 placeholder: "Add any specific notes for this category..."
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                lineNumber: 1137,
+                                                                lineNumber: 1139,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 1135,
+                                                        lineNumber: 1137,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 1085,
+                                                lineNumber: 1087,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                            lineNumber: 1084,
+                                            lineNumber: 1086,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, category, true, {
                                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                    lineNumber: 1063,
+                                    lineNumber: 1065,
                                     columnNumber: 17
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                            lineNumber: 1061,
+                            lineNumber: 1063,
                             columnNumber: 13
                         }, this),
                         currentStep === 4 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$accordion$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Accordion"], {
@@ -2414,12 +2415,12 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                 children: category
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 1157,
+                                                lineNumber: 1159,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                            lineNumber: 1156,
+                                            lineNumber: 1158,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$accordion$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AccordionContent"], {
@@ -2432,7 +2433,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                             children: testDetails.materialTest
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                            lineNumber: 1168,
+                                                            lineNumber: 1170,
                                                             columnNumber: 27
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2445,7 +2446,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                             children: "Number of Sets"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                            lineNumber: 1173,
+                                                                            lineNumber: 1175,
                                                                             columnNumber: 31
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -2459,13 +2460,13 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                             }
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                            lineNumber: 1174,
+                                                                            lineNumber: 1176,
                                                                             columnNumber: 31
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                    lineNumber: 1172,
+                                                                    lineNumber: 1174,
                                                                     columnNumber: 29
                                                                 }, this),
                                                                 testDetails.numberOfSets > 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2478,7 +2479,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                                     children: "Set Distribution"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                                    lineNumber: 1193,
+                                                                                    lineNumber: 1195,
                                                                                     columnNumber: 35
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2493,13 +2494,13 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                                    lineNumber: 1194,
+                                                                                    lineNumber: 1196,
                                                                                     columnNumber: 35
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                            lineNumber: 1192,
+                                                                            lineNumber: 1194,
                                                                             columnNumber: 33
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2517,23 +2518,23 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                                     }
                                                                                 }, i, false, {
                                                                                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                                    lineNumber: 1216,
+                                                                                    lineNumber: 1218,
                                                                                     columnNumber: 39
                                                                                 }, this))
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                            lineNumber: 1213,
+                                                                            lineNumber: 1215,
                                                                             columnNumber: 33
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                    lineNumber: 1191,
+                                                                    lineNumber: 1193,
                                                                     columnNumber: 31
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$separator$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Separator"], {}, void 0, false, {
                                                                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                    lineNumber: 1242,
+                                                                    lineNumber: 1244,
                                                                     columnNumber: 29
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$accordion$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Accordion"], {
@@ -2545,35 +2546,35 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                     children: renderSetFields(category, testId, testDetails)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                    lineNumber: 1243,
+                                                                    lineNumber: 1245,
                                                                     columnNumber: 29
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                            lineNumber: 1171,
+                                                            lineNumber: 1173,
                                                             columnNumber: 27
                                                         }, this)
                                                     ]
                                                 }, testId, true, {
                                                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                    lineNumber: 1164,
+                                                    lineNumber: 1166,
                                                     columnNumber: 25
                                                 }, this))
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                            lineNumber: 1161,
+                                            lineNumber: 1163,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, category, true, {
                                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                    lineNumber: 1155,
+                                    lineNumber: 1157,
                                     columnNumber: 17
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                            lineNumber: 1153,
+                            lineNumber: 1155,
                             columnNumber: 13
                         }, this),
                         currentStep === 5 && step1Data && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$scroll$2d$area$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ScrollArea"], {
@@ -2589,7 +2590,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                 children: "Client & Project Details"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 1264,
+                                                lineNumber: 1266,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2601,7 +2602,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                 children: "Client:"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                lineNumber: 1269,
+                                                                lineNumber: 1271,
                                                                 columnNumber: 23
                                                             }, this),
                                                             " ",
@@ -2612,7 +2613,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 1268,
+                                                        lineNumber: 1270,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2621,7 +2622,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                 children: "Address:"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                lineNumber: 1273,
+                                                                lineNumber: 1275,
                                                                 columnNumber: 23
                                                             }, this),
                                                             " ",
@@ -2629,7 +2630,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 1272,
+                                                        lineNumber: 1274,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2638,7 +2639,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                 children: "Project:"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                lineNumber: 1276,
+                                                                lineNumber: 1278,
                                                                 columnNumber: 23
                                                             }, this),
                                                             " ",
@@ -2646,7 +2647,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 1275,
+                                                        lineNumber: 1277,
                                                         columnNumber: 21
                                                     }, this),
                                                     step1Data.isSameBillingClient === 'no' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2658,7 +2659,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                         children: "Billing Client:"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                        lineNumber: 1281,
+                                                                        lineNumber: 1283,
                                                                         columnNumber: 27
                                                                     }, this),
                                                                     " ",
@@ -2670,7 +2671,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                lineNumber: 1280,
+                                                                lineNumber: 1282,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2679,7 +2680,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                         children: "Billing Address:"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                        lineNumber: 1285,
+                                                                        lineNumber: 1287,
                                                                         columnNumber: 27
                                                                     }, this),
                                                                     ' ',
@@ -2687,30 +2688,30 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                lineNumber: 1284,
+                                                                lineNumber: 1286,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 1279,
+                                                        lineNumber: 1281,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 1267,
+                                                lineNumber: 1269,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                        lineNumber: 1263,
+                                        lineNumber: 1265,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$separator$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Separator"], {}, void 0, false, {
                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                        lineNumber: 1292,
+                                        lineNumber: 1294,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2721,7 +2722,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                 children: "Sample Details"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 1294,
+                                                lineNumber: 1296,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2733,7 +2734,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                 children: "Received on:"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                lineNumber: 1297,
+                                                                lineNumber: 1299,
                                                                 columnNumber: 23
                                                             }, this),
                                                             " ",
@@ -2741,7 +2742,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 1296,
+                                                        lineNumber: 1298,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2750,7 +2751,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                 children: "Received by:"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                lineNumber: 1300,
+                                                                lineNumber: 1302,
                                                                 columnNumber: 23
                                                             }, this),
                                                             " ",
@@ -2758,7 +2759,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 1299,
+                                                        lineNumber: 1301,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2767,7 +2768,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                 children: "Delivered by:"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                lineNumber: 1303,
+                                                                lineNumber: 1305,
                                                                 columnNumber: 23
                                                             }, this),
                                                             " ",
@@ -2778,7 +2779,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 1302,
+                                                        lineNumber: 1304,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2787,7 +2788,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                 children: "Status on Arrival:"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                lineNumber: 1307,
+                                                                lineNumber: 1309,
                                                                 columnNumber: 23
                                                             }, this),
                                                             " ",
@@ -2795,7 +2796,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 1306,
+                                                        lineNumber: 1308,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2804,7 +2805,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                 children: "Results via:"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                lineNumber: 1310,
+                                                                lineNumber: 1312,
                                                                 columnNumber: 23
                                                             }, this),
                                                             ' ',
@@ -2812,24 +2813,24 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                        lineNumber: 1309,
+                                                        lineNumber: 1311,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 1295,
+                                                lineNumber: 1297,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                        lineNumber: 1293,
+                                        lineNumber: 1295,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$separator$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Separator"], {}, void 0, false, {
                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                        lineNumber: 1315,
+                                        lineNumber: 1317,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2840,7 +2841,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                 children: "Tests to be Performed"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 1317,
+                                                lineNumber: 1319,
                                                 columnNumber: 19
                                             }, this),
                                             Object.entries(selectedCategories).map(([category, data])=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2856,7 +2857,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                            lineNumber: 1322,
+                                                            lineNumber: 1324,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -2872,12 +2873,12 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                     ]
                                                                 }, testId, true, {
                                                                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                    lineNumber: 1328,
+                                                                    lineNumber: 1330,
                                                                     columnNumber: 29
                                                                 }, this))
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                            lineNumber: 1325,
+                                                            lineNumber: 1327,
                                                             columnNumber: 23
                                                         }, this),
                                                         data.notes && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2887,7 +2888,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                     children: "Notes:"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                    lineNumber: 1337,
+                                                                    lineNumber: 1339,
                                                                     columnNumber: 27
                                                                 }, this),
                                                                 " ",
@@ -2895,19 +2896,19 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                            lineNumber: 1336,
+                                                            lineNumber: 1338,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, category, true, {
                                                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                    lineNumber: 1321,
+                                                    lineNumber: 1323,
                                                     columnNumber: 21
                                                 }, this))
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                        lineNumber: 1316,
+                                        lineNumber: 1318,
                                         columnNumber: 17
                                     }, this),
                                     Object.keys(step4Data).length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2915,7 +2916,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$separator$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Separator"], {}, void 0, false, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 1346,
+                                                lineNumber: 1348,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -2923,7 +2924,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                 children: "Special Sample Details"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                lineNumber: 1347,
+                                                lineNumber: 1349,
                                                 columnNumber: 21
                                             }, this),
                                             Object.entries(step4Data).map(([category, tests])=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2934,7 +2935,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                             children: category
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                            lineNumber: 1352,
+                                                            lineNumber: 1354,
                                                             columnNumber: 25
                                                         }, this),
                                                         Object.entries(tests).map(([testId, testDetails])=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2951,7 +2952,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                        lineNumber: 1359,
+                                                                        lineNumber: 1361,
                                                                         columnNumber: 31
                                                                     }, this),
                                                                     testDetails.sets.map((set, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2966,7 +2967,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                                             ]
                                                                                         }, void 0, true, {
                                                                                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                                            lineNumber: 1369,
+                                                                                            lineNumber: 1371,
                                                                                             columnNumber: 37
                                                                                         }, this),
                                                                                         " (Qty:",
@@ -2976,7 +2977,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                                    lineNumber: 1368,
+                                                                                    lineNumber: 1370,
                                                                                     columnNumber: 35
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2993,7 +2994,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                                    lineNumber: 1372,
+                                                                                    lineNumber: 1374,
                                                                                     columnNumber: 35
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3003,7 +3004,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                                    lineNumber: 1383,
+                                                                                    lineNumber: 1385,
                                                                                     columnNumber: 35
                                                                                 }, this),
                                                                                 set.class && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3013,7 +3014,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                                    lineNumber: 1384,
+                                                                                    lineNumber: 1386,
                                                                                     columnNumber: 49
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3024,48 +3025,48 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                                    lineNumber: 1385,
+                                                                                    lineNumber: 1387,
                                                                                     columnNumber: 35
                                                                                 }, this)
                                                                             ]
                                                                         }, i, true, {
                                                                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                            lineNumber: 1364,
+                                                                            lineNumber: 1366,
                                                                             columnNumber: 33
                                                                         }, this))
                                                                 ]
                                                             }, testId, true, {
                                                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                                lineNumber: 1355,
+                                                                lineNumber: 1357,
                                                                 columnNumber: 29
                                                             }, this))
                                                     ]
                                                 }, category, true, {
                                                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                                    lineNumber: 1351,
+                                                    lineNumber: 1353,
                                                     columnNumber: 23
                                                 }, this))
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                        lineNumber: 1345,
+                                        lineNumber: 1347,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                lineNumber: 1262,
+                                lineNumber: 1264,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                            lineNumber: 1261,
+                            lineNumber: 1263,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                    lineNumber: 762,
+                    lineNumber: 764,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogFooter"], {
@@ -3078,7 +3079,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                             children: "Back"
                         }, void 0, false, {
                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                            lineNumber: 1407,
+                            lineNumber: 1409,
                             columnNumber: 13
                         }, this),
                         currentStep < 5 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -3086,7 +3087,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                             children: "Next"
                         }, void 0, false, {
                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                            lineNumber: 1411,
+                            lineNumber: 1413,
                             columnNumber: 31
                         }, this),
                         currentStep === 5 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -3095,7 +3096,7 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                             children: isSubmitting ? 'Saving...' : 'Confirm & Generate Receipt'
                         }, void 0, false, {
                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                            lineNumber: 1413,
+                            lineNumber: 1415,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogClose"], {
@@ -3106,29 +3107,29 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
                                 children: "Cancel"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                                lineNumber: 1418,
+                                lineNumber: 1420,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                            lineNumber: 1417,
+                            lineNumber: 1419,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-                    lineNumber: 1405,
+                    lineNumber: 1407,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-            lineNumber: 741,
+            lineNumber: 743,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/app/samples/components/receive-sample-dialog.tsx",
-        lineNumber: 740,
+        lineNumber: 742,
         columnNumber: 5
     }, this);
 }
