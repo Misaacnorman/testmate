@@ -24,7 +24,7 @@ function generateSampleId(material: string, project: string) {
     const materialCode = material.substring(0, 3).toUpperCase();
     const projectCode = project.substring(0, 3).toUpperCase();
     const randomPart = Math.random().toString(36).substring(2, 6).toUpperCase();
-    return `${materialCode}/${projectCode}-${randomPart}`;
+    return `${materialCode}-${projectCode}-${randomPart}`;
 }
 
 
