@@ -42,7 +42,7 @@ const renderCellWithSubItems = (items: (string | number | undefined)[]) => (
 
 interface ConcreteCubeColumnsProps {
   onEdit: (sampleSet: GroupedConcreteCubeSample) => void;
-  onDelete: (receiptId: string, setNumber: number) => void;
+  onDelete: (receiptId: string, testId: string, setNumber: number) => void;
 }
 
 export const getConcreteCubeColumns = ({ onEdit, onDelete }: ConcreteCubeColumnsProps): ColumnDef<GroupedConcreteCubeSample>[] => [
@@ -299,7 +299,7 @@ export const getConcreteCubeColumns = ({ onEdit, onDelete }: ConcreteCubeColumns
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => onDelete(sampleSet.receiptId, sampleSet.setNumber || 0)}>
+                    <AlertDialogAction onClick={() => onDelete(sampleSet.receiptId, sampleSet.testId, sampleSet.setNumber || 0)}>
                         Continue
                     </AlertDialogAction>
                 </AlertDialogFooter>

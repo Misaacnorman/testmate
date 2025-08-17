@@ -31,7 +31,7 @@ export function BlocksBricksRegister() {
       
       const groupedData: { [key: string]: BlockBrickSample[] } = {};
       data.forEach(sample => {
-        const key = `${sample.receiptId}-${sample.setNumber || '0'}`;
+        const key = `${sample.receiptId}-${sample.testId}-${sample.setNumber || '0'}`;
         if (!groupedData[key]) {
           groupedData[key] = [];
         }
@@ -94,9 +94,9 @@ export function BlocksBricksRegister() {
     setIssueDialogOpen(true);
   };
 
-  const handleDelete = async (receiptId: string, setNumber: number) => {
+  const handleDelete = async (receiptId: string, testId: string, setNumber: number) => {
     try {
-      await deleteBlockBrickTestGroup(receiptId, setNumber);
+      await deleteBlockBrickTestGroup(receiptId, testId, setNumber);
       toast({
         title: 'Success',
         description: `Sample group ${receiptId}-${setNumber} has been deleted.`,

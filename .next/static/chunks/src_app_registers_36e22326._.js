@@ -10521,7 +10521,11 @@ function BlocksBricksRegister() {
                         };
                     }
                 }["BlocksBricksRegister.useCallback[loadSamples].processedData"]).sort({
-                    "BlocksBricksRegister.useCallback[loadSamples].processedData": (a, b)=>(b.receivedAt || '').localeCompare(a.receivedAt || '')
+                    "BlocksBricksRegister.useCallback[loadSamples].processedData": (a, b)=>{
+                        const dateA = a.receivedAt ? new Date(a.receivedAt).getTime() : 0;
+                        const dateB = b.receivedAt ? new Date(b.receivedAt).getTime() : 0;
+                        return dateB - dateA;
+                    }
                 }["BlocksBricksRegister.useCallback[loadSamples].processedData"]);
                 setSamples(processedData);
             } catch (error) {
@@ -10667,20 +10671,20 @@ function BlocksBricksRegister() {
                                     children: "Blocks & Bricks Register"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/registers/components/blocks-bricks/blocks-bricks-register.tsx",
-                                    lineNumber: 191,
+                                    lineNumber: 195,
                                     columnNumber: 21
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardDescription"], {
                                     children: "Detailed records of all block and brick samples."
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/registers/components/blocks-bricks/blocks-bricks-register.tsx",
-                                    lineNumber: 192,
+                                    lineNumber: 196,
                                     columnNumber: 21
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/registers/components/blocks-bricks/blocks-bricks-register.tsx",
-                            lineNumber: 190,
+                            lineNumber: 194,
                             columnNumber: 17
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10692,7 +10696,7 @@ function BlocksBricksRegister() {
                                     children: "Test"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/registers/components/blocks-bricks/blocks-bricks-register.tsx",
-                                    lineNumber: 197,
+                                    lineNumber: 201,
                                     columnNumber: 21
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -10701,24 +10705,24 @@ function BlocksBricksRegister() {
                                     children: "Issue"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/registers/components/blocks-bricks/blocks-bricks-register.tsx",
-                                    lineNumber: 203,
+                                    lineNumber: 207,
                                     columnNumber: 22
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/registers/components/blocks-bricks/blocks-bricks-register.tsx",
-                            lineNumber: 196,
+                            lineNumber: 200,
                             columnNumber: 17
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/registers/components/blocks-bricks/blocks-bricks-register.tsx",
-                    lineNumber: 189,
+                    lineNumber: 193,
                     columnNumber: 13
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/blocks-bricks/blocks-bricks-register.tsx",
-                lineNumber: 188,
+                lineNumber: 192,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -10731,12 +10735,12 @@ function BlocksBricksRegister() {
                     setRowSelection: setRowSelection
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/blocks-bricks/blocks-bricks-register.tsx",
-                    lineNumber: 213,
+                    lineNumber: 217,
                     columnNumber: 13
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/blocks-bricks/blocks-bricks-register.tsx",
-                lineNumber: 212,
+                lineNumber: 216,
                 columnNumber: 9
             }, this),
             selectedSampleSet && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$blocks$2d$bricks$2f$edit$2d$sample$2d$set$2d$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["EditSampleSetDialog"], {
@@ -10746,7 +10750,7 @@ function BlocksBricksRegister() {
                 onSave: handleSaveEdit
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/blocks-bricks/blocks-bricks-register.tsx",
-                lineNumber: 222,
+                lineNumber: 226,
                 columnNumber: 13
             }, this),
             selectedSampleSet && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$blocks$2d$bricks$2f$test$2d$results$2d$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TestResultsDialog"], {
@@ -10756,7 +10760,7 @@ function BlocksBricksRegister() {
                 onSave: handleSaveTestResults
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/blocks-bricks/blocks-bricks-register.tsx",
-                lineNumber: 230,
+                lineNumber: 234,
                 columnNumber: 13
             }, this),
             selectedSampleSet && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$registers$2f$components$2f$blocks$2d$bricks$2f$issue$2d$certificate$2d$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["IssueCertificateDialog"], {
@@ -10766,13 +10770,13 @@ function BlocksBricksRegister() {
                 onSave: handleIssueCertificate
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/blocks-bricks/blocks-bricks-register.tsx",
-                lineNumber: 238,
+                lineNumber: 242,
                 columnNumber: 13
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/registers/components/blocks-bricks/blocks-bricks-register.tsx",
-        lineNumber: 187,
+        lineNumber: 191,
         columnNumber: 5
     }, this);
 }

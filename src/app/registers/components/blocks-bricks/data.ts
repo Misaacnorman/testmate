@@ -27,7 +27,7 @@ export async function getBlocksBricks(): Promise<BlockBrickSample[]> {
 }
 
 export async function updateSampleSetDetails(receiptId: string, setNumber: number, data: Partial<GroupedBlockBrickSample>): Promise<void> {
-    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber));
+    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber), where('testId', '==', data.testId));
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
@@ -71,12 +71,12 @@ export async function updateSampleSetDetails(receiptId: string, setNumber: numbe
 }
 
 
-export async function deleteBlockBrickTestGroup(receiptId: string, setNumber: number): Promise<void> {
-    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber));
+export async function deleteBlockBrickTestGroup(receiptId: string, testId: string, setNumber: number): Promise<void> {
+    const q = query(registerCollection, where('receiptId', '==', receiptId), where('testId', '==', testId), where('setNumber', '==', setNumber));
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
-        console.warn(`No samples found for receiptId ${receiptId} and setNumber ${setNumber} to delete.`);
+        console.warn(`No samples found for receiptId ${receiptId}, testId ${testId} and setNumber ${setNumber} to delete.`);
         return;
     }
 
@@ -89,7 +89,7 @@ export async function deleteBlockBrickTestGroup(receiptId: string, setNumber: nu
 }
 
 export async function updateBlockBrickTestResults(receiptId: string, setNumber: number, data: Partial<GroupedBlockBrickSample>): Promise<void> {
-    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber));
+    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber), where('testId', '==', data.testId));
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
@@ -134,7 +134,7 @@ export async function updateBlockBrickTestResults(receiptId: string, setNumber: 
 }
 
 export async function issueCertificateForBlockBrickTest(receiptId: string, setNumber: number, data: any): Promise<void> {
-    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber));
+    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber), where('testId', '==', data.testId));
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {

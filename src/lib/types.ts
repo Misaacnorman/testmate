@@ -29,6 +29,7 @@ export type ConcreteCubeSample = {
   clientName: string;
   projectTitle: string;
   receivedAt: string;
+  testId: string;
   sampleSerialNumber?: string;
   setNumber?: number;
   castingDate?: string;
@@ -65,6 +66,7 @@ export type PaverSample = {
   clientName: string;
   projectTitle: string;
   receivedAt: string;
+  testId: string;
   sampleSerialNumber?: string;
   setNumber?: number;
   castingDate?: string;
@@ -102,6 +104,7 @@ export type BlockBrickSample = {
   clientName: string;
   projectTitle: string;
   receivedAt: string;
+  testId: string;
   sampleSerialNumber?: string;
   setNumber?: number;
   castingDate?: string;

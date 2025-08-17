@@ -42,7 +42,7 @@ const renderCellWithSubItems = (items: (string | number | undefined)[]) => (
 
 interface PaverColumnsProps {
   onEdit: (sampleSet: GroupedPaverSample) => void;
-  onDelete: (receiptId: string, setNumber: number) => void;
+  onDelete: (receiptId: string, testId: string, setNumber: number) => void;
 }
 
 export const getPaverColumns = ({ onEdit, onDelete }: PaverColumnsProps): ColumnDef<GroupedPaverSample>[] => [
@@ -312,7 +312,7 @@ export const getPaverColumns = ({ onEdit, onDelete }: PaverColumnsProps): Column
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => onDelete(sampleSet.receiptId, sampleSet.setNumber || 0)}>
+                    <AlertDialogAction onClick={() => onDelete(sampleSet.receiptId, sampleSet.testId, sampleSet.setNumber || 0)}>
                         Continue
                     </AlertDialogAction>
                 </AlertDialogFooter>

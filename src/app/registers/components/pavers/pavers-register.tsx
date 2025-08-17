@@ -31,7 +31,7 @@ export function PaversRegister() {
       
       const groupedData: { [key: string]: PaverSample[] } = {};
       data.forEach(sample => {
-        const key = `${sample.receiptId}-${sample.setNumber || '0'}`;
+        const key = `${sample.receiptId}-${sample.testId}-${sample.setNumber || '0'}`;
         if (!groupedData[key]) {
           groupedData[key] = [];
         }
@@ -90,9 +90,9 @@ export function PaversRegister() {
     setIssueDialogOpen(true);
   };
 
-  const handleDelete = async (receiptId: string, setNumber: number) => {
+  const handleDelete = async (receiptId: string, testId: string, setNumber: number) => {
     try {
-      await deletePaverTestGroup(receiptId, setNumber);
+      await deletePaverTestGroup(receiptId, testId, setNumber);
       toast({
         title: 'Success',
         description: `Sample group ${receiptId}-${setNumber} has been deleted.`,

@@ -31,7 +31,7 @@ export function ConcreteCubesRegister() {
       
       const groupedData: { [key: string]: ConcreteCubeSample[] } = {};
       data.forEach(sample => {
-        const key = `${sample.receiptId}-${sample.setNumber || '0'}`;
+        const key = `${sample.receiptId}-${sample.testId}-${sample.setNumber || '0'}`;
         if (!groupedData[key]) {
           groupedData[key] = [];
         }
@@ -90,9 +90,9 @@ export function ConcreteCubesRegister() {
     setIssueDialogOpen(true);
   };
 
-  const handleDelete = async (receiptId: string, setNumber: number) => {
+  const handleDelete = async (receiptId: string, testId: string, setNumber: number) => {
     try {
-      await deleteCubeTestGroup(receiptId, setNumber);
+      await deleteCubeTestGroup(receiptId, testId, setNumber);
       toast({
         title: 'Success',
         description: `Sample group ${receiptId}-${setNumber} has been deleted.`,

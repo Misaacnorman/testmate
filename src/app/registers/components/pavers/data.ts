@@ -27,7 +27,7 @@ export async function getPavers(): Promise<PaverSample[]> {
 }
 
 export async function updateSampleSetDetails(receiptId: string, setNumber: number, data: Partial<GroupedPaverSample>): Promise<void> {
-    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber));
+    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber), where('testId', '==', data.testId));
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
@@ -71,12 +71,12 @@ export async function updateSampleSetDetails(receiptId: string, setNumber: numbe
 }
 
 
-export async function deletePaverTestGroup(receiptId: string, setNumber: number): Promise<void> {
-    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber));
+export async function deletePaverTestGroup(receiptId: string, testId: string, setNumber: number): Promise<void> {
+    const q = query(registerCollection, where('receiptId', '==', receiptId), where('testId', '==', testId), where('setNumber', '==', setNumber));
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
-        console.warn(`No samples found for receiptId ${receiptId} and setNumber ${setNumber} to delete.`);
+        console.warn(`No samples found for receiptId ${receiptId}, testId ${testId}, and setNumber ${setNumber} to delete.`);
         return;
     }
 
@@ -89,7 +89,7 @@ export async function deletePaverTestGroup(receiptId: string, setNumber: number)
 }
 
 export async function updatePaverTestResults(receiptId: string, setNumber: number, data: Partial<GroupedPaverSample>): Promise<void> {
-    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber));
+    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber), where('testId', '==', data.testId));
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
@@ -126,7 +126,7 @@ export async function updatePaverTestResults(receiptId: string, setNumber: numbe
 }
 
 export async function issueCertificateForPaverTest(receiptId: string, setNumber: number, data: any): Promise<void> {
-    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber));
+    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber), where('testId', '==', data.testId));
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {

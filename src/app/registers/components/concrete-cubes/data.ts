@@ -27,11 +27,11 @@ export async function getConcreteCubes(): Promise<ConcreteCubeSample[]> {
 }
 
 export async function updateSampleSetDetails(receiptId: string, setNumber: number, data: Partial<GroupedConcreteCubeSample>): Promise<void> {
-    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber));
+    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber), where('testId', '==', data.testId));
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
-        throw new Error(`No samples found for receiptId ${receiptId} and setNumber ${setNumber}.`);
+        throw new Error(`No samples found for receiptId ${receiptId}, testId ${data.testId}, and setNumber ${setNumber}.`);
     }
 
     const batch = writeBatch(db);
@@ -71,12 +71,12 @@ export async function updateSampleSetDetails(receiptId: string, setNumber: numbe
 }
 
 
-export async function deleteCubeTestGroup(receiptId: string, setNumber: number): Promise<void> {
-    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber));
+export async function deleteCubeTestGroup(receiptId: string, testId: string, setNumber: number): Promise<void> {
+    const q = query(registerCollection, where('receiptId', '==', receiptId), where('testId', '==', testId), where('setNumber', '==', setNumber));
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
-        console.warn(`No samples found for receiptId ${receiptId} and setNumber ${setNumber} to delete.`);
+        console.warn(`No samples found for receiptId ${receiptId}, testId ${testId}, and setNumber ${setNumber} to delete.`);
         return;
     }
 
@@ -89,7 +89,7 @@ export async function deleteCubeTestGroup(receiptId: string, setNumber: number):
 }
 
 export async function updateCubeTestResults(receiptId: string, setNumber: number, data: Partial<GroupedConcreteCubeSample>): Promise<void> {
-    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber));
+    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber), where('testId', '==', data.testId));
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
@@ -125,7 +125,7 @@ export async function updateCubeTestResults(receiptId: string, setNumber: number
 }
 
 export async function issueCertificateForCubeTest(receiptId: string, setNumber: number, data: any): Promise<void> {
-    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber));
+    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber), where('testId', '==', data.testId));
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
@@ -140,4 +140,3 @@ export async function issueCertificateForCubeTest(receiptId: string, setNumber: 
 
     await batch.commit();
 }
-

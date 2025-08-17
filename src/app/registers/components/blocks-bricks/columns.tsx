@@ -42,7 +42,7 @@ const renderCellWithSubItems = (items: (string | number | undefined)[]) => (
 
 interface BlockBrickColumnsProps {
   onEdit: (sampleSet: GroupedBlockBrickSample) => void;
-  onDelete: (receiptId: string, setNumber: number) => void;
+  onDelete: (receiptId: string, testId: string, setNumber: number) => void;
 }
 
 export const getBlockBrickColumns = ({ onEdit, onDelete }: BlockBrickColumnsProps): ColumnDef<GroupedBlockBrickSample>[] => [
@@ -360,7 +360,7 @@ export const getBlockBrickColumns = ({ onEdit, onDelete }: BlockBrickColumnsProp
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => onDelete(sampleSet.receiptId, sampleSet.setNumber || 0)}>
+                    <AlertDialogAction onClick={() => onDelete(sampleSet.receiptId, sampleSet.testId, sampleSet.setNumber || 0)}>
                         Continue
                     </AlertDialogAction>
                 </AlertDialogFooter>
@@ -371,5 +371,3 @@ export const getBlockBrickColumns = ({ onEdit, onDelete }: BlockBrickColumnsProp
     },
   },
 ];
-
-    
