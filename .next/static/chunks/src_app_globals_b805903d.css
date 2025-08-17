@@ -1507,6 +1507,10 @@ body {
   background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
 }
 
+.bg-primary\/90 {
+  background-color: hsl(var(--primary) / .9);
+}
+
 .fill-current {
   fill: currentColor;
 }
@@ -3321,6 +3325,11 @@ body {
 .\[\&_td\]\:py-1 td {
   padding-top: .25rem;
   padding-bottom: .25rem;
+}
+
+.\[\&_td\]\:py-2 td {
+  padding-top: .5rem;
+  padding-bottom: .5rem;
 }
 
 .\[\&_tr\:last-child\]\:border-0 tr:last-child {

@@ -8,6 +8,7 @@ import {
   TabsTrigger,
 } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ConcreteCubesRegister } from './components/concrete-cubes/concrete-cubes-register';
 
 export default function RegistersPage() {
   return (
@@ -21,7 +22,7 @@ export default function RegistersPage() {
         </div>
       </div>
       <div className="flex-1 overflow-auto p-4">
-        <Tabs defaultValue="concrete-cubes" className="w-full">
+        <Tabs defaultValue="concrete-cubes" className="w-full h-full flex flex-col">
           <TabsList>
             <TabsTrigger value="concrete-cubes">Concrete Cubes</TabsTrigger>
             <TabsTrigger value="blocks-bricks">Blocks & Bricks</TabsTrigger>
@@ -29,18 +30,8 @@ export default function RegistersPage() {
             <TabsTrigger value="cylinders">Cylinders</TabsTrigger>
             <TabsTrigger value="water-absorption">Water Absorption</TabsTrigger>
           </TabsList>
-          <TabsContent value="concrete-cubes">
-            <Card>
-                <CardHeader>
-                    <CardTitle>Concrete Cubes Register</CardTitle>
-                    <CardDescription>
-                        Detailed records of all concrete cube samples.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <p>Content for the Concrete Cubes register will be added here.</p>
-                </CardContent>
-            </Card>
+          <TabsContent value="concrete-cubes" className="flex-grow">
+            <ConcreteCubesRegister />
           </TabsContent>
            <TabsContent value="blocks-bricks">
              <Card>

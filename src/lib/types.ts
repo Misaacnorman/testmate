@@ -19,3 +19,34 @@ export type Receipt = {
   // Add other fields from the form as needed
   [key: string]: any; 
 };
+
+
+export type ConcreteCubeSample = {
+  id: string;
+  receivedAt: string;
+  clientName: string;
+  projectTitle: string;
+  castingDate?: string;
+  testingDate?: string;
+  class?: string;
+  age?: number;
+  areaOfUse?: string;
+  sampleId: string;
+  length?: number;
+  width?: number;
+  height?: number;
+  weight?: number;
+  machineUsed?: string;
+  load?: number;
+  modeOfFailure?: string;
+  recordedTemp?: number;
+  certificateNumber?: string;
+  comment?: string;
+  technician?: string;
+  dateOfIssue?: string;
+  issueId?: string;
+  takenBy?: string;
+  dateTaken?: string;
+  contact?: string;
+  receiptId: string;
+};
