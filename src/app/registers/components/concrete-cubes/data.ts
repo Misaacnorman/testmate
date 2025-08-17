@@ -3,7 +3,7 @@
 
 import { collection, getDocs, orderBy, query, writeBatch, doc, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
-import type { ConcreteCubeSample } from '@/lib/types';
+import type { ConcreteCubeSample, IssueCertificateData } from '@/lib/types';
 import { fromFirestore } from '@/lib/utils';
 
 const registerCollection = collection(db, 'concrete-cubes-register');
@@ -41,15 +41,12 @@ export async function updateCubeTestResults(updatedSamples: ConcreteCubeSample[]
         if (sample.height) updateData.height = sample.height;
         if (sample.weight) updateData.weight = sample.weight;
         if (sample.load) updateData.load = sample.load;
-        if (sample.machineUsed) updateData.machineUsed = sample.machineUsed;
         if (sample.modeOfFailure) updateData.modeOfFailure = sample.modeOfFailure;
+        
+        // These values are shared across the set
+        if (sample.machineUsed) updateData.machineUsed = sample.machineUsed;
         if (sample.recordedTemp) updateData.recordedTemp = sample.recordedTemp;
-
-        // Make sure to update the shared machineUsed value on all samples in the set
-        if (updatedSamples[0].machineUsed) {
-            updateData.machineUsed = updatedSamples[0].machineUsed;
-        }
-
+        
         batch.update(docRef, updateData);
     });
 
@@ -69,6 +66,23 @@ export async function deleteCubeTestGroup(receiptId: string, setNumber: number):
     const batch = writeBatch(db);
     snapshot.docs.forEach(document => {
         batch.delete(document.ref);
+    });
+
+    await batch.commit();
+}
+
+
+export async function issueCertificateForCubeTest(receiptId: string, setNumber: number, data: IssueCertificateData): Promise<void> {
+    const q = query(registerCollection, where('receiptId', '==', receiptId), where('setNumber', '==', setNumber));
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+        throw new Error(`No samples found for receiptId ${receiptId} and setNumber ${setNumber}.`);
+    }
+
+    const batch = writeBatch(db);
+    snapshot.docs.forEach(document => {
+        batch.update(document.ref, data);
     });
 
     await batch.commit();

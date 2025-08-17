@@ -25,11 +25,11 @@ const testResultSchema = z.object({
   length: z.coerce.number().min(1, 'Required'),
   width: z.coerce.number().min(1, 'Required'),
   height: z.coerce.number().min(1, 'Required'),
-  weight: z.coerce.number().min(0, 'Required'),
-  load: z.coerce.number().min(0, 'Required'),
-  machineUsed: z.string().min(1, 'Required'),
+  weight: z.coerce.number().min(0.1, 'Required'),
+  load: z.coerce.number().min(0.1, 'Required'),
   modeOfFailure: z.string().min(1, 'Required'),
-  recordedTemp: z.coerce.number(),
+  machineUsed: z.string().min(1, 'Required'),
+  recordedTemp: z.coerce.number().optional(),
 });
 
 const formSchema = z.object({
@@ -57,8 +57,8 @@ export function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }: Tes
         height: s.height || 0,
         weight: s.weight || 0,
         load: s.load || 0,
-        machineUsed: sampleSet.machineUsed || '',
         modeOfFailure: s.modeOfFailure || '',
+        machineUsed: sampleSet.machineUsed || '',
         recordedTemp: s.recordedTemp || 0,
       })),
     },
@@ -78,9 +78,9 @@ export function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }: Tes
         height: s.height || 0,
         weight: s.weight || 0,
         load: s.load || 0,
-        machineUsed: sampleSet.machineUsed || s.machineUsed || '',
         modeOfFailure: s.modeOfFailure || '',
-        recordedTemp: s.recordedTemp || 0,
+        machineUsed: sampleSet.machineUsed || s.machineUsed || '',
+        recordedTemp: sampleSet.recordedTemp || s.recordedTemp || undefined,
       }))
     });
     setCurrentStep(0);
@@ -97,14 +97,29 @@ export function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }: Tes
       const currentValues = form.getValues(`samples.${currentStep}`);
       const nextStepIndex = currentStep + 1;
       
-      // Carry over values to the next step if they haven't been touched yet.
       const nextStepValues = form.getValues(`samples.${nextStepIndex}`);
-      const isNextStepPristine = Object.values(nextStepValues).every(val => val === 0 || val === '');
+      
+      // Carry over shared values to the next step
+      form.setValue(`samples.${nextStepIndex}.machineUsed`, currentValues.machineUsed);
+      form.setValue(`samples.${nextStepIndex}.recordedTemp`, currentValues.recordedTemp);
+
+      // Only carry over individual values if the next step seems untouched
+      const isNextStepPristine = (
+        !nextStepValues.length &&
+        !nextStepValues.width &&
+        !nextStepValues.height &&
+        !nextStepValues.weight &&
+        !nextStepValues.load &&
+        !nextStepValues.modeOfFailure
+      );
 
       if (isNextStepPristine) {
-        form.setValue(`samples.${nextStepIndex}.machineUsed`, currentValues.machineUsed);
+        form.setValue(`samples.${nextStepIndex}.length`, currentValues.length);
+        form.setValue(`samples.${nextStepIndex}.width`, currentValues.width);
+        form.setValue(`samples.${nextStepIndex}.height`, currentValues.height);
+        form.setValue(`samples.${nextStepIndex}.weight`, currentValues.weight);
+        form.setValue(`samples.${nextStepIndex}.load`, currentValues.load);
         form.setValue(`samples.${nextStepIndex}.modeOfFailure`, currentValues.modeOfFailure);
-        form.setValue(`samples.${nextStepIndex}.recordedTemp`, currentValues.recordedTemp);
       }
       
       setCurrentStep(nextStepIndex);
@@ -121,8 +136,9 @@ export function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }: Tes
     const updatedSamples = sampleSet.samples.map((originalSample, index) => ({
       ...originalSample,
       ...data.samples[index],
-      // Ensure machineUsed is consistent across the set
+      // Ensure shared values are consistent across the set
       machineUsed: data.samples[0].machineUsed,
+      recordedTemp: data.samples[0].recordedTemp,
     }));
     onSave(updatedSamples);
   };
@@ -188,16 +204,6 @@ export function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }: Tes
                </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor={`machineUsed-${currentStep}`}>Machine Used</Label>
-                  <Controller
-                      name={`samples.${currentStep}.machineUsed`}
-                      control={form.control}
-                      render={({ field }) => <Input id={`machineUsed-${currentStep}`} {...field} />}
-                    />
-                  {form.formState.errors.samples?.[currentStep]?.machineUsed && <p className="text-destructive text-xs">{form.formState.errors.samples[currentStep]?.machineUsed?.message}</p>}
-                </div>
-
-                <div className="space-y-2">
                   <Label htmlFor={`modeOfFailure-${currentStep}`}>Mode of Failure</Label>
                    <Controller
                       name={`samples.${currentStep}.modeOfFailure`}
@@ -205,6 +211,16 @@ export function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }: Tes
                       render={({ field }) => <Input id={`modeOfFailure-${currentStep}`} {...field} />}
                     />
                   {form.formState.errors.samples?.[currentStep]?.modeOfFailure && <p className="text-destructive text-xs">{form.formState.errors.samples[currentStep]?.modeOfFailure?.message}</p>}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor={`machineUsed-${currentStep}`}>Machine Used</Label>
+                  <Controller
+                      name={`samples.${currentStep}.machineUsed`}
+                      control={form.control}
+                      render={({ field }) => <Input id={`machineUsed-${currentStep}`} {...field} />}
+                    />
+                  {form.formState.errors.samples?.[currentStep]?.machineUsed && <p className="text-destructive text-xs">{form.formState.errors.samples[currentStep]?.machineUsed?.message}</p>}
                 </div>
 
                 <div className="space-y-2">

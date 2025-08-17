@@ -636,6 +636,16 @@ const getConcreteCubeColumns = ({ onEdit, onDelete })=>[
             cell: ({ row })=>renderCellWithSubItems(row.original.samples.map((s)=>s.weight))
         },
         {
+            accessorKey: 'load',
+            header: 'Load (kN)',
+            cell: ({ row })=>renderCellWithSubItems(row.original.samples.map((s)=>s.load))
+        },
+        {
+            accessorKey: 'modeOfFailure',
+            header: 'Mode of Failure',
+            cell: ({ row })=>renderCellWithSubItems(row.original.samples.map((s)=>s.modeOfFailure))
+        },
+        {
             accessorKey: 'machineUsed',
             header: 'Machine Used',
             cell: ({ row })=>{
@@ -648,20 +658,10 @@ const getConcreteCubeColumns = ({ onEdit, onDelete })=>[
                     children: row.original.machineUsed || '-'
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
-                    lineNumber: 173,
+                    lineNumber: 183,
                     columnNumber: 15
                 }, this);
             }
-        },
-        {
-            accessorKey: 'load',
-            header: 'Load (kN)',
-            cell: ({ row })=>renderCellWithSubItems(row.original.samples.map((s)=>s.load))
-        },
-        {
-            accessorKey: 'modeOfFailure',
-            header: 'Mode of Failure',
-            cell: ({ row })=>renderCellWithSubItems(row.original.samples.map((s)=>s.modeOfFailure))
         },
         {
             accessorKey: 'recordedTemp',

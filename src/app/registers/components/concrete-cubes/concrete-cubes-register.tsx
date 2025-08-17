@@ -4,12 +4,13 @@
 import * as React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { getConcreteCubes, updateCubeTestResults, deleteCubeTestGroup } from './data';
+import { getConcreteCubes, updateCubeTestResults, deleteCubeTestGroup, issueCertificateForCubeTest } from './data';
 import { getConcreteCubeColumns } from './columns';
-import { ConcreteCubeSample, GroupedConcreteCubeSample } from '@/lib/types';
+import { ConcreteCubeSample, GroupedConcreteCubeSample, IssueCertificateData } from '@/lib/types';
 import { ConcreteCubesDataTable } from './data-table';
 import { Button } from '@/components/ui/button';
 import { TestResultsDialog } from './test-results-dialog';
+import { IssueCertificateDialog } from './issue-certificate-dialog';
 import { RowSelectionState } from '@tanstack/react-table';
 
 export function ConcreteCubesRegister() {
@@ -18,6 +19,7 @@ export function ConcreteCubesRegister() {
   const { toast } = useToast();
   const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
   const [isTestDialogOpen, setTestDialogOpen] = React.useState(false);
+  const [isIssueDialogOpen, setIssueDialogOpen] = React.useState(false);
   const [selectedSampleSet, setSelectedSampleSet] = React.useState<GroupedConcreteCubeSample | null>(null);
 
   const loadSamples = React.useCallback(async () => {
@@ -79,6 +81,20 @@ export function ConcreteCubesRegister() {
         setTestDialogOpen(true);
     }
   };
+  
+  const handleOpenIssueDialog = (sampleSet?: GroupedConcreteCubeSample) => {
+    let setToOpen = sampleSet;
+    if (!setToOpen) {
+        const selectedIndex = parseInt(Object.keys(rowSelection)[0], 10);
+        setToOpen = samples[selectedIndex];
+    }
+    
+    if (setToOpen) {
+        setSelectedSampleSet(setToOpen);
+        setIssueDialogOpen(true);
+    }
+  };
+
 
   const handleDelete = async (receiptId: string, setNumber: number) => {
     try {
@@ -118,8 +134,29 @@ export function ConcreteCubesRegister() {
         });
     }
   }
+
+  const handleIssueCertificate = async (data: IssueCertificateData) => {
+     if (!selectedSampleSet) return;
+    try {
+      await issueCertificateForCubeTest(selectedSampleSet.receiptId, selectedSampleSet.setNumber || 0, data);
+      toast({
+        title: 'Success',
+        description: 'Certificate details have been saved.',
+      });
+      setIssueDialogOpen(false);
+      setRowSelection({});
+      loadSamples();
+    } catch (error) {
+      console.error('Failed to issue certificate:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Save Failed',
+        description: 'Could not save certificate details.',
+      });
+    }
+  };
   
-  const columns = React.useMemo(() => getConcreteCubeColumns({ onEdit: handleOpenTestDialog, onDelete: handleDelete }), [handleDelete]);
+  const columns = React.useMemo(() => getConcreteCubeColumns({ onEdit: handleOpenTestDialog, onDelete: handleDelete, onIssue: handleOpenIssueDialog }), [handleDelete]);
 
   return (
     <Card className="h-full flex flex-col">
@@ -139,8 +176,9 @@ export function ConcreteCubesRegister() {
                         Test
                     </Button>
                     <Button 
+                        onClick={() => handleOpenIssueDialog()}
                         variant="outline"
-                        disabled={Object.keys(rowSelection).length === 0}
+                        disabled={Object.keys(rowSelection).length !== 1}
                     >
                         Issue
                     </Button>
@@ -162,6 +200,14 @@ export function ConcreteCubesRegister() {
                 onOpenChange={setTestDialogOpen}
                 sampleSet={selectedSampleSet}
                 onSave={handleSaveTestResults}
+            />
+        )}
+        {selectedSampleSet && (
+            <IssueCertificateDialog
+                open={isIssueDialogOpen}
+                onOpenChange={setIssueDialogOpen}
+                sampleSet={selectedSampleSet}
+                onSave={handleIssueCertificate}
             />
         )}
     </Card>

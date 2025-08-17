@@ -1,4 +1,5 @@
 
+
 export type Test = {
   id: string;
   name: string; // was materialTest
@@ -39,9 +40,9 @@ export type ConcreteCubeSample = {
   width?: number;
   height?: number;
   weight?: number;
-  machineUsed?: string;
   load?: number;
   modeOfFailure?: string;
+  machineUsed?: string;
   recordedTemp?: number;
   certificateNumber?: string;
   comment?: string;
@@ -56,3 +57,14 @@ export type ConcreteCubeSample = {
 export interface GroupedConcreteCubeSample extends ConcreteCubeSample {
     samples: ConcreteCubeSample[];
 }
+
+export type IssueCertificateData = {
+  certificateNumber: string;
+  comment?: string;
+  technician: string;
+  dateOfIssue: string;
+  takenBy: string;
+  dateTaken: string;
+  contact: string;
+  issueId?: string;
+};

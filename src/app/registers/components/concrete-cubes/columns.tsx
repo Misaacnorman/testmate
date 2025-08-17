@@ -43,9 +43,10 @@ const renderCellWithSubItems = (items: (string | number | undefined)[]) => (
 interface ConcreteCubeColumnsProps {
   onEdit: (sampleSet: GroupedConcreteCubeSample) => void;
   onDelete: (receiptId: string, setNumber: number) => void;
+  onIssue: (sampleSet: GroupedConcreteCubeSample) => void;
 }
 
-export const getConcreteCubeColumns = ({ onEdit, onDelete }: ConcreteCubeColumnsProps): ColumnDef<GroupedConcreteCubeSample>[] => [
+export const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue }: ConcreteCubeColumnsProps): ColumnDef<GroupedConcreteCubeSample>[] => [
   {
     id: 'select',
     header: ({ table }) => (
@@ -170,7 +171,7 @@ export const getConcreteCubeColumns = ({ onEdit, onDelete }: ConcreteCubeColumns
     header: 'Load (kN)',
     cell: ({row}) => renderCellWithSubItems(row.original.samples.map(s => s.load)),
   },
-    {
+  {
     accessorKey: 'modeOfFailure',
     header: 'Mode of Failure',
     cell: ({row}) => renderCellWithSubItems(row.original.samples.map(s => s.modeOfFailure)),
@@ -220,7 +221,8 @@ export const getConcreteCubeColumns = ({ onEdit, onDelete }: ConcreteCubeColumns
     header: 'Date of Issue',
     cell: ({ row }) => {
        const rowCount = row.original.samples.length;
-       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.dateOfIssue || '-'}</div>
+       const value = row.original.dateOfIssue ? format(parseISO(row.original.dateOfIssue), 'yyyy-MM-dd') : '-';
+       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{value}</div>
     }
   },
   {
@@ -244,7 +246,8 @@ export const getConcreteCubeColumns = ({ onEdit, onDelete }: ConcreteCubeColumns
     header: 'Date Taken',
      cell: ({ row }) => {
        const rowCount = row.original.samples.length;
-       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.dateTaken || '-'}</div>
+       const value = row.original.dateTaken ? format(parseISO(row.original.dateTaken), 'yyyy-MM-dd') : '-';
+       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{value}</div>
     }
   },
   {
@@ -281,6 +284,7 @@ export const getConcreteCubeColumns = ({ onEdit, onDelete }: ConcreteCubeColumns
               <DropdownMenuContent align="end">
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
                   <DropdownMenuItem onClick={() => onEdit(sampleSet)}>Edit Record</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => onIssue(sampleSet)}>Issue Certificate</DropdownMenuItem>
                   <DropdownMenuSeparator />
                    <AlertDialogTrigger asChild>
                       <DropdownMenuItem className="text-destructive">
