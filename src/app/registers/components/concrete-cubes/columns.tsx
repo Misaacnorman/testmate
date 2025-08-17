@@ -51,12 +51,10 @@ export const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue }: ConcreteCu
     id: 'select',
     header: ({ table }) => (
       <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && 'indeterminate')
-        }
+        checked={table.getIsAllPageRowsSelected()}
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
+        disabled // Always disabled for single selection mode
       />
     ),
     cell: ({ row }) => (
@@ -166,7 +164,7 @@ export const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue }: ConcreteCu
     header: 'Weight (kg)',
     cell: ({row}) => renderCellWithSubItems(row.original.samples.map(s => s.weight)),
   },
-  {
+    {
     accessorKey: 'load',
     header: 'Load (kN)',
     cell: ({row}) => renderCellWithSubItems(row.original.samples.map(s => s.load)),
@@ -314,3 +312,5 @@ export const getConcreteCubeColumns = ({ onEdit, onDelete, onIssue }: ConcreteCu
     },
   },
 ];
+
+    

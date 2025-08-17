@@ -49,6 +49,7 @@ export function ConcreteCubesDataTable<TData, TValue>({
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onRowSelectionChange: setRowSelection,
+    enableMultiRowSelection: false, // This is the key change
     state: {
       sorting,
       rowSelection,
@@ -153,3 +154,5 @@ export function ConcreteCubesDataTable<TData, TValue>({
     </div>
   );
 }
+
+    
