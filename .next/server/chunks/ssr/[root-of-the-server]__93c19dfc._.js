@@ -204,7 +204,7 @@ function generateSampleId(material, project) {
     const materialCode = material.substring(0, 3).toUpperCase();
     const projectCode = project.substring(0, 3).toUpperCase();
     const randomPart = Math.random().toString(36).substring(2, 6).toUpperCase();
-    return `${materialCode}/${projectCode}-${randomPart}`;
+    return `${materialCode}-${projectCode}-${randomPart}`;
 }
 async function processAndSaveReceipt(receiptData) {
     const batch = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["writeBatch"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$firebase$2f$config$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["db"]);

@@ -21,8 +21,8 @@ import { Separator } from '@/components/ui/separator';
 const renderCellWithSubItems = (items: (string | number | undefined)[]) => (
   <div className="flex flex-col justify-center h-full">
     {items.map((item, index) => (
-      <div key={index} className="flex-1 py-2 flex items-center justify-center">
-        {item ?? 'N/A'}
+      <div key={index} className="flex-1 py-2 flex items-center justify-center relative">
+        {item ?? '-'}
         {index < items.length - 1 && <Separator orientation="horizontal" className="absolute bottom-0 left-0 w-full" />}
       </div>
     ))}
@@ -57,7 +57,7 @@ export const columns: ColumnDef<GroupedConcreteCubeSample>[] = [
     header: 'Date Received',
     cell: ({ row }) => {
         const rowCount = row.original.samples.length;
-        return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.receivedAt ? format(parseISO(row.original.receivedAt), 'yyyy-MM-dd') : 'N/A'}</div>
+        return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.receivedAt ? format(parseISO(row.original.receivedAt), 'yyyy-MM-dd') : '-'}</div>
     },
   },
   {
@@ -81,7 +81,7 @@ export const columns: ColumnDef<GroupedConcreteCubeSample>[] = [
     header: 'Casting Date',
     cell: ({ row }) => {
        const rowCount = row.original.samples.length;
-       const value = row.original.castingDate ? format(parseISO(row.original.castingDate), 'yyyy-MM-dd') : 'N/A';
+       const value = row.original.castingDate ? format(parseISO(row.original.castingDate), 'yyyy-MM-dd') : '-';
        return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{value}</div>
     }
   },
@@ -90,7 +90,7 @@ export const columns: ColumnDef<GroupedConcreteCubeSample>[] = [
     header: 'Testing Date',
     cell: ({ row }) => {
        const rowCount = row.original.samples.length;
-       const value = row.original.testingDate ? format(parseISO(row.original.testingDate), 'yyyy-MM-dd') : 'N/A';
+       const value = row.original.testingDate ? format(parseISO(row.original.testingDate), 'yyyy-MM-dd') : '-';
        return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{value}</div>
     }
   },
@@ -99,7 +99,7 @@ export const columns: ColumnDef<GroupedConcreteCubeSample>[] = [
     header: 'Class',
      cell: ({ row }) => {
        const rowCount = row.original.samples.length;
-       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.class || 'N/A'}</div>
+       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.class || '-'}</div>
     }
   },
   {
@@ -107,7 +107,7 @@ export const columns: ColumnDef<GroupedConcreteCubeSample>[] = [
     header: 'Age (Days)',
     cell: ({ row }) => {
        const rowCount = row.original.samples.length;
-       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.age || 'N/A'}</div>
+       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.age || '-'}</div>
     }
   },
   {
@@ -115,7 +115,7 @@ export const columns: ColumnDef<GroupedConcreteCubeSample>[] = [
     header: 'Area of Use',
      cell: ({ row }) => {
        const rowCount = row.original.samples.length;
-       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.areaOfUse || 'N/A'}</div>
+       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.areaOfUse || '-'}</div>
     }
   },
   {
@@ -159,7 +159,7 @@ export const columns: ColumnDef<GroupedConcreteCubeSample>[] = [
     header: 'Machine Used',
     cell: ({ row }) => {
        const rowCount = row.original.samples.length;
-       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.machineUsed || 'N/A'}</div>
+       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.machineUsed || '-'}</div>
     }
   },
   {
@@ -167,7 +167,7 @@ export const columns: ColumnDef<GroupedConcreteCubeSample>[] = [
     header: 'Mode of Failure',
      cell: ({ row }) => {
        const rowCount = row.original.samples.length;
-       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.modeOfFailure || 'N/A'}</div>
+       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.modeOfFailure || '-'}</div>
     }
   },
   {
@@ -175,7 +175,7 @@ export const columns: ColumnDef<GroupedConcreteCubeSample>[] = [
     header: 'Temp (°C)',
     cell: ({ row }) => {
        const rowCount = row.original.samples.length;
-       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.recordedTemp || 'N/A'}</div>
+       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.recordedTemp || '-'}</div>
     }
   },
   {
@@ -183,7 +183,7 @@ export const columns: ColumnDef<GroupedConcreteCubeSample>[] = [
     header: 'Certificate No.',
     cell: ({ row }) => {
        const rowCount = row.original.samples.length;
-       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.certificateNumber || 'N/A'}</div>
+       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.certificateNumber || '-'}</div>
     }
   },
   {
@@ -191,7 +191,7 @@ export const columns: ColumnDef<GroupedConcreteCubeSample>[] = [
     header: 'Comment/Remark',
     cell: ({ row }) => {
        const rowCount = row.original.samples.length;
-       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.comment || 'N/A'}</div>
+       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.comment || '-'}</div>
     }
   },
   {
@@ -199,7 +199,7 @@ export const columns: ColumnDef<GroupedConcreteCubeSample>[] = [
     header: 'Technician',
     cell: ({ row }) => {
        const rowCount = row.original.samples.length;
-       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.technician || 'N/A'}</div>
+       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.technician || '-'}</div>
     }
   },
   {
@@ -207,7 +207,7 @@ export const columns: ColumnDef<GroupedConcreteCubeSample>[] = [
     header: 'Date of Issue',
     cell: ({ row }) => {
        const rowCount = row.original.samples.length;
-       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.dateOfIssue || 'N/A'}</div>
+       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.dateOfIssue || '-'}</div>
     }
   },
   {
@@ -215,7 +215,7 @@ export const columns: ColumnDef<GroupedConcreteCubeSample>[] = [
     header: 'Issue ID/Serial No.',
     cell: ({ row }) => {
        const rowCount = row.original.samples.length;
-       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.issueId || 'N/A'}</div>
+       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.issueId || '-'}</div>
     }
   },
   {
@@ -223,7 +223,7 @@ export const columns: ColumnDef<GroupedConcreteCubeSample>[] = [
     header: 'Taken by',
      cell: ({ row }) => {
        const rowCount = row.original.samples.length;
-       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.takenBy || 'N/A'}</div>
+       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.takenBy || '-'}</div>
     }
   },
   {
@@ -231,7 +231,7 @@ export const columns: ColumnDef<GroupedConcreteCubeSample>[] = [
     header: 'Date Taken',
      cell: ({ row }) => {
        const rowCount = row.original.samples.length;
-       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.dateTaken || 'N/A'}</div>
+       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.dateTaken || '-'}</div>
     }
   },
   {
@@ -239,7 +239,7 @@ export const columns: ColumnDef<GroupedConcreteCubeSample>[] = [
     header: 'Contact',
     cell: ({ row }) => {
        const rowCount = row.original.samples.length;
-       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.contact || 'N/A'}</div>
+       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.contact || '-'}</div>
     }
   },
   {
@@ -277,3 +277,5 @@ export const columns: ColumnDef<GroupedConcreteCubeSample>[] = [
     },
   },
 ];
+
+    

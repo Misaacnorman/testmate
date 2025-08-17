@@ -30,9 +30,17 @@ export function ConcreteCubesRegister() {
 
       const processedData: GroupedConcreteCubeSample[] = Object.values(groupedData).map(group => {
         const firstSample = group[0];
+        
+        // Sort samples within the group by serial number
+        const sortedSamples = [...group].sort((a, b) => {
+            const numA = parseInt(a.sampleSerialNumber?.match(/\d+/)?.join('') || '0', 10);
+            const numB = parseInt(b.sampleSerialNumber?.match(/\d+/)?.join('') || '0', 10);
+            return numA - numB;
+        });
+
         return {
             ...firstSample,
-            samples: group,
+            samples: sortedSamples,
         };
       });
 
@@ -72,3 +80,5 @@ export function ConcreteCubesRegister() {
     </Card>
   );
 }
+
+    
