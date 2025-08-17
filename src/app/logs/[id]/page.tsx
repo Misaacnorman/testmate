@@ -36,7 +36,7 @@ export default function LogPage({ params }: { params: { id: string } }) {
     };
 
     fetchReceipt();
-  }, [params]);
+  }, [params.id]);
 
   if (loading) {
     return <div className="flex h-screen items-center justify-center">Loading receipt...</div>;
@@ -52,3 +52,4 @@ export default function LogPage({ params }: { params: { id: string } }) {
     </div>
   );
 }
+
