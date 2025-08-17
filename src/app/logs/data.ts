@@ -44,7 +44,7 @@ export async function deleteReceipt(receiptId: string): Promise<void> {
         'soil-register',
         'aggregates-fine-register',
         'aggregates-coarse-register',
-        // Add other register names here as they are created
+        'pavers-register',
     ];
 
     for (const registerName of possibleRegisters) {

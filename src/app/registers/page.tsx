@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ConcreteCubesRegister } from './components/concrete-cubes/concrete-cubes-register';
+import { PaversRegister } from './components/pavers/pavers-register';
 
 export default function RegistersPage() {
   return (
@@ -33,6 +34,9 @@ export default function RegistersPage() {
           <TabsContent value="concrete-cubes" className="flex-grow">
             <ConcreteCubesRegister />
           </TabsContent>
+          <TabsContent value="pavers" className="flex-grow">
+            <PaversRegister />
+          </TabsContent>
            <TabsContent value="blocks-bricks">
              <Card>
                 <CardHeader>
@@ -40,16 +44,6 @@ export default function RegistersPage() {
                 </CardHeader>
                 <CardContent>
                     <p>Content for Blocks & Bricks will be added here.</p>
-                </CardContent>
-            </Card>
-          </TabsContent>
-          <TabsContent value="pavers">
-             <Card>
-                <CardHeader>
-                    <CardTitle>Pavers Register</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <p>Content for Pavers will be added here.</p>
                 </CardContent>
             </Card>
           </TabsContent>
