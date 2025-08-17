@@ -30,7 +30,6 @@ export type ConcreteCubeSample = {
   receivedAt: string;
   sampleSerialNumber?: string;
   setNumber?: number;
-
   castingDate?: string;
   testingDate?: string;
   class?: string;

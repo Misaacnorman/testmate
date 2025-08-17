@@ -302,9 +302,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$s
 const renderCellWithSubItems = (items)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "flex flex-col justify-center h-full",
         children: items.map((item, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "flex-1 py-2 flex items-center justify-center",
+                className: "flex-1 py-2 flex items-center justify-center relative",
                 children: [
-                    item ?? 'N/A',
+                    item ?? '-',
                     index < items.length - 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$separator$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Separator"], {
                         orientation: "horizontal",
                         className: "absolute bottom-0 left-0 w-full"
@@ -358,7 +358,7 @@ const columns = [
                     height: `${rowCount * 3}rem`
                 },
                 className: "flex items-center justify-center",
-                children: row.original.receivedAt ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$parseISO$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["parseISO"])(row.original.receivedAt), 'yyyy-MM-dd') : 'N/A'
+                children: row.original.receivedAt ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$parseISO$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["parseISO"])(row.original.receivedAt), 'yyyy-MM-dd') : '-'
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
                 lineNumber: 60,
@@ -407,7 +407,7 @@ const columns = [
         header: 'Casting Date',
         cell: ({ row })=>{
             const rowCount = row.original.samples.length;
-            const value = row.original.castingDate ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$parseISO$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["parseISO"])(row.original.castingDate), 'yyyy-MM-dd') : 'N/A';
+            const value = row.original.castingDate ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$parseISO$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["parseISO"])(row.original.castingDate), 'yyyy-MM-dd') : '-';
             return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 style: {
                     height: `${rowCount * 3}rem`
@@ -426,7 +426,7 @@ const columns = [
         header: 'Testing Date',
         cell: ({ row })=>{
             const rowCount = row.original.samples.length;
-            const value = row.original.testingDate ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$parseISO$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["parseISO"])(row.original.testingDate), 'yyyy-MM-dd') : 'N/A';
+            const value = row.original.testingDate ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$parseISO$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["parseISO"])(row.original.testingDate), 'yyyy-MM-dd') : '-';
             return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 style: {
                     height: `${rowCount * 3}rem`
@@ -450,7 +450,7 @@ const columns = [
                     height: `${rowCount * 3}rem`
                 },
                 className: "flex items-center justify-center",
-                children: row.original.class || 'N/A'
+                children: row.original.class || '-'
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
                 lineNumber: 102,
@@ -468,7 +468,7 @@ const columns = [
                     height: `${rowCount * 3}rem`
                 },
                 className: "flex items-center justify-center",
-                children: row.original.age || 'N/A'
+                children: row.original.age || '-'
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
                 lineNumber: 110,
@@ -486,7 +486,7 @@ const columns = [
                     height: `${rowCount * 3}rem`
                 },
                 className: "flex items-center justify-center",
-                children: row.original.areaOfUse || 'N/A'
+                children: row.original.areaOfUse || '-'
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
                 lineNumber: 118,
@@ -547,7 +547,7 @@ const columns = [
                     height: `${rowCount * 3}rem`
                 },
                 className: "flex items-center justify-center",
-                children: row.original.machineUsed || 'N/A'
+                children: row.original.machineUsed || '-'
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
                 lineNumber: 162,
@@ -565,7 +565,7 @@ const columns = [
                     height: `${rowCount * 3}rem`
                 },
                 className: "flex items-center justify-center",
-                children: row.original.modeOfFailure || 'N/A'
+                children: row.original.modeOfFailure || '-'
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
                 lineNumber: 170,
@@ -583,7 +583,7 @@ const columns = [
                     height: `${rowCount * 3}rem`
                 },
                 className: "flex items-center justify-center",
-                children: row.original.recordedTemp || 'N/A'
+                children: row.original.recordedTemp || '-'
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
                 lineNumber: 178,
@@ -601,7 +601,7 @@ const columns = [
                     height: `${rowCount * 3}rem`
                 },
                 className: "flex items-center justify-center",
-                children: row.original.certificateNumber || 'N/A'
+                children: row.original.certificateNumber || '-'
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
                 lineNumber: 186,
@@ -619,7 +619,7 @@ const columns = [
                     height: `${rowCount * 3}rem`
                 },
                 className: "flex items-center justify-center",
-                children: row.original.comment || 'N/A'
+                children: row.original.comment || '-'
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
                 lineNumber: 194,
@@ -637,7 +637,7 @@ const columns = [
                     height: `${rowCount * 3}rem`
                 },
                 className: "flex items-center justify-center",
-                children: row.original.technician || 'N/A'
+                children: row.original.technician || '-'
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
                 lineNumber: 202,
@@ -655,7 +655,7 @@ const columns = [
                     height: `${rowCount * 3}rem`
                 },
                 className: "flex items-center justify-center",
-                children: row.original.dateOfIssue || 'N/A'
+                children: row.original.dateOfIssue || '-'
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
                 lineNumber: 210,
@@ -673,7 +673,7 @@ const columns = [
                     height: `${rowCount * 3}rem`
                 },
                 className: "flex items-center justify-center",
-                children: row.original.issueId || 'N/A'
+                children: row.original.issueId || '-'
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
                 lineNumber: 218,
@@ -691,7 +691,7 @@ const columns = [
                     height: `${rowCount * 3}rem`
                 },
                 className: "flex items-center justify-center",
-                children: row.original.takenBy || 'N/A'
+                children: row.original.takenBy || '-'
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
                 lineNumber: 226,
@@ -709,7 +709,7 @@ const columns = [
                     height: `${rowCount * 3}rem`
                 },
                 className: "flex items-center justify-center",
-                children: row.original.dateTaken || 'N/A'
+                children: row.original.dateTaken || '-'
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
                 lineNumber: 234,
@@ -727,7 +727,7 @@ const columns = [
                     height: `${rowCount * 3}rem`
                 },
                 className: "flex items-center justify-center",
-                children: row.original.contact || 'N/A'
+                children: row.original.contact || '-'
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/concrete-cubes/columns.tsx",
                 lineNumber: 242,
@@ -1301,9 +1301,19 @@ function ConcreteCubesRegister() {
                 const processedData = Object.values(groupedData).map({
                     "ConcreteCubesRegister.useCallback[loadSamples].processedData": (group)=>{
                         const firstSample = group[0];
+                        // Sort samples within the group by serial number
+                        const sortedSamples = [
+                            ...group
+                        ].sort({
+                            "ConcreteCubesRegister.useCallback[loadSamples].processedData.sortedSamples": (a, b)=>{
+                                const numA = parseInt(a.sampleSerialNumber?.match(/\d+/)?.join('') || '0', 10);
+                                const numB = parseInt(b.sampleSerialNumber?.match(/\d+/)?.join('') || '0', 10);
+                                return numA - numB;
+                            }
+                        }["ConcreteCubesRegister.useCallback[loadSamples].processedData.sortedSamples"]);
                         return {
                             ...firstSample,
-                            samples: group
+                            samples: sortedSamples
                         };
                     }
                 }["ConcreteCubesRegister.useCallback[loadSamples].processedData"]);
@@ -1338,20 +1348,20 @@ function ConcreteCubesRegister() {
                         children: "Concrete Cubes Register"
                     }, void 0, false, {
                         fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
-                        lineNumber: 60,
+                        lineNumber: 68,
                         columnNumber: 13
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardDescription"], {
                         children: "Detailed records of all concrete cube samples."
                     }, void 0, false, {
                         fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
-                        lineNumber: 61,
+                        lineNumber: 69,
                         columnNumber: 13
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
-                lineNumber: 59,
+                lineNumber: 67,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -1362,18 +1372,18 @@ function ConcreteCubesRegister() {
                     loading: loading
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
-                    lineNumber: 66,
+                    lineNumber: 74,
                     columnNumber: 13
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
-                lineNumber: 65,
+                lineNumber: 73,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/registers/components/concrete-cubes/concrete-cubes-register.tsx",
-        lineNumber: 58,
+        lineNumber: 66,
         columnNumber: 5
     }, this);
 }
