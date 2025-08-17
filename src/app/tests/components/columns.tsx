@@ -144,8 +144,9 @@ export const columns = ({
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="text-center w-full whitespace-normal"
         >
-          Amount (UGX)
+          <div>Amount<br/>(UGX)</div>
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       ),
@@ -161,8 +162,9 @@ export const columns = ({
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="text-center w-full whitespace-normal"
         >
-          Amount (USD)
+          <div>Amount<br/>(USD)</div>
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       ),
@@ -188,7 +190,7 @@ export const columns = ({
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           className="text-center w-full whitespace-normal"
         >
-          Lead Time (Days)
+          <div>Lead Time<br/>(Days)</div>
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       ),
