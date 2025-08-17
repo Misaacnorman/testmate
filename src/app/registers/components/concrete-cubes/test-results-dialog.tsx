@@ -57,7 +57,7 @@ export function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }: Tes
         height: s.height || 0,
         weight: s.weight || 0,
         load: s.load || 0,
-        machineUsed: s.machineUsed || '',
+        machineUsed: sampleSet.machineUsed || '',
         modeOfFailure: s.modeOfFailure || '',
         recordedTemp: s.recordedTemp || 0,
       })),
@@ -78,7 +78,7 @@ export function TestResultsDialog({ open, onOpenChange, sampleSet, onSave }: Tes
         height: s.height || 0,
         weight: s.weight || 0,
         load: s.load || 0,
-        machineUsed: s.machineUsed || '',
+        machineUsed: sampleSet.machineUsed || s.machineUsed || '',
         modeOfFailure: s.modeOfFailure || '',
         recordedTemp: s.recordedTemp || 0,
       }))

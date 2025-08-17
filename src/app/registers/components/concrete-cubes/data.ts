@@ -1,7 +1,7 @@
 
 'use server';
 
-import { collection, getDocs, orderBy, query } from 'firebase/firestore';
+import { collection, getDocs, orderBy, query, writeBatch, doc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import type { ConcreteCubeSample } from '@/lib/types';
 import { fromFirestore } from '@/lib/utils';
@@ -24,4 +24,25 @@ export async function getConcreteCubes(): Promise<ConcreteCubeSample[]> {
     // If collection doesn't exist, it will throw. Return empty array in that case.
     return [];
   }
+}
+
+export async function updateCubeTestResults(updatedSamples: ConcreteCubeSample[]): Promise<void> {
+    const batch = writeBatch(db);
+    
+    updatedSamples.forEach(sample => {
+        const docRef = doc(db, 'concrete-cubes-register', sample.id);
+        // We only update the fields relevant to the test results
+        batch.update(docRef, {
+            length: sample.length,
+            width: sample.width,
+            height: sample.height,
+            weight: sample.weight,
+            load: sample.load,
+            machineUsed: sample.machineUsed,
+            modeOfFailure: sample.modeOfFailure,
+            recordedTemp: sample.recordedTemp,
+        });
+    });
+
+    await batch.commit();
 }

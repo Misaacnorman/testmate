@@ -10,6 +10,7 @@ import {
   getSortedRowModel,
   SortingState,
   useReactTable,
+  RowSelectionState
 } from '@tanstack/react-table';
 
 import {
@@ -27,12 +28,16 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   loading: boolean;
+  rowSelection: RowSelectionState;
+  setRowSelection: React.Dispatch<React.SetStateAction<RowSelectionState>>;
 }
 
 export function ConcreteCubesDataTable<TData, TValue>({
   columns,
   data,
   loading,
+  rowSelection,
+  setRowSelection,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
@@ -43,8 +48,10 @@ export function ConcreteCubesDataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
+      rowSelection,
     },
     initialState: {
       pagination: {
@@ -78,7 +85,7 @@ export function ConcreteCubesDataTable<TData, TValue>({
                 Array.from({ length: 15 }).map((_, i) => (
                     <TableRow key={i}>
                     {table.getAllLeafColumns().map((column, j) => (
-                        <TableCell key={`${i}-${j}`} className="p-0">
+                        <TableCell key={`${i}-${column.id || j}`} className="p-0">
                             <div className="flex items-center justify-center w-full h-12">
                                 <Skeleton className="h-6 w-4/5" />
                             </div>
@@ -118,7 +125,8 @@ export function ConcreteCubesDataTable<TData, TValue>({
        </div>
       <div className="flex items-center justify-between space-x-2 p-4 border-t">
         <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredRowModel().rows.length} row(s) found.
+          {table.getFilteredSelectedRowModel().rows.length} of{' '}
+          {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
         <div className="flex items-center space-x-2">
             <span className="text-sm">

@@ -4,15 +4,21 @@
 import * as React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { getConcreteCubes } from './data';
+import { getConcreteCubes, updateCubeTestResults } from './data';
 import { columns } from './columns';
 import { ConcreteCubeSample, GroupedConcreteCubeSample } from '@/lib/types';
 import { ConcreteCubesDataTable } from './data-table';
+import { Button } from '@/components/ui/button';
+import { TestResultsDialog } from './test-results-dialog';
+import { RowSelectionState } from '@tanstack/react-table';
 
 export function ConcreteCubesRegister() {
   const [samples, setSamples] = React.useState<GroupedConcreteCubeSample[]>([]);
   const [loading, setLoading] = React.useState(true);
   const { toast } = useToast();
+  const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
+  const [isTestDialogOpen, setTestDialogOpen] = React.useState(false);
+  const [selectedSampleSet, setSelectedSampleSet] = React.useState<GroupedConcreteCubeSample | null>(null);
 
   const loadSamples = React.useCallback(async () => {
     setLoading(true);
@@ -61,21 +67,79 @@ export function ConcreteCubesRegister() {
     loadSamples();
   }, [loadSamples]);
 
+  const handleOpenTestDialog = () => {
+    const selectedIndex = parseInt(Object.keys(rowSelection)[0], 10);
+    const sampleSet = samples[selectedIndex];
+    if (sampleSet) {
+        setSelectedSampleSet(sampleSet);
+        setTestDialogOpen(true);
+    }
+  };
+
+  const handleSaveTestResults = async (updatedSamples: ConcreteCubeSample[]) => {
+    try {
+        await updateCubeTestResults(updatedSamples);
+        toast({
+            title: "Success",
+            description: "Test results have been saved successfully.",
+        });
+        setTestDialogOpen(false);
+        setRowSelection({});
+        // Reload data to reflect changes
+        loadSamples(); 
+    } catch (error) {
+        console.error("Failed to save test results:", error);
+        toast({
+            variant: "destructive",
+            title: "Save Failed",
+            description: "Could not save the test results.",
+        });
+    }
+  }
+
   return (
     <Card className="h-full flex flex-col">
         <CardHeader>
-            <CardTitle>Concrete Cubes Register</CardTitle>
-            <CardDescription>
-                Detailed records of all concrete cube samples.
-            </CardDescription>
+            <div className="flex justify-between items-center">
+                <div>
+                    <CardTitle>Concrete Cubes Register</CardTitle>
+                    <CardDescription>
+                        Detailed records of all concrete cube samples.
+                    </CardDescription>
+                </div>
+                <div className="flex gap-2">
+                    <Button 
+                        onClick={handleOpenTestDialog}
+                        disabled={Object.keys(rowSelection).length !== 1}
+                    >
+                        Test
+                    </Button>
+                    <Button 
+                        variant="outline"
+                        disabled={Object.keys(rowSelection).length === 0}
+                    >
+                        Issue
+                    </Button>
+                </div>
+            </div>
         </CardHeader>
         <CardContent className="flex-grow overflow-hidden">
             <ConcreteCubesDataTable
                 columns={columns}
                 data={samples}
                 loading={loading}
+                rowSelection={rowSelection}
+                setRowSelection={setRowSelection}
             />
         </CardContent>
+        {selectedSampleSet && (
+            <TestResultsDialog 
+                open={isTestDialogOpen}
+                onOpenChange={setTestDialogOpen}
+                sampleSet={selectedSampleSet}
+                onSave={handleSaveTestResults}
+            />
+        )}
     </Card>
   );
 }
