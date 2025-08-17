@@ -6896,7 +6896,7 @@ const getBlockBrickColumns = ({ onEdit, onDelete })=>[
         {
             id: 'holeDimensions',
             header: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "text-center border-x-2 border-white px-1",
+                    className: "text-center px-1",
                     children: "Dimensions of Holes & No. for Hollow Blocks"
                 }, void 0, false, {
                     fileName: "[project]/src/app/registers/components/blocks-bricks/columns.tsx",
@@ -6907,7 +6907,7 @@ const getBlockBrickColumns = ({ onEdit, onDelete })=>[
                 {
                     id: 'holeA',
                     header: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "border-r-2 border-white pr-2",
+                            className: "border-x-2 border-white px-2",
                             children: "Hole a"
                         }, void 0, false, {
                             fileName: "[project]/src/app/registers/components/blocks-bricks/columns.tsx",
@@ -6935,7 +6935,7 @@ const getBlockBrickColumns = ({ onEdit, onDelete })=>[
                 {
                     id: 'holeB',
                     header: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "border-r-2 border-white pr-2",
+                            className: "border-r-2 border-white px-2",
                             children: "Hole b"
                         }, void 0, false, {
                             fileName: "[project]/src/app/registers/components/blocks-bricks/columns.tsx",
@@ -6962,7 +6962,14 @@ const getBlockBrickColumns = ({ onEdit, onDelete })=>[
                 },
                 {
                     id: 'notch',
-                    header: 'Notch',
+                    header: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "border-r-2 border-white px-2",
+                            children: "Notch"
+                        }, void 0, false, {
+                            fileName: "[project]/src/app/registers/components/blocks-bricks/columns.tsx",
+                            lineNumber: 201,
+                            columnNumber: 27
+                        }, this),
                     columns: [
                         {
                             accessorKey: 'notch_number',

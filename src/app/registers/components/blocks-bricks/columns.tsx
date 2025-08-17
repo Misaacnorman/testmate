@@ -131,7 +131,7 @@ export const getBlockBrickColumns = ({ onEdit, onDelete }: BlockBrickColumnsProp
   },
   {
     id: 'dimensions',
-    header: () => <div className="text-center px-1">Dimensions (mm)</div>,
+    header: () => <div className="text-center px-0">Dimensions (mm)</div>,
     columns: [
         {
             accessorKey: 'length',
@@ -152,11 +152,11 @@ export const getBlockBrickColumns = ({ onEdit, onDelete }: BlockBrickColumnsProp
   },
   {
     id: 'holeDimensions',
-    header: () => <div className="text-center px-1">Dimensions of Holes & No. for Hollow Blocks</div>,
+    header: () => <div className="text-center px-0">Dimensions of Holes &amp; No. for Hollow Blocks</div>,
     columns: [
         {
             id: 'holeA',
-            header: () => <div className="border-x-2 border-white px-2">Hole a</div>,
+            header: () => <div className="border-x-2 border-white px-1">Hole a</div>,
             columns: [
                 {
                     accessorKey: 'holeA_number',
@@ -177,7 +177,7 @@ export const getBlockBrickColumns = ({ onEdit, onDelete }: BlockBrickColumnsProp
         },
         {
             id: 'holeB',
-            header: () => <div className="border-r-2 border-white px-2">Hole b</div>,
+            header: () => <div className="border-r-2 border-white px-1">Hole b</div>,
             columns: [
                 {
                     accessorKey: 'holeB_number',
@@ -198,7 +198,7 @@ export const getBlockBrickColumns = ({ onEdit, onDelete }: BlockBrickColumnsProp
         },
         {
             id: 'notch',
-            header: () => <div className="border-r-2 border-white px-2">Notch</div>,
+            header: () => <div className="border-r-2 border-white px-1">Notch</div>,
             columns: [
                 {
                     accessorKey: 'notch_number',

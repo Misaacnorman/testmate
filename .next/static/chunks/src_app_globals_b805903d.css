@@ -1636,6 +1636,11 @@ body {
   padding-bottom: 1rem;
 }
 
+.px-0 {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 .pb-2 {
   padding-bottom: .5rem;
 }
