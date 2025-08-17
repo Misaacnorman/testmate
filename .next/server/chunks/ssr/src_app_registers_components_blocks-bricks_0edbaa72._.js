@@ -1109,15 +1109,15 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         if (sampleSet && open) {
             form.reset({
-                clientName: sampleSet.clientName,
-                projectTitle: sampleSet.projectTitle,
+                clientName: sampleSet.clientName || '',
+                projectTitle: sampleSet.projectTitle || '',
                 samples: sampleSet.samples.map((s)=>({
                         length: s.length || undefined,
                         width: s.width || undefined,
                         height: s.height || undefined,
                         weight: s.weight || undefined,
                         load: s.load || undefined,
-                        modeOfFailure: s.modeOfFailure || undefined,
+                        modeOfFailure: s.modeOfFailure || '',
                         holeA_number: s.holeA_number || undefined,
                         holeA_length: s.holeA_length || undefined,
                         holeA_width: s.holeA_width || undefined,
@@ -1128,7 +1128,7 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                         notch_length: s.notch_length || undefined,
                         notch_width: s.notch_width || undefined
                     })),
-                machineUsed: sampleSet.machineUsed || undefined,
+                machineUsed: sampleSet.machineUsed || '',
                 recordedTemp: sampleSet.recordedTemp || undefined,
                 certificateNumber: sampleSet.certificateNumber || '',
                 comment: sampleSet.comment || '',

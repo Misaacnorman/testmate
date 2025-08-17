@@ -1078,9 +1078,9 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
     const form = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useForm"])({
         // resolver: zodResolver(formSchema), // We'll trigger validation manually per step
         defaultValues: {
-            clientName: sampleSet.clientName,
-            projectTitle: sampleSet.projectTitle,
-            paverType: sampleSet.paverType,
+            clientName: sampleSet.clientName || '',
+            projectTitle: sampleSet.projectTitle || '',
+            paverType: sampleSet.paverType || '',
             samples: sampleSet.samples.map({
                 "EditSampleSetDialog.useForm[form]": (s)=>({
                         length: s.length,
@@ -1088,20 +1088,20 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                         height: s.height,
                         weight: s.weight,
                         load: s.load,
-                        modeOfFailure: s.modeOfFailure
+                        modeOfFailure: s.modeOfFailure || ''
                     })
             }["EditSampleSetDialog.useForm[form]"]),
-            machineUsed: sampleSet.machineUsed,
+            machineUsed: sampleSet.machineUsed || '',
             recordedTemp: sampleSet.recordedTemp,
             paversPerSqM: sampleSet.paversPerSqM,
-            certificateNumber: sampleSet.certificateNumber,
-            comment: sampleSet.comment,
+            certificateNumber: sampleSet.certificateNumber || '',
+            comment: sampleSet.comment || '',
             technician: sampleSet.technician || user?.displayName || user?.email || '',
             dateOfIssue: sampleSet.dateOfIssue ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$parseISO$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["parseISO"])(sampleSet.dateOfIssue), 'yyyy-MM-dd') : (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])(new Date(), 'yyyy-MM-dd'),
-            issueId: sampleSet.issueId,
-            takenBy: sampleSet.takenBy,
+            issueId: sampleSet.issueId || '',
+            takenBy: sampleSet.takenBy || '',
             dateTaken: sampleSet.dateTaken ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$parseISO$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["parseISO"])(sampleSet.dateTaken), 'yyyy-MM-dd') : (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])(new Date(), 'yyyy-MM-dd'),
-            contact: sampleSet.contact
+            contact: sampleSet.contact || ''
         }
     });
     const { fields } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useFieldArray"])({
@@ -1114,7 +1114,7 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                 form.reset({
                     clientName: sampleSet.clientName,
                     projectTitle: sampleSet.projectTitle,
-                    paverType: sampleSet.paverType || undefined,
+                    paverType: sampleSet.paverType || '',
                     samples: sampleSet.samples.map({
                         "EditSampleSetDialog.useEffect": (s)=>({
                                 length: s.length || undefined,
@@ -1122,10 +1122,10 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                 height: s.height || undefined,
                                 weight: s.weight || undefined,
                                 load: s.load || undefined,
-                                modeOfFailure: s.modeOfFailure || undefined
+                                modeOfFailure: s.modeOfFailure || ''
                             })
                     }["EditSampleSetDialog.useEffect"]),
-                    machineUsed: sampleSet.machineUsed || undefined,
+                    machineUsed: sampleSet.machineUsed || '',
                     recordedTemp: sampleSet.recordedTemp || undefined,
                     paversPerSqM: sampleSet.paversPerSqM || undefined,
                     certificateNumber: sampleSet.certificateNumber || '',

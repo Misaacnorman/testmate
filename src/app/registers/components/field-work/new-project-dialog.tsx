@@ -36,34 +36,34 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 
 const projectSchema = z.object({
-  date: z.date(),
+  date: z.date().optional(),
   projectIdBig: z.string().optional(),
   projectIdSmall: z.string().optional(),
-  client: z.string().min(1, 'Client is required'),
-  project: z.string().min(1, 'Project is required'),
-  engineerInCharge: z.string().min(1, 'Engineer in charge is required'),
+  client: z.string().optional(),
+  project: z.string().optional(),
+  engineerInCharge: z.string().optional(),
 
   // Field Work
-  fieldTests: z.string().min(1, 'Field tests description is required'),
-  fieldTechnician: z.string().min(1, 'Field technician is required'),
-  fieldStartDate: z.date(),
-  fieldEndDate: z.date(),
+  fieldTests: z.string().optional(),
+  fieldTechnician: z.string().optional(),
+  fieldStartDate: z.date().optional(),
+  fieldEndDate: z.date().optional(),
   fieldRemarks: z.string().optional(),
 
   // Lab Work
-  labTestsDescription: z.string().min(1, 'Lab tests description is required'),
-  labTechnician: z.string().min(1, 'Lab technician is required'),
-  labStartDate: z.date(),
-  labAgreedDeliveryDate: z.date(),
-  labAgreedDeliverySignature: z.string().min(1, 'Signature is required'),
+  labTestsDescription: z.string().optional(),
+  labTechnician: z.string().optional(),
+  labStartDate: z.date().optional(),
+  labAgreedDeliveryDate: z.date().optional(),
+  labAgreedDeliverySignature: z.string().optional(),
   labActualDeliveryDate: z.date().optional(),
   labActualDeliverySignature: z.string().optional(),
   labRemarks: z.string().optional(),
 
   // Reporting
   acknowledgement: z.string().optional(),
-  reportIssuedBy: z.string().min(1, 'Required'),
-  reportPickedBy: z.string().min(1, 'Required'),
+  reportIssuedBy: z.string().optional(),
+  reportPickedBy: z.string().optional(),
   reportContact: z.string().optional(),
   reportDateTime: z.date().optional(),
   sampleReceiptNumber: z.string().optional(),
@@ -150,11 +150,11 @@ export function NewProjectDialog({
   const handleSubmit = (data: ProjectFormValues) => {
     const formattedData = {
         ...data,
-        date: format(data.date, 'yyyy-MM-dd'),
-        fieldStartDate: format(data.fieldStartDate, 'yyyy-MM-dd'),
-        fieldEndDate: format(data.fieldEndDate, 'yyyy-MM-dd'),
-        labStartDate: format(data.labStartDate, 'yyyy-MM-dd'),
-        labAgreedDeliveryDate: format(data.labAgreedDeliveryDate, 'yyyy-MM-dd'),
+        date: data.date ? format(data.date, 'yyyy-MM-dd') : '',
+        fieldStartDate: data.fieldStartDate ? format(data.fieldStartDate, 'yyyy-MM-dd') : '',
+        fieldEndDate: data.fieldEndDate ? format(data.fieldEndDate, 'yyyy-MM-dd') : '',
+        labStartDate: data.labStartDate ? format(data.labStartDate, 'yyyy-MM-dd') : '',
+        labAgreedDeliveryDate: data.labAgreedDeliveryDate ? format(data.labAgreedDeliveryDate, 'yyyy-MM-dd') : '',
         labActualDeliveryDate: data.labActualDeliveryDate ? format(data.labActualDeliveryDate, 'yyyy-MM-dd') : '',
         reportDateTime: data.reportDateTime ? data.reportDateTime.toISOString() : '',
     };

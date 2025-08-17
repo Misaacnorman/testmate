@@ -1147,8 +1147,8 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
         "EditSampleSetDialog.useEffect": ()=>{
             if (sampleSet && open) {
                 form.reset({
-                    clientName: sampleSet.clientName,
-                    projectTitle: sampleSet.projectTitle,
+                    clientName: sampleSet.clientName || '',
+                    projectTitle: sampleSet.projectTitle || '',
                     samples: sampleSet.samples.map({
                         "EditSampleSetDialog.useEffect": (s)=>({
                                 length: s.length || undefined,
@@ -1156,7 +1156,7 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                 height: s.height || undefined,
                                 weight: s.weight || undefined,
                                 load: s.load || undefined,
-                                modeOfFailure: s.modeOfFailure || undefined,
+                                modeOfFailure: s.modeOfFailure || '',
                                 holeA_number: s.holeA_number || undefined,
                                 holeA_length: s.holeA_length || undefined,
                                 holeA_width: s.holeA_width || undefined,
@@ -1168,7 +1168,7 @@ function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }) {
                                 notch_width: s.notch_width || undefined
                             })
                     }["EditSampleSetDialog.useEffect"]),
-                    machineUsed: sampleSet.machineUsed || undefined,
+                    machineUsed: sampleSet.machineUsed || '',
                     recordedTemp: sampleSet.recordedTemp || undefined,
                     certificateNumber: sampleSet.certificateNumber || '',
                     comment: sampleSet.comment || '',
