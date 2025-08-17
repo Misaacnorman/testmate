@@ -1106,15 +1106,17 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
-function LogPage({ params }) {
+function LogPage({ params: paramsPromise }) {
     _s();
     const [receiptData, setReceiptData] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
+    // The 'use' hook is not available in the version of React being used.
+    // We will access params directly and manage the id in the useEffect hook.
+    const { id } = paramsPromise;
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "LogPage.useEffect": ()=>{
             const fetchReceipt = {
                 "LogPage.useEffect.fetchReceipt": async ()=>{
-                    const { id } = params;
                     if (!id) return;
                     try {
                         const docRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm2017$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["doc"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$firebase$2f$config$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["db"], 'receipts', id);
@@ -1135,12 +1137,12 @@ function LogPage({ params }) {
                     }
                 }
             }["LogPage.useEffect.fetchReceipt"];
-            if (params.id) {
+            if (id) {
                 fetchReceipt();
             }
         }
     }["LogPage.useEffect"], [
-        params.id
+        id
     ]);
     if (loading) {
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1148,7 +1150,7 @@ function LogPage({ params }) {
             children: "Loading receipt..."
         }, void 0, false, {
             fileName: "[project]/src/app/logs/[id]/page.tsx",
-            lineNumber: 44,
+            lineNumber: 47,
             columnNumber: 12
         }, this);
     }
@@ -1161,12 +1163,12 @@ function LogPage({ params }) {
             data: receiptData
         }, void 0, false, {
             fileName: "[project]/src/app/logs/[id]/page.tsx",
-            lineNumber: 53,
+            lineNumber: 56,
             columnNumber: 8
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/app/logs/[id]/page.tsx",
-        lineNumber: 52,
+        lineNumber: 55,
         columnNumber: 5
     }, this);
 }

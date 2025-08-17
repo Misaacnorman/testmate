@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect, useState, use } from 'react';
+import { useEffect, useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { notFound } from 'next/navigation';
@@ -10,13 +10,11 @@ import { fromFirestore } from '@/lib/utils';
 import type { Receipt } from '@/lib/types';
 
 
-export default function LogPage({ params: paramsPromise }: { params: { id: string } }) {
+export default function LogPage({ params }: { params: { id: string } }) {
   const [receiptData, setReceiptData] = useState<Receipt | null>(null);
   const [loading, setLoading] = useState(true);
   
-  // The 'use' hook is not available in the version of React being used.
-  // We will access params directly and manage the id in the useEffect hook.
-  const { id } = paramsPromise;
+  const { id } = params;
 
   useEffect(() => {
     const fetchReceipt = async () => {
