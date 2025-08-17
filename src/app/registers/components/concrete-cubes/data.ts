@@ -41,7 +41,8 @@ export async function updateSampleSetDetails(receiptId: string, testId: string, 
 
     updatableSharedFields.forEach(field => {
         if (data.hasOwnProperty(field)) {
-            sharedUpdateData[field] = (data as any)[field];
+            const value = (data as any)[field];
+            sharedUpdateData[field] = value === undefined ? null : value;
         }
     });
 
@@ -56,7 +57,8 @@ export async function updateSampleSetDetails(receiptId: string, testId: string, 
             const updatableIndividualFields = ['length', 'width', 'height', 'weight', 'load', 'modeOfFailure', 'sampleSerialNumber'];
             updatableIndividualFields.forEach(field => {
                 if (individualSampleData.hasOwnProperty(field)) {
-                    updateDataForDoc[field] = (individualSampleData as any)[field];
+                    const value = (individualSampleData as any)[field];
+                    updateDataForDoc[field] = value === undefined ? null : value;
                 }
             });
         }
@@ -99,7 +101,7 @@ export async function updateCubeTestResults(receiptId: string, testId: string, s
 
     const sharedData = {
       machineUsed: data.machineUsed,
-      recordedTemp: data.recordedTemp,
+      recordedTemp: data.recordedTemp === undefined ? null : data.recordedTemp,
     };
 
     snapshot.docs.forEach(doc => {
@@ -116,6 +118,11 @@ export async function updateCubeTestResults(receiptId: string, testId: string, s
                 load: sampleData.load,
                 modeOfFailure: sampleData.modeOfFailure,
             };
+             for (const key in updatePayload) {
+                if (updatePayload[key as keyof typeof updatePayload] === undefined) {
+                    (updatePayload as any)[key] = null;
+                }
+            }
             batch.update(doc.ref, updatePayload);
         }
     });
@@ -132,6 +139,11 @@ export async function issueCertificateForCubeTest(receiptId: string, testId: str
     }
 
     const batch = writeBatch(db);
+     for (const key in data) {
+        if (data[key] === undefined) {
+            data[key] = null;
+        }
+    }
     
     snapshot.docs.forEach(doc => {
         batch.update(doc.ref, data);

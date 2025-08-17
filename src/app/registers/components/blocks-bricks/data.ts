@@ -41,7 +41,8 @@ export async function updateSampleSetDetails(receiptId: string, testId: string, 
 
     updatableSharedFields.forEach(field => {
         if (data.hasOwnProperty(field)) {
-            sharedUpdateData[field] = (data as any)[field];
+             const value = (data as any)[field];
+            sharedUpdateData[field] = value === undefined ? null : value;
         }
     });
 
@@ -56,7 +57,8 @@ export async function updateSampleSetDetails(receiptId: string, testId: string, 
             const updatableIndividualFields = ['length', 'width', 'height', 'weight', 'load', 'modeOfFailure', 'sampleSerialNumber', 'holeA_number', 'holeA_length', 'holeA_width', 'holeB_number', 'holeB_length', 'holeB_width', 'notch_number', 'notch_length', 'notch_width'];
             updatableIndividualFields.forEach(field => {
                 if (individualSampleData.hasOwnProperty(field)) {
-                    updateDataForDoc[field] = (individualSampleData as any)[field];
+                    const value = (individualSampleData as any)[field];
+                    updateDataForDoc[field] = value === undefined ? null : value;
                 }
             });
         }
@@ -99,7 +101,7 @@ export async function updateBlockBrickTestResults(receiptId: string, testId: str
 
     const sharedData = {
       machineUsed: data.machineUsed,
-      recordedTemp: data.recordedTemp,
+      recordedTemp: data.recordedTemp === undefined ? null : data.recordedTemp,
     };
 
     snapshot.docs.forEach(doc => {
@@ -125,6 +127,11 @@ export async function updateBlockBrickTestResults(receiptId: string, testId: str
                 notch_length: sampleData.notch_length,
                 notch_width: sampleData.notch_width,
             };
+             for (const key in updatePayload) {
+                if (updatePayload[key as keyof typeof updatePayload] === undefined) {
+                    (updatePayload as any)[key] = null;
+                }
+            }
             batch.update(doc.ref, updatePayload);
         }
     });
@@ -141,6 +148,12 @@ export async function issueCertificateForBlockBrickTest(receiptId: string, testI
     }
 
     const batch = writeBatch(db);
+    
+     for (const key in data) {
+        if (data[key] === undefined) {
+            data[key] = null;
+        }
+    }
     
     snapshot.docs.forEach(doc => {
         batch.update(doc.ref, data);

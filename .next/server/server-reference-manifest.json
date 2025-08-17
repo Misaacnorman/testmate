@@ -22,7 +22,7 @@
         "app/registers/page": "action-browser"
       }
     },
-    "703ca03c4527c8e17b524a8340f5c7fa96254f9859": {
+    "783ca03c4527c8e17b524a8340f5c7fa96254f9859": {
       "workers": {
         "app/registers/page": {
           "moduleId": "[project]/.next-internal/server/app/registers/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/registers/components/concrete-cubes/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/app/registers/components/pavers/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/src/app/registers/components/blocks-bricks/data.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
@@ -33,7 +33,7 @@
         "app/registers/page": "action-browser"
       }
     },
-    "708385756c86f70ccb930927038bff8219f3f85bf8": {
+    "788385756c86f70ccb930927038bff8219f3f85bf8": {
       "workers": {
         "app/registers/page": {
           "moduleId": "[project]/.next-internal/server/app/registers/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/registers/components/concrete-cubes/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/app/registers/components/pavers/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/src/app/registers/components/blocks-bricks/data.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
@@ -44,7 +44,7 @@
         "app/registers/page": "action-browser"
       }
     },
-    "707ef623f9fcc5aa515abfe0a22b4d6f6647380cf3": {
+    "787ef623f9fcc5aa515abfe0a22b4d6f6647380cf3": {
       "workers": {
         "app/registers/page": {
           "moduleId": "[project]/.next-internal/server/app/registers/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/registers/components/concrete-cubes/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/app/registers/components/pavers/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/src/app/registers/components/blocks-bricks/data.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
@@ -77,7 +77,7 @@
         "app/registers/page": "action-browser"
       }
     },
-    "702cff095aec703008e0d15ba0c851f41952b4f0ec": {
+    "782cff095aec703008e0d15ba0c851f41952b4f0ec": {
       "workers": {
         "app/registers/page": {
           "moduleId": "[project]/.next-internal/server/app/registers/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/registers/components/concrete-cubes/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/app/registers/components/pavers/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/src/app/registers/components/blocks-bricks/data.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
@@ -88,7 +88,7 @@
         "app/registers/page": "action-browser"
       }
     },
-    "70702440c229bff2b403e13f5e21a7455e329cdd28": {
+    "78702440c229bff2b403e13f5e21a7455e329cdd28": {
       "workers": {
         "app/registers/page": {
           "moduleId": "[project]/.next-internal/server/app/registers/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/registers/components/concrete-cubes/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/app/registers/components/pavers/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/src/app/registers/components/blocks-bricks/data.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
@@ -99,7 +99,7 @@
         "app/registers/page": "action-browser"
       }
     },
-    "7003ed0f5b4f396dd33583fe1397a01e66aab07979": {
+    "7803ed0f5b4f396dd33583fe1397a01e66aab07979": {
       "workers": {
         "app/registers/page": {
           "moduleId": "[project]/.next-internal/server/app/registers/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/registers/components/concrete-cubes/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/app/registers/components/pavers/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/src/app/registers/components/blocks-bricks/data.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
@@ -132,7 +132,7 @@
         "app/registers/page": "action-browser"
       }
     },
-    "70bbf5551ea8304f70288f12174e8c933493d889f1": {
+    "78bbf5551ea8304f70288f12174e8c933493d889f1": {
       "workers": {
         "app/registers/page": {
           "moduleId": "[project]/.next-internal/server/app/registers/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/registers/components/concrete-cubes/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/app/registers/components/pavers/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/src/app/registers/components/blocks-bricks/data.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
@@ -143,7 +143,7 @@
         "app/registers/page": "action-browser"
       }
     },
-    "70946eb03b50f68deee2ee3c42c837c9f79df59aea": {
+    "78946eb03b50f68deee2ee3c42c837c9f79df59aea": {
       "workers": {
         "app/registers/page": {
           "moduleId": "[project]/.next-internal/server/app/registers/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/registers/components/concrete-cubes/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/app/registers/components/pavers/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/src/app/registers/components/blocks-bricks/data.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
@@ -154,7 +154,7 @@
         "app/registers/page": "action-browser"
       }
     },
-    "705c2284558f343e6549de4ad95a763f201e07830a": {
+    "785c2284558f343e6549de4ad95a763f201e07830a": {
       "workers": {
         "app/registers/page": {
           "moduleId": "[project]/.next-internal/server/app/registers/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/registers/components/concrete-cubes/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/app/registers/components/pavers/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/src/app/registers/components/blocks-bricks/data.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
