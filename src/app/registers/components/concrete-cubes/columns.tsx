@@ -166,22 +166,22 @@ export const getConcreteCubeColumns = ({ onEdit, onDelete }: ConcreteCubeColumns
     cell: ({row}) => renderCellWithSubItems(row.original.samples.map(s => s.weight)),
   },
   {
+    accessorKey: 'load',
+    header: 'Load (kN)',
+    cell: ({row}) => renderCellWithSubItems(row.original.samples.map(s => s.load)),
+  },
+    {
+    accessorKey: 'modeOfFailure',
+    header: 'Mode of Failure',
+    cell: ({row}) => renderCellWithSubItems(row.original.samples.map(s => s.modeOfFailure)),
+  },
+  {
     accessorKey: 'machineUsed',
     header: 'Machine Used',
     cell: ({ row }) => {
        const rowCount = row.original.samples.length;
        return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.machineUsed || '-'}</div>
     }
-  },
-  {
-    accessorKey: 'load',
-    header: 'Load (kN)',
-    cell: ({row}) => renderCellWithSubItems(row.original.samples.map(s => s.load)),
-  },
-  {
-    accessorKey: 'modeOfFailure',
-    header: 'Mode of Failure',
-    cell: ({row}) => renderCellWithSubItems(row.original.samples.map(s => s.modeOfFailure)),
   },
   {
     accessorKey: 'recordedTemp',

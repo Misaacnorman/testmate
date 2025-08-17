@@ -236,6 +236,10 @@ async function updateCubeTestResults(updatedSamples) {
         if (sample.machineUsed) updateData.machineUsed = sample.machineUsed;
         if (sample.modeOfFailure) updateData.modeOfFailure = sample.modeOfFailure;
         if (sample.recordedTemp) updateData.recordedTemp = sample.recordedTemp;
+        // Make sure to update the shared machineUsed value on all samples in the set
+        if (updatedSamples[0].machineUsed) {
+            updateData.machineUsed = updatedSamples[0].machineUsed;
+        }
         batch.update(docRef, updateData);
     });
     await batch.commit();
