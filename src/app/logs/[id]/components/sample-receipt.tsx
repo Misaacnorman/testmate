@@ -4,18 +4,29 @@
 import React, { useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { useReactToPrint } from 'react-to-print';
 import { Printer } from 'lucide-react';
 import { TestTube } from 'lucide-react';
+import type { Receipt } from '@/lib/types';
 
 
-export function SampleReceipt({ data }: { data: any }) {
+export function SampleReceipt({ data }: { data: Receipt }) {
   const componentRef = useRef<HTMLDivElement>(null);
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     documentTitle: `Sample_Receipt_${data.id}`,
   });
+
+  const parseAndFormatDate = (dateString: string | undefined, formatString: string = 'PPP') => {
+      if (!dateString) return 'N/A';
+      try {
+        const date = dateString.includes('T') ? parseISO(dateString) : parseISO(dateString.replace(' ', 'T'));
+        return format(date, formatString);
+      } catch (e) {
+          return 'Invalid Date';
+      }
+  }
 
   return (
     <div className="bg-white max-w-4xl mx-auto p-8 rounded-lg shadow-xl">
@@ -39,7 +50,7 @@ export function SampleReceipt({ data }: { data: any }) {
           <div className="text-right">
             <h2 className="text-2xl font-bold uppercase text-primary">Sample Receipt</h2>
             <p className="text-lg font-mono">ID: {data.id}</p>
-            <p className="text-sm text-gray-600">Date: {data.receiptDate ? format(new Date(data.receiptDate.seconds * 1000), 'PPP') : 'N/A'}</p>
+            <p className="text-sm text-gray-600">Date: {parseAndFormatDate(data.receiptDate)}</p>
           </div>
         </header>
 
@@ -96,8 +107,8 @@ export function SampleReceipt({ data }: { data: any }) {
                                 {testDetails.sets.map((set: any, i: number) => (
                                     <div key={i} className="p-2 text-xs grid grid-cols-4 gap-2">
                                         <p><strong>Set {i + 1}:</strong> {testDetails.setDistribution[i]} samples</p>
-                                        <p><strong>Casting:</strong> {set.castingDate ? format(new Date(set.castingDate), 'dd-MMM-yy') : 'N/A'}</p>
-                                        <p><strong>Testing:</strong> {set.testingDate ? format(new Date(set.testingDate), 'dd-MMM-yy') : 'N/A'}</p>
+                                        <p><strong>Casting:</strong> {parseAndFormatDate(set.castingDate, 'dd-MMM-yy')}</p>
+                                        <p><strong>Testing:</strong> {parseAndFormatDate(set.testingDate, 'dd-MMM-yy')}</p>
                                         <p><strong>Age:</strong> {set.age || 'N/A'} days</p>
                                         <p className="col-span-2"><strong>Area of Use:</strong> {set.areaOfUse || 'N/A'}</p>
                                         {set.class && <p><strong>Class:</strong> {set.class}</p>}

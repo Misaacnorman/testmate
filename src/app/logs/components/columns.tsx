@@ -4,7 +4,7 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal, ArrowUpDown } from 'lucide-react';
 import Link from 'next/link';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -80,9 +80,15 @@ export const columns = ({ onDelete }: ColumnsProps): ColumnDef<Receipt>[] => [
       </Button>
     ),
     cell: ({ row }) => {
-      const date = row.getValue('receiptDate') as { seconds: number; nanoseconds: number };
-      if (!date?.seconds) return 'N/A';
-      return format(new Date(date.seconds * 1000), 'PPP p');
+      const dateString = row.getValue('receiptDate') as string;
+      if (!dateString) return 'N/A';
+      try {
+        const date = parseISO(dateString.replace(' ', 'T'));
+        return format(date, 'PPP p');
+      } catch (e) {
+        console.error("Failed to parse date:", dateString);
+        return 'Invalid Date';
+      }
     },
   },
   {

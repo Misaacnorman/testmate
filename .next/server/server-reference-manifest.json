@@ -43,6 +43,28 @@
       "layer": {
         "app/tests/page": "action-browser"
       }
+    },
+    "0010d33ed374a454f5f6d055cfb946993f15a4b8a5": {
+      "workers": {
+        "app/logs/page": {
+          "moduleId": "[project]/.next-internal/server/app/logs/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/logs/data.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/logs/page": "action-browser"
+      }
+    },
+    "40ad835583e9fd24515fa92ab873d198ee9b0a1631": {
+      "workers": {
+        "app/logs/page": {
+          "moduleId": "[project]/.next-internal/server/app/logs/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/logs/data.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/logs/page": "action-browser"
+      }
     }
   },
   "edge": {},

@@ -15,10 +15,7 @@ export type Receipt = {
   id: string;
   clientName: string;
   projectTitle: string;
-  receiptDate: {
-    seconds: number;
-    nanoseconds: number;
-  };
+  receiptDate: string; // Changed from object to string
   // Add other fields from the form as needed
   [key: string]: any; 
 };

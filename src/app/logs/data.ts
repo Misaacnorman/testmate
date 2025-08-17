@@ -4,6 +4,7 @@
 import { collection, getDocs, doc, deleteDoc, writeBatch, query, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import type { Receipt } from '@/lib/types';
+import { fromFirestore } from '@/lib/utils';
 
 const receiptsCollection = collection(db, 'receipts');
 
@@ -11,7 +12,7 @@ export async function getReceipts(): Promise<Receipt[]> {
   // Simulate network delay for a better UX
   await new Promise(resolve => setTimeout(resolve, 500));
   const snapshot = await getDocs(receiptsCollection);
-  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Receipt));
+  return snapshot.docs.map(doc => fromFirestore<Receipt>({ id: doc.id, ...doc.data() }));
 }
 
 export async function deleteReceipt(receiptId: string): Promise<void> {

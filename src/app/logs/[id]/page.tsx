@@ -6,9 +6,12 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { notFound } from 'next/navigation';
 import { SampleReceipt } from './components/sample-receipt';
+import { fromFirestore } from '@/lib/utils';
+import type { Receipt } from '@/lib/types';
+
 
 export default function LogPage({ params }: { params: { id: string } }) {
-  const [receiptData, setReceiptData] = useState<any>(null);
+  const [receiptData, setReceiptData] = useState<Receipt | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -19,7 +22,8 @@ export default function LogPage({ params }: { params: { id: string } }) {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          setReceiptData(docSnap.data());
+          const data = fromFirestore<Receipt>({ id: docSnap.id, ...docSnap.data() });
+          setReceiptData(data);
         } else {
           setReceiptData(null);
         }
