@@ -4,6 +4,17 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 import { Button } from '@/components/ui/button';
 import {
@@ -16,8 +27,11 @@ import {
 } from '@/components/ui/dropdown-menu';
 import type { FieldWorkInstruction } from '@/lib/types';
 
+interface FieldWorkColumnsProps {
+  onDelete: (id: string) => void;
+}
 
-export const getFieldWorkColumns = (): ColumnDef<FieldWorkInstruction>[] => [
+export const getFieldWorkColumns = ({ onDelete }: FieldWorkColumnsProps): ColumnDef<FieldWorkInstruction>[] => [
   {
     accessorKey: 'date',
     header: 'Date',
@@ -106,6 +120,7 @@ export const getFieldWorkColumns = (): ColumnDef<FieldWorkInstruction>[] => [
       const instruction = row.original;
       return (
         <div className="text-center">
+          <AlertDialog>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="h-8 w-8 p-0">
@@ -118,9 +133,26 @@ export const getFieldWorkColumns = (): ColumnDef<FieldWorkInstruction>[] => [
                   <DropdownMenuItem>Edit</DropdownMenuItem>
                   <DropdownMenuItem>Mark as Complete</DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
+                  <AlertDialogTrigger asChild>
+                    <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
+                  </AlertDialogTrigger>
               </DropdownMenuContent>
             </DropdownMenu>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete this project instruction.
+                  </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={() => onDelete(instruction.id)}>
+                      Continue
+                  </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       );
     },

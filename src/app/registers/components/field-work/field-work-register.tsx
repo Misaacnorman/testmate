@@ -4,7 +4,7 @@
 import * as React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { getFieldWorkInstructions, createFieldWorkInstruction } from './data';
+import { getFieldWorkInstructions, createFieldWorkInstruction, deleteFieldWorkInstruction } from './data';
 import { getFieldWorkColumns } from './columns';
 import { FieldWorkInstruction } from '@/lib/types';
 import { FieldWorkDataTable } from './data-table';
@@ -63,7 +63,25 @@ export function FieldWorkRegister() {
     }
   };
 
-  const columns = React.useMemo(() => getFieldWorkColumns(), []);
+  const handleDelete = async (id: string) => {
+    try {
+        await deleteFieldWorkInstruction(id);
+        toast({
+            title: 'Success',
+            description: `Project has been deleted.`
+        });
+        loadInstructions(); // Refresh data
+    } catch (error) {
+        console.error("Failed to delete instruction:", error);
+        toast({
+            variant: "destructive",
+            title: "Delete Failed",
+            description: "Could not delete the instruction from the register."
+        });
+    }
+  }
+
+  const columns = React.useMemo(() => getFieldWorkColumns({ onDelete: handleDelete }), [handleDelete]);
 
   return (
     <Card className="h-full flex flex-col">

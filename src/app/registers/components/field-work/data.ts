@@ -1,7 +1,7 @@
 
 'use server';
 
-import { collection, getDocs, orderBy, query, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, getDocs, orderBy, query, addDoc, serverTimestamp, doc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import type { FieldWorkInstruction } from '@/lib/types';
 import { fromFirestore } from '@/lib/utils';
@@ -30,4 +30,9 @@ export async function createFieldWorkInstruction(data: Omit<FieldWorkInstruction
         ...data,
         createdAt: serverTimestamp()
     });
+}
+
+export async function deleteFieldWorkInstruction(id: string): Promise<void> {
+    const docRef = doc(db, 'fieldWorkInstructions', id);
+    await deleteDoc(docRef);
 }
