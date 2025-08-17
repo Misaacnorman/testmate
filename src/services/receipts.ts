@@ -6,6 +6,7 @@ import {
   writeBatch,
   doc,
   serverTimestamp,
+  addDoc,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 
@@ -27,6 +28,7 @@ function generateSampleId(material: string, project: string) {
     return `${materialCode}-${projectCode}-${randomPart}`;
 }
 
+const specialCategoriesForRegisters = ['Concrete Cubes', 'Bricks', 'Blocks', 'Pavers', 'Cylinder'];
 
 export async function processAndSaveReceipt(receiptData: any): Promise<{ id: string }> {
   const batch = writeBatch(db);
@@ -45,26 +47,45 @@ export async function processAndSaveReceipt(receiptData: any): Promise<{ id: str
   batch.set(receiptRef, newReceipt);
 
   const { formData, categories, specialData } = receiptData;
+  
+  const fieldWorkInstructionPayload: any = {
+      date: new Date().toISOString().split('T')[0],
+      projectIdSmall: `SAMPLES-${receiptId}`,
+      client: formData.clientName,
+      project: formData.projectTitle,
+      engineerInCharge: formData.receivedBy,
+      sampleReceiptNumber: receiptId,
+      labTestsDescription: [],
+  };
 
   Object.entries(categories).forEach(([category, catData]: [string, any]) => {
      Object.entries(catData.tests).forEach(([testId, testData]: [string, any]) => {
 
-        const isSpecialCategory = Object.keys(specialData).includes(category) && specialData[category][testId];
-        const lowerCaseCategory = category.toLowerCase();
-        let registerName = lowerCaseCategory.replace(/\s/g, '-') + '-register';
+        const isSpecialCategory = specialCategoriesForRegisters.some(sc => sc.toLowerCase() === category.toLowerCase());
+        
+        let registerName;
 
         if (testData.materialTest.toLowerCase().trim() === 'water absorption') {
             registerName = 'water-absorption-register';
-        } else if (lowerCaseCategory === 'bricks' || lowerCaseCategory === 'blocks') {
-            registerName = 'blocks-bricks-register';
-        } else if (lowerCaseCategory === 'cylinder') {
-            registerName = 'cylinder-register';
+        } else if (isSpecialCategory) {
+            const lowerCaseCategory = category.toLowerCase();
+            if (lowerCaseCategory === 'bricks' || lowerCaseCategory === 'blocks') {
+                registerName = 'blocks-bricks-register';
+            } else {
+                 registerName = lowerCaseCategory.replace(/\s/g, '-') + '-register';
+            }
+        } else {
+            // Non-special categories are added to the field work instructions
+            fieldWorkInstructionPayload.labTestsDescription.push(`${testData.materialTest} (Qty: ${testData.quantity})`);
+            return; // Skip register creation for this test
         }
         
-        if (isSpecialCategory) {
+        const isSpecialDataAvailable = Object.keys(specialData).includes(category) && specialData[category][testId];
+
+        if (isSpecialDataAvailable) {
             const specialTestData = specialData[category][testId];
             specialTestData.sets.forEach((set: any, setIndex: number) => {
-                set.serials.forEach((serialId: string, sampleIndex: number) => {
+                set.serials.forEach((serialId: string) => {
                     const sampleDocId = generateSampleId(category, formData.projectTitle);
                     const sampleRef = doc(db, registerName, sampleDocId);
                     
@@ -113,6 +134,13 @@ export async function processAndSaveReceipt(receiptData: any): Promise<{ id: str
      });
   });
 
+  // If there were any non-special tests, create a field work instruction
+  if (fieldWorkInstructionPayload.labTestsDescription.length > 0) {
+      fieldWorkInstructionPayload.labTestsDescription = fieldWorkInstructionPayload.labTestsDescription.join(', ');
+      const fieldWorkRef = collection(db, 'fieldWorkInstructions');
+      // We don't use the batch here because we want to add it as a separate document
+      await addDoc(fieldWorkRef, fieldWorkInstructionPayload);
+  }
 
   await batch.commit();
 

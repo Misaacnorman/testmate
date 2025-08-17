@@ -4,17 +4,21 @@
 import * as React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { getFieldWorkInstructions } from './data';
+import { getFieldWorkInstructions, createFieldWorkInstruction } from './data';
 import { getFieldWorkColumns } from './columns';
 import { FieldWorkInstruction } from '@/lib/types';
 import { FieldWorkDataTable } from './data-table';
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
+import { NewProjectDialog } from './new-project-dialog'; // Import the new dialog
 
 export function FieldWorkRegister() {
   const [instructions, setInstructions] = React.useState<FieldWorkInstruction[]>([]);
   const [loading, setLoading] = React.useState(true);
   const { toast } = useToast();
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  const [isProcessing, setIsProcessing] = React.useState(false);
+
 
   const loadInstructions = React.useCallback(async () => {
     setLoading(true);
@@ -37,6 +41,28 @@ export function FieldWorkRegister() {
     loadInstructions();
   }, [loadInstructions]);
 
+  const handleCreateProject = async (data: Omit<FieldWorkInstruction, 'id'>) => {
+    setIsProcessing(true);
+    try {
+        await createFieldWorkInstruction(data);
+        toast({
+            title: 'Success',
+            description: 'New project has been created successfully.'
+        });
+        setIsDialogOpen(false);
+        loadInstructions(); // Refresh the data
+    } catch (error) {
+        console.error("Failed to create project:", error);
+        toast({
+            variant: "destructive",
+            title: "Creation Failed",
+            description: "Could not create the new project instruction."
+        });
+    } finally {
+        setIsProcessing(false);
+    }
+  };
+
   const columns = React.useMemo(() => getFieldWorkColumns(), []);
 
   return (
@@ -49,7 +75,7 @@ export function FieldWorkRegister() {
                         Records of all assigned field work instructions.
                     </CardDescription>
                 </div>
-                 <Button>
+                 <Button onClick={() => setIsDialogOpen(true)}>
                     <PlusCircle className="mr-2 h-4 w-4" />
                     New Project
                 </Button>
@@ -62,7 +88,12 @@ export function FieldWorkRegister() {
                 loading={loading}
             />
         </CardContent>
+         <NewProjectDialog
+            open={isDialogOpen}
+            onOpenChange={setIsDialogOpen}
+            onSubmit={handleCreateProject}
+            processing={isProcessing}
+        />
     </Card>
   );
 }
-

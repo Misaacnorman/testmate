@@ -616,14 +616,14 @@ function FieldWorkRegister() {
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardTitle"], {
-                                    children: "Field Work Instructions"
+                                    children: "Projects"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/registers/components/field-work/field-work-register.tsx",
                                     lineNumber: 47,
                                     columnNumber: 21
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardDescription"], {
-                                    children: "Records of all assigned field work."
+                                    children: "Records of all assigned field work instructions."
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/registers/components/field-work/field-work-register.tsx",
                                     lineNumber: 48,
@@ -644,7 +644,7 @@ function FieldWorkRegister() {
                                     lineNumber: 53,
                                     columnNumber: 21
                                 }, this),
-                                "New Instruction"
+                                "New Project"
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/registers/components/field-work/field-work-register.tsx",
