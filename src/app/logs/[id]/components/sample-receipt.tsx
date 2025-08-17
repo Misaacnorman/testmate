@@ -10,12 +10,6 @@ import { Printer, TestTube, User, Folder, Calendar, Truck, Microscope, Clipboard
 import type { Receipt } from '@/lib/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-interface TestRowData {
-    category: string;
-    test: any;
-    testId: string;
-}
-
 export function SampleReceipt({ data }: { data: Receipt }) {
   const componentRef = useRef<HTMLDivElement>(null);
   const handlePrint = useReactToPrint({
@@ -33,16 +27,6 @@ export function SampleReceipt({ data }: { data: Receipt }) {
           return 'Invalid Date';
       }
   }
-
-  const allTests: TestRowData[] = React.useMemo(() => {
-    return Object.entries(data.categories).flatMap(([category, catData]: [string, any]) => 
-        Object.entries(catData.tests).map(([testId, test]: [string, any]) => ({
-            category,
-            test,
-            testId
-        }))
-    );
-  }, [data.categories]);
 
   return (
     <div className="bg-white max-w-4xl mx-auto p-8 rounded-lg shadow-xl">
@@ -127,28 +111,36 @@ export function SampleReceipt({ data }: { data: Receipt }) {
                 <Table>
                     <TableHeader className="bg-gray-100">
                         <TableRow>
-                            <TableHead className="w-[150px]">Material Category</TableHead>
-                            <TableHead>Material Test</TableHead>
-                            <TableHead>Test Method(s)</TableHead>
+                            <TableHead className="w-[150px] text-center">Material Category</TableHead>
+                            <TableHead className="text-center">Material Test</TableHead>
+                            <TableHead className="text-center">Test Method(s)</TableHead>
                             <TableHead className="text-center">Quantity</TableHead>
-                            <TableHead>Concrete Details</TableHead>
+                            <TableHead className="text-center">Concrete Details</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {allTests.map(({ category, test, testId }, index) => {
-                            const specialTestDetails = data.specialData?.[category]?.[testId];
-                            return (
-                                <TableRow key={index}>
-                                    <TableCell>{category}</TableCell>
-                                    <TableCell>{test.materialTest}</TableCell>
-                                    <TableCell>{test.testMethods}</TableCell>
+                       {Object.entries(data.categories).flatMap(([category, catData]) => {
+                            const testsInCategory = Object.entries(catData.tests as Record<string, any>);
+                            if (testsInCategory.length === 0) return [];
+                            
+                            return testsInCategory.map(([testId, test], index) => {
+                                const specialTestDetails = data.specialData?.[category]?.[testId];
+                                return (
+                                <TableRow key={`${category}-${testId}`}>
+                                    {index === 0 && (
+                                        <TableCell rowSpan={testsInCategory.length} className="text-center align-middle font-medium">
+                                            {category}
+                                        </TableCell>
+                                    )}
+                                    <TableCell className="text-center">{test.materialTest}</TableCell>
+                                    <TableCell className="text-center">{test.testMethods}</TableCell>
                                     <TableCell className="text-center">{test.quantity}</TableCell>
                                     <TableCell>
                                         {specialTestDetails ? (
-                                            <div className="space-y-2 text-xs">
+                                            <div className="space-y-3 text-xs">
                                                 {specialTestDetails.sets.map((set: any, i: number) => (
-                                                    <div key={i} className="p-2 bg-gray-50 rounded">
-                                                        <p><strong>Set {i + 1}</strong> (Qty: {specialTestDetails.setDistribution[i]})</p>
+                                                    <div key={i} className="p-3 bg-gray-50 rounded-md border text-left">
+                                                        <p className="font-bold mb-1">Set {i + 1} (Qty: {specialTestDetails.setDistribution[i]})</p>
                                                         <p><strong>Casting:</strong> {parseAndFormatDate(set.castingDate, 'dd-MMM-yy')}</p>
                                                         <p><strong>Testing:</strong> {parseAndFormatDate(set.testingDate, 'dd-MMM-yy')}</p>
                                                         <p><strong>Age:</strong> {set.age || 'N/A'} days</p>
@@ -157,10 +149,11 @@ export function SampleReceipt({ data }: { data: Receipt }) {
                                                     </div>
                                                 ))}
                                             </div>
-                                        ) : 'N/A'}
+                                        ) : <div className="text-center">N/A</div>}
                                     </TableCell>
                                 </TableRow>
-                            );
+                                );
+                            })
                         })}
                     </TableBody>
                 </Table>
@@ -190,5 +183,3 @@ export function SampleReceipt({ data }: { data: Receipt }) {
     </div>
   );
 }
-
-    
