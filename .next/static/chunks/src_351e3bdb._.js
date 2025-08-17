@@ -902,16 +902,13 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
         "ReceiveSampleDialog.useMemo[uniqueMaterialCategories]": ()=>{
             const categories = allTests.filter({
                 "ReceiveSampleDialog.useMemo[uniqueMaterialCategories].categories": (test)=>typeof test.material === 'string'
-            }["ReceiveSampleDialog.useMemo[uniqueMaterialCategories].categories"]) // Add this line to filter out tests without a material
-            .map({
-                "ReceiveSampleDialog.useMemo[uniqueMaterialCategories].categories": (test)=>test.material.toLowerCase().trim()
+            }["ReceiveSampleDialog.useMemo[uniqueMaterialCategories].categories"]).map({
+                "ReceiveSampleDialog.useMemo[uniqueMaterialCategories].categories": (test)=>test.material
             }["ReceiveSampleDialog.useMemo[uniqueMaterialCategories].categories"]);
             return [
                 ...new Set(categories)
-            ].map({
-                "ReceiveSampleDialog.useMemo[uniqueMaterialCategories]": (cat)=>allTests.find({
-                        "ReceiveSampleDialog.useMemo[uniqueMaterialCategories]": (t)=>t.material && t.material.toLowerCase().trim() === cat
-                    }["ReceiveSampleDialog.useMemo[uniqueMaterialCategories]"]).material
+            ].sort({
+                "ReceiveSampleDialog.useMemo[uniqueMaterialCategories]": (a, b)=>a.localeCompare(b)
             }["ReceiveSampleDialog.useMemo[uniqueMaterialCategories]"]);
         }
     }["ReceiveSampleDialog.useMemo[uniqueMaterialCategories]"], [

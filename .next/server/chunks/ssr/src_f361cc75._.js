@@ -786,11 +786,10 @@ function ReceiveSampleDialog({ open, onOpenChange }) {
         resetAllState
     ]);
     const uniqueMaterialCategories = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
-        const categories = allTests.filter((test)=>typeof test.material === 'string') // Add this line to filter out tests without a material
-        .map((test)=>test.material.toLowerCase().trim());
+        const categories = allTests.filter((test)=>typeof test.material === 'string').map((test)=>test.material);
         return [
             ...new Set(categories)
-        ].map((cat)=>allTests.find((t)=>t.material && t.material.toLowerCase().trim() === cat).material);
+        ].sort((a, b)=>a.localeCompare(b));
     }, [
         allTests
     ]);
