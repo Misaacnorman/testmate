@@ -84,7 +84,7 @@ export async function processAndSaveReceipt(receiptData: any): Promise<{ id: str
                         testingDate: set.testingDate || null,
                         age: set.age || null,
                         areaOfUse: set.areaOfUse || null,
-                        class: set.class || null,
+                        sampleType: set.sampleType || null,
                         setNumber: setIndex + 1,
                     };
                     batch.set(sampleRef, sampleRecord);

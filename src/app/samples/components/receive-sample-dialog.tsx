@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
@@ -142,7 +143,7 @@ export function ReceiveSampleDialog({
   }, [user, form1]);
 
   const specialCategories = useMemo(
-    () => ['Concrete Cubes', 'Bricks', 'Blocks', 'Pavers', 'Cylinder'],
+    () => ['Concrete Cubes', 'Bricks', 'Blocks', 'Pavers', 'Cylinder', 'Water Absorption'],
     []
   );
 
@@ -693,7 +694,7 @@ export function ReceiveSampleDialog({
                 }
               />
             </div>
-            {category.toLowerCase() === 'concrete cubes' && (
+            {(category.toLowerCase() === 'concrete cubes' || category.toLowerCase() === 'cylinder') && (
               <div className="space-y-2">
                 <Label>Class</Label>
                 <Input
@@ -709,6 +710,24 @@ export function ReceiveSampleDialog({
                   }
                 />
               </div>
+            )}
+            {category.toLowerCase() === 'pavers' && (
+                <div className="space-y-2">
+                    <Label>Paver Type</Label>
+                    <Input
+                        value={set.paverType || ''}
+                        onChange={(e) => handleSetDataChange(category, testId, i, 'paverType', e.target.value)}
+                    />
+                </div>
+            )}
+             {category.toLowerCase() === 'water absorption' && (
+                <div className="space-y-2">
+                    <Label>Sample Type</Label>
+                    <Input
+                        value={set.sampleType || ''}
+                        onChange={(e) => handleSetDataChange(category, testId, i, 'sampleType', e.target.value)}
+                    />
+                </div>
             )}
           </div>
           <div className="space-y-2">
@@ -1384,6 +1403,7 @@ export function ReceiveSampleDialog({
                                   </p>
                                   <p>Area of Use: {set.areaOfUse || 'N/A'}</p>
                                   {set.class && <p>Class: {set.class}</p>}
+                                  {set.sampleType && <p>Sample Type: {set.sampleType}</p>}
                                   <p>
                                     IDs:{' '}
                                     {Array.isArray(set.serials)

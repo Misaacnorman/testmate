@@ -109,14 +109,6 @@ export const getWaterAbsorptionColumns = ({ onEdit, onDelete }: WaterAbsorptionC
     }
   },
   {
-    accessorKey: 'class',
-    header: 'Class',
-     cell: ({ row }) => {
-       const rowCount = row.original.samples.length;
-       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.class || '-'}</div>
-    }
-  },
-  {
     accessorKey: 'age',
     header: 'Age (Days)',
     cell: ({ row }) => {
@@ -130,6 +122,14 @@ export const getWaterAbsorptionColumns = ({ onEdit, onDelete }: WaterAbsorptionC
      cell: ({ row }) => {
        const rowCount = row.original.samples.length;
        return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.areaOfUse || '-'}</div>
+    }
+  },
+  {
+    accessorKey: 'sampleType',
+    header: 'Sample Type',
+     cell: ({ row }) => {
+       const rowCount = row.original.samples.length;
+       return <div style={{ height: `${rowCount * 3}rem`}} className="flex items-center justify-center">{row.original.sampleType || '-'}</div>
     }
   },
   {

@@ -191,7 +191,7 @@ export type WaterAbsorptionSample = {
   setNumber?: number;
   castingDate?: string;
   testingDate?: string;
-  class?: string;
+  sampleType?: string;
   age?: number;
   areaOfUse?: string;
   length?: number;

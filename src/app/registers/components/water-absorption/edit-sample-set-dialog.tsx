@@ -29,6 +29,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 const receiptDetailsSchema = z.object({
   clientName: z.string().min(1, 'Client name is required'),
   projectTitle: z.string().min(1, 'Project title is required'),
+  sampleType: z.string().optional(),
 });
 
 const testResultSampleSchema = z.object({
@@ -96,6 +97,7 @@ export function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }: E
       form.reset({
         clientName: sampleSet.clientName,
         projectTitle: sampleSet.projectTitle,
+        sampleType: sampleSet.sampleType || '',
         samples: sampleSet.samples.map(s => ({
           length: s.length || undefined,
           width: s.width || undefined,
@@ -218,6 +220,10 @@ export function EditSampleSetDialog({ open, onOpenChange, sampleSet, onSave }: E
                           <Label>Project Title</Label>
                           <Controller name="projectTitle" control={form.control} render={({ field }) => <Input {...field} />} />
                           {form.formState.errors.projectTitle && <p className="text-destructive text-xs">{form.formState.errors.projectTitle.message}</p>}
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Sample Type</Label>
+                          <Controller name="sampleType" control={form.control} render={({ field }) => <Input {...field} value={field.value ?? ''} />} />
                         </div>
                     </div>
                 </div>

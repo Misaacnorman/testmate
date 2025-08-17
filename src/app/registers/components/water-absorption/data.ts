@@ -38,7 +38,7 @@ export async function updateSampleSetDetails(receiptId: string, testId: string, 
     
     // These are fields that are shared across all samples in the set
     const sharedUpdateData: any = {};
-    const updatableSharedFields = ['clientName', 'projectTitle', 'castingDate', 'testingDate', 'age', 'areaOfUse', 'class', 'certificateNumber', 'comment', 'technician', 'dateOfIssue', 'issueId', 'takenBy', 'dateTaken', 'contact'];
+    const updatableSharedFields = ['clientName', 'projectTitle', 'castingDate', 'testingDate', 'age', 'areaOfUse', 'sampleType', 'certificateNumber', 'comment', 'technician', 'dateOfIssue', 'issueId', 'takenBy', 'dateTaken', 'contact'];
 
     updatableSharedFields.forEach(field => {
         if (data.hasOwnProperty(field)) {
