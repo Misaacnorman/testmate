@@ -227,20 +227,13 @@ async function processAndSaveReceipt(receiptData) {
     };
     batch.set(receiptRef, newReceipt);
     const { formData, categories, specialData } = receiptData;
-    const fieldWorkInstructionPayload = {
-        date: new Date().toISOString().split('T')[0],
-        projectIdSmall: `SAMPLES-${receiptId}`,
-        client: formData.clientName,
-        project: formData.projectTitle,
-        engineerInCharge: formData.receivedBy,
-        sampleReceiptNumber: receiptId,
-        labTestsDescription: []
-    };
+    const labTestsByCat = {};
     Object.entries(categories).forEach(([category, catData])=>{
         Object.entries(catData.tests).forEach(([testId, testData])=>{
+            const materialTestName = (testData.materialTest || '').toLowerCase().trim();
             const isSpecialCategory = specialCategoriesForRegisters.some((sc)=>sc.toLowerCase() === category.toLowerCase());
             let registerName;
-            if (testData.materialTest.toLowerCase().trim() === 'water absorption') {
+            if (materialTestName === 'water absorption') {
                 registerName = 'water-absorption-register';
             } else if (isSpecialCategory) {
                 const lowerCaseCategory = category.toLowerCase();
@@ -250,8 +243,13 @@ async function processAndSaveReceipt(receiptData) {
                     registerName = lowerCaseCategory.replace(/\s/g, '-') + '-register';
                 }
             } else {
-                // Non-special categories are added to the field work instructions
-                fieldWorkInstructionPayload.labTestsDescription.push(`${testData.materialTest} (Qty: ${testData.quantity})`);
+                if (!labTestsByCat[category]) {
+                    labTestsByCat[category] = [];
+                }
+                labTestsByCat[category].push({
+                    name: testData.materialTest,
+                    quantity: testData.quantity
+                });
                 return; // Skip register creation for this test
             }
             const isSpecialDataAvailable = Object.keys(specialData).includes(category) && specialData[category][testId];
@@ -305,9 +303,38 @@ async function processAndSaveReceipt(receiptData) {
             }
         });
     });
+    const labTestsDescription = Object.entries(labTestsByCat).map(([category, tests])=>({
+            category,
+            tests
+        }));
     // If there were any non-special tests, create a field work instruction
-    if (fieldWorkInstructionPayload.labTestsDescription.length > 0) {
-        fieldWorkInstructionPayload.labTestsDescription = fieldWorkInstructionPayload.labTestsDescription.join(', ');
+    if (labTestsDescription.length > 0) {
+        const fieldWorkInstructionPayload = {
+            date: new Date().toISOString().split('T')[0],
+            projectIdSmall: `SAMPLES-${receiptId}`,
+            client: formData.clientName,
+            project: formData.projectTitle,
+            engineerInCharge: formData.receivedBy,
+            sampleReceiptNumber: receiptId,
+            labTestsDescription,
+            fieldTests: '',
+            fieldTechnician: '',
+            fieldStartDate: '',
+            fieldEndDate: '',
+            fieldRemarks: '',
+            labTechnician: '',
+            labStartDate: '',
+            labAgreedDeliveryDate: '',
+            labAgreedDeliverySignature: '',
+            labActualDeliveryDate: '',
+            labActualDeliverySignature: '',
+            labRemarks: '',
+            acknowledgement: '',
+            reportIssuedBy: '',
+            reportPickedBy: '',
+            reportContact: '',
+            reportDateTime: ''
+        };
         const fieldWorkRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["collection"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$firebase$2f$config$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["db"], 'fieldWorkInstructions');
         // We don't use the batch here because we want to add it as a separate document
         await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["addDoc"])(fieldWorkRef, fieldWorkInstructionPayload);

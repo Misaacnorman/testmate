@@ -930,6 +930,10 @@ body {
   width: 200px;
 }
 
+.w-\[300px\] {
+  width: 300px;
+}
+
 .w-\[350px\] {
   width: 350px;
 }
@@ -944,10 +948,6 @@ body {
 
 .w-full {
   width: 100%;
-}
-
-.w-\[300px\] {
-  width: 300px;
 }
 
 .min-w-0 {
@@ -1682,6 +1682,10 @@ body {
   padding-left: 1rem;
 }
 
+.pl-5 {
+  padding-left: 1.25rem;
+}
+
 .pl-8 {
   padding-left: 2rem;
 }
@@ -1728,10 +1732,6 @@ body {
 
 .pt-8 {
   padding-top: 2rem;
-}
-
-.pl-5 {
-  padding-left: 1.25rem;
 }
 
 .text-left {
