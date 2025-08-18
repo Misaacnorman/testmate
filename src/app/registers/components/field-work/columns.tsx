@@ -25,7 +25,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import type { FieldWorkInstruction } from '@/lib/types';
+import type { FieldWorkInstruction, FieldWorkLabTest } from '@/lib/types';
 
 interface FieldWorkColumnsProps {
   onDelete: (id: string) => void;
@@ -98,7 +98,30 @@ export const getFieldWorkColumns = ({ onDelete }: FieldWorkColumnsProps): Column
     id: 'labWorkInstructions',
     header: () => <div className="text-center">SCOPE OF WORK (LABORATORY TESTING)</div>,
     columns: [
-        { accessorKey: 'labTestsDescription', header: 'Laboratory Test Description and number of tests', cell: ({row}) => <div className="w-[300px]">{row.original.labTestsDescription}</div> },
+        { 
+            accessorKey: 'labTestsDescription', 
+            header: 'Laboratory Test Description and number of tests', 
+            cell: ({row}) => {
+                const testsByCat = row.original.labTestsDescription;
+                if (!Array.isArray(testsByCat) || testsByCat.length === 0) {
+                    return <div className="w-[300px]">-</div>
+                }
+                return (
+                    <div className="w-[300px] space-y-2">
+                        {testsByCat.map((cat, index) => (
+                            <div key={index}>
+                                <p className="font-bold">{cat.category}</p>
+                                <ul className="list-disc pl-5">
+                                    {cat.tests.map((test, testIndex) => (
+                                        <li key={testIndex}>{test.name} (Qty: {test.quantity})</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))}
+                    </div>
+                )
+            } 
+        },
         { accessorKey: 'labTechnician', header: 'Technician in Charge' },
         { accessorKey: 'labStartDate', header: 'Start Date', cell: ({ row }) => <div>{row.original.labStartDate ? format(parseISO(row.original.labStartDate), 'yyyy-MM-dd') : '-'}</div> },
         { accessorKey: 'labAgreedDeliveryDate', header: 'Agreed Delivery Date', cell: ({ row }) => <div>{row.original.labAgreedDeliveryDate ? format(parseISO(row.original.labAgreedDeliveryDate), 'yyyy-MM-dd') : '-'}</div> },

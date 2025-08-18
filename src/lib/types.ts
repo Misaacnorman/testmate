@@ -227,6 +227,14 @@ export type IssueCertificateData = {
   issueId?: string;
 };
 
+export type FieldWorkLabTest = {
+    category: string;
+    tests: {
+        name: string;
+        quantity: number;
+    }[];
+}
+
 export type FieldWorkInstruction = {
   id: string;
   date: string;
@@ -242,7 +250,7 @@ export type FieldWorkInstruction = {
   fieldEndDate: string;
   fieldRemarks: string;
   // Lab Work
-  labTestsDescription: string;
+  labTestsDescription: FieldWorkLabTest[];
   labTechnician: string;
   labStartDate: string;
   labAgreedDeliveryDate: string;

@@ -9,6 +9,8 @@ import {
   addDoc,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
+import { FieldWorkLabTest } from '@/lib/types';
+
 
 // A simple function to generate a unique ID for the receipt.
 function generateReceiptId() {
@@ -48,24 +50,17 @@ export async function processAndSaveReceipt(receiptData: any): Promise<{ id: str
 
   const { formData, categories, specialData } = receiptData;
   
-  const fieldWorkInstructionPayload: any = {
-      date: new Date().toISOString().split('T')[0],
-      projectIdSmall: `SAMPLES-${receiptId}`,
-      client: formData.clientName,
-      project: formData.projectTitle,
-      engineerInCharge: formData.receivedBy,
-      sampleReceiptNumber: receiptId,
-      labTestsDescription: [],
-  };
+  const labTestsByCat: { [key: string]: { name: string, quantity: number }[] } = {};
+
 
   Object.entries(categories).forEach(([category, catData]: [string, any]) => {
      Object.entries(catData.tests).forEach(([testId, testData]: [string, any]) => {
-
+        const materialTestName = (testData.materialTest || '').toLowerCase().trim();
         const isSpecialCategory = specialCategoriesForRegisters.some(sc => sc.toLowerCase() === category.toLowerCase());
         
         let registerName;
 
-        if (testData.materialTest.toLowerCase().trim() === 'water absorption') {
+        if (materialTestName === 'water absorption') {
             registerName = 'water-absorption-register';
         } else if (isSpecialCategory) {
             const lowerCaseCategory = category.toLowerCase();
@@ -75,8 +70,10 @@ export async function processAndSaveReceipt(receiptData: any): Promise<{ id: str
                  registerName = lowerCaseCategory.replace(/\s/g, '-') + '-register';
             }
         } else {
-            // Non-special categories are added to the field work instructions
-            fieldWorkInstructionPayload.labTestsDescription.push(`${testData.materialTest} (Qty: ${testData.quantity})`);
+            if (!labTestsByCat[category]) {
+                labTestsByCat[category] = [];
+            }
+            labTestsByCat[category].push({ name: testData.materialTest, quantity: testData.quantity });
             return; // Skip register creation for this test
         }
         
@@ -134,9 +131,40 @@ export async function processAndSaveReceipt(receiptData: any): Promise<{ id: str
      });
   });
 
+  const labTestsDescription: FieldWorkLabTest[] = Object.entries(labTestsByCat).map(([category, tests]) => ({
+      category,
+      tests,
+  }));
+
+
   // If there were any non-special tests, create a field work instruction
-  if (fieldWorkInstructionPayload.labTestsDescription.length > 0) {
-      fieldWorkInstructionPayload.labTestsDescription = fieldWorkInstructionPayload.labTestsDescription.join(', ');
+  if (labTestsDescription.length > 0) {
+      const fieldWorkInstructionPayload: any = {
+        date: new Date().toISOString().split('T')[0],
+        projectIdSmall: `SAMPLES-${receiptId}`,
+        client: formData.clientName,
+        project: formData.projectTitle,
+        engineerInCharge: formData.receivedBy,
+        sampleReceiptNumber: receiptId,
+        labTestsDescription,
+        fieldTests: '',
+        fieldTechnician: '',
+        fieldStartDate: '',
+        fieldEndDate: '',
+        fieldRemarks: '',
+        labTechnician: '',
+        labStartDate: '',
+        labAgreedDeliveryDate: '',
+        labAgreedDeliverySignature: '',
+        labActualDeliveryDate: '',
+        labActualDeliverySignature: '',
+        labRemarks: '',
+        acknowledgement: '',
+        reportIssuedBy: '',
+        reportPickedBy: '',
+        reportContact: '',
+        reportDateTime: '',
+      };
       const fieldWorkRef = collection(db, 'fieldWorkInstructions');
       // We don't use the batch here because we want to add it as a separate document
       await addDoc(fieldWorkRef, fieldWorkInstructionPayload);
