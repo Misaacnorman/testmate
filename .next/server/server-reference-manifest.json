@@ -1,5 +1,49 @@
 {
   "node": {
+    "00412efd54c486ab3dcbb46023c3f84b82ee9a6e89": {
+      "workers": {
+        "app/samples/page": {
+          "moduleId": "[project]/.next-internal/server/app/samples/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/services/tests.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/services/receipts.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/samples/page": "action-browser"
+      }
+    },
+    "40e35a63c6474a4f85ec870f71e4b3e027cce4ce04": {
+      "workers": {
+        "app/samples/page": {
+          "moduleId": "[project]/.next-internal/server/app/samples/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/services/tests.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/services/receipts.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/samples/page": "action-browser"
+      }
+    },
+    "0010d33ed374a454f5f6d055cfb946993f15a4b8a5": {
+      "workers": {
+        "app/logs/page": {
+          "moduleId": "[project]/.next-internal/server/app/logs/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/logs/data.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/logs/page": "action-browser"
+      }
+    },
+    "40ad835583e9fd24515fa92ab873d198ee9b0a1631": {
+      "workers": {
+        "app/logs/page": {
+          "moduleId": "[project]/.next-internal/server/app/logs/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/logs/data.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/logs/page": "action-browser"
+      }
+    },
     "00a397b6fc7964f531715ad9fae934640560c2de96": {
       "workers": {
         "app/registers/page": {
@@ -297,48 +341,15 @@
         "app/registers/page": "action-browser"
       }
     },
-    "00412efd54c486ab3dcbb46023c3f84b82ee9a6e89": {
+    "40648349f99c69a71cbfe053d21abe8864672de0d0": {
       "workers": {
-        "app/samples/page": {
-          "moduleId": "[project]/.next-internal/server/app/samples/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/services/tests.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/services/receipts.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+        "app/registers/page": {
+          "moduleId": "[project]/.next-internal/server/app/registers/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/registers/components/concrete-cubes/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/app/registers/components/pavers/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/src/app/registers/components/blocks-bricks/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE3 => \"[project]/src/app/registers/components/cylinders/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE4 => \"[project]/src/app/registers/components/water-absorption/data.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE5 => \"[project]/src/app/registers/components/field-work/data.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
           "async": false
         }
       },
       "layer": {
-        "app/samples/page": "action-browser"
-      }
-    },
-    "40e35a63c6474a4f85ec870f71e4b3e027cce4ce04": {
-      "workers": {
-        "app/samples/page": {
-          "moduleId": "[project]/.next-internal/server/app/samples/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/services/tests.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/services/receipts.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
-          "async": false
-        }
-      },
-      "layer": {
-        "app/samples/page": "action-browser"
-      }
-    },
-    "0010d33ed374a454f5f6d055cfb946993f15a4b8a5": {
-      "workers": {
-        "app/logs/page": {
-          "moduleId": "[project]/.next-internal/server/app/logs/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/logs/data.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
-          "async": false
-        }
-      },
-      "layer": {
-        "app/logs/page": "action-browser"
-      }
-    },
-    "40ad835583e9fd24515fa92ab873d198ee9b0a1631": {
-      "workers": {
-        "app/logs/page": {
-          "moduleId": "[project]/.next-internal/server/app/logs/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/logs/data.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
-          "async": false
-        }
-      },
-      "layer": {
-        "app/logs/page": "action-browser"
+        "app/registers/page": "action-browser"
       }
     },
     "00caf931871d958ec1c061dd88838da49c52cd32b9": {

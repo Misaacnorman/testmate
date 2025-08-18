@@ -98,7 +98,7 @@ export const getFieldWorkColumns = ({ onDelete }: FieldWorkColumnsProps): Column
     id: 'labWorkInstructions',
     header: () => <div className="text-center">SCOPE OF WORK (LABORATORY TESTING)</div>,
     columns: [
-        { accessorKey: 'labTestsDescription', header: 'Laboratory Test Description and number of tests' },
+        { accessorKey: 'labTestsDescription', header: 'Laboratory Test Description and number of tests', cell: ({row}) => <div className="w-[300px]">{row.original.labTestsDescription}</div> },
         { accessorKey: 'labTechnician', header: 'Technician in Charge' },
         { accessorKey: 'labStartDate', header: 'Start Date', cell: ({ row }) => <div>{row.original.labStartDate ? format(parseISO(row.original.labStartDate), 'yyyy-MM-dd') : '-'}</div> },
         { accessorKey: 'labAgreedDeliveryDate', header: 'Agreed Delivery Date', cell: ({ row }) => <div>{row.original.labAgreedDeliveryDate ? format(parseISO(row.original.labAgreedDeliveryDate), 'yyyy-MM-dd') : '-'}</div> },

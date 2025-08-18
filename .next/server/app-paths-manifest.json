@@ -1,11 +1,9 @@
 {
   "/dashboard/page": "app/dashboard/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/login/page": "app/login/page.js",
   "/logs/[id]/page": "app/logs/[id]/page.js",
   "/logs/page": "app/logs/page.js",
   "/page": "app/page.js",
-  "/projects/page": "app/projects/page.js",
   "/registers/page": "app/registers/page.js",
   "/samples/page": "app/samples/page.js",
   "/tests/page": "app/tests/page.js"

@@ -206,6 +206,13 @@ function generateSampleId(material, project) {
     const randomPart = Math.random().toString(36).substring(2, 6).toUpperCase();
     return `${materialCode}-${projectCode}-${randomPart}`;
 }
+const specialCategoriesForRegisters = [
+    'Concrete Cubes',
+    'Bricks',
+    'Blocks',
+    'Pavers',
+    'Cylinder'
+];
 async function processAndSaveReceipt(receiptData) {
     const batch = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["writeBatch"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$firebase$2f$config$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["db"]);
     const receiptId = generateReceiptId();
@@ -220,21 +227,39 @@ async function processAndSaveReceipt(receiptData) {
     };
     batch.set(receiptRef, newReceipt);
     const { formData, categories, specialData } = receiptData;
+    const fieldWorkInstructionPayload = {
+        date: new Date().toISOString().split('T')[0],
+        projectIdSmall: `SAMPLES-${receiptId}`,
+        client: formData.clientName,
+        project: formData.projectTitle,
+        engineerInCharge: formData.receivedBy,
+        sampleReceiptNumber: receiptId,
+        labTestsDescription: []
+    };
     Object.entries(categories).forEach(([category, catData])=>{
         Object.entries(catData.tests).forEach(([testId, testData])=>{
-            const isSpecialCategory = Object.keys(specialData).includes(category) && specialData[category][testId];
-            if (isSpecialCategory) {
+            const isSpecialCategory = specialCategoriesForRegisters.some((sc)=>sc.toLowerCase() === category.toLowerCase());
+            let registerName;
+            if (testData.materialTest.toLowerCase().trim() === 'water absorption') {
+                registerName = 'water-absorption-register';
+            } else if (isSpecialCategory) {
+                const lowerCaseCategory = category.toLowerCase();
+                if (lowerCaseCategory === 'bricks' || lowerCaseCategory === 'blocks') {
+                    registerName = 'blocks-bricks-register';
+                } else {
+                    registerName = lowerCaseCategory.replace(/\s/g, '-') + '-register';
+                }
+            } else {
+                // Non-special categories are added to the field work instructions
+                fieldWorkInstructionPayload.labTestsDescription.push(`${testData.materialTest} (Qty: ${testData.quantity})`);
+                return; // Skip register creation for this test
+            }
+            const isSpecialDataAvailable = Object.keys(specialData).includes(category) && specialData[category][testId];
+            if (isSpecialDataAvailable) {
                 const specialTestData = specialData[category][testId];
                 specialTestData.sets.forEach((set, setIndex)=>{
-                    set.serials.forEach((serialId, sampleIndex)=>{
+                    set.serials.forEach((serialId)=>{
                         const sampleDocId = generateSampleId(category, formData.projectTitle);
-                        const lowerCaseCategory = category.toLowerCase();
-                        let registerName = lowerCaseCategory.replace(/\s/g, '-') + '-register';
-                        if (lowerCaseCategory === 'bricks' || lowerCaseCategory === 'blocks') {
-                            registerName = 'blocks-bricks-register';
-                        } else if (lowerCaseCategory === 'cylinder') {
-                            registerName = 'cylinder-register';
-                        }
                         const sampleRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["doc"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$firebase$2f$config$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["db"], registerName, sampleDocId);
                         const sampleRecord = {
                             sampleId: sampleDocId,
@@ -252,6 +277,8 @@ async function processAndSaveReceipt(receiptData) {
                             age: set.age || null,
                             areaOfUse: set.areaOfUse || null,
                             class: set.class || null,
+                            paverType: set.paverType || null,
+                            sampleType: set.sampleType || null,
                             setNumber: setIndex + 1
                         };
                         batch.set(sampleRef, sampleRecord);
@@ -260,13 +287,6 @@ async function processAndSaveReceipt(receiptData) {
             } else {
                 for(let i = 0; i < testData.quantity; i++){
                     const sampleDocId = generateSampleId(category, formData.projectTitle);
-                    const lowerCaseCategory = category.toLowerCase();
-                    let registerName = lowerCaseCategory.replace(/\s/g, '-') + '-register';
-                    if (lowerCaseCategory === 'bricks' || lowerCaseCategory === 'blocks') {
-                        registerName = 'blocks-bricks-register';
-                    } else if (lowerCaseCategory === 'cylinder') {
-                        registerName = 'cylinder-register';
-                    }
                     const sampleRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["doc"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$firebase$2f$config$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["db"], registerName, sampleDocId);
                     const sampleRecord = {
                         sampleId: sampleDocId,
@@ -285,6 +305,13 @@ async function processAndSaveReceipt(receiptData) {
             }
         });
     });
+    // If there were any non-special tests, create a field work instruction
+    if (fieldWorkInstructionPayload.labTestsDescription.length > 0) {
+        fieldWorkInstructionPayload.labTestsDescription = fieldWorkInstructionPayload.labTestsDescription.join(', ');
+        const fieldWorkRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["collection"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$firebase$2f$config$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["db"], 'fieldWorkInstructions');
+        // We don't use the batch here because we want to add it as a separate document
+        await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["addDoc"])(fieldWorkRef, fieldWorkInstructionPayload);
+    }
     await batch.commit();
     return {
         id: receiptId

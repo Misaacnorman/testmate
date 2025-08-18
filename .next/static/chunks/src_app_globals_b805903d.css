@@ -563,14 +563,14 @@ body {
   margin-bottom: .25rem;
 }
 
-.my-8 {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-}
-
 .my-2 {
   margin-top: .5rem;
   margin-bottom: .5rem;
+}
+
+.my-8 {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .-ml-4 {
@@ -794,16 +794,16 @@ body {
   max-height: 24rem;
 }
 
+.max-h-\[90vh\] {
+  max-height: 90vh;
+}
+
 .max-h-\[95vh\] {
   max-height: 95vh;
 }
 
 .max-h-screen {
   max-height: 100vh;
-}
-
-.max-h-\[90vh\] {
-  max-height: 90vh;
 }
 
 .min-h-0 {
@@ -944,6 +944,10 @@ body {
 
 .w-full {
   width: 100%;
+}
+
+.w-\[300px\] {
+  width: 300px;
 }
 
 .min-w-0 {
@@ -1364,16 +1368,16 @@ body {
   border-right-width: 1px;
 }
 
+.border-r-2 {
+  border-right-width: 2px;
+}
+
 .border-t {
   border-top-width: 1px;
 }
 
 .border-t-0 {
   border-top-width: 0;
-}
-
-.border-r-2 {
-  border-right-width: 2px;
 }
 
 .border-dashed {
@@ -1579,6 +1583,11 @@ body {
   padding: 1px;
 }
 
+.px-0 {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 .px-1 {
   padding-left: .25rem;
   padding-right: .25rem;
@@ -1647,11 +1656,6 @@ body {
 .py-4 {
   padding-top: 1rem;
   padding-bottom: 1rem;
-}
-
-.px-0 {
-  padding-left: 0;
-  padding-right: 0;
 }
 
 .pb-2 {
