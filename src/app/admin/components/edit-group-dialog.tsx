@@ -13,6 +13,13 @@ import {
   DialogFooter,
   DialogDescription,
 } from '@/components/ui/dialog';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
@@ -73,6 +80,7 @@ export function EditGroupDialog({ open, onOpenChange, group, onSave }: EditGroup
             Manage the permissions associated with this group.
           </DialogDescription>
         </DialogHeader>
+        <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
@@ -136,6 +144,7 @@ export function EditGroupDialog({ open, onOpenChange, group, onSave }: EditGroup
             <Button type="submit">Save Changes</Button>
           </DialogFooter>
         </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );
