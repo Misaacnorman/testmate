@@ -1,5 +1,4 @@
 
-
 export type Test = {
   id: string;
   name: string; // was materialTest
@@ -273,6 +272,7 @@ export type User = {
   email: string;
   role: string;
   createdAt: string;
+  disabled?: boolean;
   overrides?: {
     add: string[];
     remove: string[];

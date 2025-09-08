@@ -4,16 +4,18 @@
 import * as React from 'react';
 import { useToast } from '@/hooks/use-toast';
 import type { User, Role } from '@/lib/types';
-import { getUsers, getRoles, updateUser, createRole, updateRole, deleteRole } from '../data';
+import { getUsers, getRoles, updateUser, createRole, updateRole, deleteRole, updateUserStatus, createUser } from '../data';
 import { RoleList } from './role-list';
 import { UserTable } from './user-table';
 import { Skeleton } from '@/components/ui/skeleton';
+import { AddUserDialog } from './add-user-dialog';
 
 export function UserManagement() {
   const [users, setUsers] = React.useState<User[]>([]);
   const [roles, setRoles] = React.useState<Role[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [selectedRole, setSelectedRole] = React.useState<string>('all');
+  const [isAddUserDialogOpen, setAddUserDialogOpen] = React.useState(false);
   const { toast } = useToast();
 
   const loadData = React.useCallback(async () => {
@@ -37,6 +39,18 @@ export function UserManagement() {
   React.useEffect(() => {
     loadData();
   }, [loadData]);
+  
+  const handleAddUser = async (userData: Omit<User, 'id' | 'createdAt'>) => {
+    try {
+      await createUser(userData);
+      toast({ title: 'Success', description: 'User created successfully. They will need to set their password via email.' });
+      setAddUserDialogOpen(false);
+      loadData();
+    } catch (error) {
+      console.error('Failed to create user:', error);
+      toast({ variant: 'destructive', title: 'Error', description: (error as Error).message || 'Failed to create user.' });
+    }
+  };
 
   const handleUserUpdate = async (userId: string, data: Partial<User>) => {
     try {
@@ -78,6 +92,28 @@ export function UserManagement() {
     }
   };
 
+  const handleSuspend = async (user: User) => {
+    try {
+      await updateUserStatus(user.id, true);
+      toast({ title: 'Success', description: `User ${user.displayName} has been suspended.` });
+      loadData();
+    } catch (error) {
+      console.error('Failed to suspend user:', error);
+      toast({ variant: 'destructive', title: 'Error', description: 'Failed to suspend user.' });
+    }
+  };
+  
+  const handleUnsuspend = async (user: User) => {
+    try {
+      await updateUserStatus(user.id, false);
+      toast({ title: 'Success', description: `User ${user.displayName} has been re-enabled.` });
+      loadData();
+    } catch (error) {
+      console.error('Failed to re-enable user:', error);
+      toast({ variant: 'destructive', title: 'Error', description: 'Failed to re-enable user.' });
+    }
+  };
+
   const filteredUsers = React.useMemo(() => {
     if (selectedRole === 'all') {
       return users;
@@ -107,6 +143,17 @@ export function UserManagement() {
         users={filteredUsers}
         roles={roles}
         onUserUpdate={handleUserUpdate}
+        onAddUser={() => setAddUserDialogOpen(true)}
+        onSuspend={handleSuspend}
+        onUnsuspend={handleUnsuspend}
+        selectedRole={selectedRole}
+      />
+      <AddUserDialog
+        open={isAddUserDialogOpen}
+        onOpenChange={setAddUserDialogOpen}
+        roles={roles}
+        onSubmit={handleAddUser}
+        defaultRoleId={selectedRole !== 'all' ? selectedRole : undefined}
       />
     </div>
   );
