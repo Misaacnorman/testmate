@@ -10,7 +10,7 @@ export const PERMISSIONS: Permission[] = [
 
   // Group Management
   { id: 'admin:groups:read', group: 'Admin', description: 'View all permission groups' },
-  { id: 'admin:groups:create', group 'Admin',: description: 'Create a new permission group' },
+  { id: 'admin:groups:create', group: 'Admin', description: 'Create a new permission group' },
   { id: 'admin:groups:update', group: 'Admin', description: 'Update a permission group (name and permissions)' },
   { id: 'admin:groups:delete', group: 'Admin', description: 'Delete a permission group' },
 
