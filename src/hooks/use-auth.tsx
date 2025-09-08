@@ -11,12 +11,14 @@ import {
   updateProfile,
   User,
 } from 'firebase/auth';
-import { app } from '@/lib/firebase/config';
+import { app, db } from '@/lib/firebase/config';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  signup: (email: string, password: string, profileData?: { displayName?: string; photoURL?: string; }) => Promise<void>;
+  signup: (email: string, password: string, profileData?: { displayName?: string; photoURL?: string; }, roleId?: string) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -37,12 +39,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => unsubscribe();
   }, []);
 
-  const signup = async (email: string, password: string, profileData?: { displayName?: string; photoURL?: string; }) => {
+  const signup = async (email: string, password: string, profileData?: { displayName?: string; photoURL?: string; }, roleId?: string) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    if (userCredential.user && profileData) {
-      await updateProfile(userCredential.user, profileData);
-      // Manually update the user state as updateProfile doesn't trigger onAuthStateChanged
-      setUser({ ...userCredential.user, ...profileData });
+    const authUser = userCredential.user;
+    if (authUser) {
+      // 1. Update auth profile
+      if (profileData) {
+        await updateProfile(authUser, profileData);
+      }
+      
+      // 2. Create user document in Firestore
+      const userRef = doc(db, "users", authUser.uid);
+      await setDoc(userRef, {
+        id: authUser.uid,
+        displayName: profileData?.displayName || '',
+        email: authUser.email,
+        role: roleId || '', // Save the selected role ID
+        createdAt: serverTimestamp(),
+        overrides: { add: [], remove: [] },
+      });
+
+      // Manually update the user state as updateProfile doesn't trigger onAuthStateChanged immediately
+      setUser({ ...authUser, ...profileData });
     }
   };
 
