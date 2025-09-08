@@ -3,11 +3,11 @@
 
 import { collection, getDocs, doc, updateDoc, setDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
-import type { User, Group } from '@/lib/types';
+import type { User, Role } from '@/lib/types';
 import { fromFirestore } from '@/lib/utils';
 
 const usersCollection = collection(db, 'users');
-const groupsCollection = collection(db, 'groups');
+const rolesCollection = collection(db, 'roles');
 
 export async function getUsers(): Promise<User[]> {
   await new Promise(resolve => setTimeout(resolve, 500));
@@ -20,13 +20,13 @@ export async function getUsers(): Promise<User[]> {
   }
 }
 
-export async function getGroups(): Promise<Group[]> {
+export async function getRoles(): Promise<Role[]> {
   await new Promise(resolve => setTimeout(resolve, 500));
   try {
-    const snapshot = await getDocs(groupsCollection);
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Group));
+    const snapshot = await getDocs(rolesCollection);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Role));
   } catch (e) {
-    console.error("Error fetching groups: ", e);
+    console.error("Error fetching roles: ", e);
     return [];
   }
 }
@@ -36,18 +36,18 @@ export async function updateUser(userId: string, data: Partial<User>): Promise<v
   await updateDoc(userRef, data);
 }
 
-export async function createGroup(data: Omit<Group, 'id'>): Promise<void> {
+export async function createRole(data: Omit<Role, 'id'>): Promise<void> {
     const id = data.name.toLowerCase().replace(/\s+/g, '-');
-    const groupRef = doc(db, 'groups', id);
-    await setDoc(groupRef, { ...data, id });
+    const roleRef = doc(db, 'roles', id);
+    await setDoc(roleRef, { ...data, id });
 }
 
-export async function updateGroup(groupId: string, data: Partial<Group>): Promise<void> {
-    const groupRef = doc(db, 'groups', groupId);
-    await updateDoc(groupRef, data);
+export async function updateRole(roleId: string, data: Partial<Role>): Promise<void> {
+    const roleRef = doc(db, 'roles', roleId);
+    await updateDoc(roleRef, data);
 }
 
-export async function deleteGroup(groupId: string): Promise<void> {
-    const groupRef = doc(db, 'groups', groupId);
-    await deleteDoc(groupRef);
+export async function deleteRole(roleId: string): Promise<void> {
+    const roleRef = doc(db, 'roles', roleId);
+    await deleteDoc(roleRef);
 }

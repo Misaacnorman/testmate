@@ -11,7 +11,7 @@ export default function AdminPage() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Admin</h1>
           <p className="text-muted-foreground">
-            Manage users, groups, and permissions.
+            Manage users, roles, and permissions.
           </p>
         </div>
       </div>

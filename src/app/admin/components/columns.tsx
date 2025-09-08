@@ -13,16 +13,16 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import type { User, Group } from '@/lib/types';
+import type { User, Role } from '@/lib/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 
 interface ColumnsProps {
-  groups: Group[];
+  roles: Role[];
   onEdit: (user: User) => void;
 }
 
-export const getColumns = ({ groups, onEdit }: ColumnsProps): ColumnDef<User>[] => [
+export const getColumns = ({ roles, onEdit }: ColumnsProps): ColumnDef<User>[] => [
   {
     accessorKey: 'displayName',
     header: 'User',
@@ -43,19 +43,19 @@ export const getColumns = ({ groups, onEdit }: ColumnsProps): ColumnDef<User>[] 
     },
   },
   {
-    accessorKey: 'group',
+    accessorKey: 'role',
     header: ({ column }) => (
       <Button
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
       >
-        Group
+        Role
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
     cell: ({ row }) => {
-      const group = groups.find(g => g.id === row.getValue('group'));
-      return <Badge variant="secondary" className="capitalize">{group?.name || row.getValue('group')}</Badge>;
+      const role = roles.find(g => g.id === row.getValue('role'));
+      return <Badge variant="secondary" className="capitalize">{role?.name || row.getValue('role')}</Badge>;
     },
   },
   {

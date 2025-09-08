@@ -271,7 +271,7 @@ export type User = {
   id: string;
   displayName: string;
   email: string;
-  group: string;
+  role: string;
   createdAt: string;
   overrides?: {
     add: string[];
@@ -282,10 +282,10 @@ export type User = {
 export type Permission = {
   id: string;
   description: string;
-  group: string;
+  role: string;
 };
 
-export type Group = {
+export type Role = {
   id: string;
   name: string;
   permissions: string[];

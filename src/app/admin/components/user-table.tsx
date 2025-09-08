@@ -5,16 +5,16 @@ import * as React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { DataTable } from './data-table';
 import { getColumns } from './columns';
-import type { User, Group } from '@/lib/types';
+import type { User, Role } from '@/lib/types';
 import { EditUserDialog } from './edit-user-dialog';
 
 interface UserTableProps {
   users: User[];
-  groups: Group[];
+  roles: Role[];
   onUserUpdate: (userId: string, data: Partial<User>) => void;
 }
 
-export function UserTable({ users, groups, onUserUpdate }: UserTableProps) {
+export function UserTable({ users, roles, onUserUpdate }: UserTableProps) {
   const [editingUser, setEditingUser] = React.useState<User | null>(null);
 
   const handleEdit = (user: User) => {
@@ -26,7 +26,7 @@ export function UserTable({ users, groups, onUserUpdate }: UserTableProps) {
     setEditingUser(null);
   };
   
-  const columns = React.useMemo(() => getColumns({ groups, onEdit: handleEdit }), [groups]);
+  const columns = React.useMemo(() => getColumns({ roles, onEdit: handleEdit }), [roles]);
 
   return (
     <Card className="h-full flex flex-col">
@@ -38,7 +38,7 @@ export function UserTable({ users, groups, onUserUpdate }: UserTableProps) {
             open={!!editingUser}
             onOpenChange={() => setEditingUser(null)}
             user={editingUser}
-            groups={groups}
+            roles={roles}
             onSave={handleSave}
         />
       )}

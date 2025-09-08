@@ -3,31 +3,31 @@
 
 import * as React from 'react';
 import { useToast } from '@/hooks/use-toast';
-import type { User, Group } from '@/lib/types';
-import { getUsers, getGroups, updateUser, createGroup, updateGroup, deleteGroup } from '../data';
-import { GroupList } from './group-list';
+import type { User, Role } from '@/lib/types';
+import { getUsers, getRoles, updateUser, createRole, updateRole, deleteRole } from '../data';
+import { RoleList } from './role-list';
 import { UserTable } from './user-table';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export function UserManagement() {
   const [users, setUsers] = React.useState<User[]>([]);
-  const [groups, setGroups] = React.useState<Group[]>([]);
+  const [roles, setRoles] = React.useState<Role[]>([]);
   const [loading, setLoading] = React.useState(true);
-  const [selectedGroup, setSelectedGroup] = React.useState<string>('all');
+  const [selectedRole, setSelectedRole] = React.useState<string>('all');
   const { toast } = useToast();
 
   const loadData = React.useCallback(async () => {
     setLoading(true);
     try {
-      const [userData, groupData] = await Promise.all([getUsers(), getGroups()]);
+      const [userData, roleData] = await Promise.all([getUsers(), getRoles()]);
       setUsers(userData);
-      setGroups(groupData);
+      setRoles(roleData);
     } catch (error) {
       console.error('Failed to load admin data:', error);
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: 'Failed to load users and groups.',
+        description: 'Failed to load users and roles.',
       });
     } finally {
       setLoading(false);
@@ -49,41 +49,41 @@ export function UserManagement() {
     }
   };
 
-  const handleGroupSave = async (groupData: Partial<Group> & { id?: string }) => {
+  const handleRoleSave = async (roleData: Partial<Role> & { id?: string }) => {
     try {
-      if (groupData.id) {
-        await updateGroup(groupData.id, groupData);
-        toast({ title: 'Success', description: 'Group updated successfully.' });
+      if (roleData.id) {
+        await updateRole(roleData.id, roleData);
+        toast({ title: 'Success', description: 'Role updated successfully.' });
       } else {
-        await createGroup(groupData as Omit<Group, 'id'>);
-        toast({ title: 'Success', description: 'Group created successfully.' });
+        await createRole(roleData as Omit<Role, 'id'>);
+        toast({ title: 'Success', description: 'Role created successfully.' });
       }
       loadData();
     } catch (error) {
-      console.error('Failed to save group:', error);
-      toast({ variant: 'destructive', title: 'Error', description: 'Failed to save group.' });
+      console.error('Failed to save role:', error);
+      toast({ variant: 'destructive', title: 'Error', description: 'Failed to save role.' });
     }
   };
 
-  const handleGroupDelete = async (groupId: string) => {
-    // Optional: Check if any users are in this group before deleting
+  const handleRoleDelete = async (roleId: string) => {
+    // Optional: Check if any users are in this role before deleting
     try {
-      await deleteGroup(groupId);
-      toast({ title: 'Success', description: 'Group deleted successfully.' });
-      setSelectedGroup('all');
+      await deleteRole(roleId);
+      toast({ title: 'Success', description: 'Role deleted successfully.' });
+      setSelectedRole('all');
       loadData();
     } catch (error) {
-      console.error('Failed to delete group:', error);
-      toast({ variant: 'destructive', title: 'Error', description: 'Failed to delete group.' });
+      console.error('Failed to delete role:', error);
+      toast({ variant: 'destructive', title: 'Error', description: 'Failed to delete role.' });
     }
   };
 
   const filteredUsers = React.useMemo(() => {
-    if (selectedGroup === 'all') {
+    if (selectedRole === 'all') {
       return users;
     }
-    return users.filter((user) => user.group === selectedGroup);
-  }, [users, selectedGroup]);
+    return users.filter((user) => user.role === selectedRole);
+  }, [users, selectedRole]);
 
   if (loading) {
     return (
@@ -96,16 +96,16 @@ export function UserManagement() {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-4 h-full">
-      <GroupList
-        groups={groups}
-        selectedGroup={selectedGroup}
-        onSelectGroup={setSelectedGroup}
-        onSave={handleGroupSave}
-        onDelete={handleGroupDelete}
+      <RoleList
+        roles={roles}
+        selectedRole={selectedRole}
+        onSelectRole={setSelectedRole}
+        onSave={handleRoleSave}
+        onDelete={handleRoleDelete}
       />
       <UserTable
         users={filteredUsers}
-        groups={groups}
+        roles={roles}
         onUserUpdate={handleUserUpdate}
       />
     </div>
