@@ -37,6 +37,13 @@ export function GroupList({ groups, selectedGroup, onSelectGroup, onSave, onDele
     setEditDialogOpen(true);
   }
 
+  const handleKeyDown = (event: React.KeyboardEvent, groupId: string) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      onSelectGroup(groupId);
+    }
+  };
+
+
   return (
     <Card className="h-full">
       <CardHeader className="flex flex-row items-center justify-between">
@@ -48,22 +55,28 @@ export function GroupList({ groups, selectedGroup, onSelectGroup, onSave, onDele
       </CardHeader>
       <CardContent className="p-2">
         <nav className="flex flex-col gap-1">
-          <button
+          <div
+            role="button"
+            tabIndex={0}
             onClick={() => onSelectGroup('all')}
+            onKeyDown={(e) => handleKeyDown(e, 'all')}
             className={cn(
-              'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+              'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring',
               selectedGroup === 'all' && 'bg-accent text-primary font-semibold'
             )}
           >
             <Users className="h-5 w-5" />
             <span>All Users</span>
-          </button>
+          </div>
           {groups.map((group) => (
-            <button
+            <div
               key={group.id}
               onClick={() => onSelectGroup(group.id)}
+              onKeyDown={(e) => handleKeyDown(e, group.id)}
+              role="button"
+              tabIndex={0}
               className={cn(
-                'group flex items-center justify-between gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                'group flex items-center justify-between gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring',
                 selectedGroup === group.id && 'bg-accent text-primary font-semibold'
               )}
             >
@@ -73,11 +86,11 @@ export function GroupList({ groups, selectedGroup, onSelectGroup, onSave, onDele
               </div>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                   <Button variant="ghost" size="icon" className="h-6 w-6 opacity-0 group-hover:opacity-100">
+                   <Button variant="ghost" size="icon" className="h-6 w-6 opacity-0 group-hover:opacity-100" onClick={(e) => e.stopPropagation()}>
                         <MoreVertical className="h-4 w-4" />
                    </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent>
+                <DropdownMenuContent onClick={(e) => e.stopPropagation()}>
                     <DropdownMenuItem onClick={() => handleEdit(group)}>
                         <Edit className="mr-2 h-4 w-4" />
                         Edit
@@ -88,7 +101,7 @@ export function GroupList({ groups, selectedGroup, onSelectGroup, onSave, onDele
                     </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            </button>
+            </div>
           ))}
         </nav>
       </CardContent>
