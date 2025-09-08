@@ -7,6 +7,7 @@ import {
   FlaskConical,
   ClipboardList,
   Archive,
+  Shield,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -24,6 +25,7 @@ const navItems = [
   { href: '/logs', icon: ClipboardList, label: 'Receipts'},
   { href: '/registers', icon: Archive, label: 'Registers' },
   { href: '/tests', icon: Beaker, label: 'Tests' },
+  { href: '/admin', icon: Shield, label: 'Admin' },
 ];
 
 export function SidebarNav({ isMobile = false }: SidebarNavProps) {

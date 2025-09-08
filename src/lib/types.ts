@@ -266,3 +266,27 @@ export type FieldWorkInstruction = {
   reportDateTime: string;
   sampleReceiptNumber: string;
 };
+
+export type User = {
+  id: string;
+  displayName: string;
+  email: string;
+  group: string;
+  createdAt: string;
+  overrides?: {
+    add: string[];
+    remove: string[];
+  };
+};
+
+export type Permission = {
+  id: string;
+  description: string;
+  group: string;
+};
+
+export type Group = {
+  id: string;
+  name: string;
+  permissions: string[];
+};
