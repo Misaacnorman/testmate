@@ -99,7 +99,7 @@ export function UserManagement() {
       loadData();
     } catch (error) {
       console.error('Failed to suspend user:', error);
-      toast({ variant: 'destructive', title: 'Error', description: 'Failed to suspend user.' });
+      toast({ variant: 'destructive', title: 'Error', description: (error as Error).message || 'Failed to suspend user.' });
     }
   };
   
@@ -110,7 +110,7 @@ export function UserManagement() {
       loadData();
     } catch (error) {
       console.error('Failed to re-enable user:', error);
-      toast({ variant: 'destructive', title: 'Error', description: 'Failed to re-enable user.' });
+      toast({ variant: 'destructive', title: 'Error', description: (error as Error).message || 'Failed to re-enable user.' });
     }
   };
 

@@ -279,7 +279,7 @@ function getAdminAuth() {
         const app = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$firebase$2f$admin$2d$config$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["getAdminApp"])();
         return (0, __TURBOPACK__imported__module__$5b$externals$5d2f$firebase$2d$admin$2f$auth__$5b$external$5d$__$28$firebase$2d$admin$2f$auth$2c$__esm_import$29$__["getAuth"])(app);
     } catch (e) {
-        console.error("Admin Auth could not be initialized:", e.message);
+        console.warn("Admin Auth could not be initialized:", e.message);
         return null;
     }
 }
@@ -295,6 +295,7 @@ async function getUsers() {
             }));
         const adminAuth = getAdminAuth();
         if (!adminAuth) {
+            console.warn("Admin SDK not configured. User status (enabled/disabled) will not be available.");
             return users.map((user)=>({
                     ...user,
                     disabled: false
@@ -317,7 +318,7 @@ async function getUsers() {
 async function createUser(data) {
     const adminAuth = getAdminAuth();
     if (!adminAuth) {
-        throw new Error("Admin SDK not configured. Cannot create user.");
+        throw new Error("Admin SDK not configured. Please provide FIREBASE_SERVICE_ACCOUNT_KEY to create users.");
     }
     try {
         const authUser = await adminAuth.createUser({
@@ -384,7 +385,7 @@ async function deleteRole(roleId) {
 async function updateUserStatus(userId, disabled) {
     const adminAuth = getAdminAuth();
     if (!adminAuth) {
-        throw new Error("Admin SDK not configured. Cannot update user status.");
+        throw new Error("Admin SDK not configured. Please provide FIREBASE_SERVICE_ACCOUNT_KEY to update user status.");
     }
     await adminAuth.updateUser(userId, {
         disabled
