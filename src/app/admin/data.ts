@@ -6,11 +6,18 @@ import { db } from '@/lib/firebase/config';
 import type { User, Role } from '@/lib/types';
 import { fromFirestore } from '@/lib/utils';
 import { getAuth } from 'firebase-admin/auth';
-import { initializeAdminApp } from '@/lib/firebase/admin-config';
+import { getAdminApp } from '@/lib/firebase/admin-config';
 
-// Initialize Firebase Admin SDK
-initializeAdminApp();
-const adminAuth = getAuth();
+// Initialize Firebase Admin SDK lazily
+function getAdminAuth() {
+    try {
+        const app = getAdminApp();
+        return getAuth(app);
+    } catch (e) {
+        console.error("Admin Auth could not be initialized:", (e as Error).message);
+        return null;
+    }
+}
 
 const usersCollection = collection(db, 'users');
 const rolesCollection = collection(db, 'roles');
@@ -20,6 +27,11 @@ export async function getUsers(): Promise<User[]> {
   try {
     const snapshot = await getDocs(usersCollection);
     const users = snapshot.docs.map(doc => fromFirestore<User>({ id: doc.id, ...doc.data() }));
+
+    const adminAuth = getAdminAuth();
+    if (!adminAuth) {
+        return users.map(user => ({...user, disabled: false})); // Return users without auth status if admin is not configured
+    }
 
     const authUsers = await adminAuth.listUsers();
     
@@ -39,6 +51,10 @@ export async function getUsers(): Promise<User[]> {
 }
 
 export async function createUser(data: Omit<User, 'id' | 'createdAt' | 'status'>): Promise<void> {
+    const adminAuth = getAdminAuth();
+    if (!adminAuth) {
+        throw new Error("Admin SDK not configured. Cannot create user.");
+    }
     try {
         const authUser = await adminAuth.createUser({
             email: data.email,
@@ -102,5 +118,9 @@ export async function deleteRole(roleId: string): Promise<void> {
 }
 
 export async function updateUserStatus(userId: string, disabled: boolean): Promise<void> {
+    const adminAuth = getAdminAuth();
+    if (!adminAuth) {
+        throw new Error("Admin SDK not configured. Cannot update user status.");
+    }
     await adminAuth.updateUser(userId, { disabled });
 }

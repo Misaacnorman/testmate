@@ -1,20 +1,42 @@
 
 import * as admin from 'firebase-admin';
 
-const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
+let adminApp: admin.app | null = null;
 
-if (!serviceAccount) {
-    throw new Error('FIREBASE_SERVICE_ACCOUNT_KEY environment variable is not set.');
-}
+function initializeAdminApp() {
+    if (admin.apps.length > 0) {
+        adminApp = admin.app();
+        return;
+    }
 
-const serviceAccountKey = JSON.parse(
-  Buffer.from(serviceAccount, 'base64').toString('utf-8')
-);
+    const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
+    if (!serviceAccount) {
+        console.warn("FIREBASE_SERVICE_ACCOUNT_KEY is not set. Admin features will be disabled.");
+        return;
+    }
 
-export function initializeAdminApp() {
-    if (admin.apps.length === 0) {
-        admin.initializeApp({
+    try {
+        const serviceAccountKey = JSON.parse(
+          Buffer.from(serviceAccount, 'base64').toString('utf-8')
+        );
+        
+        adminApp = admin.initializeApp({
             credential: admin.credential.cert(serviceAccountKey),
         });
+    } catch (error) {
+        console.error("Failed to parse FIREBASE_SERVICE_ACCOUNT_KEY or initialize admin app:", error);
+        adminApp = null;
     }
 }
+
+function getAdminApp() {
+    if (!adminApp) {
+        initializeAdminApp();
+    }
+    if (!adminApp) {
+        throw new Error("Firebase Admin SDK is not initialized. Please set the FIREBASE_SERVICE_ACCOUNT_KEY environment variable.");
+    }
+    return adminApp;
+}
+
+export { getAdminApp };
