@@ -55,7 +55,7 @@ export async function createUser(data: Omit<User, 'id' | 'createdAt' | 'disabled
     const adminAuth = getAdminAuth();
     if (!adminAuth) {
         const errorMessage = "Admin SDK not configured. Please provide FIREBASE_SERVICE_ACCOUNT_KEY to create users.";
-        console.warn(errorMessage);
+        console.error(errorMessage);
         throw new Error(errorMessage);
     }
     try {
@@ -124,7 +124,7 @@ export async function updateUserStatus(userId: string, disabled: boolean): Promi
     const adminAuth = getAdminAuth();
     if (!adminAuth) {
         const errorMessage = "Admin SDK not configured. Please provide FIREBASE_SERVICE_ACCOUNT_KEY to update user status.";
-        console.warn(errorMessage);
+        console.error(errorMessage);
         throw new Error(errorMessage);
     }
     await adminAuth.updateUser(userId, { disabled });
