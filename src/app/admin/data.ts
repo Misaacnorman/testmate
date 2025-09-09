@@ -14,7 +14,7 @@ function getAdminAuth() {
         const app = getAdminApp();
         return getAuth(app);
     } catch (e) {
-        console.warn("Admin Auth could not be initialized:", (e as Error).message);
+        // This will be caught by the functions below, which will log a warning.
         return null;
     }
 }
@@ -51,10 +51,12 @@ export async function getUsers(): Promise<User[]> {
   }
 }
 
-export async function createUser(data: Omit<User, 'id' | 'createdAt' | 'status'>): Promise<void> {
+export async function createUser(data: Omit<User, 'id' | 'createdAt' | 'disabled'>): Promise<void> {
     const adminAuth = getAdminAuth();
     if (!adminAuth) {
-        throw new Error("Admin SDK not configured. Please provide FIREBASE_SERVICE_ACCOUNT_KEY to create users.");
+        const errorMessage = "Admin SDK not configured. Please provide FIREBASE_SERVICE_ACCOUNT_KEY to create users.";
+        console.warn(errorMessage);
+        throw new Error(errorMessage);
     }
     try {
         const authUser = await adminAuth.createUser({
@@ -77,7 +79,7 @@ export async function createUser(data: Omit<User, 'id' | 'createdAt' | 'status'>
         // For this app, we'll log it to the console as a demonstration.
         console.log(`Password reset link for ${data.email}: ${passwordResetLink}`);
 
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error creating user in backend: ", error);
         if (error.code === 'auth/email-already-exists') {
             throw new Error('A user with this email already exists.');
@@ -121,7 +123,9 @@ export async function deleteRole(roleId: string): Promise<void> {
 export async function updateUserStatus(userId: string, disabled: boolean): Promise<void> {
     const adminAuth = getAdminAuth();
     if (!adminAuth) {
-        throw new Error("Admin SDK not configured. Please provide FIREBASE_SERVICE_ACCOUNT_KEY to update user status.");
+        const errorMessage = "Admin SDK not configured. Please provide FIREBASE_SERVICE_ACCOUNT_KEY to update user status.";
+        console.warn(errorMessage);
+        throw new Error(errorMessage);
     }
     await adminAuth.updateUser(userId, { disabled });
 }
