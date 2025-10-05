@@ -1,10 +1,9 @@
-
 # TestMate LIMS
 
 **TestMate** is a modern, web-based Laboratory Information Management System (LIMS) designed to streamline and automate the daily operations of materials testing laboratories. Built with a powerful and scalable tech stack, it provides a comprehensive suite of tools to manage everything from sample reception to final certificate generation.
 
 ![TestMate Dashboard](https://picsum.photos/seed/dashboard/1200/600)
-*A preview of the TestMate dashboard.*
+*A preview of the TestMate dashboard, showcasing key metrics and tasks.*
 
 ---
 
@@ -75,17 +74,17 @@ You will need to have the following installed on your machine:
 
 4.  **Set up environment variables:**
     This project uses Firebase for its backend. You will need to create a Firebase project and get your configuration credentials.
-    - Create a file named `.env` in the root of the project.
-    - Add your Firebase configuration details to this file. You can get these from your Firebase project settings.
+    - Create a file named `.env.local` in the root of the project.
+    - Add your Firebase configuration details to this file (copied from your Firebase project settings).
 
-    _Note: The `.env` file is listed in `.gitignore` and should not be committed to the repository._
+    *Note: The `.env.local` file is listed in `.gitignore` and should not be committed to the repository.*
 
 5.  **Run the development server:**
     ```bash
     npm run dev
     ```
 
-Open [http://localhost:9002](http://localhost:9002) with your browser to see the result. You can start editing the page by modifying `src/app/page.tsx`.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ---
 
