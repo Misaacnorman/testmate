@@ -1,0 +1,198 @@
+
+"use client";
+
+import React from 'react';
+import { CertificateData } from './CertificateData';
+import { useAuth } from '@/context/auth-context';
+import QRCode from 'qrcode.react';
+
+interface CertificateTemplateProps {
+  data: CertificateData;
+}
+
+const CertificateTemplate: React.FC<CertificateTemplateProps> = ({ data }) => {
+  const { laboratory } = useAuth();
+  
+  const qrCodeValue = `Cert No: ${data.certificateNo}\nClient: ${data.clientName}\nDate: ${data.dateOfIssue}`;
+
+  return (
+    <div id="certificate-content-printable" className="certificate-container bg-white p-8 font-sans text-[10px] leading-relaxed">
+        {/* Header */}
+        <header className="flex justify-between items-start pb-4 border-b-2 border-black">
+            <div className="flex items-center gap-4">
+                {laboratory?.logo && <img src={laboratory.logo} alt="Company Logo" className="h-16"/>}
+                <div>
+                    <h1 className="text-xl font-bold uppercase">{laboratory?.name}</h1>
+                    <p className="text-gray-600">{laboratory?.address}</p>
+                    <p className="text-gray-600">{laboratory?.email}</p>
+                </div>
+            </div>
+            <div className="text-right">
+                <h2 className="text-base font-bold text-gray-800">TEST CERTIFICATE</h2>
+                <p><span className="font-semibold">Certificate No:</span> {data.certificateNo}</p>
+                <p><span className="font-semibold">Date of Issue:</span> {data.dateOfIssue}</p>
+                <p><span className="font-semibold">Version:</span> {data.version}</p>
+            </div>
+        </header>
+
+        <main>
+            {/* Details Grid */}
+            <section className="grid grid-cols-[1fr,auto,1fr] gap-x-8 py-4 text-[10px]">
+                <div className="space-y-1">
+                    <p><strong>1. Client Name:</strong> {data.clientName}</p>
+                    <p><strong>2. Client Address:</strong> {data.clientAddress}</p>
+                    <p><strong>4. Project Title:</strong> {data.projectTitle}</p>
+                    <p><strong>5. Sample Description:</strong> {data.sampleDescription}</p>
+                    <p><strong>6. Condition at receipt:</strong> {data.conditionAtReceipt}</p>
+                    <p><strong>8. Nature of test:</strong> Compressive strength of test specimens</p>
+                </div>
+                <div className="w-px bg-gray-200"></div>
+                <div className="space-y-1">
+                    <p><strong>3. Client Contact:</strong> {data.clientContact}</p>
+                    <p><strong>7. Date of Receipt:</strong> {data.dateOfReceipt}</p>
+                    <p><strong>9. Sampling Report:</strong> {data.samplingReport}</p>
+                    <p><strong>12. Tested by:</strong> {data.testedBy}</p>
+                </div>
+            </section>
+            <section className="grid grid-cols-[auto,1fr] gap-x-8 pb-4 text-[10px]">
+                 <p><strong>10. Test Method(s):</strong></p><p>{data.testMethod}</p>
+                 <p><strong>11. Test Location:</strong></p><p>{data.testLocation}</p>
+                 <p><strong>13. Attachment(s):</strong></p><p>None</p>
+                 <p><strong>14. Results:</strong></p><p></p>
+            </section>
+
+            {/* Test Results Header Box */}
+            <div className="border-2 border-black mb-4">
+                <h3 className="text-center font-bold py-1 bg-gray-200 border-b-2 border-black text-sm">TEST RESULT FOR CONCRETE CUBE</h3>
+                <div className="grid grid-cols-2 text-[10px]">
+                    <div className="border-r-2 border-black">
+                        <div className="grid grid-cols-[150px,1fr]"><p className="p-1 border-b-2 border-black font-semibold">Sample type/ Size:</p><p className="p-1 border-b-2 border-black">{data.sampleTypeSize}</p></div>
+                        <div className="grid grid-cols-[150px,1fr]"><p className="p-1 border-b-2 border-black font-semibold">Class of Concrete:</p><p className="p-1 border-b-2 border-black">{data.classOfConcrete}</p></div>
+                        <div className="grid grid-cols-[150px,1fr]"><p className="p-1 border-b-2 border-black font-semibold">Design Compressive Strength:</p><p className="p-1 border-b-2 border-black">{data.designCompressiveStrength}</p></div>
+                        <div className="grid grid-cols-[150px,1fr]"><p className="p-1 border-b-2 border-black font-semibold">Testing Age:</p><p className="p-1 border-b-2 border-black">{data.testingAge}</p></div>
+                        <div className="grid grid-cols-[150px,1fr]"><p className="p-1 font-semibold">Area of use:</p><p className="p-1">{data.areaOfUse}</p></div>
+                    </div>
+                    <div>
+                        <div className="grid grid-cols-[150px,1fr]"><p className="p-1 border-b-2 border-black font-semibold">Curing condition:</p><p className="p-1 border-b-2 border-black">{data.curingCondition}</p></div>
+                        <div className="grid grid-cols-[150px,1fr]"><p className="p-1 border-b-2 border-black font-semibold">Curing Period at the Facility:</p><p className="p-1 border-b-2 border-black">{data.curingPeriodAtFacility}</p></div>
+                        <div className="grid grid-cols-[150px,1fr]"><p className="p-1 border-b-2 border-black font-semibold">Facility Temperature:</p><p className="p-1 border-b-2 border-black">{data.facilityTemperature}</p></div>
+                        <div className="grid grid-cols-[auto,1fr]"><p className="p-1 font-semibold">Type of Failure:</p><p className="p-1">{data.typeOfFailure}</p></div>
+                    </div>
+                </div>
+                <div className="grid grid-cols-[auto,1fr] border-t-2 border-black"><p className="p-1 font-semibold">Compressive Testing Machine ID:</p><p className="p-1">{data.compressiveTestingMachineId}</p></div>
+            </div>
+
+            {/* Results Table */}
+            <table className="w-full border-collapse border-2 border-black text-[10px] text-center mb-4">
+                <thead className="bg-gray-200">
+                    <tr className="[&>th]:border-2 [&>th]:border-black [&>th]:p-1 [&>th]:font-bold">
+                        <th rowSpan={2}>DATE OF<br />CASTING</th>
+                        <th rowSpan={2}>DATE OF<br />TESTING</th>
+                        <th rowSpan={2}>SAMPLE<br />NUMBER</th>
+                        <th colSpan={3}>MEASURED SPECIMEN<br />DIMENSIONS (mm)</th>
+                        <th rowSpan={2}>CROSS SECTIONAL<br />AREA (mm²)</th>
+                        <th rowSpan={2}>WEIGHT OF<br />SAMPLE (kg)</th>
+                        <th rowSpan={2}>DENSITY OF<br />SAMPLE (kg/m³)</th>
+                        <th rowSpan={2}>FAILURE<br />LOAD (kN)</th>
+                        <th rowSpan={2}>CORRECTED<br />FAILURE<br />LOAD (kN)</th>
+                        <th rowSpan={2}>COMPRESSIVE<br />STRENGTH<br />(N/mm²)</th>
+                    </tr>
+                    <tr className="[&>th]:border-2 [&>th]:border-black [&>th]:p-1 [&>th]:font-bold">
+                        <th>L</th>
+                        <th>W</th>
+                        <th>H</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {data.testResults.map((result, index) => (
+                        <tr key={index} className="[&>td]:border-2 [&>td]:border-black [&>td]:p-1">
+                            {index === 0 ? (
+                                <>
+                                    <td rowSpan={data.testResults.length}>{data.dateOfCasting}</td>
+                                    <td rowSpan={data.testResults.length}>{data.dateOfTesting}</td>
+                                </>
+                            ) : null}
+                            <td>{result.sampleNumber}</td>
+                            <td>{result.length.toFixed(1)}</td>
+                            <td>{result.width.toFixed(1)}</td>
+                            <td>{result.height.toFixed(1)}</td>
+                            <td>{result.crossSectionalArea.toFixed(0)}</td>
+                            <td>{result.weight.toFixed(2)}</td>
+                            <td>{result.density.toFixed(0)}</td>
+                            <td>{result.failureLoad.toFixed(1)}</td>
+                            <td>{result.correctedFailureLoad.toFixed(1)}</td>
+                            <td>{result.compressiveStrength.toFixed(1)}</td>
+                        </tr>
+                    ))}
+                </tbody>
+                 {data.averageCompressiveStrength ? (
+                    <tfoot className="font-bold bg-gray-200">
+                        <tr className="[&>td]:border-2 [&>td]:border-black [&>td]:p-1">
+                            <td colSpan={11} className="text-right">Average Compressive Strength:</td>
+                            <td>{data.averageCompressiveStrength.toFixed(1)}</td>
+                        </tr>
+                    </tfoot>
+                 ) : null}
+            </table>
+
+            {/* Remarks and Signatories */}
+            <div className="space-y-4 text-[10px] leading-tight">
+                <div>
+                    <p className="font-semibold">Remarks:</p>
+                    <ol className="list-[decimal] list-outside pl-4">
+                        {data.remarks.map((remark, index) => <li key={index} className="pl-1">{remark}</li>)}
+                    </ol>
+                     {!data.averageCompressiveStrength && (
+                         <p className="mt-2">The average compressive strength value is not provided on this certificate because of the variability in the results which exceeds the repeatability condition (r=9%)</p>
+                    )}
+                </div>
+
+                <div className="text-center font-semibold pt-2">
+                    ................................................END OF REPORT................................................
+                </div>
+                
+                 <div className="flex justify-between items-end pt-12">
+                    <div className="text-center">
+                        {data.approvedByEngineer?.signatureURL ? (
+                            <div className="mb-1 h-12 flex justify-center items-center">
+                                <img src={data.approvedByEngineer.signatureURL} alt="Engineer's Signature" className="max-h-full"/>
+                            </div>
+                        ) : <div className="h-12"></div>}
+                        <p className="border-t border-black px-8 pt-1">{data.approvedByEngineer?.name || 'N/A'}</p>
+                        <p className="font-semibold">Materials Engineer</p>
+                    </div>
+                    <div className="text-center">
+                        {data.approvedByManager?.signatureURL ? (
+                            <div className="mb-1 h-12 flex justify-center items-center">
+                                <img src={data.approvedByManager.signatureURL} alt="Manager's Signature" className="max-h-full"/>
+                            </div>
+                        ) : <div className="h-12"></div>}
+                         <p className="border-t border-black px-8 pt-1">{data.approvedByManager?.name || 'N/A'}</p>
+                         <p className="font-semibold">Technical Manager</p>
+                    </div>
+                    <div className="text-center">
+                         <div className="h-12"></div>
+                         <p className="border-t border-black px-8 pt-1">{data.clientRepresentative || 'Client\'s Representative'}</p>
+                         <p className="font-semibold">Client's Representative</p>
+                    </div>
+                </div>
+
+                {data.status === 'Approved' && (
+                    <div className="flex justify-between items-center pt-8">
+                        <div>
+                            <QRCode value={qrCodeValue} size={64} />
+                        </div>
+                        <div className="relative h-24 w-24">
+                           {laboratory?.stampSettings?.stampUrl && (
+                             <img src={laboratory.stampSettings.stampUrl} alt="Lab Stamp" className="h-24 w-24" />
+                           )}
+                        </div>
+                    </div>
+                )}
+            </div>
+        </main>
+    </div>
+  );
+};
+
+export default CertificateTemplate;
