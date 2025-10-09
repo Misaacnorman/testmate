@@ -17,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Loader2, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useErrorHandler } from "@/hooks/use-error-handler";
 import { db } from "@/lib/firebase";
 import { doc, setDoc } from "firebase/firestore";
 import { useAuth } from "@/context/auth-context";
@@ -43,6 +44,7 @@ export default function CompanyProfileOnboardingPage() {
   const [isLoading, setIsLoading] = React.useState(true);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+  const { handleError, showSuccess } = useErrorHandler();
 
   React.useEffect(() => {
     if (laboratory) {
@@ -125,18 +127,11 @@ export default function CompanyProfileOnboardingPage() {
         // Explicitly refresh the auth context to get the latest lab data
         await refresh();
 
-        toast({
-            title: "Profile Updated!",
-            description: "Your laboratory profile has been updated.",
-        });
+        showSuccess("Profile Updated Successfully", "Your laboratory profile has been saved and you're ready to start using the platform!");
         router.push('/');
     } catch (error) {
         console.error("Error saving company profile:", error);
-        toast({
-            variant: "destructive",
-            title: "Save Failed",
-            description: "Could not save laboratory profile to the database.",
-        });
+        handleError(error, "company profile save");
     } finally {
         setIsSaving(false);
     }

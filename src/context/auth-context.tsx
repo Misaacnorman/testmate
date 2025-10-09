@@ -107,6 +107,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       } catch (e) {
           console.error("Failed to fetch user/lab data", e);
+          
+          // Set fallback user data but don't show error to user
+          // This prevents infinite error loops in the UI
           setUser({
             uid: currentUser.uid,
             email: currentUser.email || undefined,

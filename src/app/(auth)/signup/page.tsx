@@ -11,6 +11,7 @@ import { createUserWithEmailAndPassword, updateProfile, AuthError } from "fireba
 import { collection, setDoc, doc, writeBatch, addDoc, getDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
 import { useToast } from "@/hooks/use-toast";
+import { useErrorHandler } from "@/hooks/use-error-handler";
 import { PERMISSION_GROUPS } from "@/lib/permissions";
 
 import { Button } from "@/components/ui/button";
@@ -43,9 +44,10 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 export default function SignupPage() {
-    const router = useRouter();
-    const { toast } = useToast();
-    const [isSubmitting, setIsSubmitting] = React.useState(false);
+        const router = useRouter();
+        const { toast } = useToast();
+        const { handleAuthError, showSuccess, handleError } = useErrorHandler();
+        const [isSubmitting, setIsSubmitting] = React.useState(false);
 
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
@@ -110,30 +112,33 @@ export default function SignupPage() {
       };
       batch.set(userRef, userData);
 
-      await batch.commit();
-      
-      // Wait a moment for Firestore to index the new documents
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      toast({ title: "Account created" });
-      router.push("/welcome/company-profile");
-            
-        } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error("Signup error:", error);
-            const authError = error as AuthError;
-            let description = "An unexpected error occurred. Please try again.";
-            if (authError.code === "auth/email-already-in-use") {
-                description = "This email is already associated with an account.";
+          await batch.commit();
+
+          // Wait a moment for Firestore to index the new documents
+          await new Promise(resolve => setTimeout(resolve, 1000));
+
+          showSuccess("Account Created Successfully", "Your laboratory account has been created. Please complete your company profile setup.");
+          router.push("/welcome/company-profile");
+
+            } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error("Signup error:", error);
+                const authError = error as AuthError;
+                
+                // Handle specific signup errors
+                if (authError.code === "auth/email-already-in-use") {
+                    handleAuthError(authError);
+                } else if (authError.code === "auth/weak-password") {
+                    handleAuthError(authError);
+                } else if (authError.code === "auth/invalid-email") {
+                    handleAuthError(authError);
+                } else {
+                    // Handle other errors (Firestore, network, etc.)
+                    handleError(error, "signup");
+                }
+            } finally {
+                setIsSubmitting(false);
             }
-            toast({
-                variant: "destructive",
-                title: "Signup Failed",
-                description,
-            });
-        } finally {
-            setIsSubmitting(false);
-        }
     };
 
 

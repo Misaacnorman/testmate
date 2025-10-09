@@ -28,7 +28,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2 } from "lucide-react";
+import { useErrorHandler } from "@/hooks/use-error-handler";
+import { Loader2, AlertCircle, CheckCircle } from "lucide-react";
 import { auth } from "@/lib/firebase";
 
 const formSchema = z.object({
@@ -41,7 +42,10 @@ type FormData = z.infer<typeof formSchema>;
 export default function LoginPage() {
     const router = useRouter();
     const { toast } = useToast();
+    const { handleAuthError, showSuccess } = useErrorHandler();
     const [isSubmitting, setIsSubmitting] = React.useState(false);
+    const [loginAttempts, setLoginAttempts] = React.useState(0);
+    const [isBlocked, setIsBlocked] = React.useState(false);
     
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
@@ -52,22 +56,45 @@ export default function LoginPage() {
     });
 
     const onSubmit = async (data: FormData) => {
+        // Check if user is temporarily blocked
+        if (isBlocked) {
+            toast({
+                variant: "destructive",
+                title: "Account Temporarily Blocked",
+                description: "Too many failed login attempts. Please wait 5 minutes before trying again.",
+            });
+            return;
+        }
+
         setIsSubmitting(true);
         try {
             await signInWithEmailAndPassword(auth, data.email, data.password);
+            
+            // Reset login attempts on successful login
+            setLoginAttempts(0);
+            showSuccess("Login Successful", "Welcome back! Redirecting to your dashboard...");
+            
             // The AuthGuard will handle redirection
         } catch (error) {
             console.error("Login error:", error);
             const authError = error as AuthError;
-            let description = "An unexpected error occurred. Please try again.";
-            if (authError.code === "auth/user-not-found" || authError.code === "auth/wrong-password" || authError.code === 'auth/invalid-credential') {
-                description = "Invalid credentials. Please check your email and password and try again.";
+            
+            // Handle too many requests
+            if (authError.code === "auth/too-many-requests") {
+                setLoginAttempts(5);
+                setIsBlocked(true);
+                // Unblock after 5 minutes
+                setTimeout(() => {
+                    setIsBlocked(false);
+                    setLoginAttempts(0);
+                }, 5 * 60 * 1000);
+            } else {
+                // Increment failed attempts
+                setLoginAttempts(prev => prev + 1);
             }
-            toast({
-                variant: "destructive",
-                title: "Login Failed",
-                description,
-            });
+            
+            // Show user-friendly error message
+            handleAuthError(authError);
         } finally {
             setIsSubmitting(false);
         }
@@ -78,10 +105,21 @@ export default function LoginPage() {
     <div className="flex items-center justify-center py-12">
         <Card className="mx-auto max-w-sm">
             <CardHeader>
-            <CardTitle className="text-2xl">Login</CardTitle>
+            <CardTitle className="text-2xl flex items-center gap-2">
+                {isBlocked ? <AlertCircle className="h-5 w-5 text-destructive" /> : <CheckCircle className="h-5 w-5 text-green-500" />}
+                Login
+            </CardTitle>
             <CardDescription>
-                Enter your email below to login to your account
+                {isBlocked 
+                    ? "Your account is temporarily blocked due to too many failed attempts"
+                    : "Enter your email below to login to your account"
+                }
             </CardDescription>
+            {loginAttempts > 0 && !isBlocked && (
+                <div className="text-sm text-amber-600 bg-amber-50 p-2 rounded">
+                    Failed attempts: {loginAttempts}/5
+                </div>
+            )}
             </CardHeader>
             <CardContent>
             <Form {...form}>
@@ -112,9 +150,14 @@ export default function LoginPage() {
                             </FormItem>
                         )}
                     />
-                    <Button type="submit" className="w-full" disabled={isSubmitting}>
+                    <Button 
+                        type="submit" 
+                        className="w-full" 
+                        disabled={isSubmitting || isBlocked}
+                        variant={isBlocked ? "secondary" : "default"}
+                    >
                         {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        Login
+                        {isBlocked ? "Account Blocked" : "Login"}
                     </Button>
                 </form>
             </Form>
