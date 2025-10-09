@@ -44,6 +44,7 @@ import {
     AlertDialogTitle,
   } from "@/components/ui/alert-dialog";
 import { useAuth } from "@/context/auth-context";
+import { differenceInDays } from "date-fns";
 
 const formatDate = (dateValue: any) => {
     if (!dateValue) return '-';
@@ -103,6 +104,8 @@ export function CylindersTable() {
     const [isEditDialogOpen, setIsEditDialogOpen] = React.useState(false);
     const [firestoreError, setFirestoreError] = React.useState(false);
     const [deletingEntry, setDeletingEntry] = React.useState<CylinderRegisterEntry | null>(null);
+    const [showDateWarning, setShowDateWarning] = React.useState(false);
+    const [pendingTestEntry, setPendingTestEntry] = React.useState<CylinderRegisterEntry | null>(null);
     const { toast } = useToast();
     const { laboratoryId, user, laboratory } = useAuth();
     const [columnVisibility, setColumnVisibility] = React.useState(initialColumnVisibility);
@@ -164,18 +167,87 @@ export function CylindersTable() {
         setIsEditDialogOpen(true);
     };
     
+    const checkTestingDate = (testingDate: any): { canTest: boolean; isBefore: boolean; isAfter: boolean } => {
+        if (!testingDate) return { canTest: true, isBefore: false, isAfter: false };
+        
+        try {
+            let scheduledDate: Date;
+            if (testingDate && typeof testingDate.seconds === 'number') {
+                scheduledDate = testingDate.toDate();
+            } else {
+                scheduledDate = new Date(testingDate);
+            }
+            
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            scheduledDate.setHours(0, 0, 0, 0);
+            
+            const isBefore = today < scheduledDate;
+            const isAfter = today > scheduledDate;
+            
+            return { canTest: !isBefore, isBefore, isAfter };
+        } catch (e) {
+            return { canTest: true, isBefore: false, isAfter: false };
+        }
+    };
+    
     const openTestDialog = (entry: CylinderRegisterEntry) => {
-        setSelectedRow(entry);
-        setIsTestDialogOpen(true);
+        const dateCheck = checkTestingDate(entry.testingDate);
+        
+        if (dateCheck.isBefore) {
+            setPendingTestEntry(entry);
+            setShowDateWarning(true);
+        } else {
+            setSelectedRow(entry);
+            setIsTestDialogOpen(true);
+        }
+    };
+    
+    const handleOverrideDate = () => {
+        if (pendingTestEntry) {
+            setSelectedRow(pendingTestEntry);
+            setIsTestDialogOpen(true);
+            setShowDateWarning(false);
+            setPendingTestEntry(null);
+        }
     };
 
+
+    const calculateAge = (castingDate: any, testingDate: any): number | string => {
+        try {
+            let casting: Date;
+            let testing: Date;
+            
+            if (castingDate && typeof castingDate.seconds === 'number') {
+                casting = castingDate.toDate();
+            } else {
+                casting = new Date(castingDate);
+            }
+            
+            if (testingDate && typeof testingDate.seconds === 'number') {
+                testing = testingDate.toDate();
+            } else {
+                testing = new Date(testingDate);
+            }
+            
+            if (isNaN(casting.getTime()) || isNaN(testing.getTime())) {
+                return '';
+            }
+            
+            const days = differenceInDays(testing, casting);
+            return days > 28 ? ">28" : days;
+        } catch (e) {
+            return '';
+        }
+    };
 
     const handleTestSubmit = async (results: SampleTestResult[], machineUsed: string, temperature: number) => {
         if (!selectedRow || !user) return;
     
         try {
           const docRef = doc(db, "cylinders_register", selectedRow.id);
-          await updateDoc(docRef, {
+          const dateCheck = checkTestingDate(selectedRow.testingDate);
+          const updateData: any = {
             results,
             machineUsed,
             temperature,
@@ -184,7 +256,18 @@ export function CylindersTable() {
             engineerOnDutyId: laboratory?.engineerOnDuty || null,
             technicianId: user.uid,
             technician: user.name,
-          });
+          };
+          
+          // Update testing date if testing on a different date
+          if (dateCheck.isBefore || dateCheck.isAfter) {
+            updateData.testingDate = new Date().toISOString();
+          }
+          
+          // Calculate and update age based on casting date and testing date
+          const finalTestingDate = updateData.testingDate || selectedRow.testingDate;
+          updateData.age = calculateAge(selectedRow.castingDate, finalTestingDate);
+          
+          await updateDoc(docRef, updateData);
           toast({
             title: "Success",
             description: "Test results have been saved successfully.",
@@ -297,7 +380,10 @@ export function CylindersTable() {
                             ))}
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <Button onClick={() => openTestDialog(selectedRow!)} disabled={!selectedRow}>
+                    <Button 
+                        onClick={() => openTestDialog(selectedRow!)} 
+                        disabled={!selectedRow || (selectedRow && selectedRow.results && selectedRow.results.length > 0)}
+                    >
                         <FlaskConical className="mr-2 h-4 w-4" />
                         Test Cylinder
                     </Button>
@@ -507,6 +593,28 @@ export function CylindersTable() {
             <AlertDialogCancel onClick={() => setDeletingEntry(null)}>Cancel</AlertDialogCancel>
             <AlertDialogAction onClick={handleDeleteEntry}>
               Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={showDateWarning} onOpenChange={(open) => !open && setShowDateWarning(false)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Sample Not Yet Due for Testing</AlertDialogTitle>
+            <AlertDialogDescription>
+              This sample is scheduled for testing on <strong>{pendingTestEntry?.testingDate ? formatDate(pendingTestEntry.testingDate) : 'N/A'}</strong>. 
+              <br /><br />
+              Do you want to proceed with testing anyway? The testing date will be updated to today's date.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => {
+              setShowDateWarning(false);
+              setPendingTestEntry(null);
+            }}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleOverrideDate}>
+              Proceed Anyway
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -110,6 +110,7 @@ export const PERMISSION_GROUPS: PermissionGroup[] = [
       id: "system",
       label: "System Settings",
       permissions: [
+        { id: "settings:company:read", label: "View Settings Page" },
         { id: "settings:company:update", label: "Update Company Profile" },
         { id: "settings:documents:update", label: "Update Document & ID Settings" },
         { id: "settings:machines:update", label: "Manage Machine Correction Factors" },

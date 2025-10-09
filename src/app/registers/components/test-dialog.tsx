@@ -138,6 +138,19 @@ export function TestDialog({ isOpen, onClose, sampleSet, onSubmit, machines }: T
     setResults(newResults);
   };
   
+  const handleFormatNumber = (field: keyof Omit<SampleTestResult, 'sampleId'>, decimals: number) => {
+    const newResults = [...results];
+    const currentResult = { ...newResults[step] };
+    const value = (currentResult as any)[field];
+    
+    if (value !== undefined && value !== null && !isNaN(value)) {
+      (currentResult as any)[field] = parseFloat(value.toFixed(decimals));
+    }
+    
+    newResults[step] = currentResult;
+    setResults(newResults);
+  };
+  
   const handleMachineChange = (machineId: string) => {
     setMachineUsed(machineId);
     const machine = machines.find(m => m.id === machineId);
@@ -146,7 +159,7 @@ export function TestDialog({ isOpen, onClose, sampleSet, onSubmit, machines }: T
     // Recalculate for all samples in the set when machine changes
     const newResults = results.map(result => {
         const updatedResult = {...result};
-        if (updatedResult.load !== undefined) {
+        if (updatedResult.load !== undefined && updatedResult.load !== null) {
              updatedResult.correctedFailureLoad = (machine.factorM * updatedResult.load) + machine.factorC;
         }
         return updatedResult;
@@ -237,12 +250,24 @@ export function TestDialog({ isOpen, onClose, sampleSet, onSubmit, machines }: T
                 )}
                  <div className="space-y-2">
                     <Label>Weight (kg)</Label>
-                    <Input type="number" value={results[step]?.weight ?? ''} onChange={(e) => handleResultChange('weight', e.target.value)} />
+                    <Input 
+                        type="number" 
+                        step="0.01"
+                        value={results[step]?.weight ?? ''} 
+                        onChange={(e) => handleResultChange('weight', e.target.value)}
+                        onBlur={() => handleFormatNumber('weight', 2)}
+                    />
                 </div>
                  <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                         <Label>Failure Load (kN)</Label>
-                        <Input type="number" value={results[step]?.load ?? ''} onChange={(e) => handleResultChange('load', e.target.value)} />
+                        <Input 
+                            type="number" 
+                            step="0.1"
+                            value={results[step]?.load ?? ''} 
+                            onChange={(e) => handleResultChange('load', e.target.value)}
+                            onBlur={() => handleFormatNumber('load', 1)}
+                        />
                     </div>
                     <div className="space-y-2">
                         <Label>Corrected Failure Load (kN)</Label>

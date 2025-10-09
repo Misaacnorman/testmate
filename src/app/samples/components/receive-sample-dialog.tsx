@@ -366,6 +366,28 @@ const handleSetDataChange = (
         const set = newData[categoryName]?.tests[testId]?.sets.find(s => s.id === setId);
         if (!set) return prevData;
 
+        const today = startOfToday();
+        
+        // Apply date restrictions
+        if (field === 'castingDate' && value) {
+            const castingDate = new Date(value);
+            // Casting date must be before today (receipt date)
+            if (isValid(castingDate) && !isAfter(today, castingDate)) {
+                // Show error - casting date must be before today
+                return prevData; // Don't update if invalid
+            }
+        }
+        
+        if (field === 'testingDate' && value) {
+            const testingDate = new Date(value);
+            const castingDate = set.castingDate ? new Date(set.castingDate) : null;
+            // Testing date must be after casting date
+            if (castingDate && isValid(castingDate) && isValid(testingDate) && !isAfter(testingDate, castingDate)) {
+                // Show error - testing date must be after casting date
+                return prevData; // Don't update if invalid
+            }
+        }
+
         (set as any)[field] = value;
         
         const castingDate = set.castingDate ? new Date(set.castingDate) : null;
@@ -373,10 +395,6 @@ const handleSetDataChange = (
 
         if (field === 'castingDate' || field === 'testingDate') {
             if (castingDate && isValid(castingDate) && testingDate && isValid(testingDate)) {
-                 if (isAfter(castingDate, testingDate)) {
-                    testingDate = castingDate; // Ensure test date is not before cast date
-                    set.testingDate = castingDate;
-                 }
                 set.age = differenceInDays(testingDate, castingDate);
             } else {
                 set.age = "";

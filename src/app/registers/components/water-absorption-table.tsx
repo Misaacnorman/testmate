@@ -49,6 +49,7 @@ import {
 import { WaterAbsorptionCertificate } from "@/app/test-certificates/components/WaterAbsorptionCertificate";
 import { WaterAbsorptionTestDialog } from "./water-absorption-test-dialog";
 import { useAuth } from "@/context/auth-context";
+import { differenceInDays } from "date-fns";
 
 const formatDate = (dateValue: any) => {
     if (!dateValue) return '-';
@@ -107,6 +108,8 @@ export function WaterAbsorptionTable() {
   const [firestoreError, setFirestoreError] = React.useState(false);
   const [deletingEntry, setDeletingEntry] = React.useState<WaterAbsorptionRegisterEntry | null>(null);
   const [viewingCertificate, setViewingCertificate] = React.useState<WaterAbsorptionRegisterEntry | null>(null);
+  const [showDateWarning, setShowDateWarning] = React.useState(false);
+  const [pendingTestEntry, setPendingTestEntry] = React.useState<WaterAbsorptionRegisterEntry | null>(null);
   const { toast } = useToast();
   const { user, laboratory } = useAuth();
   const [columnVisibility, setColumnVisibility] = React.useState(initialColumnVisibility);
@@ -161,9 +164,77 @@ export function WaterAbsorptionTable() {
     setIsEditDialogOpen(true);
   };
   
+  const checkTestingDate = (testingDate: any): { canTest: boolean; isBefore: boolean; isAfter: boolean } => {
+    if (!testingDate) return { canTest: true, isBefore: false, isAfter: false };
+    
+    try {
+        let scheduledDate: Date;
+        if (testingDate && typeof testingDate.seconds === 'number') {
+            scheduledDate = testingDate.toDate();
+        } else {
+            scheduledDate = new Date(testingDate);
+        }
+        
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        scheduledDate.setHours(0, 0, 0, 0);
+        
+        const isBefore = today < scheduledDate;
+        const isAfter = today > scheduledDate;
+        
+        return { canTest: !isBefore, isBefore, isAfter };
+    } catch (e) {
+        return { canTest: true, isBefore: false, isAfter: false };
+    }
+  };
+  
   const openTestDialog = (entry: WaterAbsorptionRegisterEntry) => {
-    setSelectedRow(entry);
-    setIsTestDialogOpen(true);
+    const dateCheck = checkTestingDate(entry.testingDate);
+    
+    if (dateCheck.isBefore) {
+        setPendingTestEntry(entry);
+        setShowDateWarning(true);
+    } else {
+        setSelectedRow(entry);
+        setIsTestDialogOpen(true);
+    }
+  };
+  
+  const handleOverrideDate = () => {
+    if (pendingTestEntry) {
+        setSelectedRow(pendingTestEntry);
+        setIsTestDialogOpen(true);
+        setShowDateWarning(false);
+        setPendingTestEntry(null);
+    }
+  };
+  
+  const calculateAge = (castingDate: any, testingDate: any): number | string => {
+    try {
+        let casting: Date;
+        let testing: Date;
+        
+        if (castingDate && typeof castingDate.seconds === 'number') {
+            casting = castingDate.toDate();
+        } else {
+            casting = new Date(castingDate);
+        }
+        
+        if (testingDate && typeof testingDate.seconds === 'number') {
+            testing = testingDate.toDate();
+        } else {
+            testing = new Date(testingDate);
+        }
+        
+        if (isNaN(casting.getTime()) || isNaN(testing.getTime())) {
+            return '';
+        }
+        
+        const days = differenceInDays(testing, casting);
+        return days > 28 ? ">28" : days;
+    } catch (e) {
+        return '';
+    }
   };
   
   const handleTestSubmit = async (results: WaterAbsorptionTestResult[], machineUsed: string, temperature: number) => {
@@ -171,7 +242,8 @@ export function WaterAbsorptionTable() {
 
     try {
       const docRef = doc(db, "water_absorption_register", selectedRow.id);
-      await updateDoc(docRef, {
+      const dateCheck = checkTestingDate(selectedRow.testingDate);
+      const updateData: any = {
         results,
         machineUsed,
         temperature,
@@ -180,7 +252,18 @@ export function WaterAbsorptionTable() {
         engineerOnDutyId: laboratory?.engineerOnDuty || null,
         technicianId: user.uid,
         technician: user.name,
-      });
+      };
+      
+      // Update testing date if testing on a different date
+      if (dateCheck.isBefore || dateCheck.isAfter) {
+        updateData.testingDate = new Date().toISOString();
+      }
+      
+      // Calculate and update age based on casting date and testing date
+      const finalTestingDate = updateData.testingDate || selectedRow.testingDate;
+      updateData.age = calculateAge(selectedRow.castingDate, finalTestingDate);
+      
+      await updateDoc(docRef, updateData);
       toast({
         title: "Success",
         description: "Test results have been saved and certificate is pending approval.",
@@ -223,21 +306,15 @@ export function WaterAbsorptionTable() {
 
   const getResultForRow = (row: WaterAbsorptionRegisterEntry, sampleId: string, field: keyof Omit<WaterAbsorptionTestResult, 'sampleId'>) => {
     const result = row.results?.find(r => r.sampleId === sampleId);
-    const value = result?.[field];
-
-    if (value === undefined || value === null || (typeof value === 'number' && isNaN(value))) {
-        return '-';
-    }
+    if (!result) return '-';
     
-    if (typeof value === 'string' && value.trim() === '') {
+    const value = result[field] as number | undefined;
+
+    if (value === undefined || value === null || isNaN(value)) {
         return '-';
     }
 
-    if (typeof value === 'number') {
-        return value.toFixed(field === 'waterAbsorption' ? 1 : 2);
-    }
-
-    return value;
+    return value.toFixed(field === 'waterAbsorption' ? 1 : 2);
   };
   
   const openDeleteDialog = (entry: WaterAbsorptionRegisterEntry) => {
@@ -305,7 +382,10 @@ export function WaterAbsorptionTable() {
                             ))}
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <Button onClick={() => openTestDialog(selectedRow!)} disabled={!selectedRow}>
+                    <Button 
+                        onClick={() => openTestDialog(selectedRow!)} 
+                        disabled={!selectedRow || (selectedRow && selectedRow.results && selectedRow.results.length > 0)}
+                    >
                         <FlaskConical className="mr-2 h-4 w-4" />
                         Test Sample
                     </Button>
@@ -489,6 +569,28 @@ export function WaterAbsorptionTable() {
             <AlertDialogFooter>
               <AlertDialogCancel onClick={() => setDeletingEntry(null)}>Cancel</AlertDialogCancel>
               <AlertDialogAction onClick={handleDeleteEntry}>Continue</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
+        <AlertDialog open={showDateWarning} onOpenChange={(open) => !open && setShowDateWarning(false)}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Sample Not Yet Due for Testing</AlertDialogTitle>
+              <AlertDialogDescription>
+                This sample is scheduled for testing on <strong>{pendingTestEntry?.testingDate ? formatDate(pendingTestEntry.testingDate) : 'N/A'}</strong>. 
+                <br /><br />
+                Do you want to proceed with testing anyway? The testing date will be updated to today's date.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={() => {
+                setShowDateWarning(false);
+                setPendingTestEntry(null);
+              }}>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={handleOverrideDate}>
+                Proceed Anyway
+              </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

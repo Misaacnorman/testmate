@@ -27,7 +27,7 @@ import { Button } from "@/components/ui/button";
 import { PaverTestDialog } from "./paver-test-dialog";
 import { EditEntryDialog } from "./edit-entry-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
-import { FlaskConical, MoreHorizontal, Terminal, Columns } from "lucide-react";
+import { FlaskConical, MoreHorizontal, Terminal, Columns, Loader2 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
     AlertDialog,
@@ -50,6 +50,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { PaverCertificate } from "@/app/test-certificates/components/PaverCertificate";
 import { useAuth } from "@/context/auth-context";
+import { differenceInDays } from "date-fns";
 
 const formatDate = (dateValue: any) => {
     if (!dateValue) return '-';
@@ -113,6 +114,8 @@ export function PaversTable() {
   const [firestoreError, setFirestoreError] = React.useState(false);
   const [deletingEntry, setDeletingEntry] = React.useState<PaverRegisterEntry | null>(null);
   const [viewingCertificate, setViewingCertificate] = React.useState<PaverRegisterEntry | null>(null);
+  const [showDateWarning, setShowDateWarning] = React.useState(false);
+  const [pendingTestEntry, setPendingTestEntry] = React.useState<PaverRegisterEntry | null>(null);
   const { toast } = useToast();
   const { laboratoryId, user, laboratory } = useAuth();
   const [columnVisibility, setColumnVisibility] = React.useState(initialColumnVisibility);
@@ -177,21 +180,90 @@ export function PaversTable() {
     setIsEditDialogOpen(true);
   };
   
+  const checkTestingDate = (testingDate: any): { canTest: boolean; isBefore: boolean; isAfter: boolean } => {
+    if (!testingDate) return { canTest: true, isBefore: false, isAfter: false };
+    
+    try {
+        let scheduledDate: Date;
+        if (testingDate && typeof testingDate.seconds === 'number') {
+            scheduledDate = testingDate.toDate();
+        } else {
+            scheduledDate = new Date(testingDate);
+        }
+        
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        scheduledDate.setHours(0, 0, 0, 0);
+        
+        const isBefore = today < scheduledDate;
+        const isAfter = today > scheduledDate;
+        
+        return { canTest: !isBefore, isBefore, isAfter };
+    } catch (e) {
+        return { canTest: true, isBefore: false, isAfter: false };
+    }
+  };
+  
   const openTestDialog = (entry: PaverRegisterEntry) => {
-    setSelectedRow(entry);
-    setIsTestDialogOpen(true);
+    const dateCheck = checkTestingDate(entry.testingDate);
+    
+    if (dateCheck.isBefore) {
+        setPendingTestEntry(entry);
+        setShowDateWarning(true);
+    } else {
+        setSelectedRow(entry);
+        setIsTestDialogOpen(true);
+    }
+  };
+  
+  const handleOverrideDate = () => {
+    if (pendingTestEntry) {
+        setSelectedRow(pendingTestEntry);
+        setIsTestDialogOpen(true);
+        setShowDateWarning(false);
+        setPendingTestEntry(null);
+    }
   };
   
   const openCertificateView = (entry: PaverRegisterEntry) => {
       setViewingCertificate(entry);
   }
 
+  const calculateAge = (castingDate: any, testingDate: any): number | string => {
+    try {
+        let casting: Date;
+        let testing: Date;
+        
+        if (castingDate && typeof castingDate.seconds === 'number') {
+            casting = castingDate.toDate();
+        } else {
+            casting = new Date(castingDate);
+        }
+        
+        if (testingDate && typeof testingDate.seconds === 'number') {
+            testing = testingDate.toDate();
+        } else {
+            testing = new Date(testingDate);
+        }
+        
+        if (isNaN(casting.getTime()) || isNaN(testing.getTime())) {
+            return '';
+        }
+        
+        const days = differenceInDays(testing, casting);
+        return days > 28 ? ">28" : days;
+    } catch (e) {
+        return '';
+    }
+  };
+
   const handleTestSubmit = async (results: PaverTestResult[], machineUsed: string, temperature: number, paverThickness: string) => {
     if (!selectedRow || !user) return;
 
     try {
       const docRef = doc(db, "pavers_register", selectedRow.id);
-       const sanitizedResults = results.map(r => ({
+      const dateCheck = checkTestingDate(selectedRow.testingDate);
+      const sanitizedResults = results.map(r => ({
         ...r,
         weight: r.weight ?? null,
         load: r.load ?? null,
@@ -199,7 +271,8 @@ export function PaversTable() {
         calculatedArea: r.calculatedArea ?? null,
         measuredThickness: r.measuredThickness ?? null,
       }));
-      await updateDoc(docRef, {
+      
+      const updateData: any = {
         results: sanitizedResults,
         machineUsed,
         temperature,
@@ -209,7 +282,18 @@ export function PaversTable() {
         engineerOnDutyId: laboratory?.engineerOnDuty || null,
         technicianId: user.uid,
         technician: user.name,
-      });
+      };
+      
+      // Update testing date if testing on a different date
+      if (dateCheck.isBefore || dateCheck.isAfter) {
+        updateData.testingDate = new Date().toISOString();
+      }
+      
+      // Calculate and update age based on casting date and testing date
+      const finalTestingDate = updateData.testingDate || selectedRow.testingDate;
+      updateData.age = calculateAge(selectedRow.castingDate, finalTestingDate);
+      
+      await updateDoc(docRef, updateData);
       toast({
         title: "Success",
         description: "Test results for paver have been saved successfully.",
@@ -330,7 +414,10 @@ export function PaversTable() {
                             ))}
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <Button onClick={() => openTestDialog(selectedRow!)} disabled={!selectedRow}>
+                    <Button 
+                        onClick={() => openTestDialog(selectedRow!)} 
+                        disabled={!selectedRow || (selectedRow && selectedRow.results && selectedRow.results.length > 0)}
+                    >
                         <FlaskConical className="mr-2 h-4 w-4" />
                         Test Paver
                     </Button>
@@ -543,6 +630,28 @@ export function PaversTable() {
               <AlertDialogCancel onClick={() => setDeletingEntry(null)}>Cancel</AlertDialogCancel>
               <AlertDialogAction onClick={handleDeleteEntry}>
                 Continue
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
+        <AlertDialog open={showDateWarning} onOpenChange={(open) => !open && setShowDateWarning(false)}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Sample Not Yet Due for Testing</AlertDialogTitle>
+              <AlertDialogDescription>
+                This sample is scheduled for testing on <strong>{pendingTestEntry?.testingDate ? formatDate(pendingTestEntry.testingDate) : 'N/A'}</strong>. 
+                <br /><br />
+                Do you want to proceed with testing anyway? The testing date will be updated to today's date.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={() => {
+                setShowDateWarning(false);
+                setPendingTestEntry(null);
+              }}>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={handleOverrideDate}>
+                Proceed Anyway
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

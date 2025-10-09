@@ -154,6 +154,19 @@ export function PaverTestDialog({ isOpen, onClose, sampleSet, onSubmit, machines
     setResults(newResults);
   };
   
+  const handleFormatNumber = (field: keyof Omit<PaverTestResult, 'sampleId' | 'length' | 'width' | 'height'>, decimals: number) => {
+    const newResults = [...results];
+    const currentResult = { ...newResults[step] };
+    const value = (currentResult as any)[field];
+    
+    if (value !== undefined && value !== null && !isNaN(value)) {
+      (currentResult as any)[field] = parseFloat(value.toFixed(decimals));
+    }
+    
+    newResults[step] = currentResult;
+    setResults(newResults);
+  };
+  
   const handlePaverThicknessChange = (thickness: string) => {
     setPaverThickness(thickness);
     const correctionFactor = getCorrectionFactor(thickness);
@@ -161,7 +174,7 @@ export function PaverTestDialog({ isOpen, onClose, sampleSet, onSubmit, machines
 
     const newResults = results.map(result => {
         const updatedResult = {...result, measuredThickness};
-        if (updatedResult.load !== undefined) {
+        if (updatedResult.load !== undefined && updatedResult.load !== null) {
              updatedResult.correctedFailureLoad = updatedResult.load * correctionFactor;
         }
         return updatedResult;
@@ -225,12 +238,24 @@ export function PaverTestDialog({ isOpen, onClose, sampleSet, onSubmit, machines
                 </div>
                  <div className="space-y-2">
                     <Label>Weight (kg)</Label>
-                    <Input type="number" value={results[step]?.weight ?? ''} onChange={(e) => handleResultChange('weight', e.target.value)} />
+                    <Input 
+                        type="number" 
+                        step="0.01"
+                        value={results[step]?.weight ?? ''} 
+                        onChange={(e) => handleResultChange('weight', e.target.value)}
+                        onBlur={() => handleFormatNumber('weight', 2)}
+                    />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                         <Label>Failure Load (kN)</Label>
-                        <Input type="number" value={results[step]?.load ?? ''} onChange={(e) => handleResultChange('load', e.target.value)} />
+                        <Input 
+                            type="number" 
+                            step="0.1"
+                            value={results[step]?.load ?? ''} 
+                            onChange={(e) => handleResultChange('load', e.target.value)}
+                            onBlur={() => handleFormatNumber('load', 1)}
+                        />
                     </div>
                     <div className="space-y-2">
                         <Label>Corrected Failure Load (kN)</Label>

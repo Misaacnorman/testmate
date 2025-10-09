@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { collection, getDocs, doc, query, updateDoc, orderBy, deleteDoc } from "firebase/firestore";
+import { collection, getDocs, doc, query, where, updateDoc, orderBy, deleteDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
@@ -45,6 +45,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ConcreteCubeCertificate } from "@/app/test-certificates/components/ConcreteCubeCertificate";
 import { useAuth } from "@/context/auth-context";
+import { differenceInDays } from "date-fns";
 
 
 const formatDate = (dateValue: any) => {
@@ -107,6 +108,8 @@ export function ConcreteCubesTable() {
     const [firestoreError, setFirestoreError] = React.useState(false);
     const [deletingEntry, setDeletingEntry] = React.useState<ConcreteCubeRegisterEntry | null>(null);
     const [viewingCertificate, setViewingCertificate] = React.useState<ConcreteCubeRegisterEntry | null>(null);
+    const [showDateWarning, setShowDateWarning] = React.useState(false);
+    const [pendingTestEntry, setPendingTestEntry] = React.useState<ConcreteCubeRegisterEntry | null>(null);
     const { toast } = useToast();
     const { laboratory, laboratoryId, user } = useAuth();
     const [columnVisibility, setColumnVisibility] = React.useState(initialColumnVisibility);
@@ -174,22 +177,92 @@ export function ConcreteCubesTable() {
         setIsEditDialogOpen(true);
     };
     
+    const checkTestingDate = (testingDate: any): { canTest: boolean; isBefore: boolean; isAfter: boolean } => {
+        if (!testingDate) return { canTest: true, isBefore: false, isAfter: false };
+        
+        try {
+            let scheduledDate: Date;
+            if (testingDate && typeof testingDate.seconds === 'number') {
+                scheduledDate = testingDate.toDate();
+            } else {
+                scheduledDate = new Date(testingDate);
+            }
+            
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            scheduledDate.setHours(0, 0, 0, 0);
+            
+            const isBefore = today < scheduledDate;
+            const isAfter = today > scheduledDate;
+            
+            return { canTest: !isBefore, isBefore, isAfter };
+        } catch (e) {
+            return { canTest: true, isBefore: false, isAfter: false };
+        }
+    };
+    
     const openTestDialog = (entry: ConcreteCubeRegisterEntry) => {
-        setSelectedRow(entry);
-        setIsTestDialogOpen(true);
+        const dateCheck = checkTestingDate(entry.testingDate);
+        
+        if (dateCheck.isBefore) {
+            // Show warning dialog if testing before scheduled date
+            setPendingTestEntry(entry);
+            setShowDateWarning(true);
+        } else {
+            // Proceed normally if on or after testing date
+            setSelectedRow(entry);
+            setIsTestDialogOpen(true);
+        }
+    };
+    
+    const handleOverrideDate = () => {
+        if (pendingTestEntry) {
+            setSelectedRow(pendingTestEntry);
+            setIsTestDialogOpen(true);
+            setShowDateWarning(false);
+            setPendingTestEntry(null);
+        }
     };
 
     const openCertificateView = (entry: ConcreteCubeRegisterEntry) => {
         setViewingCertificate(entry);
     }
 
+    const calculateAge = (castingDate: any, testingDate: any): number | string => {
+        try {
+            let casting: Date;
+            let testing: Date;
+            
+            if (castingDate && typeof castingDate.seconds === 'number') {
+                casting = castingDate.toDate();
+            } else {
+                casting = new Date(castingDate);
+            }
+            
+            if (testingDate && typeof testingDate.seconds === 'number') {
+                testing = testingDate.toDate();
+            } else {
+                testing = new Date(testingDate);
+            }
+            
+            if (isNaN(casting.getTime()) || isNaN(testing.getTime())) {
+                return '';
+            }
+            
+            const days = differenceInDays(testing, casting);
+            return days > 28 ? ">28" : days;
+        } catch (e) {
+            return '';
+        }
+    };
 
     const handleTestSubmit = async (results: SampleTestResult[], machineUsed: string, temperature: number) => {
         if (!selectedRow || !user) return;
     
         try {
           const docRef = doc(db, "concrete_cubes_register", selectedRow.id);
-          await updateDoc(docRef, {
+          const dateCheck = checkTestingDate(selectedRow.testingDate);
+          const updateData: any = {
             results,
             machineUsed,
             temperature,
@@ -198,7 +271,18 @@ export function ConcreteCubesTable() {
             engineerOnDutyId: laboratory?.engineerOnDuty || null,
             technicianId: user.uid, // Store who tested it
             technician: user.name,
-          });
+          };
+          
+          // Update testing date if testing on a different date
+          if (dateCheck.isBefore || dateCheck.isAfter) {
+            updateData.testingDate = new Date().toISOString();
+          }
+          
+          // Calculate and update age based on casting date and testing date
+          const finalTestingDate = updateData.testingDate || selectedRow.testingDate;
+          updateData.age = calculateAge(selectedRow.castingDate, finalTestingDate);
+          
+          await updateDoc(docRef, updateData);
           toast({
             title: "Success",
             description: "Test results saved. Certificate is pending approval.",
@@ -316,7 +400,10 @@ export function ConcreteCubesTable() {
                             ))}
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <Button onClick={() => openTestDialog(selectedRow!)} disabled={!selectedRow}>
+                    <Button 
+                        onClick={() => openTestDialog(selectedRow!)} 
+                        disabled={!selectedRow || (selectedRow && selectedRow.results && selectedRow.results.length > 0)}
+                    >
                         <FlaskConical className="mr-2 h-4 w-4" />
                         Test
                     </Button>
@@ -538,6 +625,28 @@ export function ConcreteCubesTable() {
             <AlertDialogCancel onClick={() => setDeletingEntry(null)}>Cancel</AlertDialogCancel>
             <AlertDialogAction onClick={handleDeleteEntry}>
               Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={showDateWarning} onOpenChange={(open) => !open && setShowDateWarning(false)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Sample Not Yet Due for Testing</AlertDialogTitle>
+            <AlertDialogDescription>
+              This sample is scheduled for testing on <strong>{pendingTestEntry?.testingDate ? formatDate(pendingTestEntry.testingDate) : 'N/A'}</strong>. 
+              <br /><br />
+              Do you want to proceed with testing anyway? The testing date will be updated to today's date.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => {
+              setShowDateWarning(false);
+              setPendingTestEntry(null);
+            }}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleOverrideDate}>
+              Proceed Anyway
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

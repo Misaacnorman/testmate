@@ -118,6 +118,31 @@ export function WaterAbsorptionTestDialog({ isOpen, onClose, sampleSet, onSubmit
     setResults(newResults);
   };
   
+  const handleFormatNumber = (field: keyof Omit<WaterAbsorptionTestResult, 'sampleId'>, decimals: number) => {
+    const newResults = [...results];
+    const currentResult = { ...newResults[step] };
+    const value = (currentResult as any)[field];
+    
+    if (value !== undefined && value !== null && !isNaN(value)) {
+      (currentResult as any)[field] = parseFloat(value.toFixed(decimals));
+      
+      // Recalculate derived values if formatting weight fields
+      if (field === 'ovenDriedWeight' || field === 'weightAfterSoaking') {
+        const ovenWeight = currentResult.ovenDriedWeight;
+        const soakedWeight = currentResult.weightAfterSoaking;
+        
+        if(ovenWeight !== undefined && soakedWeight !== undefined) {
+            const waterWeight = soakedWeight - ovenWeight;
+            currentResult.weightOfWater = waterWeight;
+            currentResult.waterAbsorption = ovenWeight > 0 ? (waterWeight / ovenWeight) * 100 : 0;
+        }
+      }
+    }
+    
+    newResults[step] = currentResult;
+    setResults(newResults);
+  };
+  
   const handleNext = () => {
     if (step < totalSteps - 1) {
       setStep(prev => prev + 1);
@@ -186,11 +211,23 @@ export function WaterAbsorptionTestDialog({ isOpen, onClose, sampleSet, onSubmit
                      <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <Label>Oven Dried Weight Before Soaking</Label>
-                            <Input type="number" value={results[step]?.ovenDriedWeight ?? ''} onChange={(e) => handleResultChange('ovenDriedWeight', e.target.value)} />
+                            <Input 
+                                type="number" 
+                                step="0.01"
+                                value={results[step]?.ovenDriedWeight ?? ''} 
+                                onChange={(e) => handleResultChange('ovenDriedWeight', e.target.value)}
+                                onBlur={() => handleFormatNumber('ovenDriedWeight', 2)}
+                            />
                         </div>
                          <div className="space-y-2">
                             <Label>Weight After Soaking</Label>
-                            <Input type="number" value={results[step]?.weightAfterSoaking ?? ''} onChange={(e) => handleResultChange('weightAfterSoaking', e.target.value)} />
+                            <Input 
+                                type="number" 
+                                step="0.01"
+                                value={results[step]?.weightAfterSoaking ?? ''} 
+                                onChange={(e) => handleResultChange('weightAfterSoaking', e.target.value)}
+                                onBlur={() => handleFormatNumber('weightAfterSoaking', 2)}
+                            />
                         </div>
                     </div>
                 </div>

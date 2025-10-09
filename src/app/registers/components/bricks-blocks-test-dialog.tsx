@@ -151,6 +151,19 @@ export function BricksBlocksTestDialog({ isOpen, onClose, sampleSet, onSubmit, m
     setResults(newResults);
   };
   
+  const handleFormatNumber = (field: keyof Omit<BricksBlocksTestResult, 'sampleId' | 'holeA' | 'holeB' | 'notch'>, decimals: number) => {
+    const newResults = [...results];
+    const currentResult = { ...newResults[step] };
+    const value = (currentResult as any)[field];
+    
+    if (value !== undefined && value !== null && !isNaN(value)) {
+      (currentResult as any)[field] = parseFloat(value.toFixed(decimals));
+    }
+    
+    newResults[step] = currentResult;
+    setResults(newResults);
+  };
+  
   const handleHoleChange = (hole: 'holeA' | 'holeB' | 'notch', field: keyof HoleDimension, value: string) => {
       const newResults = [...results];
       const currentResult = { ...newResults[step] };
@@ -192,29 +205,29 @@ export function BricksBlocksTestDialog({ isOpen, onClose, sampleSet, onSubmit, m
 
   const handleFormSubmit = async () => {
     setIsSubmitting(true);
-    const sanitizedResults = results.map(r => ({
+    const sanitizedResults: BricksBlocksTestResult[] = results.map(r => ({
       ...r,
-      length: r.length ?? null,
-      width: r.width ?? null,
-      height: r.height ?? null,
-      weight: r.weight ?? null,
-      load: r.load ?? null,
-      correctedFailureLoad: r.correctedFailureLoad ?? null,
-      modeOfFailure: r.modeOfFailure ?? null,
+      length: r.length ?? undefined,
+      width: r.width ?? undefined,
+      height: r.height ?? undefined,
+      weight: r.weight ?? undefined,
+      load: r.load ?? undefined,
+      correctedFailureLoad: r.correctedFailureLoad ?? undefined,
+      modeOfFailure: r.modeOfFailure ?? 'Satisfactory',
       holeA: {
-        l: r.holeA?.l ?? null,
-        w: r.holeA?.w ?? null,
-        no: r.holeA?.no ?? null,
+        l: r.holeA?.l ?? undefined,
+        w: r.holeA?.w ?? undefined,
+        no: r.holeA?.no ?? undefined,
       },
       holeB: {
-        l: r.holeB?.l ?? null,
-        w: r.holeB?.w ?? null,
-        no: r.holeB?.no ?? null,
+        l: r.holeB?.l ?? undefined,
+        w: r.holeB?.w ?? undefined,
+        no: r.holeB?.no ?? undefined,
       },
       notch: {
-        l: r.notch?.l ?? null,
-        w: r.notch?.w ?? null,
-        no: r.notch?.no ?? null,
+        l: r.notch?.l ?? undefined,
+        w: r.notch?.w ?? undefined,
+        no: r.notch?.no ?? undefined,
       },
     }));
     await onSubmit(sanitizedResults, machineUsed, temperature, solidBlockType || null, modeOfCompaction || null, brickType || null);
@@ -299,12 +312,24 @@ export function BricksBlocksTestDialog({ isOpen, onClose, sampleSet, onSubmit, m
                  <Separator />
                  <div className="space-y-2">
                     <Label>Weight (kg)</Label>
-                    <Input type="number" value={results[step]?.weight ?? ''} onChange={(e) => handleResultChange('weight', e.target.value)} />
+                    <Input 
+                        type="number" 
+                        step="0.01"
+                        value={results[step]?.weight ?? ''} 
+                        onChange={(e) => handleResultChange('weight', e.target.value)}
+                        onBlur={() => handleFormatNumber('weight', 2)}
+                    />
                 </div>
                  <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                         <Label>Failure Load (kN)</Label>
-                        <Input type="number" value={results[step]?.load ?? ''} onChange={(e) => handleResultChange('load', e.target.value)} />
+                        <Input 
+                            type="number" 
+                            step="0.1"
+                            value={results[step]?.load ?? ''} 
+                            onChange={(e) => handleResultChange('load', e.target.value)}
+                            onBlur={() => handleFormatNumber('load', 1)}
+                        />
                     </div>
                     <div className="space-y-2">
                         <Label>Corrected Failure Load (kN)</Label>
