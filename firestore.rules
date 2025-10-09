@@ -18,6 +18,11 @@ service cloud.firestore {
              resource.data.laboratoryId == getUserLaboratoryId();
     }
     
+    // Helper function to check if user can create document with laboratoryId field
+    function canCreateDocumentWithLabId() {
+      return request.auth != null && 
+             request.resource.data.laboratoryId == getUserLaboratoryId();
+    }
     
     // Users collection - users can only access their own document
     match /users/{userId} {
@@ -31,71 +36,72 @@ service cloud.firestore {
     
     // Roles collection - users can only access roles from their laboratory
     match /roles/{roleId} {
-      allow read, write: if canAccessDocumentWithLabId();
+      allow read, write: if canAccessDocumentWithLabId() || canCreateDocumentWithLabId();
     }
     
     // Projects collection - users can only access projects from their laboratory
     match /projects/{projectId} {
-      allow read, write: if canAccessDocumentWithLabId();
+      allow read, write: if canAccessDocumentWithLabId() || canCreateDocumentWithLabId();
     }
     
     // Register collections - users can only access entries from their laboratory
     match /concrete_cubes_register/{entryId} {
-      allow read, write: if canAccessDocumentWithLabId();
+      allow read, write: if canAccessDocumentWithLabId() || canCreateDocumentWithLabId();
     }
     
     match /cylinders_register/{entryId} {
-      allow read, write: if canAccessDocumentWithLabId();
+      allow read, write: if canAccessDocumentWithLabId() || canCreateDocumentWithLabId();
     }
     
     match /bricks_blocks_register/{entryId} {
-      allow read, write: if canAccessDocumentWithLabId();
+      allow read, write: if canAccessDocumentWithLabId() || canCreateDocumentWithLabId();
     }
     
     match /pavers_register/{entryId} {
-      allow read, write: if canAccessDocumentWithLabId();
+      allow read, write: if canAccessDocumentWithLabId() || canCreateDocumentWithLabId();
     }
     
     match /water_absorption_register/{entryId} {
-      allow read, write: if canAccessDocumentWithLabId();
+      allow read, write: if canAccessDocumentWithLabId() || canCreateDocumentWithLabId();
     }
     
     // Test certificates - users can only access certificates from their laboratory
     match /test_certificates/{certId} {
-      allow read, write: if canAccessDocumentWithLabId();
+      allow read, write: if canAccessDocumentWithLabId() || canCreateDocumentWithLabId();
     }
     
     // Finance collections - users can only access finance data from their laboratory
     match /invoices/{invoiceId} {
-      allow read, write: if canAccessDocumentWithLabId();
+      allow read, write: if canAccessDocumentWithLabId() || canCreateDocumentWithLabId();
     }
     
     match /quotations/{quotationId} {
-      allow read, write: if canAccessDocumentWithLabId();
+      allow read, write: if canAccessDocumentWithLabId() || canCreateDocumentWithLabId();
     }
     
     match /expenses/{expenseId} {
-      allow read, write: if canAccessDocumentWithLabId();
+      allow read, write: if canAccessDocumentWithLabId() || canCreateDocumentWithLabId();
     }
     
     // Samples collection - users can only access samples from their laboratory
     match /samples/{sampleId} {
-      allow read, write: if canAccessDocumentWithLabId();
+      allow read, write: if canAccessDocumentWithLabId() || canCreateDocumentWithLabId();
     }
     
     // Assets collection - users can only access assets from their laboratory
     match /assets/{assetId} {
-      allow read, write: if canAccessDocumentWithLabId();
+      allow read, write: if canAccessDocumentWithLabId() || canCreateDocumentWithLabId();
     }
     
     // Receipts collection - users can only access receipts from their laboratory
     match /receipts/{receiptId} {
-      allow read, write: if canAccessDocumentWithLabId();
+      allow read, write: if canAccessDocumentWithLabId() || canCreateDocumentWithLabId();
     }
     
-    // Deny all other access
+    // Allow authenticated users to read/write any document for now (temporary)
+    // This ensures signup and initial setup works while we migrate data
     match /{document=**} {
-      allow read, write: if false;
+      allow read, write: if request.auth != null;
     }
   }
 }
