@@ -1,7 +1,7 @@
 
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
+import { getAuth, connectAuthEmulator } from "firebase/auth";
 
 
 const firebaseConfig = {
@@ -18,5 +18,23 @@ const firebaseConfig = {
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
+
+// Connect to local emulators during development when available
+const shouldUseEmulators =
+  process.env.NODE_ENV !== 'production' &&
+  (process.env.NEXT_PUBLIC_USE_EMULATORS === 'true' ||
+    (typeof window !== 'undefined' && window.location?.hostname === 'localhost'));
+
+if (shouldUseEmulators) {
+  try {
+    // Defaults: Firestore 8080, Auth 9099
+    connectFirestoreEmulator(db, 'localhost', 8080);
+    connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
+    // eslint-disable-next-line no-console
+    console.info('[firebase] Connected to local emulators');
+  } catch {
+    // ignore if already connected
+  }
+}
 
 export { db, auth };
