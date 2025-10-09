@@ -1,0 +1,23 @@
+{
+  "apphosting": {
+    "backend": "apphosting-backend",
+    "frontend": {
+      "source": ".",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**",
+        "**/.next/**"
+      ],
+      "framework": "nextjs"
+    }
+  },
+  "functions": {
+    "source": "functions",
+    "runtime": "nodejs18"
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
+}

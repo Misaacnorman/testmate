@@ -1,0 +1,10 @@
+# App Hosting environment overrides for prod
+# These values override apphosting.yaml when deploying the 'prod' environment.
+
+env:
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: testmate-lims
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    value: testmate-lims.firebaseapp.com
+  - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    value: testmate-lims.firebasestorage.app

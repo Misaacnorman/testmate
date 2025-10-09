@@ -88,6 +88,29 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ---
 
+## 📦 Deploy (Firebase App Hosting)
+
+This project uses Firebase App Hosting (not classic Firebase Hosting).
+
+- Deploy frontend (Next.js):
+  ```bash
+  npm run deploy:frontend
+  ```
+
+- Deploy backend (when you add App Hosting backend/functions):
+  ```bash
+  npm run deploy:backend
+  ```
+
+- Deploy everything configured for App Hosting:
+  ```bash
+  npm run deploy
+  ```
+
+Notes:
+- The default domain will be your App Hosting domain in the form `https://<app-name>.<region>.hosted.app` as shown in the Firebase Console under App Hosting → Domains.
+- Environment variables are managed in Firebase Console → App Hosting → Environment (and `.env.local` for local dev).
+
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/Misaacnorman/testmate/issues).

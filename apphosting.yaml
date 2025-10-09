@@ -5,3 +5,41 @@ runConfig:
   # Increase this value if you'd like to automatically spin up
   # more instances in response to increased traffic.
   maxInstances: 1
+
+# Public runtime and build-time environment variables for the Next.js app
+env:
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    value: AIzaSyCIYjuuANK-6hz8fM_R8jedKp9FpU2Ww4s
+    availability:
+      build: true
+      runtime: true
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    value: testmate-lims.firebaseapp.com
+    availability:
+      build: true
+      runtime: true
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: testmate-lims
+    availability:
+      build: true
+      runtime: true
+  - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    value: testmate-lims.firebasestorage.app
+    availability:
+      build: true
+      runtime: true
+  - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+    value: "308193198087"
+    availability:
+      build: true
+      runtime: true
+  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+    value: 1:308193198087:web:3a77f543d40ad53fd0eaa2
+    availability:
+      build: true
+      runtime: true
+  - variable: NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+    value: G-5C3E7X61Q5
+    availability:
+      build: true
+      runtime: true

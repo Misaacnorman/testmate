@@ -9,7 +9,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "deploy": "firebase deploy",
+    "deploy:frontend": "firebase deploy --only apphosting:frontend",
+    "deploy:backend": "firebase deploy --only apphosting:backend",
+    "deploy:firestore": "firebase deploy --only firestore"
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.14.1",
