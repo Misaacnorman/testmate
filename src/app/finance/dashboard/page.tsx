@@ -8,8 +8,20 @@ import { useAuth } from '@/context/auth-context';
 import { Invoice, Expense } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, DollarSign, Receipt, TrendingUp } from 'lucide-react';
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
+import dynamic from 'next/dynamic';
+
+const FinanceCharts = dynamic(
+  () => import('@/app/finance/components/finance-charts').then(m => m.FinanceCharts),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        <div className="col-span-4 h-[360px] rounded-md border" />
+        <div className="col-span-3 h-[360px] rounded-md border" />
+      </div>
+    ),
+  }
+);
 
 const cardIconStyle = "h-4 w-4 text-muted-foreground";
 
@@ -115,42 +127,10 @@ export default function FinanceDashboardPage() {
                     </CardContent>
                 </Card>
             </div>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <Card className="col-span-4">
-                    <CardHeader>
-                        <CardTitle>Revenue vs. Expenses</CardTitle>
-                    </CardHeader>
-                    <CardContent className="pl-2">
-                        <ChartContainer config={{}} className="h-[300px] w-full">
-                           <BarChart data={monthlyChartData}>
-                                <CartesianGrid vertical={false} />
-                                <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
-                                <YAxis />
-                                <Tooltip content={<ChartTooltipContent />} />
-                                <Bar dataKey="revenue" fill="hsl(var(--primary))" radius={4} />
-                                <Bar dataKey="expenses" fill="hsl(var(--destructive))" radius={4} />
-                            </BarChart>
-                        </ChartContainer>
-                    </CardContent>
-                </Card>
-                <Card className="col-span-3">
-                    <CardHeader>
-                        <CardTitle>Expenses by Category</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                         <ChartContainer config={{}} className="h-[300px] w-full">
-                            <PieChart>
-                                <Tooltip content={<ChartTooltipContent />} />
-                                <Pie data={expenseCategoryData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} label>
-                                    {expenseCategoryData.map((_, index) => (
-                                        <Cell key={`cell-${index}`} fill={`hsl(var(--chart-${index + 1}))`} />
-                                    ))}
-                                </Pie>
-                            </PieChart>
-                        </ChartContainer>
-                    </CardContent>
-                </Card>
-            </div>
+            <FinanceCharts
+              monthlyChartData={monthlyChartData}
+              expenseCategoryData={expenseCategoryData}
+            />
         </div>
     );
 }
