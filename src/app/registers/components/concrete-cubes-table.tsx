@@ -117,8 +117,10 @@ export function ConcreteCubesTable() {
         if (!laboratoryId) return;
 
         try {
+            // Use laboratory filtering to prevent data leakage
             const cubesQuery = query(
               collection(db, "concrete_cubes_register"),
+              where("laboratoryId", "==", laboratoryId),
               orderBy("dateReceived", "desc"),
               orderBy("setId", "asc")
             );
@@ -138,7 +140,11 @@ export function ConcreteCubesTable() {
              console.error("Error fetching concrete register data:", error);
              if (error.code === 'failed-precondition') {
                  setFirestoreError(true);
-                const fallbackQuery = query(collection(db, "concrete_cubes_register"));
+                // Fallback query also needs laboratory filtering
+                const fallbackQuery = query(
+                  collection(db, "concrete_cubes_register"),
+                  where("laboratoryId", "==", laboratoryId)
+                );
                 const querySnapshot = await getDocs(fallbackQuery);
                  const samplesData: ConcreteCubeRegisterEntry[] = querySnapshot.docs.map(doc => ({
                     id: doc.id,

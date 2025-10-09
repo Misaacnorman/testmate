@@ -1,22 +1,101 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow read/write access to authenticated users
-    match /{document=**} {
-      allow read, write: if request.auth != null;
+    
+    // Helper function to get user's laboratory ID
+    function getUserLaboratoryId() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.laboratoryId;
     }
     
-    // Specific rules for better security
+    // Helper function to check if user belongs to laboratory
+    function belongsToLaboratory(labId) {
+      return request.auth != null && getUserLaboratoryId() == labId;
+    }
+    
+    // Helper function to check if user can access document with laboratoryId field
+    function canAccessDocumentWithLabId() {
+      return request.auth != null && 
+             resource.data.laboratoryId == getUserLaboratoryId();
+    }
+    
+    
+    // Users collection - users can only access their own document
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
     
+    // Laboratories collection - users can only access their own laboratory
     match /laboratories/{labId} {
-      allow read, write: if request.auth != null;
+      allow read, write: if belongsToLaboratory(labId);
     }
     
+    // Roles collection - users can only access roles from their laboratory
     match /roles/{roleId} {
-      allow read, write: if request.auth != null;
+      allow read, write: if canAccessDocumentWithLabId();
+    }
+    
+    // Projects collection - users can only access projects from their laboratory
+    match /projects/{projectId} {
+      allow read, write: if canAccessDocumentWithLabId();
+    }
+    
+    // Register collections - users can only access entries from their laboratory
+    match /concrete_cubes_register/{entryId} {
+      allow read, write: if canAccessDocumentWithLabId();
+    }
+    
+    match /cylinders_register/{entryId} {
+      allow read, write: if canAccessDocumentWithLabId();
+    }
+    
+    match /bricks_blocks_register/{entryId} {
+      allow read, write: if canAccessDocumentWithLabId();
+    }
+    
+    match /pavers_register/{entryId} {
+      allow read, write: if canAccessDocumentWithLabId();
+    }
+    
+    match /water_absorption_register/{entryId} {
+      allow read, write: if canAccessDocumentWithLabId();
+    }
+    
+    // Test certificates - users can only access certificates from their laboratory
+    match /test_certificates/{certId} {
+      allow read, write: if canAccessDocumentWithLabId();
+    }
+    
+    // Finance collections - users can only access finance data from their laboratory
+    match /invoices/{invoiceId} {
+      allow read, write: if canAccessDocumentWithLabId();
+    }
+    
+    match /quotations/{quotationId} {
+      allow read, write: if canAccessDocumentWithLabId();
+    }
+    
+    match /expenses/{expenseId} {
+      allow read, write: if canAccessDocumentWithLabId();
+    }
+    
+    // Samples collection - users can only access samples from their laboratory
+    match /samples/{sampleId} {
+      allow read, write: if canAccessDocumentWithLabId();
+    }
+    
+    // Assets collection - users can only access assets from their laboratory
+    match /assets/{assetId} {
+      allow read, write: if canAccessDocumentWithLabId();
+    }
+    
+    // Receipts collection - users can only access receipts from their laboratory
+    match /receipts/{receiptId} {
+      allow read, write: if canAccessDocumentWithLabId();
+    }
+    
+    // Deny all other access
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }
