@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import * as XLSX from "xlsx";
 import type { Table } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -24,7 +23,8 @@ export function TestActions<TData extends Test>({
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const [globalFilter, setGlobalFilter] = React.useState("");
 
-  const handleExport = () => {
+  const handleExport = async () => {
+    const XLSX = await import("xlsx");
     const dataToExport = table
       .getFilteredRowModel()
       .rows.map((row) => row.original);

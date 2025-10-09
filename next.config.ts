@@ -1,4 +1,4 @@
-import type {NextConfig} from 'next';
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -31,6 +31,17 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  experimental: {
+    optimizePackageImports: [
+      'lucide-react',
+      'date-fns',
+    ],
+  },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
+  },
+  productionBrowserSourceMaps: false,
+  poweredByHeader: false,
 };
 
 export default nextConfig;

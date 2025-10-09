@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import * as XLSX from "xlsx";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -91,7 +90,8 @@ export function TestDataTable<TData extends Test, TValue>({
     if (file) {
       setIsImporting(true);
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = async (e) => {
+        const XLSX = await import("xlsx");
         const data = new Uint8Array(e.target?.result as ArrayBuffer);
         const workbook = XLSX.read(data, { type: "array" });
         const sheetName = workbook.SheetNames[0];
