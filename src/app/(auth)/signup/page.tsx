@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { createUserWithEmailAndPassword, updateProfile, AuthError } from "firebase/auth";
-import { collection, setDoc, doc, writeBatch, addDoc } from "firebase/firestore";
+import { collection, setDoc, doc, writeBatch, addDoc, getDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
 import { useToast } from "@/hooks/use-toast";
 import { PERMISSION_GROUPS } from "@/lib/permissions";
@@ -46,17 +46,6 @@ export default function SignupPage() {
     const router = useRouter();
     const { toast } = useToast();
     const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [debugOpen, setDebugOpen] = React.useState(false);
-  const [logs, setLogs] = React.useState<string[]>([]);
-
-  const log = React.useCallback((message: string, meta?: unknown) => {
-    const line = meta ? `${message} :: ${JSON.stringify(meta)}` : message;
-    // Keep last 100 lines
-    setLogs(prev => [...prev.slice(-99), `${new Date().toISOString()} - ${line}`]);
-    // Also emit to console for browser devtools
-    // eslint-disable-next-line no-console
-    console.debug("[signup]", message, meta ?? "");
-  }, []);
 
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
@@ -70,11 +59,12 @@ export default function SignupPage() {
   const onSubmit = async (data: FormData) => {
         setIsSubmitting(true);
         try {
-      log("starting signup", { email: data.email });
-      // Create user with email and password
+      // Create user with email and password first
       const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
             const user = userCredential.user;
-      log("auth created", { uid: user.uid });
+      
+      // Wait a moment for auth token to propagate
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
             // Use a batch write to ensure atomicity
             const batch = writeBatch(db);
@@ -87,7 +77,6 @@ export default function SignupPage() {
                 createdAt: new Date().toISOString(),
       };
       batch.set(labRef, labData);
-      log("prepared lab doc", { labId: labRef.id, labData });
 
             // 2. Create a default "Admin" role for this new lab with all permissions
             const adminRoleRef = doc(collection(db, "roles"));
@@ -99,7 +88,6 @@ export default function SignupPage() {
                 memberIds: [user.uid],
       };
       batch.set(adminRoleRef, roleData);
-      log("prepared role doc", { roleId: adminRoleRef.id, countPermissions: allPermissions.length });
 
             // 3. Update Firebase Auth user profile
       const profileData = {
@@ -107,7 +95,6 @@ export default function SignupPage() {
                 photoURL: `https://picsum.photos/seed/${data.email}/40/40`
       };
       await updateProfile(user, profileData);
-      log("updated profile");
 
             // 4. Create the user document in Firestore, linking it to the lab and the new Admin role
             const userRef = doc(db, "users", user.uid);
@@ -122,10 +109,12 @@ export default function SignupPage() {
                 roleId: adminRoleRef.id,
       };
       batch.set(userRef, userData);
-      log("prepared user doc", { userId: user.uid, laboratoryId: labRef.id });
 
       await batch.commit();
-      log("batch committed");
+      
+      // Wait a moment for Firestore to index the new documents
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
       toast({ title: "Account created" });
       router.push("/welcome/company-profile");
             
@@ -137,9 +126,6 @@ export default function SignupPage() {
             if (authError.code === "auth/email-already-in-use") {
                 description = "This email is already associated with an account.";
             }
-      // Capture more detail for debugging (non-user-facing)
-      log("error", { code: (authError as any)?.code, message: (authError as any)?.message });
-      setDebugOpen(true);
             toast({
                 variant: "destructive",
                 title: "Signup Failed",
@@ -216,19 +202,6 @@ export default function SignupPage() {
           </Button>
         </CardFooter>
       </Card>
-      {process.env.NODE_ENV !== 'production' && (
-        <div className="fixed bottom-4 right-4 z-50 w-[28rem] max-w-[90vw]">
-          <Button variant="outline" className="mb-2" onClick={() => setDebugOpen(v => !v)}>
-            {debugOpen ? 'Hide' : 'Show'} Debug Console
-          </Button>
-          {debugOpen && (
-            <div className="rounded-md border bg-background p-3 shadow-lg max-h-72 overflow-auto text-xs">
-              <div className="mb-2 font-semibold">Signup Debug Console</div>
-              <pre className="whitespace-pre-wrap break-words">{logs.join('\n')}</pre>
-            </div>
-          )}
-        </div>
-      )}
       </>
   );
 }

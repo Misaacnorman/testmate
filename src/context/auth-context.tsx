@@ -35,7 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [permissions, setPermissions] = React.useState<string[]>([]);
   const [loading, setLoading] = React.useState(true);
 
-  const fetchUserData = React.useCallback(async (currentUser: User | null) => {
+  const fetchUserData = React.useCallback(async (currentUser: User | null, retryCount = 0) => {
     if (currentUser) {
       try {
         const userDocRef = doc(db, 'users', currentUser.uid);
@@ -76,20 +76,46 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               const labDocRef = doc(db, 'laboratories', labId);
               const labDoc = await getDoc(labDocRef);
               if (labDoc.exists()) {
-                  setLaboratory(labDoc.data() as Laboratory);
+                  const labData = labDoc.data() as Laboratory;
+                  setLaboratory(labData);
               } else {
                   setLaboratory(null);
               }
           }
         } else {
-            setUser(currentUser as AppUser);
-            setLaboratoryId(null);
-            setLaboratory(null);
-            setPermissions([]);
+          // If user document doesn't exist and this is a retry, wait and try again
+          if (retryCount < 3) {
+            setTimeout(() => {
+              fetchUserData(currentUser, retryCount + 1);
+            }, (retryCount + 1) * 1000);
+            return;
+          }
+          
+          // After retries, fallback to auth user
+          setUser({
+            uid: currentUser.uid,
+            email: currentUser.email || undefined,
+            name: currentUser.displayName || undefined,
+            photoURL: currentUser.photoURL || undefined,
+            status: 'active',
+            createdAt: new Date().toISOString(),
+            laboratoryId: '',
+          });
+          setLaboratoryId(null);
+          setLaboratory(null);
+          setPermissions([]);
         }
       } catch (e) {
           console.error("Failed to fetch user/lab data", e);
-          setUser(currentUser as AppUser); // Fallback to auth user
+          setUser({
+            uid: currentUser.uid,
+            email: currentUser.email || undefined,
+            name: currentUser.displayName || undefined,
+            photoURL: currentUser.photoURL || undefined,
+            status: 'active',
+            createdAt: new Date().toISOString(),
+            laboratoryId: '',
+          }); // Fallback to auth user
           setLaboratoryId(null);
           setLaboratory(null);
           setPermissions([]);

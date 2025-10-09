@@ -22,8 +22,8 @@ const auth = getAuth(app);
 // Connect to local emulators during development when available
 const shouldUseEmulators =
   process.env.NODE_ENV !== 'production' &&
-  (process.env.NEXT_PUBLIC_USE_EMULATORS === 'true' ||
-    (typeof window !== 'undefined' && window.location?.hostname === 'localhost'));
+  process.env.NEXT_PUBLIC_USE_EMULATORS === 'true' &&
+  (typeof window !== 'undefined' && window.location?.hostname === 'localhost');
 
 if (shouldUseEmulators) {
   try {

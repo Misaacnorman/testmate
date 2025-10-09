@@ -36,10 +36,11 @@ const emptyCompanyProfile = {
 };
 
 export default function CompanyProfileOnboardingPage() {
-  const { laboratory, laboratoryId, refresh } = useAuth();
+  const { laboratory, laboratoryId, refresh, user, permissions } = useAuth();
   const router = useRouter();
   const [profile, setProfile] = React.useState(emptyCompanyProfile);
   const [isSaving, setIsSaving] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
@@ -56,8 +57,13 @@ export default function CompanyProfileOnboardingPage() {
             contentBg: laboratory.themeColors?.contentBg || "#f0f9ff",
             topbarBg: laboratory.themeColors?.topbarBg || "#ffffff",
         });
+        setIsLoading(false);
+    } else if (laboratoryId) {
+        setIsLoading(false);
+    } else {
+        setIsLoading(false);
     }
-  }, [laboratory]);
+  }, [laboratory, laboratoryId, refresh, user, permissions]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -98,6 +104,7 @@ export default function CompanyProfileOnboardingPage() {
         toast({ variant: "destructive", title: "Error", description: "No laboratory context found." });
         return;
     }
+    
     setIsSaving(true);
     try {
         const docRef = doc(db, "laboratories", laboratoryId);
@@ -135,6 +142,21 @@ export default function CompanyProfileOnboardingPage() {
     }
   };
   
+  if (isLoading) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center bg-muted/40">
+        <Card className="w-full max-w-2xl">
+          <CardContent className="flex items-center justify-center p-8">
+            <div className="flex items-center space-x-2">
+              <Loader2 className="h-6 w-6 animate-spin" />
+              <span>Loading your laboratory profile...</span>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-muted/40">
         <Card className="w-full max-w-2xl">
