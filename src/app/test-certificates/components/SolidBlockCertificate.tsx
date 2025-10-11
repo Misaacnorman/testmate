@@ -11,6 +11,7 @@ import { doc, getDoc, query, where, getDocs, collection, limit } from "firebase/
 import { db } from "@/lib/firebase";
 import { SolidBlockCertificateTemplate } from "./SolidBlockCertificateTemplate";
 import { SolidBlockCertificateData, SolidBlockTestResult, calculateAverageCompressiveStrength, exceedsRepeatabilityCondition, getSampleCountText } from "./SolidBlockCertificateData";
+// Removed PDF service imports - using simple window.print() with CSS
 
 // Helper to format dates, handling Firestore Timestamps and strings
 const formatDateFromFirestore = (dateValue: any): string => {
@@ -41,6 +42,7 @@ export function SolidBlockCertificate({ certificateData, onBack }: SolidBlockCer
     const [mappedData, setMappedData] = React.useState<SolidBlockCertificateData | null>(null);
     const [loading, setLoading] = React.useState(true);
     const [approvers, setApprovers] = React.useState<{engineer?: User, manager?: User}>({});
+    // Removed PDF generation state - using simple window.print()
 
     React.useEffect(() => {
         const fetchAndMapData = async () => {
@@ -194,34 +196,15 @@ export function SolidBlockCertificate({ certificateData, onBack }: SolidBlockCer
                 </div>
             </div>
             
-            <div className="print-content bg-gray-100 flex justify-center p-4 print:p-0 print:bg-white">
-              <div className="w-[210mm] min-h-[297mm] bg-white shadow-lg print:shadow-none">
-                <SolidBlockCertificateTemplate data={mappedData} />
+            <main className="container mx-auto max-w-4xl p-4 sm:p-6 lg:p-8 print:m-0 print:p-0">
+              <div className="print-content p-8 bg-card rounded-lg shadow-sm border print:border-none print:shadow-none">
+                <div className="certificate-container">
+                  <SolidBlockCertificateTemplate data={mappedData} />
+                </div>
               </div>
-            </div>
+            </main>
             
-            <style jsx global>{`
-                @media print {
-                  body > *:not(.print-content) {
-                    display: none !important;
-                  }
-                  .print-content {
-                    position: absolute !important;
-                    top: 0 !important;
-                    left: 0 !important;
-                    right: 0 !important;
-                    padding: 0 !important;
-                    margin: 0 !important;
-                    background-color: white !important;
-                  }
-                   @page {
-                    size: A4;
-                    margin: 0;
-                  }
-                }
-              `}</style>
+            {/* Removed PDFPreviewModal - using simple window.print() */}
         </>
     );
 }
-
-    

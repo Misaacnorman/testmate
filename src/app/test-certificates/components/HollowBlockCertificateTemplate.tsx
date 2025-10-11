@@ -16,7 +16,11 @@ export const HollowBlockCertificateTemplate: React.FC<CertificateTemplateProps> 
   const qrCodeValue = `Cert No: ${data.certificateNo}\nClient: ${data.clientName}\nDate: ${data.dateOfIssue}`;
 
   return (
-    <div id="certificate-content-printable" className="certificate-container bg-white p-8 font-sans text-[10px] leading-relaxed">
+    <div 
+      id="certificate-content-printable" 
+      className="certificate-template certificate-container bg-white p-8 font-sans text-[10px] leading-relaxed"
+      style={{ visibility: 'visible', display: 'block', opacity: 1 }}
+    >
         {/* Header */}
         <header className="flex justify-between items-start pb-4 border-b-2 border-black">
             <div className="flex items-center gap-4">

@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paver Test Certificate</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #000;
+            font-size: 11px; /* Increased base font size for A4 */
+            line-height: 1.3;
+            background: white;
+            box-sizing: border-box;
+        }
+        .certificate {
+            width: 210mm; /* A4 width */
+            min-height: 297mm; /* A4 height */
+            margin: 0 auto;
+            padding: 12px; /* Reduced padding */
+            box-sizing: border-box;
+            background: #fff;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px; /* Reduced margin */
+            padding-bottom: 8px; /* Reduced padding */
+            border-bottom: 1px solid #000; /* Thinner border */
+        }
+        .company-info {
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Reduced gap */
+        }
+        .logo {
+            width: 40px; /* Smaller logo */
+            height: 40px; /* Smaller logo */
+            object-fit: contain;
+            display: block;
+        }
+        .company-details h1 {
+            font-size: 16px; /* Increased font size */
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+        .company-details p {
+            font-size: 9px; /* Increased font size */
+            color: #333;
+            margin: 1px 0;
+        }
+        .certificate-title {
+            text-align: right;
+        }
+        .certificate-title h2 {
+            font-size: 14px; /* Increased font size */
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        .certificate-details {
+            font-size: 9px; /* Increased font size */
+        }
+        .certificate-details p {
+            margin: 1px 0;
+        }
+
+        /* Certificate Info Section */
+        .certificate-info {
+            margin-bottom: 12px; /* Reduced margin */
+        }
+
+        .certificate-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px; /* Reduced gap */
+            margin-bottom: 12px; /* Reduced margin */
+        }
+
+        .certificate-info-left {
+            font-size: 10px; /* Increased font size */
+        }
+
+        .certificate-info-right {
+            font-size: 10px; /* Increased font size */
+            text-align: right;
+        }
+
+        /* Improved Client Info Layout */
+        .client-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px; /* Reduced gap */
+            margin-bottom: 12px; /* Reduced margin */
+        }
+        .client-info-left {
+            font-size: 10px; /* Increased font size */
+        }
+        .client-info-right {
+            font-size: 10px; /* Increased font size */
+        }
+        .info-item {
+            margin-bottom: 3px;
+            display: flex;
+            padding: 1px 0;
+            /* Removed border-bottom: 0.5px solid #e0e0e0; */
+        }
+        .info-label {
+            font-weight: normal;
+            min-width: 80px; /* Reduced min-width */
+            margin-right: 4px; /* Reduced margin */
+        }
+        .info-value {
+            flex: 1;
+        }
+        .results-header {
+            font-size: 10px; /* Increased font size */
+            font-weight: bold;
+            margin: 12px 0 8px 0; /* Adjusted margins */
+        }
+        .results-line {
+            border-bottom: 1px solid #000;
+            margin-bottom: 12px; /* Adjusted margin */
+        }
+
+        /* Test Results Section */
+        .test-results-section {
+            margin: 15px 0; /* Reduced margin */
+        }
+        .test-results-title {
+            font-size: 12px; /* Increased font size */
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px; /* Reduced margin */
+        }
+        .test-results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px; /* Reduced gap */
+            margin-bottom: 10px; /* Reduced margin */
+            font-size: 10px; /* Increased font size */
+        }
+        .test-results-column {
+            display: flex;
+            flex-direction: column;
+        }
+        .test-result-item {
+            display: grid;
+            grid-template-columns: 100px 1fr; /* Adjusted column width */
+            border-bottom: 0.5px solid #e0e0e0; /* Thinner border */
+            padding: 2px 0; /* Reduced padding */
+        }
+        .test-result-item:last-child {
+            border-bottom: none;
+        }
+        .test-result-label {
+            font-weight: normal;
+            padding-right: 4px; /* Reduced padding */
+        }
+        .test-result-value {
+            padding-left: 4px; /* Reduced padding */
+            border-left: 0.5px solid #e0e0e0; /* Thinner border */
+        }
+
+        /* Data table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0; /* Reduced margin */
+            font-size: 9px; /* Increased font size */
+        }
+        .data-table th,
+        .data-table td {
+            border: 0.5px solid #000; /* Thinner, black border */
+            padding: 2px; /* Reduced padding */
+            text-align: center;
+            vertical-align: middle;
+        }
+        .data-table th {
+            background-color: #f5f5f5; /* Lighter grey */
+            font-weight: bold;
+        }
+        .data-table .text-left {
+            text-align: left;
+        }
+        .average-row {
+            font-weight: bold;
+        }
+        .average-label {
+            text-align: left;
+        }
+        .average-value {
+            text-align: right;
+        }
+
+        /* Remarks Section */
+        .remarks-section {
+            margin: 15px 0; /* Reduced margin */
+        }
+        .remarks-title {
+            font-size: 10px; /* Increased font size */
+            font-weight: bold;
+            margin-bottom: 6px; /* Reduced margin */
+        }
+        .remarks-content {
+            font-size: 9px; /* Increased font size */
+            line-height: 1.3; /* Reduced line height */
+        }
+        .remarks-content ul {
+            margin-left: 12px; /* Reduced margin */
+        }
+        .remarks-content li {
+            margin-bottom: 2px; /* Reduced margin */
+        }
+        .end-of-report {
+            text-align: center;
+            margin: 12px 0; /* Reduced margin */
+            font-size: 9px; /* Increased font size */
+        }
+        .end-line {
+            border-bottom: 1px solid #000;
+            margin-bottom: 5px;
+        }
+
+        /* Signatures */
+        .signatures {
+            margin-top: 20px; /* Reduced margin */
+            display: flex; /* Changed to flex for side-by-side */
+            justify-content: space-between; /* Space between signature boxes */
+            align-items: flex-start;
+        }
+        .signature-box {
+            text-align: left;
+        }
+        .signature-label {
+            font-size: 9px; /* Increased font size */
+            font-weight: bold;
+            margin-bottom: 4px; /* Reduced margin */
+        }
+        .signature-line {
+            height: 20px; /* Reduced height */
+            border-bottom: 1px solid #000;
+            margin: 4px 0; /* Reduced margin */
+            width: 200px; /* Fixed width for signature line */
+        }
+        .signature-title {
+            font-size: 8px;
+            font-weight: normal;
+            margin-top: 2px;
+            text-align: center;
+        }
+        /* Footer */
+        .footer {
+            margin-top: 15px; /* Reduced margin */
+            padding-top: 8px; /* Reduced padding */
+            border-top: 1px solid #000;
+            font-size: 9px; /* Increased font size */
+            text-align: center;
+        }
+
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            
+            .certificate {
+                margin: 0;
+                padding: 10px;
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="certificate">
+        <!-- Header -->
+        <div class="header">
+            <div class="company-info">
+                <img src="{{logoUrl}}" alt="Company Logo" class="logo">
+                <div class="company-details">
+                    <h1>{{companyName}}</h1>
+                    <p>{{companyAddress}}</p>
+                    <p>{{companyEmail}}</p>
+                </div>
+            </div>
+            <div class="certificate-title">
+                <h2>TEST CERTIFICATE</h2>
+                <div class="certificate-details">
+                    <p><strong>Date of Issue:</strong> {{dateOfIssue}}</p>
+                    <p><strong>Page 1 of 1</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Certificate Info -->
+        <div class="certificate-info">
+            <div class="certificate-info-grid">
+                <div class="certificate-info-left">
+                    <div class="info-item">
+                        <span class="info-label"><strong>CERTIFICATE No.:</strong></span>
+                        <span class="info-value">{{certificateNo}}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label"><strong>Version:</strong></span>
+                        <span class="info-value">{{version}}</span>
+                    </div>
+                </div>
+                <div class="certificate-info-right">
+                    <div class="info-item">
+                        <span class="info-label"><strong>Date of Issue:</strong></span>
+                        <span class="info-value">{{dateOfIssue}}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label"><strong>Page 1 of 1</strong></span>
+                        <span class="info-value"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Client and Project Information - Sequential Layout -->
+        <div class="client-info-grid">
+            <div class="client-info-left">
+                <div class="info-item">
+                    <span class="info-label"><strong>1. Client Name:</strong></span>
+                    <span class="info-value">{{clientName}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label"><strong>2. Client Address:</strong></span>
+                    <span class="info-value">{{clientAddress}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label"><strong>4. Project Title:</strong></span>
+                    <span class="info-value">{{projectTitle}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label"><strong>5. Sample Description:</strong></span>
+                    <span class="info-value">{{sampleCountText}} paving blocks were delivered to the laboratory for testing</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label"><strong>6. Condition at receipt:</strong></span>
+                    <span class="info-value">{{conditionAtReceipt}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label"><strong>8. Nature of test:</strong></span>
+                    <span class="info-value">Compressive strength of test specimens</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label"><strong>10. Test Method(s):</strong></span>
+                    <span class="info-value">BS 6717: 1993, Precast concrete paving blocks - Part 1. Specification for paving blocks</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label"><strong>11. Test Location:</strong></span>
+                    <span class="info-value">{{testLocation}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label"><strong>13. Attachment(s):</strong></span>
+                    <span class="info-value">{{attachments}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label"><strong>14. Results:</strong></span>
+                    <span class="info-value"></span>
+                </div>
+            </div>
+            <div class="client-info-right">
+                <div class="info-item">
+                    <span class="info-label"><strong>3. Client Contact:</strong></span>
+                    <span class="info-value">{{clientContact}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label"><strong>7. Date of Receipt:</strong></span>
+                    <span class="info-value">{{dateOfReceipt}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label"><strong>9. Sampling Report:</strong></span>
+                    <span class="info-value">{{samplingReport}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label"><strong>12. Tested by:</strong></span>
+                    <span class="info-value">{{testedBy}}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results line -->
+        <div class="results-line"></div>
+
+        <!-- Test Results Section -->
+        <div class="test-results-section">
+            <div class="test-results-title">
+                TEST RESULTS FOR PAVING BLOCKS
+            </div>
+            <div class="test-results-grid">
+                <div class="test-results-column">
+                    <div class="test-result-item">
+                        <span class="test-result-label">Paver Type:</span>
+                        <span class="test-result-value">{{paverType}}</span>
+                    </div>
+                    <div class="test-result-item">
+                        <span class="test-result-label">Method of Compaction:</span>
+                        <span class="test-result-value">{{methodOfCompaction}}</span>
+                    </div>
+                    <div class="test-result-item">
+                        <span class="test-result-label">Testing Age:</span>
+                        <span class="test-result-value">{{testingAge}}</span>
+                    </div>
+                    <div class="test-result-item">
+                        <span class="test-result-label">No. of Pavers per Sqm:</span>
+                        <span class="test-result-value">{{numberOfPaversPerSqm}}</span>
+                    </div>
+                    <div class="test-result-item">
+                        <span class="test-result-label">Calculated Area:</span>
+                        <span class="test-result-value">{{calculatedArea}}</span>
+                    </div>
+                    <div class="test-result-item">
+                        <span class="test-result-label">Area of use:</span>
+                        <span class="test-result-value">{{areaOfUse}}</span>
+                    </div>
+                    <div class="test-result-item">
+                        <span class="test-result-label">Compressive Testing Machine ID:</span>
+                        <span class="test-result-value">{{compressiveTestingMachineId}}</span>
+                    </div>
+                </div>
+                <div class="test-results-column">
+                    <div class="test-result-item">
+                        <span class="test-result-label">Curing condition:</span>
+                        <span class="test-result-value">{{curingCondition}}</span>
+                    </div>
+                    <div class="test-result-item">
+                        <span class="test-result-label">Facility Temperature:</span>
+                        <span class="test-result-value">{{facilityTemperature}}</span>
+                    </div>
+                    <div class="test-result-item">
+                        <span class="test-result-label">Type of Failure:</span>
+                        <span class="test-result-value">{{typeOfFailure}}</span>
+                    </div>
+                    <div class="test-result-item">
+                        <span class="test-result-label">Paver Thickness:</span>
+                        <span class="test-result-value">{{paverThickness}}</span>
+                    </div>
+                    <div class="test-result-item">
+                        <span class="test-result-label">Area used for strength:</span>
+                        <span class="test-result-value">{{areaUsedForStrength}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Results Table -->
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th rowspan="2">DATE OF CASTING</th>
+                        <th rowspan="2">DATE OF TESTING</th>
+                        <th rowspan="2">SAMPLE NUMBER</th>
+                        <th rowspan="2">THICKNESS (mm)</th>
+                        <th rowspan="2">CORRECTION FACTOR</th>
+                        <th rowspan="2">COMPUTED PLAN AREA (mm²)</th>
+                        <th rowspan="2">WEIGHT OF SAMPLE (kg)</th>
+                        <th rowspan="2">DENSITY OF SAMPLE (kg/m³)</th>
+                        <th rowspan="2">FAILURE LOAD (kN)</th>
+                        <th rowspan="2">CORRECTED FAILURE LOAD (kN)</th>
+                        <th rowspan="2">COMPRESSIVE STRENGTH (N/mm²)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{testResultsRows}}
+                    <tr class="average-row">
+                        <td colspan="10" class="average-label">Average Compressive Strength :</td>
+                        <td class="average-value">{{averageCompressiveStrength}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Remarks Section -->
+        <div class="remarks-section">
+            <div class="remarks-title">15. Remarks:</div>
+            <ul class="remarks-content">
+                <li>15.1 This report relates only to the samples tested.</li>
+                <li>15.2 All information about the specimen furnished by the client/ client representative.</li>
+                <li>15.3 The test was carried out according to BS 6717: 1993, Precast concrete paving blocks - Part 1. Specification for paving blocks</li>
+                <li>15.4 All tested samples will be discarded immediately after the test.</li>
+                <li>15.5 The average compressive strength value is not provided on this certificate because of the variability in the results which exceeds the repeatability condition (r = 9%)</li>
+            </ul>
+        </div>
+
+        <!-- End of Report -->
+        <div class="end-of-report">
+            <div class="end-line"></div>
+            ................................................................................END OF REPORT................................................................................
+        </div>
+
+        <!-- Signatures -->
+        <div class="signatures">
+            <div class="signature-box">
+                <div class="signature-label">Checked by:</div>
+                <div class="signature-line"></div>
+                <div class="signature-title">Materials Engineer</div>
+            </div>
+            <div class="signature-box">
+                <div class="signature-label">Approved by: {{managerName}}</div>
+                <div class="signature-line"></div>
+                <div class="signature-title">Technical Manager</div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>Date of Issue:</strong> {{dateOfIssue}} | <strong>Page 1 of 1</strong></p>
+        </div>
+    </div>
+</body>
+</html>

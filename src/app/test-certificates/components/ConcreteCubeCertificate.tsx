@@ -9,8 +9,11 @@ import { type ConcreteCubeRegisterEntry, type Receipt, Laboratory, User, Correct
 import { useAuth } from "@/context/auth-context";
 import { doc, getDoc, query, where, getDocs, collection, limit } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import CertificateTemplate from "./CertificateTemplate";
 import { CertificateData, TestResult, calculateAverageCompressiveStrength, exceedsRepeatabilityCondition } from "./CertificateData";
+import { mapConcreteCertificateData } from "@/lib/certificate-data-mapper";
+// Removed PDF preview modal - using browser print
+import { CertificatePreview } from "@/components/certificate-preview";
+// Removed PDF service imports - using HTML template approach
 
 interface ConcreteCubeCertificateProps {
     certificateData: ConcreteCubeRegisterEntry;
@@ -47,6 +50,9 @@ export function ConcreteCubeCertificate({ certificateData, onBack }: ConcreteCub
     const [approvers, setApprovers] = React.useState<{engineer?: User, manager?: User}>({});
     const [mappedData, setMappedData] = React.useState<CertificateData | null>(null);
     const [loading, setLoading] = React.useState(true);
+    
+    // PDF generation state
+    const [isGeneratingPDF, setIsGeneratingPDF] = React.useState(false);
 
     React.useEffect(() => {
         const fetchAndMapData = async () => {
@@ -190,9 +196,78 @@ export function ConcreteCubeCertificate({ certificateData, onBack }: ConcreteCub
         fetchAndMapData();
     }, [certificateData, laboratory, laboratoryId, user]);
 
-    const handlePrint = () => {
-        window.print();
+    const handlePrint = async () => {
+        console.log('Download PDF button clicked');
+        
+        if (!mappedData || !laboratory) {
+            console.log('Missing data:', { mappedData: !!mappedData, laboratory: !!laboratory });
+            alert('Certificate data not ready');
+            return;
+        }
+
+        setIsGeneratingPDF(true);
+
+        try {
+            console.log('Mapping component data...');
+            // Map the component data to template data
+            const templateData = mapConcreteCertificateData({
+                certificateData,
+                laboratory,
+                laboratoryId,
+                user,
+                receipt: null, // We'll need to fetch this if needed
+                machine: null, // We'll need to fetch this if needed
+                approvers,
+                mappedData
+            });
+
+            console.log('Template data mapped:', templateData);
+
+            console.log('Calling API...');
+            // Call the API to generate PDF
+            const response = await fetch('/api/generate-pdf/concrete-certificate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(templateData),
+            });
+
+            console.log('API response status:', response.status);
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('API error response:', errorData);
+                throw new Error(`API Error: ${response.status} - ${errorData.details || errorData.error || 'Unknown error'}`);
+            }
+
+            console.log('Creating PDF blob...');
+            // Create blob and auto-download
+            const blob = await response.blob();
+            console.log('Blob created, size:', blob.size);
+            
+            const fileName = `concrete-certificate-${mappedData.certificateNo}.pdf`;
+            const url = window.URL.createObjectURL(blob);
+            
+            // Auto-download the PDF
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            
+            console.log('PDF downloaded successfully');
+        } catch (error) {
+            console.error('Error generating PDF:', error);
+            alert(`Failed to generate PDF: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        } finally {
+            setIsGeneratingPDF(false);
+        }
     };
+
+    // PDF generation with auto-download functionality
 
     if (loading || !mappedData) {
         return (
@@ -212,20 +287,24 @@ export function ConcreteCubeCertificate({ certificateData, onBack }: ConcreteCub
                         Back
                     </Button>
                     <h2 className="text-lg font-semibold">Test Certificate Preview</h2>
-                    <Button onClick={handlePrint}>
-                        <Printer className="mr-2 h-4 w-4" />
-                        Print / Save PDF
+                    <Button onClick={handlePrint} disabled={isGeneratingPDF}>
+                        {isGeneratingPDF ? (
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        ) : (
+                            <Printer className="mr-2 h-4 w-4" />
+                        )}
+                        {isGeneratingPDF ? 'Generating PDF...' : 'Download PDF'}
                     </Button>
                 </div>
             </div>
             
-            <div className="bg-gray-100 flex justify-center p-4 print:p-0 print:bg-white print:m-0">
-              <div className="w-[210mm] min-h-[297mm] bg-white shadow-lg print:shadow-none">
-                <CertificateTemplate data={mappedData} />
+            <main className="container mx-auto max-w-4xl p-4 sm:p-6 lg:p-8 print:m-0 print:p-0">
+              <div className="print-content p-8 bg-card rounded-lg shadow-sm border print:border-none print:shadow-none">
+                <CertificatePreview data={mappedData} />
               </div>
-            </div>
+            </main>
+
+            {/* PDF generation with auto-download - no modal needed */}
         </>
     );
 }
-
-    

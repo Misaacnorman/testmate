@@ -16,18 +16,22 @@ const CertificateTemplate: React.FC<CertificateTemplateProps> = ({ data }) => {
   const qrCodeValue = `Cert No: ${data.certificateNo}\nClient: ${data.clientName}\nDate: ${data.dateOfIssue}`;
 
   return (
-    <div id="certificate-content-printable" className="certificate-container bg-white p-8 font-sans text-[10px] leading-relaxed">
+    <div 
+      id="certificate-content-printable" 
+      className="certificate-template certificate-container bg-white p-8 font-sans text-[10px] leading-relaxed"
+      style={{ visibility: 'visible', display: 'block', opacity: 1 }}
+    >
         {/* Header */}
-        <header className="flex justify-between items-start pb-4 border-b-2 border-black">
+        <header className="certificate-header flex justify-between items-start pb-4 border-b-2 border-black">
             <div className="flex items-center gap-4">
-                {laboratory?.logo && <img src={laboratory.logo} alt="Company Logo" className="h-16"/>}
+                {laboratory?.logo && <img src={laboratory.logo} alt="Company Logo" className="certificate-logo h-16"/>}
                 <div>
                     <h1 className="text-xl font-bold uppercase">{laboratory?.name}</h1>
                     <p className="text-gray-600">{laboratory?.address}</p>
                     <p className="text-gray-600">{laboratory?.email}</p>
                 </div>
             </div>
-            <div className="text-right">
+            <div className="certificate-title text-right">
                 <h2 className="text-base font-bold text-gray-800">TEST CERTIFICATE</h2>
                 <p><span className="font-semibold">Certificate No:</span> {data.certificateNo}</p>
                 <p><span className="font-semibold">Date of Issue:</span> {data.dateOfIssue}</p>
@@ -62,7 +66,7 @@ const CertificateTemplate: React.FC<CertificateTemplateProps> = ({ data }) => {
             </section>
 
             {/* Test Results Header Box */}
-            <div className="border-2 border-black mb-4">
+            <div className="certificate-test-results border-2 border-black mb-4">
                 <h3 className="text-center font-bold py-1 bg-gray-200 border-b-2 border-black text-sm">TEST RESULT FOR CONCRETE CUBE</h3>
                 <div className="grid grid-cols-2 text-[10px]">
                     <div className="border-r-2 border-black">
@@ -83,7 +87,7 @@ const CertificateTemplate: React.FC<CertificateTemplateProps> = ({ data }) => {
             </div>
 
             {/* Results Table */}
-            <table className="w-full border-collapse border-2 border-black text-[10px] text-center mb-4">
+            <table className="certificate-test-results-table w-full border-collapse border-2 border-black text-[10px] text-center mb-4">
                 <thead className="bg-gray-200">
                     <tr className="[&>th]:border-2 [&>th]:border-black [&>th]:p-1 [&>th]:font-bold">
                         <th rowSpan={2}>DATE OF<br />CASTING</th>
@@ -151,27 +155,27 @@ const CertificateTemplate: React.FC<CertificateTemplateProps> = ({ data }) => {
                     ................................................END OF REPORT................................................
                 </div>
                 
-                 <div className="flex justify-between items-end pt-12">
-                    <div className="text-center">
+                 <div className="certificate-signatures flex justify-between items-end pt-12">
+                    <div className="certificate-signature-box text-center">
                         {data.approvedByEngineer?.signatureURL ? (
-                            <div className="mb-1 h-12 flex justify-center items-center">
+                            <div className="certificate-signature-line mb-1 h-12 flex justify-center items-center">
                                 <img src={data.approvedByEngineer.signatureURL} alt="Engineer's Signature" className="max-h-full"/>
                             </div>
-                        ) : <div className="h-12"></div>}
+                        ) : <div className="certificate-signature-line h-12"></div>}
                         <p className="border-t border-black px-8 pt-1">{data.approvedByEngineer?.name || 'N/A'}</p>
                         <p className="font-semibold">Materials Engineer</p>
                     </div>
-                    <div className="text-center">
+                    <div className="certificate-signature-box text-center">
                         {data.approvedByManager?.signatureURL ? (
-                            <div className="mb-1 h-12 flex justify-center items-center">
+                            <div className="certificate-signature-line mb-1 h-12 flex justify-center items-center">
                                 <img src={data.approvedByManager.signatureURL} alt="Manager's Signature" className="max-h-full"/>
                             </div>
-                        ) : <div className="h-12"></div>}
+                        ) : <div className="certificate-signature-line h-12"></div>}
                          <p className="border-t border-black px-8 pt-1">{data.approvedByManager?.name || 'N/A'}</p>
                          <p className="font-semibold">Technical Manager</p>
                     </div>
-                    <div className="text-center">
-                         <div className="h-12"></div>
+                    <div className="certificate-signature-box text-center">
+                         <div className="certificate-signature-line h-12"></div>
                          <p className="border-t border-black px-8 pt-1">{data.clientRepresentative || 'Client\'s Representative'}</p>
                          <p className="font-semibold">Client's Representative</p>
                     </div>

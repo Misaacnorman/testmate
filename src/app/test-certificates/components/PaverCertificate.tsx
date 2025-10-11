@@ -9,8 +9,10 @@ import { type PaverRegisterEntry, type Receipt, User, CorrectionFactorMachine } 
 import { useAuth } from "@/context/auth-context";
 import { doc, getDoc, query, where, getDocs, collection, limit } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { PaverCertificateTemplate } from "./PaverCertificateTemplate";
 import { PaverCertificateData, PaverTestResult, calculateAverageCompressiveStrength, getCorrectionFactor, getSampleCountText } from "./PaverCertificateData";
+import { mapPaverCertificateData } from "@/lib/paver-certificate-data-mapper";
+import { PaverCertificatePreview } from "@/components/paver-certificate-preview";
+// Removed PDF service imports - using HTML template approach
 
 const formatDateFromFirestore = (dateValue: any): string => {
     if (!dateValue) return 'N/A';
@@ -40,6 +42,9 @@ export function PaverCertificate({ certificateData, onBack }: PaverCertificatePr
     const [approvers, setApprovers] = React.useState<{engineer?: User, manager?: User}>({});
     const [mappedData, setMappedData] = React.useState<PaverCertificateData | null>(null);
     const [loading, setLoading] = React.useState(true);
+    
+    // PDF generation state
+    const [isGeneratingPDF, setIsGeneratingPDF] = React.useState(false);
 
     React.useEffect(() => {
         const fetchAndMapData = async () => {
@@ -102,12 +107,26 @@ export function PaverCertificate({ certificateData, onBack }: PaverCertificatePr
             
             const paverThickness = certificateData.paverThickness || `0 mm`;
             
+            console.log('DEBUG: certificateData.paverThickness =', certificateData.paverThickness);
+            console.log('DEBUG: paverThickness after fallback =', paverThickness);
+            
             const testResults: PaverTestResult[] = (certificateData.results || []).map(r => {
                 const computedPlanArea = r.calculatedArea ?? (certificateData.paversPerSquareMetre ? 1000000 / certificateData.paversPerSquareMetre : 0);
                 const correctedFailureLoad = r.correctedFailureLoad ?? 0;
                 const compressiveStrength = computedPlanArea > 0 ? correctedFailureLoad / computedPlanArea * 1000 : 0;
-                const density = r.weight && computedPlanArea && paverThickness ? (r.weight / (computedPlanArea * (parseInt(paverThickness)/1000) * 1e-9)) : 0;
-                const measuredThickness = parseInt(paverThickness.replace(/\D/g, ''), 10) || 0;
+                
+                // Extract thickness number from string like "80 mm Plain" -> 80
+                const thicknessMatch = paverThickness.match(/(\d+)/);
+                const measuredThickness = thicknessMatch ? parseInt(thicknessMatch[1], 10) : 0;
+                
+                // Use the extracted thickness for density calculation
+                const density = r.weight && computedPlanArea && measuredThickness > 0 ? (r.weight / (computedPlanArea * measuredThickness / 1000)) : 0;
+                
+                console.log('Paver thickness extraction:', {
+                    paverThickness,
+                    thicknessMatch,
+                    measuredThickness
+                });
 
                 return {
                     sampleNumber: r.sampleId,
@@ -176,8 +195,90 @@ export function PaverCertificate({ certificateData, onBack }: PaverCertificatePr
         fetchAndMapData();
     }, [certificateData, laboratory, laboratoryId, user]);
 
-    const handlePrint = () => {
-        window.print();
+    const handlePrint = async () => {
+        console.log('Download PDF button clicked');
+        console.log('DEBUG: mappedData exists?', !!mappedData);
+        console.log('DEBUG: laboratory exists?', !!laboratory);
+        
+        if (!mappedData || !laboratory) {
+            console.log('Missing data:', { mappedData: !!mappedData, laboratory: !!laboratory });
+            alert('Certificate data not ready');
+            return;
+        }
+
+        setIsGeneratingPDF(true);
+
+        try {
+            console.log('Mapping component data...');
+            console.log('DEBUG: mappedData.testResults[0].measuredThickness =', mappedData.testResults[0]?.measuredThickness);
+            console.log('DEBUG: mappedData.testResults =', mappedData.testResults);
+            
+            // Map the component data to template data
+            const templateData = mapPaverCertificateData({
+                certificateData,
+                laboratory,
+                laboratoryId,
+                user,
+                receipt: null, // We'll need to fetch this if needed
+                approvers,
+                mappedData
+            });
+
+            console.log('Template data mapped:', templateData);
+
+            console.log('Calling API...');
+            // Call the API to generate PDF
+            const response = await fetch('/api/generate-pdf/paver-certificate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(templateData),
+            });
+
+                    console.log('API response status:', response.status);
+                    console.log('API response headers:', Object.fromEntries(response.headers.entries()));
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.error('API error response:', errorData);
+                        throw new Error(`API Error: ${response.status} - ${errorData.details || errorData.error || 'Unknown error'}`);
+                    }
+
+                    console.log('Creating PDF blob...');
+                    // Create blob and auto-download
+                    const blob = await response.blob();
+                    console.log('Blob created, size:', blob.size);
+                    console.log('Blob type:', blob.type);
+                    
+                    if (blob.size === 0) {
+                        console.error('ERROR: PDF blob is empty!');
+                        // Clone the response to read it again
+                        const responseClone = response.clone();
+                        const responseText = await responseClone.text();
+                        console.log('Response text:', responseText);
+                        throw new Error('PDF generation failed - empty blob received');
+                    }
+            
+            const fileName = `paver-certificate-${mappedData.certificateNo}.pdf`;
+            const url = window.URL.createObjectURL(blob);
+            
+            // Auto-download the PDF
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            
+            console.log('PDF downloaded successfully');
+        } catch (error) {
+            console.error('Error generating PDF:', error);
+            alert(`Failed to generate PDF: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        } finally {
+            setIsGeneratingPDF(false);
+        }
     };
 
     if (loading || !mappedData) {
@@ -198,41 +299,32 @@ export function PaverCertificate({ certificateData, onBack }: PaverCertificatePr
                         Back
                     </Button>
                     <h2 className="text-lg font-semibold">Paver Certificate</h2>
-                    <Button onClick={handlePrint}>
-                        <Printer className="mr-2 h-4 w-4" />
-                        Print / Save PDF
+                    <Button onClick={handlePrint} disabled={isGeneratingPDF}>
+                        {isGeneratingPDF ? (
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        ) : (
+                            <Printer className="mr-2 h-4 w-4" />
+                        )}
+                        {isGeneratingPDF ? 'Generating PDF...' : 'Download PDF'}
                     </Button>
                 </div>
             </div>
             
-            <div className="print-content bg-gray-100 flex justify-center p-4 print:p-0 print:bg-white">
-              <div className="w-[210mm] min-h-[297mm] bg-white shadow-lg print:shadow-none">
-                <PaverCertificateTemplate data={mappedData} />
+            <main className="container mx-auto max-w-4xl p-4 sm:p-6 lg:p-8 print:m-0 print:p-0">
+              <div className="print-content p-8 bg-card rounded-lg shadow-sm border print:border-none print:shadow-none">
+                <PaverCertificatePreview data={mapPaverCertificateData({
+                  certificateData,
+                  laboratory,
+                  laboratoryId: laboratoryId || '',
+                  user,
+                  receipt: null,
+                  approvers,
+                  mappedData
+                })} />
               </div>
-            </div>
+            </main>
             
-            <style jsx global>{`
-                @media print {
-                  body > *:not(.print-content) {
-                    display: none !important;
-                  }
-                  .print-content {
-                    position: absolute !important;
-                    top: 0 !important;
-                    left: 0 !important;
-                    right: 0 !important;
-                    padding: 0 !important;
-                    margin: 0 !important;
-                    background-color: white !important;
-                  }
-                   @page {
-                    size: A4;
-                    margin: 0;
-                  }
-                }
-              `}</style>
+            {/* Removed PDFPreviewModal - using simple window.print() */}
         </>
     );
 }
-
-    

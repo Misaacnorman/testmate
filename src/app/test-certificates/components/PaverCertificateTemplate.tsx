@@ -15,7 +15,11 @@ export const PaverCertificateTemplate: React.FC<CertificateTemplateProps> = ({ d
   const qrCodeValue = `Cert No: ${data.certificateNo}\nClient: ${data.clientName}\nDate: ${data.dateOfIssue}`;
 
   return (
-    <div id="certificate-content-printable" className="certificate-container bg-white p-8 font-sans text-[9px] leading-snug">
+    <div 
+      id="certificate-content-printable" 
+      className="certificate-template certificate-container bg-white p-8 font-sans text-[9px] leading-snug"
+      style={{ visibility: 'visible', display: 'block', opacity: 1 }}
+    >
         {/* Header */}
         <header className="flex justify-between items-start pb-4 border-b-2 border-black">
             <div className="flex items-center gap-4">
@@ -61,7 +65,7 @@ export const PaverCertificateTemplate: React.FC<CertificateTemplateProps> = ({ d
             {/* Test Results Header Box */}
             <div className="border-2 border-black my-2">
                 <h3 className="text-center font-bold py-1 bg-gray-200 border-b-2 border-black text-sm uppercase">TEST RESULTS FOR PAVING BLOCKS</h3>
-                <div className="grid grid-cols-[1fr,1fr] text-[9px]">
+                <div className="grid grid-cols-2 text-[9px]">
                     <div className="pr-px">
                        <div className="grid grid-cols-[120px,1fr] border-b border-black"><p className="p-1 font-semibold">Paver type/ name:</p><p className="p-1 border-l border-black">{data.paverType}</p></div>
                        <div className="grid grid-cols-[120px,1fr] border-b border-black"><p className="p-1 font-semibold">Method of Compaction:</p><p className="p-1 border-l border-black">{data.methodOfCompaction}</p></div>
@@ -82,7 +86,7 @@ export const PaverCertificateTemplate: React.FC<CertificateTemplateProps> = ({ d
             </div>
 
             {/* Results Table */}
-            <table className="w-full border-collapse border-2 border-black text-[8.5px] text-center mb-2">
+            <table className="w-full border-collapse border-2 border-black text-[8.5px] text-center mb-2 wide-table">
                 <thead className="bg-gray-200">
                     <tr className="[&>th]:border-2 [&>th]:border-black [&>th]:p-1 [&>th]:font-bold">
                         <th>DATE OF<br />CASTING</th>

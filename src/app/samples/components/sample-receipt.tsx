@@ -5,8 +5,10 @@ import * as React from "react";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Printer } from "lucide-react";
-import { type Receipt, type SelectedCategory, type Step4Data } from "@/lib/types";
+import { type Receipt } from "@/lib/types";
+import { type SelectedCategory, type Step4Data } from "./receive-sample-dialog";
 import { useAuth } from "@/context/auth-context";
+// Removed PDF service imports - using simple window.print() with CSS
 
 interface SampleReceiptProps {
   receipt: Receipt;
@@ -36,9 +38,7 @@ export function SampleReceipt({
   onBack,
 }: SampleReceiptProps) {
   const { formData, selectedCategories, step4Data, receiptId, date } = receipt;
-  const { laboratory } = useAuth();
-
-
+  const { laboratory, laboratoryId } = useAuth();
   const handlePrint = () => {
     window.print();
   };
@@ -78,15 +78,18 @@ export function SampleReceipt({
       </div>
 
       <main className="container mx-auto max-w-4xl p-4 sm:p-6 lg:p-8 print:m-0 print:p-0">
-        <div className="p-8 bg-card rounded-lg shadow-sm border print:border-none print:shadow-none">
+        <div className="print-content p-8 bg-card rounded-lg shadow-sm border print:border-none print:shadow-none">
           {/* Header */}
-          <header className="flex justify-between items-start pb-6 border-b">
-            <div>
-              {laboratory?.logo && <img src={laboratory.logo} alt="Company Logo" className="h-16 mb-2"/>}
-              <h1 className="text-xl font-bold">{laboratory?.name}</h1>
-              <p className="text-sm text-muted-foreground">{laboratory?.address}</p>
+          <header className="receipt-header flex justify-between items-start pb-6 border-b">
+            <div className="receipt-logo-section">
+              {laboratory?.logo && <img src={laboratory.logo} alt="Company Logo" className="receipt-logo h-16 mb-2"/>}
+              <div className="receipt-company-info">
+                <h1 className="text-xl font-bold">{laboratory?.name}</h1>
+                <p className="text-sm text-muted-foreground">{laboratory?.address}</p>
+                <p className="text-sm text-muted-foreground">{laboratory?.email}</p>
+              </div>
             </div>
-            <div className="text-right">
+            <div className="receipt-info text-right">
               <h2 className="text-lg font-semibold text-primary">SAMPLE RECEIPT</h2>
               <p className="text-sm">
                 <span className="font-medium">ID:</span> {receiptId}
@@ -98,19 +101,19 @@ export function SampleReceipt({
           </header>
 
           {/* Details Grid */}
-          <section className="grid grid-cols-3 gap-8 py-6 text-xs">
-            <div>
+          <section className="receipt-details-grid grid grid-cols-3 gap-8 py-6 text-xs">
+            <div className="receipt-detail-section">
               <h3 className="font-semibold uppercase tracking-wider text-muted-foreground mb-2">Client Details</h3>
               <p><span className="font-semibold">Name:</span> {formData.clientName}</p>
               <p><span className="font-semibold">Contact:</span> {formData.clientContact}</p>
               <p><span className="font-semibold">Address:</span> {formData.clientAddress}</p>
               <p><span className="font-semibold">Project:</span> {formData.projectTitle}</p>
             </div>
-             <div>
+             <div className="receipt-detail-section">
               <h3 className="font-semibold uppercase tracking-wider text-muted-foreground mb-2">Billing Details</h3>
               <p>{formData.isBillingClientSame === 'yes' ? 'Billed to client' : formData.billingClientName}</p>
             </div>
-            <div>
+            <div className="receipt-detail-section">
               <h3 className="font-semibold uppercase tracking-wider text-muted-foreground mb-2">Delivery &amp; Reporting</h3>
               <p><span className="font-semibold">{formData.deliveryMode === 'deliveredBy' ? 'Delivered by:' : 'Picked by:'}</span> {formData.deliveryPerson} ({formData.delivererContact})</p>
               <p><span className="font-semibold">Received By:</span> {formData.receivedBy}</p>
@@ -119,10 +122,10 @@ export function SampleReceipt({
           </section>
 
            {/* Tests Table */}
-          <section className="mt-2">
+          <section className="receipt-tests-section mt-2">
             <h3 className="text-base font-semibold uppercase tracking-wider text-muted-foreground mb-2">Tests to be Performed</h3>
             <div className="border rounded-lg">
-                <table className="w-full text-xs">
+                <table className="receipt-tests-table w-full text-xs">
                     <thead className="bg-muted/50">
                         <tr className="text-left">
                             <th className="p-2 font-semibold">Material Category</th>
@@ -135,7 +138,7 @@ export function SampleReceipt({
                     <tbody>
                         {Object.entries(testsByCategory).map(([categoryName, data]) => (
                              <React.Fragment key={categoryName}>
-                                <tr className="border-t font-semibold bg-muted/20">
+                                <tr className="receipt-category-row border-t font-semibold bg-muted/20">
                                     <td colSpan={5} className="p-1.5 text-muted-foreground">{categoryName}</td>
                                 </tr>
                                 {data.tests.map((test, index) => {
@@ -185,9 +188,9 @@ export function SampleReceipt({
           </section>
 
           {/* Notes */}
-            <section className="mt-6">
+            <section className="receipt-notes-section mt-6">
                 <h3 className="text-base font-semibold uppercase tracking-wider text-muted-foreground mb-2">Notes</h3>
-                 <div className="border rounded-lg p-3 bg-muted/20 text-xs">
+                 <div className="receipt-notes-box border rounded-lg p-3 bg-muted/20 text-xs">
                     {Object.entries(testsByCategory)
                         .filter(([, data]) => data.notes.trim() !== '')
                         .map(([categoryName, data]) => (
@@ -202,8 +205,8 @@ export function SampleReceipt({
                 </div>
             </section>
 
-            <footer className="text-center text-xs text-muted-foreground pt-6 mt-6 border-t">
-                <p className="font-semibold">{laboratory?.name} | {laboratory?.address}</p>
+            <footer className="receipt-footer text-center text-xs text-muted-foreground pt-6 mt-6 border-t">
+                <p className="company-name font-semibold">{laboratory?.name} | {laboratory?.address}</p>
                 <p>{laboratory?.email}</p>
                 <p className="mt-4">This is a system-generated receipt and does not require a signature.</p>
             </footer>

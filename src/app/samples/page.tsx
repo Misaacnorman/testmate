@@ -14,6 +14,7 @@ import { ProjectLabTest, Receipt, Invoice } from "@/lib/types";
 import { useAuth } from "@/context/auth-context";
 import { HasPermission } from "@/components/auth/has-permission";
 import { addDays } from "date-fns";
+// Removed PDF service imports - using simple window.print() with CSS
 
 const SPECIAL_CATEGORIES = ["Concrete", "Bricks", "Blocks", "Pavers", "Cylinder", "Water Absorption"];
 
@@ -22,6 +23,7 @@ export default function SamplesPage() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const [receiptData, setReceiptData] = React.useState<Receipt | null>(null);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  // Removed PDF generation state - using simple window.print()
   const { toast } = useToast();
   const { laboratoryId, laboratory } = useAuth();
 
@@ -249,7 +251,8 @@ export default function SamplesPage() {
       
         setReceiptData({ ...newReceiptData, id: receiptDocRef.id });
         setIsDialogOpen(false);
-         toast({
+        
+        toast({
             title: "Receipt and Invoice Generated",
             description: "Sample receipt saved, registers updated, and a draft invoice has been created.",
         });
@@ -296,6 +299,7 @@ export default function SamplesPage() {
         onFinish={handleFinish}
         isSubmitting={isSubmitting}
       />
+      {/* Removed PDFPreviewModal - using simple window.print() */}
     </>
   );
 }
