@@ -33,6 +33,10 @@ export function EditEntryDialog({ isOpen, onClose, entry, onSubmit, entryType }:
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [formData, setFormData] = React.useState<Partial<Entry>>(entry);
 
+  const isDate = (value: any): value is Date => {
+    return value instanceof Date && !isNaN(value.getTime());
+  };
+
   React.useEffect(() => {
     if (entry) {
         const parseDate = (date: any) => {
@@ -97,7 +101,7 @@ export function EditEntryDialog({ isOpen, onClose, entry, onSubmit, entryType }:
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Date Received</Label>
-                <DatePicker value={formData.dateReceived} onChange={date => handleInputChange('dateReceived', date)} />
+                <DatePicker value={isDate(formData.dateReceived) ? formData.dateReceived : undefined} onChange={date => handleInputChange('dateReceived', date)} />
               </div>
               <div className="space-y-2">
                 <Label>Client</Label>
@@ -113,11 +117,11 @@ export function EditEntryDialog({ isOpen, onClose, entry, onSubmit, entryType }:
             <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label>Casting Date</Label>
-                <DatePicker value={formData.castingDate} onChange={date => handleInputChange('castingDate', date)} />
+                <DatePicker value={isDate(formData.castingDate) ? formData.castingDate : undefined} onChange={date => handleInputChange('castingDate', date)} />
               </div>
               <div className="space-y-2">
                 <Label>Testing Date</Label>
-                <DatePicker value={formData.testingDate} onChange={date => handleInputChange('testingDate', date)} />
+                <DatePicker value={isDate(formData.testingDate) ? formData.testingDate : undefined} onChange={date => handleInputChange('testingDate', date)} />
               </div>
                <div className="space-y-2">
                 <Label>Age (Days)</Label>

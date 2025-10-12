@@ -82,28 +82,44 @@ export function ImportPreviewDialog({
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="h-[60vh] rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Material Category</TableHead>
-                <TableHead>Test Code</TableHead>
-                <TableHead>Material Test</TableHead>
-                <TableHead>Amount (UGX)</TableHead>
-                <TableHead>Amount (USD)</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {importData.map((test, index) => (
-                <TableRow key={index}>
-                  <TableCell>{test.materialCategory}</TableCell>
-                  <TableCell>{test.testCode}</TableCell>
-                  <TableCell>{test.materialTest}</TableCell>
-                  <TableCell>{test.amountUGX}</TableCell>
-                  <TableCell>{test.amountUSD}</TableCell>
+          <div className="min-w-full overflow-x-auto">
+            <Table className="min-w-[800px]">
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="min-w-[150px]">Material Category</TableHead>
+                  <TableHead className="min-w-[120px]">Test Code</TableHead>
+                  <TableHead className="min-w-[200px]">Material Test</TableHead>
+                  <TableHead className="min-w-[100px]">Test Method</TableHead>
+                  <TableHead className="min-w-[120px]">Accreditation</TableHead>
+                  <TableHead className="min-w-[80px]">Unit</TableHead>
+                  <TableHead className="min-w-[100px]">Amount (UGX)</TableHead>
+                  <TableHead className="min-w-[100px]">Amount (USD)</TableHead>
+                  <TableHead className="min-w-[100px]">Lead Time (Days)</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {importData.map((test, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="min-w-[150px]">{test.materialCategory}</TableCell>
+                    <TableCell className="min-w-[120px]">{test.testCode}</TableCell>
+                    <TableCell className="min-w-[200px]">{test.materialTest}</TableCell>
+                    <TableCell className="min-w-[100px]">{test.testMethod || '-'}</TableCell>
+                    <TableCell className="min-w-[120px]">
+                      {test.accreditationStatus ? 'Accredited' : 'Not Accredited'}
+                    </TableCell>
+                    <TableCell className="min-w-[80px]">{test.unit || '-'}</TableCell>
+                    <TableCell className="min-w-[100px]">
+                      {test.amountUGX ? new Intl.NumberFormat('en-US').format(test.amountUGX) : '-'}
+                    </TableCell>
+                    <TableCell className="min-w-[100px]">
+                      {test.amountUSD ? new Intl.NumberFormat('en-US').format(test.amountUSD) : '-'}
+                    </TableCell>
+                    <TableCell className="min-w-[100px]">{test.leadTimeDays || '-'}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </ScrollArea>
         <DialogFooter>
           <Button variant="outline" onClick={onClose} disabled={isConfirming}>

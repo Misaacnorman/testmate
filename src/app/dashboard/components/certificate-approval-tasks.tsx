@@ -1,4 +1,3 @@
-
 "use client"
 
 import React, { useState } from 'react';
@@ -145,9 +144,3 @@ export function ProjectAssignmentList({ projects, engineers, onRefresh }: Projec
         </Card>
     );
 }
-
-```
-  </change>
-  <change>
-    <file>src/app/dashboard/components/certificate-approval-tasks.tsx</file>
-    <content><

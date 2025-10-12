@@ -45,7 +45,7 @@ const navGroups = [
         label: 'Business',
         items: [
             { label: "Assets", icon: Package, href: "/assets", permissionId: "assets:read" },
-            { label: "Finance", icon: Banknote, href: "/finance", permissionId: "finance:read" }, 
+            { label: "Finance", icon: Banknote, href: "/finance", permissionId: "finance:read-dashboard" }, 
             { label: "Personnel", icon: Users, href: "/personnel", permissionId: "profile:read:own" },
         ]
     },
@@ -53,7 +53,7 @@ const navGroups = [
         label: 'System Administration',
         items: [
             { label: "Admin", icon: Shield, href: "/admin", permissionId: "users:read" }, // Requires at least one admin permission
-            { label: "Settings", icon: Settings, href: "/settings", permissionId: "settings:company:read" },
+            { label: "Settings", icon: Settings, href: "/settings", permissionId: "settings:read" },
         ]
     }
 ]

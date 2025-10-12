@@ -22,7 +22,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 
@@ -192,18 +192,21 @@ export function CreateTestDialog({
               control={form.control}
               name="accreditationStatus"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
+                <FormItem className="flex flex-row items-center justify-between space-x-3 space-y-0 rounded-md border p-4">
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>
+                      Accreditation Status
+                    </FormLabel>
+                    <p className="text-sm text-muted-foreground">
+                      {field.value ? "Accredited" : "Not Accredited"}
+                    </p>
+                  </div>
                   <FormControl>
-                    <Checkbox
+                    <Switch
                       checked={field.value}
                       onCheckedChange={field.onChange}
                     />
                   </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>
-                      Accredited
-                    </FormLabel>
-                  </div>
                 </FormItem>
               )}
             />

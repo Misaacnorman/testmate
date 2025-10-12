@@ -110,6 +110,27 @@ export default function TestsPage() {
       });
     }
   };
+
+  const handleToggleAccreditation = async (test: Test) => {
+    if (!test.id) return;
+    try {
+      const updatedTest = { ...test, accreditationStatus: !test.accreditationStatus };
+      const { id, ...testData } = updatedTest;
+      await updateDoc(doc(db, "tests", test.id), testData);
+      toast({
+        title: "Accreditation Status Updated",
+        description: `Test is now ${updatedTest.accreditationStatus ? 'accredited' : 'not accredited'}.`,
+      });
+      fetchTests(); // Refresh data
+    } catch (error) {
+      console.error("Error updating accreditation status:", error);
+      toast({
+        variant: "destructive",
+        title: "Update Failed",
+        description: "Could not update the accreditation status. Check console for details.",
+      });
+    }
+  };
   
   const openEditDialog = (test: Test) => {
     setEditingTest(test);
@@ -175,7 +196,7 @@ export default function TestsPage() {
   };
 
 
-  const columns = getColumns(openEditDialog, openDeleteDialog);
+  const columns = getColumns(openEditDialog, openDeleteDialog, handleToggleAccreditation);
 
 
   return (

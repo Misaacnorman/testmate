@@ -34,6 +34,7 @@ export function UserProfile() {
         >
           <Avatar className="h-8 w-8">
             <AvatarImage
+              key={user?.photoURL} // Force re-render when photoURL changes
               src={
                 user?.photoURL ||
                 `https://picsum.photos/seed/${user?.email}/40/40`

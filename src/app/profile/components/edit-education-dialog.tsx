@@ -1,7 +1,6 @@
-
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -30,13 +29,14 @@ const educationSchema = z.object({
 
 type EducationFormData = z.infer<typeof educationSchema>;
 
-interface AddEducationDialogProps {
+interface EditEducationDialogProps {
     isOpen: boolean;
     onClose: () => void;
-    onSave: (data: Omit<ProfileEducation, 'id'>, documents: File[]) => Promise<void>;
+    onSave: (data: ProfileEducation, documents: File[]) => Promise<void>;
+    education: ProfileEducation | null;
 }
 
-export function AddEducationDialog({ isOpen, onClose, onSave }: AddEducationDialogProps) {
+export function EditEducationDialog({ isOpen, onClose, onSave, education }: EditEducationDialogProps) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
     const [dragActive, setDragActive] = useState(false);
@@ -51,6 +51,20 @@ export function AddEducationDialog({ isOpen, onClose, onSave }: AddEducationDial
             documents: [],
         },
     });
+
+    useEffect(() => {
+        if (education && isOpen) {
+            form.reset({
+                institution: education.institution,
+                degree: education.degree,
+                fieldOfStudy: education.fieldOfStudy,
+                startDate: new Date(education.startDate),
+                endDate: education.endDate ? new Date(education.endDate) : undefined,
+                isCurrentEducation: !education.endDate,
+            });
+            setUploadedFiles([]);
+        }
+    }, [education, isOpen, form]);
 
     const handleFileUpload = (files: FileList | null) => {
         if (files) {
@@ -83,10 +97,13 @@ export function AddEducationDialog({ isOpen, onClose, onSave }: AddEducationDial
     };
 
     const handleFormSubmit = async (data: EducationFormData) => {
+        if (!education) return;
+        
         setIsSubmitting(true);
         
         // Prepare the data object, filtering out undefined values
-        const dataToSave: any = {
+        const dataToSave: ProfileEducation = {
+            ...education,
             institution: data.institution,
             degree: data.degree,
             fieldOfStudy: data.fieldOfStudy,
@@ -96,6 +113,8 @@ export function AddEducationDialog({ isOpen, onClose, onSave }: AddEducationDial
         // Only include endDate if it's not current education and has a value
         if (!data.isCurrentEducation && data.endDate) {
             dataToSave.endDate = data.endDate.toISOString();
+        } else {
+            delete dataToSave.endDate;
         }
 
         await onSave(dataToSave, uploadedFiles);
@@ -122,8 +141,8 @@ export function AddEducationDialog({ isOpen, onClose, onSave }: AddEducationDial
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="sm:max-w-lg max-h-[80vh] flex flex-col">
                 <DialogHeader>
-                    <DialogTitle>Add Education</DialogTitle>
-                    <DialogDescription>Fill in the details of your academic background.</DialogDescription>
+                    <DialogTitle>Edit Education</DialogTitle>
+                    <DialogDescription>Update the details of your academic background.</DialogDescription>
                 </DialogHeader>
                 <div className="flex-1 overflow-y-auto pr-2">
                     <Form {...form}>
@@ -162,7 +181,7 @@ export function AddEducationDialog({ isOpen, onClose, onSave }: AddEducationDial
                         <div className="space-y-4">
                             <div>
                                 <FormLabel>Academic Documents</FormLabel>
-                                <p className="text-sm text-muted-foreground mb-2">Upload certificates, transcripts, or other academic documents related to this education entry.</p>
+                                <p className="text-sm text-muted-foreground mb-2">Upload additional certificates, transcripts, or other academic documents related to this education entry.</p>
                             </div>
                             
                             {/* File Upload Area */}
@@ -187,13 +206,13 @@ export function AddEducationDialog({ isOpen, onClose, onSave }: AddEducationDial
                                     accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                                     onChange={(e) => handleFileUpload(e.target.files)}
                                     className="hidden"
-                                    id="file-upload"
+                                    id="file-upload-edit"
                                 />
                                 <Button
                                     type="button"
                                     variant="outline"
                                     size="sm"
-                                    onClick={() => document.getElementById('file-upload')?.click()}
+                                    onClick={() => document.getElementById('file-upload-edit')?.click()}
                                 >
                                     Select Files
                                 </Button>
@@ -202,7 +221,7 @@ export function AddEducationDialog({ isOpen, onClose, onSave }: AddEducationDial
                             {/* Uploaded Files List */}
                             {uploadedFiles.length > 0 && (
                                 <div className="space-y-2">
-                                    <p className="text-sm font-medium">Uploaded Files:</p>
+                                    <p className="text-sm font-medium">New Files to Upload:</p>
                                     {uploadedFiles.map((file, index) => (
                                         <div key={index} className="flex items-center justify-between p-2 bg-muted/50 rounded-md">
                                             <div className="flex items-center gap-2">
@@ -233,7 +252,7 @@ export function AddEducationDialog({ isOpen, onClose, onSave }: AddEducationDial
                     <Button type="button" variant="outline" onClick={onClose} disabled={isSubmitting}>Cancel</Button>
                     <Button type="submit" disabled={isSubmitting} onClick={form.handleSubmit(handleFormSubmit)}>
                         {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        Save Education
+                        Update Education
                     </Button>
                 </DialogFooter>
             </DialogContent>

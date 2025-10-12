@@ -209,6 +209,7 @@ export interface SampleTestResult {
     startDate: string;
     endDate?: string;
     description?: string;
+    documents?: string[]; // Array of document IDs
   };
 
   export type ProfileEducation = {
@@ -219,6 +220,7 @@ export interface SampleTestResult {
     fieldOfStudy: string;
     startDate: string;
     endDate?: string;
+    documents?: string[]; // Array of document IDs
   };
 
   export type AcademicDocument = {
@@ -226,6 +228,21 @@ export interface SampleTestResult {
     name: string;
     url: string;
     uploadedAt: string;
+    institution: string;
+    degree: string;
+    fieldOfStudy: string;
+    educationId?: string; // Reference to the education entry
+  };
+
+  export type WorkDocument = {
+    id: string;
+    name: string;
+    url: string;
+    uploadedAt: string;
+    company: string;
+    title: string;
+    location?: string;
+    experienceId?: string; // Reference to the experience entry
   };
   
   // Admin Types
@@ -250,6 +267,7 @@ export interface SampleTestResult {
     experience?: ProfileExperience[];
     education?: ProfileEducation[];
     academicDocuments?: AcademicDocument[];
+    workDocuments?: WorkDocument[];
     contact?: {
         phone?: string;
     };
@@ -289,10 +307,54 @@ export interface SampleTestResult {
     stampSettings: StampSettings;
     ownerUid: string;
     createdAt: any;
+    // Legacy fields (keeping for backward compatibility)
     address?: string;
     email?: string;
     bio?: string;
     engineerOnDuty?: string;
+    
+    // New comprehensive company profile fields
+    companyDetails?: {
+      name: string;
+      region: string;
+      slogan?: string;
+      trade?: string;
+    };
+    addressDetails?: {
+      plotNo?: string;
+      streetNameVillage: string;
+      parishTown?: string;
+      subCountyTownCouncil?: string;
+      countyMunicipality?: string;
+      district: string;
+      country: string;
+      postOfficeBoxNo: string;
+      boxOfficeLocation?: string;
+    };
+    contactDetails?: {
+      officePhones: string[];
+      mobilePhones: string[];
+      emails: string[];
+      website?: string;
+    };
+    regulatoryDetails?: {
+      businessRegistrationNumber: string;
+      yearOfRegistration: string;
+      tin: string;
+      vatRegNumber?: string;
+      vatRate?: string;
+      nssfRegNo?: string;
+    };
+    customSections?: Array<{
+      id: string;
+      title: string;
+      fields: Array<{
+        id: string;
+        label: string;
+        value: string;
+        required?: boolean;
+      }>;
+    }>;
   }
 
   // Asset Management Types

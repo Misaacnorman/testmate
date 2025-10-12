@@ -88,7 +88,9 @@ export function ProfileCV({ user, roleName }: ProfileCVProps) {
                  <section className="mb-8">
                     <h2 className="cv-section-title">Experience</h2>
                     <div className="mt-3 space-y-6">
-                        {user.experience.map(exp => (
+                        {user.experience
+                            .sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())
+                            .map(exp => (
                              <div key={exp.id} className="relative pl-6">
                                 <div className="absolute left-0 top-1 h-full w-px bg-gray-200"></div>
                                 <div className="absolute left-[-5px] top-1.5 h-3 w-3 rounded-full bg-primary border-2 border-white"></div>
@@ -106,7 +108,9 @@ export function ProfileCV({ user, roleName }: ProfileCVProps) {
                  <section>
                     <h2 className="cv-section-title">Education</h2>
                     <div className="mt-3 space-y-6">
-                        {user.education.map(edu => (
+                        {user.education
+                            .sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())
+                            .map(edu => (
                             <div key={edu.id} className="relative pl-6">
                                 <div className="absolute left-0 top-1 h-full w-px bg-gray-200"></div>
                                 <div className="absolute left-[-5px] top-1.5 h-3 w-3 rounded-full bg-primary border-2 border-white"></div>

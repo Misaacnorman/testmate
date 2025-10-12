@@ -282,10 +282,54 @@ export interface SampleTestResult {
     stampSettings: StampSettings;
     ownerUid: string;
     createdAt: any;
+    // Legacy fields (keeping for backward compatibility)
     address?: string;
     email?: string;
     bio?: string;
     engineerOnDuty?: string;
+    
+    // New comprehensive company profile fields
+    companyDetails?: {
+      name: string;
+      region: string;
+      slogan?: string;
+      trade?: string;
+    };
+    addressDetails?: {
+      plotNo?: string;
+      streetNameVillage: string;
+      parishTown?: string;
+      subCountyTownCouncil?: string;
+      countyMunicipality?: string;
+      district: string;
+      country: string;
+      postOfficeBoxNo: string;
+      boxOfficeLocation?: string;
+    };
+    contactDetails?: {
+      officePhones: string[];
+      mobilePhones: string[];
+      emails: string[];
+      website?: string;
+    };
+    regulatoryDetails?: {
+      businessRegistrationNumber: string;
+      yearOfRegistration: string;
+      tin: string;
+      vatRegNumber?: string;
+      vatRate?: string;
+      nssfRegNo?: string;
+    };
+    customSections?: Array<{
+      id: string;
+      title: string;
+      fields: Array<{
+        id: string;
+        label: string;
+        value: string;
+        required?: boolean;
+      }>;
+    }>;
   }
 
   // Asset Management Types

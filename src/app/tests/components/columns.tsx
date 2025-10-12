@@ -2,6 +2,7 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
 import type { Test } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
@@ -16,7 +17,8 @@ import {
 
 export const getColumns = (
     onEdit: (test: Test) => void,
-    onDelete: (test: Test) => void
+    onDelete: (test: Test) => void,
+    onToggleAccreditation: (test: Test) => void
   ): ColumnDef<Test>[] => [
   {
     id: "select",
@@ -79,7 +81,17 @@ export const getColumns = (
   {
     accessorKey: "accreditationStatus",
     header: "Accreditation Status",
-    cell: ({ row }) => (row.original.accreditationStatus ? "Accredited" : "Not Accredited"),
+    cell: ({ row }) => (
+      <div className="flex items-center space-x-2">
+        <Switch
+          checked={row.original.accreditationStatus || false}
+          onCheckedChange={() => onToggleAccreditation(row.original)}
+        />
+        <span className="text-sm text-muted-foreground">
+          {row.original.accreditationStatus ? "Accredited" : "Not Accredited"}
+        </span>
+      </div>
+    ),
   },
   {
     accessorKey: "unit",
